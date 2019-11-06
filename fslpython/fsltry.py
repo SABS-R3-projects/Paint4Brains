@@ -13,7 +13,7 @@ x = ims.Image(file_x)
 bet(x, file_y, "R")
 y = ims.Image(file_y)
 
-# Showing how images work and different parameters yoi can call
+# Showing how images work and different parameters you can call
 print(x)
 print(x.dtype)
 print(x.data)
@@ -24,10 +24,11 @@ print("\n")
 print(x.header)
 
 # Doing an animated plot (for fun/to see it)
-dimention = x.header["dim"]
+dimension = x.header["dim"]
 fig = plt.figure()
 ims = []
-for i in range(dimention[3]):
+# Doing animation along the 3rd dimension. Therefore dimension[3] and data[:,:,i]
+for i in range(dimension[3]):
     im = plt.imshow(y.data[:, :, i], animated=True)
     ims.append([im])
 
