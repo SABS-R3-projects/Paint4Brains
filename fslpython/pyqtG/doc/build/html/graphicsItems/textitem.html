@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TextItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="ErrorBarItem" href="errorbaritem.html" />
+    <link rel="prev" title="AxisItem" href="axisitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errorbaritem.html" title="ErrorBarItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="axisitem.html" title="AxisItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="textitem">
+<h1>TextItem<a class="headerlink" href="#textitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.TextItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">TextItem</code><span class="sig-paren">(</span><em>text=''</em>, <em>color=(200</em>, <em>200</em>, <em>200)</em>, <em>html=None</em>, <em>anchor=(0</em>, <em>0)</em>, <em>border=None</em>, <em>fill=None</em>, <em>angle=0</em>, <em>rotateAxis=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>GraphicsItem displaying unscaled text (the text will always appear normal even inside a scaled ViewBox).</p>
+<dl class="method">
+<dt id="pyqtgraph.TextItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>text=''</em>, <em>color=(200</em>, <em>200</em>, <em>200)</em>, <em>html=None</em>, <em>anchor=(0</em>, <em>0)</em>, <em>border=None</em>, <em>fill=None</em>, <em>angle=0</em>, <em>rotateAxis=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><em>text</em></td>
+<td>The text to display</td>
+</tr>
+<tr class="row-odd"><td><em>color</em></td>
+<td>The color of the text (any format accepted by pg.mkColor)</td>
+</tr>
+<tr class="row-even"><td><em>html</em></td>
+<td>If specified, this overrides both <em>text</em> and <em>color</em></td>
+</tr>
+<tr class="row-odd"><td><em>anchor</em></td>
+<td>A QPointF or (x,y) sequence indicating what region of the text box will
+be anchored to the item&#8217;s position. A value of (0,0) sets the upper-left corner
+of the text box to be at the position specified by setPos(), while a value of (1,1)
+sets the lower-right corner.</td>
+</tr>
+<tr class="row-even"><td><em>border</em></td>
+<td>A pen to use when drawing the border</td>
+</tr>
+<tr class="row-odd"><td><em>fill</em></td>
+<td>A brush to use when filling within the border</td>
+</tr>
+<tr class="row-even"><td><em>angle</em></td>
+<td>Angle in degrees to rotate text. Default is 0; text will be displayed upright.</td>
+</tr>
+<tr class="row-odd"><td><em>rotateAxis</em></td>
+<td>If None, then a text angle of 0 always points along the +x axis of the scene.
+If a QPointF or (x,y) sequence is given, then it represents a vector direction
+in the parent&#8217;s coordinate system that the 0-degree line will be aligned to. This
+Allows text to follow both the position and orientation of its parent while still
+discarding any scale and shear factors.</td>
+</tr>
+</tbody>
+</table>
+<p>The effects of the <cite>rotateAxis</cite> and <cite>angle</cite> arguments are added independently. So for example:</p>
+<ul class="simple">
+<li>rotateAxis=None, angle=0 -&gt; normal horizontal text</li>
+<li>rotateAxis=None, angle=90 -&gt; normal vertical text</li>
+<li>rotateAxis=(1, 0), angle=0 -&gt; text aligned with x axis of its parent</li>
+<li>rotateAxis=(0, 1), angle=0 -&gt; text aligned with y axis of its parent</li>
+<li>rotateAxis=(1, 0), angle=90 -&gt; text orthogonal to x axis of its parent</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TextItem.setColor">
+<code class="descname">setColor</code><span class="sig-paren">(</span><em>color</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.setColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.setColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the color for this text.</p>
+<p>See QtGui.QGraphicsItem.setDefaultTextColor().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TextItem.setFont">
+<code class="descname">setFont</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.setFont"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.setFont" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the font for this text.</p>
+<p>See QtGui.QGraphicsTextItem.setFont().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TextItem.setHtml">
+<code class="descname">setHtml</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.setHtml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.setHtml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the HTML code to be rendered by this item.</p>
+<p>See QtGui.QGraphicsTextItem.setHtml().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TextItem.setPlainText">
+<code class="descname">setPlainText</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.setPlainText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.setPlainText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the plain text to be rendered by this item.</p>
+<p>See QtGui.QGraphicsTextItem.setPlainText().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TextItem.setText">
+<code class="descname">setText</code><span class="sig-paren">(</span><em>text</em>, <em>color=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.setText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.setText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the text of this item.</p>
+<p>This method sets the plain text of the item; see also setHtml().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TextItem.setTextWidth">
+<code class="descname">setTextWidth</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/TextItem.html#TextItem.setTextWidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TextItem.setTextWidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the width of the text.</p>
+<p>If the text requires more space than the width limit, then it will be
+wrapped into multiple lines.</p>
+<p>See QtGui.QGraphicsTextItem.setTextWidth().</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="axisitem.html"
+                        title="previous chapter">AxisItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="errorbaritem.html"
+                        title="next chapter">ErrorBarItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/textitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errorbaritem.html" title="ErrorBarItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="axisitem.html" title="AxisItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

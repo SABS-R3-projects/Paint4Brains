@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>flowchart.Terminal &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="Visual Programming with Flowcharts" href="index.html" />
+    <link rel="next" title="Internals - Extensions to Qt’s GraphicsView" href="../internals.html" />
+    <link rel="prev" title="flowchart.Node" href="node.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../internals.html" title="Internals - Extensions to Qt’s GraphicsView"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="node.html" title="flowchart.Node"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Visual Programming with Flowcharts</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="flowchart-terminal">
+<h1>flowchart.Terminal<a class="headerlink" href="#flowchart-terminal" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.flowchart.Terminal">
+<em class="property">class </em><code class="descclassname">pyqtgraph.flowchart.</code><code class="descname">Terminal</code><span class="sig-paren">(</span><em>node</em>, <em>name</em>, <em>io</em>, <em>optional=False</em>, <em>multi=False</em>, <em>pos=None</em>, <em>renamable=False</em>, <em>removable=False</em>, <em>multiable=False</em>, <em>bypass=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>node</em>, <em>name</em>, <em>io</em>, <em>optional=False</em>, <em>multi=False</em>, <em>pos=None</em>, <em>renamable=False</em>, <em>removable=False</em>, <em>multiable=False</em>, <em>bypass=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a new terminal.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>node</td>
+<td>the node to which this terminal belongs</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>string, the name of the terminal</td>
+</tr>
+<tr class="row-even"><td>io</td>
+<td>&#8216;in&#8217; or &#8216;out&#8217;</td>
+</tr>
+<tr class="row-odd"><td>optional</td>
+<td>bool, whether the node may process without connection to this terminal</td>
+</tr>
+<tr class="row-even"><td>multi</td>
+<td>bool, for inputs: whether this terminal may make multiple connections
+for outputs: whether this terminal creates a different value for each connection</td>
+</tr>
+<tr class="row-odd"><td>pos</td>
+<td>[x, y], the position of the terminal within its node&#8217;s boundaries</td>
+</tr>
+<tr class="row-even"><td>renamable</td>
+<td>(bool) Whether the terminal can be renamed by the user</td>
+</tr>
+<tr class="row-odd"><td>removable</td>
+<td>(bool) Whether the terminal can be removed by the user</td>
+</tr>
+<tr class="row-even"><td>multiable</td>
+<td>(bool) Whether the user may toggle the <em>multi</em> option for this terminal</td>
+</tr>
+<tr class="row-odd"><td>bypass</td>
+<td>(str) Name of the terminal from which this terminal&#8217;s value is derived
+when the Node is in bypass mode.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.connected">
+<code class="descname">connected</code><span class="sig-paren">(</span><em>term</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.connected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called whenever this terminal has been connected to another. (note&#8211;this function is called on both terminals)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.dependentNodes">
+<code class="descname">dependentNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.dependentNodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.dependentNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of nodes which receive input from this terminal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.disconnected">
+<code class="descname">disconnected</code><span class="sig-paren">(</span><em>term</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.disconnected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.disconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called whenever this terminal has been disconnected from another. (note&#8211;this function is called on both terminals)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.inputChanged">
+<code class="descname">inputChanged</code><span class="sig-paren">(</span><em>term</em>, <em>process=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.inputChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.inputChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called whenever there is a change to the input value to this terminal.
+It may often be useful to override this function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.inputTerminals">
+<code class="descname">inputTerminals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.inputTerminals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.inputTerminals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the terminal(s) that give input to this one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.setMultiValue">
+<code class="descname">setMultiValue</code><span class="sig-paren">(</span><em>multi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.setMultiValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.setMultiValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether this is a multi-value terminal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.setValue">
+<code class="descname">setValue</code><span class="sig-paren">(</span><em>val</em>, <em>process=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is a single-value terminal, val should be a single value.
+If this is a multi-value terminal, val should be a dict of terminal:value pairs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.value">
+<code class="descname">value</code><span class="sig-paren">(</span><em>term=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value this terminal provides for the connected terminal</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Terminal.valueIsAcceptable">
+<code class="descname">valueIsAcceptable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Terminal.html#Terminal.valueIsAcceptable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Terminal.valueIsAcceptable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True-&gt;acceptable  None-&gt;unknown  False-&gt;Unacceptable</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="node.html"
+                        title="previous chapter">flowchart.Node</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../internals.html"
+                        title="next chapter">Internals - Extensions to Qt&#8217;s GraphicsView</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/flowchart/terminal.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../internals.html" title="Internals - Extensions to Qt’s GraphicsView"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="node.html" title="flowchart.Node"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Visual Programming with Flowcharts</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

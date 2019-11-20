@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exporting &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Rapid GUI prototyping" href="prototyping.html" />
+    <link rel="prev" title="Interactive Data Selection Controls" href="region_of_interest.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="prototyping.html" title="Rapid GUI prototyping"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="region_of_interest.html" title="Interactive Data Selection Controls"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="exporting">
+<h1>Exporting<a class="headerlink" href="#exporting" title="Permalink to this headline">¶</a></h1>
+<p>PyQtGraph provides a variety of export formats for all 2D graphics. For 3D graphics, see <a class="reference internal" href="#exporting-3d-graphics">Exporting 3D Graphics</a> below.</p>
+<div class="section" id="exporting-from-the-gui">
+<h2>Exporting from the GUI<a class="headerlink" href="#exporting-from-the-gui" title="Permalink to this headline">¶</a></h2>
+<p>Any 2D graphics can be exported by right-clicking on the graphic, then selecting &#8216;export&#8217; from the context menu.
+This will display the export dialog in which the user must:</p>
+<ol class="arabic simple">
+<li>Select an item (or the entire scene) to export. Selecting an item will cause the item to be hilighted in the original
+graphic window (but this hilight will not be displayed in the exported file).</li>
+<li>Select an export format.</li>
+<li>Change any desired export options.</li>
+<li>Click the &#8216;export&#8217; button.</li>
+</ol>
+</div>
+<div class="section" id="export-formats">
+<h2>Export Formats<a class="headerlink" href="#export-formats" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Image - PNG is the default format. The exact set of image formats supported will depend on your Qt libraries. However,
+common formats such as PNG, JPG, and TIFF are almost always available.</li>
+<li>SVG - Graphics exported as SVG are targeted to work as well as possible with both Inkscape and
+Adobe Illustrator. For high quality SVG export, please use PyQtGraph version 0.9.3 or later.
+This is the preferred method for generating publication graphics from PyQtGraph.</li>
+<li>CSV - Exports plotted data as CSV. This exporter _only_ works if a PlotItem is selected for export.</li>
+<li>Matplotlib - This exporter opens a new window and attempts to re-plot the
+data using matplotlib (if available). Note that some graphic features are either not implemented
+for this exporter or not available in matplotlib. This exporter _only_ works if a PlotItem is selected
+for export.</li>
+<li>Printer - Exports to the operating system&#8217;s printing service. This exporter is provided for completeness,
+but is not well supported due to problems with Qt&#8217;s printing system.</li>
+</ul>
+</div>
+<div class="section" id="exporting-from-the-api">
+<h2>Exporting from the API<a class="headerlink" href="#exporting-from-the-api" title="Permalink to this headline">¶</a></h2>
+<p>To export a file programatically, follow this example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="kn">as</span> <span class="nn">pg</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph.exporters</span>
+
+<span class="c1"># generate something to export</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="c1"># create an exporter instance, as an argument give it</span>
+<span class="c1"># the item you wish to export</span>
+<span class="n">exporter</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">exporters</span><span class="o">.</span><span class="n">ImageExporter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">plotItem</span><span class="p">)</span>
+
+<span class="c1"># set export parameters if needed</span>
+<span class="n">exporter</span><span class="o">.</span><span class="n">parameters</span><span class="p">()[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>   <span class="c1"># (note this also affects height parameter)</span>
+
+<span class="c1"># save to file</span>
+<span class="n">exporter</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;fileName.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exporting-3d-graphics">
+<h2>Exporting 3D Graphics<a class="headerlink" href="#exporting-3d-graphics" title="Permalink to this headline">¶</a></h2>
+<p>The exporting functionality described above is not yet available for 3D graphics. However, it is possible to
+generate an image from a GLViewWidget by using QGLWidget.grabFrameBuffer or QGLWidget.renderPixmap:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">glview</span><span class="o">.</span><span class="n">grabFrameBuffer</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;fileName.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See the Qt documentation for more information.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exporting</a><ul>
+<li><a class="reference internal" href="#exporting-from-the-gui">Exporting from the GUI</a></li>
+<li><a class="reference internal" href="#export-formats">Export Formats</a></li>
+<li><a class="reference internal" href="#exporting-from-the-api">Exporting from the API</a></li>
+<li><a class="reference internal" href="#exporting-3d-graphics">Exporting 3D Graphics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="region_of_interest.html"
+                        title="previous chapter">Interactive Data Selection Controls</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="prototyping.html"
+                        title="next chapter">Rapid GUI prototyping</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/exporting.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="prototyping.html" title="Rapid GUI prototyping"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="region_of_interest.html" title="Interactive Data Selection Controls"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

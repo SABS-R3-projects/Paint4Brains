@@ -1,0 +1,600 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyqtgraph.opengl.MeshData &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../../../index.html" />
+    <link rel="up" title="pyqtgraph" href="../../pyqtgraph.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../pyqtgraph.html" accesskey="U">pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyqtgraph.opengl.MeshData</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..Qt</span> <span class="kn">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fn</span>
+<span class="kn">from</span> <span class="nn">..python2_3</span> <span class="kn">import</span> <span class="nb">xrange</span>
+
+
+<div class="viewcode-block" id="MeshData"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData">[docs]</a><span class="k">class</span> <span class="nc">MeshData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for storing and operating on 3D mesh data. May contain:</span>
+<span class="sd">    </span>
+<span class="sd">    - list of vertex locations</span>
+<span class="sd">    - list of edges</span>
+<span class="sd">    - list of triangles</span>
+<span class="sd">    - colors per vertex, edge, or tri</span>
+<span class="sd">    - normals per vertex or tri</span>
+<span class="sd">    </span>
+<span class="sd">    This class handles conversion between the standard [list of vertexes, list of faces]</span>
+<span class="sd">    format (suitable for use with glDrawElements) and &#39;indexed&#39; [list of vertexes] format</span>
+<span class="sd">    (suitable for use with glDrawArrays). It will automatically compute face normal</span>
+<span class="sd">    vectors as well as averaged vertex normal vectors. </span>
+<span class="sd">    </span>
+<span class="sd">    The class attempts to be as efficient as possible in caching conversion results and</span>
+<span class="sd">    avoiding unnecessary conversions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MeshData.__init__"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertexes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">vertexColors</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">faceColors</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ==============  =====================================================</span>
+<span class="sd">        **Arguments:**</span>
+<span class="sd">        vertexes        (Nv, 3) array of vertex coordinates.</span>
+<span class="sd">                        If faces is not specified, then this will instead be</span>
+<span class="sd">                        interpreted as (Nf, 3, 3) array of coordinates.</span>
+<span class="sd">        faces           (Nf, 3) array of indexes into the vertex array.</span>
+<span class="sd">        edges           [not available yet]</span>
+<span class="sd">        vertexColors    (Nv, 4) array of vertex colors.</span>
+<span class="sd">                        If faces is not specified, then this will instead be</span>
+<span class="sd">                        interpreted as (Nf, 3, 4) array of colors.</span>
+<span class="sd">        faceColors      (Nf, 4) array of face colors.</span>
+<span class="sd">        ==============  =====================================================</span>
+<span class="sd">        </span>
+<span class="sd">        All arguments are optional.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># (Nv,3) array of vertex coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1">#  (Nf, 3, 3) array of vertex coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByEdges</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1">#  (Ne, 2, 3) array of vertex coordinates</span>
+        
+        <span class="c1">## mappings between vertexes, faces, and edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># Nx3 array of indexes into self._vertexes specifying three vertexes for each face</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># Nx2 array of indexes into self._vertexes specifying two vertexes per edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1">## maps vertex ID to a list of face IDs (inverse mapping of _faces)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexEdges</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1">## maps vertex ID to a list of edge IDs (inverse mapping of _edges)</span>
+        
+        <span class="c1">## Per-vertex data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span> <span class="o">=</span> <span class="bp">None</span>                <span class="c1"># (Nv, 3) array of normals, one per vertex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormalsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># (Nf, 3, 3) array of normals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span> <span class="o">=</span> <span class="bp">None</span>                 <span class="c1"># (Nv, 3) array of colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># (Nf, 3, 4) array of colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByEdges</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># (Nf, 2, 4) array of colors</span>
+        
+        <span class="c1">## Per-face data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span> <span class="o">=</span> <span class="bp">None</span>                <span class="c1"># (Nf, 3) array of face normals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormalsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># (Nf, 3, 3) array of face normals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span> <span class="o">=</span> <span class="bp">None</span>                 <span class="c1"># (Nf, 4) array of face colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># (Nf, 3, 4) array of face colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByEdges</span> <span class="o">=</span> <span class="bp">None</span>   <span class="c1"># (Ne, 2, 4) array of face colors</span>
+        
+        <span class="c1">## Per-edge data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edgeColors</span> <span class="o">=</span> <span class="bp">None</span>                <span class="c1"># (Ne, 4) array of edge colors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edgeColorsIndexedByEdges</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># (Ne, 2, 4) array of edge colors</span>
+        <span class="c1">#self._meshColor = (1, 1, 1, 0.1)  # default color to use if no face/edge/vertex colors are given</span>
+        
+        
+        
+        <span class="k">if</span> <span class="n">vertexes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">faces</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setVertexes</span><span class="p">(</span><span class="n">vertexes</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">vertexColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setVertexColors</span><span class="p">(</span><span class="n">vertexColors</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">faceColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setFaceColors</span><span class="p">(</span><span class="n">faceColors</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setVertexes</span><span class="p">(</span><span class="n">vertexes</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setFaces</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">vertexColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setVertexColors</span><span class="p">(</span><span class="n">vertexColors</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">faceColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">setFaceColors</span><span class="p">(</span><span class="n">faceColors</span><span class="p">)</span></div>
+            
+<div class="viewcode-block" id="MeshData.faces"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.faces">[docs]</a>    <span class="k">def</span> <span class="nf">faces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an array (Nf, 3) of vertex indexes, three per triangular face in the mesh.</span>
+<span class="sd">        </span>
+<span class="sd">        If faces have not been computed for this mesh, the function returns None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span></div>
+    
+<div class="viewcode-block" id="MeshData.edges"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an array (Nf, 3) of vertex indexes, two per edge in the mesh.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_computeEdges</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span></div>
+        
+<div class="viewcode-block" id="MeshData.setFaces"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.setFaces">[docs]</a>    <span class="k">def</span> <span class="nf">setFaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">faces</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the (Nf, 3) array of faces. Each rown in the array contains</span>
+<span class="sd">        three indexes into the vertex array, specifying the three corners </span>
+<span class="sd">        of a triangular face.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="o">=</span> <span class="n">faces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resetNormals</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span></div>
+    
+<div class="viewcode-block" id="MeshData.vertexes"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.vertexes">[docs]</a>    <span class="k">def</span> <span class="nf">vertexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an array (N,3) of the positions of vertexes in the mesh. </span>
+<span class="sd">        By default, each unique vertex appears only once in the array.</span>
+<span class="sd">        If indexed is &#39;faces&#39;, then the array will instead contain three vertexes</span>
+<span class="sd">        per face in the mesh (and a single vertex may appear more than once in the array).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_computeUnindexedVertexes</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">faces</span><span class="p">()]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.setVertexes"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.setVertexes">[docs]</a>    <span class="k">def</span> <span class="nf">setVertexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">resetNormals</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the array (Nv, 3) of vertex coordinates.</span>
+<span class="sd">        If indexed==&#39;faces&#39;, then the data must have shape (Nf, 3, 3) and is</span>
+<span class="sd">        assumed to be already indexed as a list of faces.</span>
+<span class="sd">        This will cause any pre-existing normal vectors to be cleared</span>
+<span class="sd">        unless resetNormals=False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="o">=</span> <span class="n">verts</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="n">indexed</span><span class="o">==</span><span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="n">verts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="o">=</span> <span class="n">verts</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">resetNormals</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resetNormals</span><span class="p">()</span></div>
+    
+    <span class="k">def</span> <span class="nf">resetNormals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormalsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormalsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        
+<div class="viewcode-block" id="MeshData.hasFaceIndexedData"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.hasFaceIndexedData">[docs]</a>    <span class="k">def</span> <span class="nf">hasFaceIndexedData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if this object already has vertex positions indexed by face&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span></div>
+    
+    <span class="k">def</span> <span class="nf">hasEdgeIndexedData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByEdges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+    
+<div class="viewcode-block" id="MeshData.hasVertexColor"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.hasVertexColor">[docs]</a>    <span class="k">def</span> <span class="nf">hasVertexColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if this data set has vertex color information&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByEdges</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span></div>
+        
+<div class="viewcode-block" id="MeshData.hasFaceColor"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.hasFaceColor">[docs]</a>    <span class="k">def</span> <span class="nf">hasFaceColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if this data set has face color information&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByEdges</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span></div>
+    
+<div class="viewcode-block" id="MeshData.faceNormals"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.faceNormals">[docs]</a>    <span class="k">def</span> <span class="nf">faceNormals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array (Nf, 3) of normal vectors for each face.</span>
+<span class="sd">        If indexed=&#39;faces&#39;, then instead return an indexed array</span>
+<span class="sd">        (Nf, 3, 3)  (this is just the same array with each vector</span>
+<span class="sd">        copied three times).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">v</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">v</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">v</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormalsIndexedByFaces</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+                <span class="n">norms</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormalsIndexedByFaces</span> <span class="o">=</span> <span class="n">norms</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormalsIndexedByFaces</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.vertexNormals"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.vertexNormals">[docs]</a>    <span class="k">def</span> <span class="nf">vertexNormals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array of normal vectors.</span>
+<span class="sd">        By default, the array will be (N, 3) with one entry per unique vertex in the mesh.</span>
+<span class="sd">        If indexed is &#39;faces&#39;, then the array will contain three normal vectors per face</span>
+<span class="sd">        (and some vertexes may be repeated).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">faceNorms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">faceNormals</span><span class="p">()</span>
+            <span class="n">vertFaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertexFaces</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">vindex</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">faces</span> <span class="o">=</span> <span class="n">vertFaces</span><span class="p">[</span><span class="n">vindex</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span><span class="p">[</span><span class="n">vindex</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">norms</span> <span class="o">=</span> <span class="n">faceNorms</span><span class="p">[</span><span class="n">faces</span><span class="p">]</span>  <span class="c1">## get all face normals</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">norms</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>       <span class="c1">## sum normals</span>
+                <span class="n">norm</span> <span class="o">/=</span> <span class="p">(</span><span class="n">norm</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>  <span class="c1">## and re-normalize</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span><span class="p">[</span><span class="n">vindex</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span>
+                
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">faces</span><span class="p">()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.vertexColors"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.vertexColors">[docs]</a>    <span class="k">def</span> <span class="nf">vertexColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array (Nv, 4) of vertex colors.</span>
+<span class="sd">        If indexed==&#39;faces&#39;, then instead return an indexed array</span>
+<span class="sd">        (Nf, 3, 4). </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">faces</span><span class="p">()]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.setVertexColors"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.setVertexColors">[docs]</a>    <span class="k">def</span> <span class="nf">setVertexColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the vertex color array (Nv, 4).</span>
+<span class="sd">        If indexed==&#39;faces&#39;, then the array will be interpreted</span>
+<span class="sd">        as indexed and should have shape (Nf, 3, 4)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span> <span class="o">=</span> <span class="n">colors</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="o">=</span> <span class="n">colors</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.faceColors"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.faceColors">[docs]</a>    <span class="k">def</span> <span class="nf">faceColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an array (Nf, 4) of face colors.</span>
+<span class="sd">        If indexed==&#39;faces&#39;, then instead return an indexed array</span>
+<span class="sd">        (Nf, 3, 4)  (note this is just the same array with each color</span>
+<span class="sd">        repeated three times). </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">Nf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">Nf</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span><span class="p">[:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.setFaceColors"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.setFaceColors">[docs]</a>    <span class="k">def</span> <span class="nf">setFaceColors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">indexed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the face color array (Nf, 4).</span>
+<span class="sd">        If indexed==&#39;faces&#39;, then the array will be interpreted</span>
+<span class="sd">        as indexed and should have shape (Nf, 3, 4)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexed</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span> <span class="o">=</span> <span class="n">colors</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="n">indexed</span> <span class="o">==</span> <span class="s1">&#39;faces&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="o">=</span> <span class="n">colors</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid indexing mode. Accepts: None, &#39;faces&#39;&quot;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.faceCount"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.faceCount">[docs]</a>    <span class="k">def</span> <span class="nf">faceCount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of faces in the mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+        
+    <span class="k">def</span> <span class="nf">edgeColors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_edgeColors</span>
+        
+    <span class="c1">#def _setIndexedFaces(self, faces, vertexColors=None, faceColors=None):</span>
+        <span class="c1">#self._vertexesIndexedByFaces = faces</span>
+        <span class="c1">#self._vertexColorsIndexedByFaces = vertexColors</span>
+        <span class="c1">#self._faceColorsIndexedByFaces = faceColors</span>
+        
+    <span class="k">def</span> <span class="nf">_computeUnindexedVertexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">## Given (Nv, 3, 3) array of vertexes-indexed-by-face, convert backward to unindexed vertexes</span>
+        <span class="c1">## This is done by collapsing into a list of &#39;unique&#39; vertexes (difference &lt; 1e-14) </span>
+        
+        <span class="c1">## I think generally this should be discouraged..</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">## used to remember the index of each vertex position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_faceNormals</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexNormals</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">face</span> <span class="o">=</span> <span class="n">faces</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">inds</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="n">face</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">pt2</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mf">1e14</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">])</span>  <span class="c1">## quantize to be sure that nearly-identical points will be merged</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pt2</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="c1">#self._vertexes.append(QtGui.QVector3D(*pt))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+                    <span class="n">verts</span><span class="p">[</span><span class="n">pt2</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>  <span class="c1"># keep track of which vertexes belong to which faces</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertexes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    
+    <span class="c1">#def _setUnindexedFaces(self, faces, vertexes, vertexColors=None, faceColors=None):</span>
+        <span class="c1">#self._vertexes = vertexes #[QtGui.QVector3D(*v) for v in vertexes]</span>
+        <span class="c1">#self._faces = faces.astype(np.uint)</span>
+        <span class="c1">#self._edges = None</span>
+        <span class="c1">#self._vertexFaces = None</span>
+        <span class="c1">#self._faceNormals = None</span>
+        <span class="c1">#self._vertexNormals = None</span>
+        <span class="c1">#self._vertexColors = vertexColors</span>
+        <span class="c1">#self._faceColors = faceColors</span>
+
+<div class="viewcode-block" id="MeshData.vertexFaces"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.vertexFaces">[docs]</a>    <span class="k">def</span> <span class="nf">vertexFaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return list mapping each vertex index to a list of face indexes that use the vertex.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span><span class="p">()))]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">face</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">face</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexFaces</span></div>
+        
+    <span class="c1">#def reverseNormals(self):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Reverses the direction of all normal vectors.</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#pass</span>
+        
+    <span class="c1">#def generateEdgesFromFaces(self):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Generate a set of edges by listing all the edges of faces and removing any duplicates.</span>
+        <span class="c1">#Useful for displaying wireframe meshes.</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#pass</span>
+        
+    <span class="k">def</span> <span class="nf">_computeEdges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasFaceIndexedData</span><span class="p">:</span>
+            <span class="c1">## generate self._edges from self._faces</span>
+            <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">)</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nf</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+            <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">nf</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="n">nf</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">nf</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="o">-</span><span class="n">nf</span><span class="p">:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="o">-</span><span class="n">nf</span><span class="p">:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+            
+            <span class="c1"># sort per-edge</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="n">mask</span><span class="p">][:,::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># remove duplicate entries</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edges</span><span class="p">)[</span><span class="s1">&#39;i&#39;</span><span class="p">]</span>
+            <span class="c1">#print self._edges</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">verts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexesIndexedByFaces</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">verts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span>
+            <span class="n">nf</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nf</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
+            <span class="n">edges</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">edges</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">edges</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">edges</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_edges</span> <span class="o">=</span> <span class="n">edges</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;MeshData cannot generate edges--no faces in this data.&quot;</span><span class="p">)</span>
+        
+        
+<div class="viewcode-block" id="MeshData.save"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Serialize this mesh to a string appropriate for disk storage&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">pickle</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_vertexes&#39;</span><span class="p">,</span> <span class="s1">&#39;_faces&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_vertexesIndexedByFaces&#39;</span><span class="p">]</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_vertexColors&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertexColorsIndexedByFaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_vertexColorsIndexedByFaces&#39;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_faceColors&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_faceColorsIndexedByFaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_faceColorsIndexedByFaces&#39;</span><span class="p">)</span>
+            
+        <span class="n">state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">n</span><span class="p">,</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="MeshData.restore"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.restore">[docs]</a>    <span class="k">def</span> <span class="nf">restore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Restore the state of a mesh previously saved using save()&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">pickle</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">state</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVector3D</span><span class="p">):</span>
+                    <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">v</span><span class="o">.</span><span class="n">z</span><span class="p">()]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
+                <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></div>
+
+
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MeshData.sphere"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.sphere">[docs]</a>    <span class="k">def</span> <span class="nf">sphere</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a MeshData instance with vertexes and faces computed</span>
+<span class="sd">        for a spherical surface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        
+        <span class="c1">## compute vertexes</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">verts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span> 
+        <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
+            <span class="n">th</span> <span class="o">=</span> <span class="n">th</span> <span class="o">+</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>  <span class="c1">## rotate each row by 1/2 column</span>
+        <span class="n">verts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+        <span class="n">verts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">cols</span><span class="p">,</span> <span class="mi">3</span><span class="p">)[</span><span class="n">cols</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="p">(</span><span class="n">cols</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>  <span class="c1">## remove redundant vertexes from top and bottom</span>
+        
+        <span class="c1">## compute faces</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">rows</span><span class="o">*</span><span class="n">cols</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span>
+        <span class="n">rowtemplate1</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]))</span> <span class="o">%</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="p">]])</span>
+        <span class="n">rowtemplate2</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]))</span> <span class="o">%</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">cols</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="p">]])</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">row</span> <span class="o">*</span> <span class="n">cols</span> <span class="o">*</span> <span class="mi">2</span> 
+            <span class="n">faces</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="n">cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">rowtemplate1</span> <span class="o">+</span> <span class="n">row</span> <span class="o">*</span> <span class="n">cols</span>
+            <span class="n">faces</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="n">cols</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="p">(</span><span class="n">cols</span><span class="o">*</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">rowtemplate2</span> <span class="o">+</span> <span class="n">row</span> <span class="o">*</span> <span class="n">cols</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span><span class="p">[</span><span class="n">cols</span><span class="p">:</span><span class="o">-</span><span class="n">cols</span><span class="p">]</span>  <span class="c1">## cut off zero-area triangles at top and bottom</span>
+        
+        <span class="c1">## adjust for redundant vertexes that were removed from top and bottom</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">cols</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">faces</span><span class="p">[</span><span class="n">faces</span><span class="o">&lt;</span><span class="n">vmin</span><span class="p">]</span> <span class="o">=</span> <span class="n">vmin</span>
+        <span class="n">faces</span> <span class="o">-=</span> <span class="n">vmin</span>  
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">faces</span><span class="p">[</span><span class="n">faces</span><span class="o">&gt;</span><span class="n">vmax</span><span class="p">]</span> <span class="o">=</span> <span class="n">vmax</span>
+        
+        <span class="k">return</span> <span class="n">MeshData</span><span class="p">(</span><span class="n">vertexes</span><span class="o">=</span><span class="n">verts</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">)</span></div>
+        
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="MeshData.cylinder"><a class="viewcode-back" href="../../../3dgraphics/meshdata.html#pyqtgraph.opengl.MeshData.cylinder">[docs]</a>    <span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">length</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a MeshData instance with vertexes and faces computed</span>
+<span class="sd">        for a cylindrical surface.</span>
+<span class="sd">        The cylinder may be tapered with different radii at each end (truncated cone)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">radius</span> <span class="o">=</span> <span class="p">[</span><span class="n">radius</span><span class="p">,</span> <span class="n">radius</span><span class="p">]</span> <span class="c1"># convert to list</span>
+        <span class="c1">## compute vertexes</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">radius</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">radius</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">num</span><span class="o">=</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># radius as a function of z</span>
+        <span class="n">verts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># z</span>
+        <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
+            <span class="n">th</span> <span class="o">=</span> <span class="n">th</span> <span class="o">+</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>  <span class="c1">## rotate each row by 1/2 column</span>
+        <span class="n">verts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="c1"># x = r cos(th)</span>
+        <span class="n">verts</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="c1"># y = r sin(th)</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">rows</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">cols</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># just reshape: no redundant vertices...</span>
+        <span class="c1">## compute faces</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">rows</span><span class="o">*</span><span class="n">cols</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span>
+        <span class="n">rowtemplate1</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]))</span> <span class="o">%</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="p">]])</span>
+        <span class="n">rowtemplate2</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]))</span> <span class="o">%</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">cols</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="p">]])</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">row</span> <span class="o">*</span> <span class="n">cols</span> <span class="o">*</span> <span class="mi">2</span> 
+            <span class="n">faces</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="n">cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">rowtemplate1</span> <span class="o">+</span> <span class="n">row</span> <span class="o">*</span> <span class="n">cols</span>
+            <span class="n">faces</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="n">cols</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="p">(</span><span class="n">cols</span><span class="o">*</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">rowtemplate2</span> <span class="o">+</span> <span class="n">row</span> <span class="o">*</span> <span class="n">cols</span>
+        
+        <span class="k">return</span> <span class="n">MeshData</span><span class="p">(</span><span class="n">vertexes</span><span class="o">=</span><span class="n">verts</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">)</span></div></div>
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../pyqtgraph.html" >pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

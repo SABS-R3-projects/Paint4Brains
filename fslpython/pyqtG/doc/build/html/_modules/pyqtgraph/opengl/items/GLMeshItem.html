@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyqtgraph.opengl.items.GLMeshItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="pyqtgraph" href="../../../pyqtgraph.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../../pyqtgraph.html" accesskey="U">pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyqtgraph.opengl.items.GLMeshItem</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">OpenGL.GL</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="nn">GLGraphicsItem</span> <span class="kn">import</span> <span class="n">GLGraphicsItem</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="nn">MeshData</span> <span class="kn">import</span> <span class="n">MeshData</span>
+<span class="kn">from</span> <span class="nn">...Qt</span> <span class="kn">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">shaders</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fn</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GLMeshItem&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="GLMeshItem"><a class="viewcode-back" href="../../../../3dgraphics/glmeshitem.html#pyqtgraph.opengl.GLMeshItem">[docs]</a><span class="k">class</span> <span class="nc">GLMeshItem</span><span class="p">(</span><span class="n">GLGraphicsItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Bases:** :class:`GLGraphicsItem &lt;pyqtgraph.opengl.GLGraphicsItem&gt;`</span>
+<span class="sd">    </span>
+<span class="sd">    Displays a 3D triangle mesh. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GLMeshItem.__init__"><a class="viewcode-back" href="../../../../3dgraphics/glmeshitem.html#pyqtgraph.opengl.GLMeshItem.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ============== =====================================================</span>
+<span class="sd">        **Arguments:**</span>
+<span class="sd">        meshdata       MeshData object from which to determine geometry for </span>
+<span class="sd">                       this item.</span>
+<span class="sd">        color          Default face color used if no vertex or face colors </span>
+<span class="sd">                       are specified.</span>
+<span class="sd">        edgeColor      Default edge color to use if no edge colors are</span>
+<span class="sd">                       specified in the mesh data.</span>
+<span class="sd">        drawEdges      If True, a wireframe mesh will be drawn. </span>
+<span class="sd">                       (default=False)</span>
+<span class="sd">        drawFaces      If True, mesh faces are drawn. (default=True)</span>
+<span class="sd">        shader         Name of shader program to use when drawing faces.</span>
+<span class="sd">                       (None for no shader)</span>
+<span class="sd">        smooth         If True, normal vectors are computed for each vertex</span>
+<span class="sd">                       and interpolated within each face.</span>
+<span class="sd">        computeNormals If False, then computation of normal vectors is </span>
+<span class="sd">                       disabled. This can provide a performance boost for </span>
+<span class="sd">                       meshes that do not make use of normals.</span>
+<span class="sd">        ============== =====================================================</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;meshdata&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span>
+            <span class="s1">&#39;drawEdges&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+            <span class="s1">&#39;drawFaces&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s1">&#39;edgeColor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="s1">&#39;shader&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s1">&#39;smooth&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s1">&#39;computeNormals&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        
+        <span class="n">GLGraphicsItem</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">glopts</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;glOptions&#39;</span><span class="p">,</span> <span class="s1">&#39;opaque&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setGLOptions</span><span class="p">(</span><span class="n">glopts</span><span class="p">)</span>
+        <span class="n">shader</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;shader&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setShader</span><span class="p">(</span><span class="n">shader</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMeshData</span><span class="p">(</span><span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        
+        <span class="c1">## storage for data compiled from MeshData object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="bp">None</span></div>
+        
+<div class="viewcode-block" id="GLMeshItem.setShader"><a class="viewcode-back" href="../../../../3dgraphics/glmeshitem.html#pyqtgraph.opengl.GLMeshItem.setShader">[docs]</a>    <span class="k">def</span> <span class="nf">setShader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shader</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the shader used when rendering faces in the mesh. (see the GL shaders example)&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;shader&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+    <span class="k">def</span> <span class="nf">shader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">shader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;shader&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shader</span><span class="p">,</span> <span class="n">shaders</span><span class="o">.</span><span class="n">ShaderProgram</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">shader</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">shaders</span><span class="o">.</span><span class="n">getShaderProgram</span><span class="p">(</span><span class="n">shader</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="GLMeshItem.setColor"><a class="viewcode-back" href="../../../../3dgraphics/glmeshitem.html#pyqtgraph.opengl.GLMeshItem.setColor">[docs]</a>    <span class="k">def</span> <span class="nf">setColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the default color to use when no vertex or face colors are specified.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLMeshItem.setMeshData"><a class="viewcode-back" href="../../../../3dgraphics/glmeshitem.html#pyqtgraph.opengl.GLMeshItem.setMeshData">[docs]</a>    <span class="k">def</span> <span class="nf">setMeshData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set mesh data for this item. This can be invoked two ways:</span>
+<span class="sd">        </span>
+<span class="sd">        1. Specify *meshdata* argument with a new MeshData object</span>
+<span class="sd">        2. Specify keyword arguments to be passed to MeshData(..) to create a new instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;meshdata&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">md</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vertexes&#39;</span><span class="p">,</span> <span class="s1">&#39;faces&#39;</span><span class="p">,</span> <span class="s1">&#39;edges&#39;</span><span class="p">,</span> <span class="s1">&#39;vertexColors&#39;</span><span class="p">,</span> <span class="s1">&#39;faceColors&#39;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">opts</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">md</span> <span class="o">=</span> <span class="n">MeshData</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;meshdata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">md</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meshDataChanged</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+    
+<div class="viewcode-block" id="GLMeshItem.meshDataChanged"><a class="viewcode-back" href="../../../../3dgraphics/glmeshitem.html#pyqtgraph.opengl.GLMeshItem.meshDataChanged">[docs]</a>    <span class="k">def</span> <span class="nf">meshDataChanged</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method must be called to inform the item that the MeshData object</span>
+<span class="sd">        has been altered.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edgeColors</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+    
+    <span class="k">def</span> <span class="nf">parseMeshData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">## interpret vertex / normal data before drawing</span>
+        <span class="c1">## This can:</span>
+        <span class="c1">##   - automatically generate normals if they were not specified</span>
+        <span class="c1">##   - pull vertexes/noormals/faces from MeshData if that was specified</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1">#if self.opts[&#39;normals&#39;] is None:</span>
+            <span class="c1">#if self.opts[&#39;meshdata&#39;] is None:</span>
+                <span class="c1">#self.opts[&#39;meshdata&#39;] = MeshData(vertexes=self.opts[&#39;vertexes&#39;], faces=self.opts[&#39;faces&#39;])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;meshdata&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;meshdata&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;smooth&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">md</span><span class="o">.</span><span class="n">hasFaceIndexedData</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexes</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;computeNormals&#39;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexNormals</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">faces</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">md</span><span class="o">.</span><span class="n">hasVertexColor</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexColors</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">md</span><span class="o">.</span><span class="n">hasFaceColor</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">faceColors</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexes</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;computeNormals&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;smooth&#39;</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexNormals</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">faceNormals</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="k">if</span> <span class="n">md</span><span class="o">.</span><span class="n">hasVertexColor</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexColors</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">md</span><span class="o">.</span><span class="n">hasFaceColor</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">faceColors</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+                    
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;drawEdges&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">md</span><span class="o">.</span><span class="n">hasFaceIndexedData</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">edgeVerts</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexes</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">edgeVerts</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">vertexes</span><span class="p">(</span><span class="n">indexed</span><span class="o">=</span><span class="s1">&#39;faces&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+    
+    <span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupGLState</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">parseMeshData</span><span class="p">()</span>        
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;drawFaces&#39;</span><span class="p">]:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">shader</span><span class="p">():</span>
+                <span class="n">verts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertexes</span>
+                <span class="n">norms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normals</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span>
+                <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">faces</span>
+                <span class="k">if</span> <span class="n">verts</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">return</span>
+                <span class="n">glEnableClientState</span><span class="p">(</span><span class="n">GL_VERTEX_ARRAY</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">glVertexPointerf</span><span class="p">(</span><span class="n">verts</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QColor</span><span class="p">):</span>
+                            <span class="n">glColor4f</span><span class="p">(</span><span class="o">*</span><span class="n">fn</span><span class="o">.</span><span class="n">glColor</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">glColor4f</span><span class="p">(</span><span class="o">*</span><span class="n">color</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">glEnableClientState</span><span class="p">(</span><span class="n">GL_COLOR_ARRAY</span><span class="p">)</span>
+                        <span class="n">glColorPointerf</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+                    
+                    
+                    <span class="k">if</span> <span class="n">norms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">glEnableClientState</span><span class="p">(</span><span class="n">GL_NORMAL_ARRAY</span><span class="p">)</span>
+                        <span class="n">glNormalPointerf</span><span class="p">(</span><span class="n">norms</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">faces</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">glDrawArrays</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">verts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                        <span class="n">glDrawElements</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="n">faces</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">glDisableClientState</span><span class="p">(</span><span class="n">GL_NORMAL_ARRAY</span><span class="p">)</span>
+                    <span class="n">glDisableClientState</span><span class="p">(</span><span class="n">GL_VERTEX_ARRAY</span><span class="p">)</span>
+                    <span class="n">glDisableClientState</span><span class="p">(</span><span class="n">GL_COLOR_ARRAY</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;drawEdges&#39;</span><span class="p">]:</span>
+            <span class="n">verts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edgeVerts</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
+            <span class="n">glEnableClientState</span><span class="p">(</span><span class="n">GL_VERTEX_ARRAY</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">glVertexPointerf</span><span class="p">(</span><span class="n">verts</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">edgeColors</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;edgeColor&#39;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QColor</span><span class="p">):</span>
+                        <span class="n">glColor4f</span><span class="p">(</span><span class="o">*</span><span class="n">fn</span><span class="o">.</span><span class="n">glColor</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">glColor4f</span><span class="p">(</span><span class="o">*</span><span class="n">color</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">glEnableClientState</span><span class="p">(</span><span class="n">GL_COLOR_ARRAY</span><span class="p">)</span>
+                    <span class="n">glColorPointerf</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+                <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+                <span class="n">glDrawElements</span><span class="p">(</span><span class="n">GL_LINES</span><span class="p">,</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">glDisableClientState</span><span class="p">(</span><span class="n">GL_VERTEX_ARRAY</span><span class="p">)</span>
+                <span class="n">glDisableClientState</span><span class="p">(</span><span class="n">GL_COLOR_ARRAY</span><span class="p">)</span></div>
+            
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../../pyqtgraph.html" >pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

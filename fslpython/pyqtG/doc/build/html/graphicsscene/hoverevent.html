@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HoverEvent &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="GraphicsScene and Mouse Events" href="index.html" />
+    <link rel="next" title="MouseClickEvent" href="mouseclickevent.html" />
+    <link rel="prev" title="GraphicsScene" href="graphicsscene.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mouseclickevent.html" title="MouseClickEvent"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graphicsscene.html" title="GraphicsScene"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">GraphicsScene and Mouse Events</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hoverevent">
+<h1>HoverEvent<a class="headerlink" href="#hoverevent" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent">
+<em class="property">class </em><code class="descclassname">pyqtgraph.GraphicsScene.mouseEvents.</code><code class="descname">HoverEvent</code><span class="sig-paren">(</span><em>moveEvent</em>, <em>acceptable</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances of this class are delivered to items in a <a class="reference internal" href="graphicsscene.html#pyqtgraph.GraphicsScene" title="pyqtgraph.GraphicsScene"><code class="xref py py-class docutils literal"><span class="pre">GraphicsScene</span></code></a> via their hoverEvent() method when the mouse is hovering over the item.
+This event class both informs items that the mouse cursor is nearby and allows items to 
+communicate with one another about whether each item will accept <em>potential</em> mouse events.</p>
+<p>It is common for multiple overlapping items to receive hover events and respond by changing 
+their appearance. This can be misleading to the user since, in general, only one item will
+respond to mouse events. To avoid this, items make calls to event.acceptClicks(button) 
+and/or acceptDrags(button).</p>
+<p>Each item may make multiple calls to acceptClicks/Drags, each time for a different button. 
+If the method returns True, then the item is guaranteed to be
+the recipient of the claimed event IF the user presses the specified mouse button before
+moving. If claimEvent returns False, then this item is guaranteed NOT to get the specified
+event (because another has already claimed it) and the item should change its appearance 
+accordingly.</p>
+<p>event.isEnter() returns True if the mouse has just entered the item&#8217;s shape;
+event.isExit() returns True if the mouse has just left.</p>
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.acceptClicks">
+<code class="descname">acceptClicks</code><span class="sig-paren">(</span><em>button</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.acceptClicks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.acceptClicks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inform the scene that the item (that the event was delivered to)
+would accept a mouse click event if the user were to click before
+moving the mouse again.</p>
+<p>Returns True if the request is successful, otherwise returns False (indicating
+that some other item would receive an incoming click).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.acceptDrags">
+<code class="descname">acceptDrags</code><span class="sig-paren">(</span><em>button</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.acceptDrags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.acceptDrags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inform the scene that the item (that the event was delivered to)
+would accept a mouse drag event if the user were to drag before
+the next hover event.</p>
+<p>Returns True if the request is successful, otherwise returns False (indicating
+that some other item would receive an incoming drag event).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.buttons">
+<code class="descname">buttons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.buttons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.buttons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the buttons currently pressed on the mouse.
+(see QGraphicsSceneMouseEvent::buttons in the Qt documentation)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.isEnter">
+<code class="descname">isEnter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.isEnter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.isEnter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the mouse has just entered the item&#8217;s shape</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.isExit">
+<code class="descname">isExit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.isExit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.isExit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the mouse has just exited the item&#8217;s shape</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.lastPos">
+<code class="descname">lastPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.lastPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.lastPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the previous position of the mouse in the coordinate system of the item
+that the event was delivered to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.lastScenePos">
+<code class="descname">lastScenePos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.lastScenePos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.lastScenePos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the previous scene position of the mouse.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.lastScreenPos">
+<code class="descname">lastScreenPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.lastScreenPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.lastScreenPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the previous screen position of the mouse.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.modifiers">
+<code class="descname">modifiers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.modifiers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.modifiers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return any keyboard modifiers currently pressed.
+(see QGraphicsSceneMouseEvent::modifiers in the Qt documentation)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.pos">
+<code class="descname">pos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current position of the mouse in the coordinate system of the item
+that the event was delivered to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.scenePos">
+<code class="descname">scenePos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.scenePos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.scenePos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current scene position of the mouse.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.screenPos">
+<code class="descname">screenPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#HoverEvent.screenPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.HoverEvent.screenPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current screen position of the mouse.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="graphicsscene.html"
+                        title="previous chapter">GraphicsScene</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mouseclickevent.html"
+                        title="next chapter">MouseClickEvent</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsscene/hoverevent.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mouseclickevent.html" title="MouseClickEvent"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graphicsscene.html" title="GraphicsScene"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >GraphicsScene and Mouse Events</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

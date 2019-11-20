@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ColorMap &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="up" title="API Reference" href="apireference.html" />
+    <link rel="next" title="GraphicsScene and Mouse Events" href="graphicsscene/index.html" />
+    <link rel="prev" title="MeshData" href="3dgraphics/meshdata.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphicsscene/index.html" title="GraphicsScene and Mouse Events"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="3dgraphics/meshdata.html" title="MeshData"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="apireference.html" accesskey="U">API Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="colormap">
+<h1>ColorMap<a class="headerlink" href="#colormap" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.ColorMap">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">ColorMap</code><span class="sig-paren">(</span><em>pos</em>, <em>color</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A ColorMap defines a relationship between a scalar value and a range of colors. 
+ColorMaps are commonly used for false-coloring monochromatic images, coloring 
+scatter-plot points, and coloring surface plots by height.</p>
+<p>Each color map is defined by a set of colors, each corresponding to a
+particular scalar value. For example:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">0.0  -&gt; black</div>
+<div class="line">0.2  -&gt; red</div>
+<div class="line">0.6  -&gt; yellow</div>
+<div class="line">1.0  -&gt; white</div>
+</div>
+</div></blockquote>
+<p>The colors for intermediate values are determined by interpolating between 
+the two nearest colors in either RGB or HSV color space.</p>
+<p>To provide user-defined color mappings, see <a class="reference internal" href="widgets/gradientwidget.html#pyqtgraph.GradientWidget" title="pyqtgraph.GradientWidget"><code class="xref py py-class docutils literal"><span class="pre">GradientWidget</span></code></a>.</p>
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>pos</em>, <em>color</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>Array of positions where each color is defined</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>Array of RGBA colors.
+Integer data types are interpreted as 0-255; float data types
+are interpreted as 0.0-1.0</td>
+</tr>
+<tr class="row-even"><td>mode</td>
+<td>Array of color modes (ColorMap.RGB, HSV_POS, or HSV_NEG)
+indicating the color space that should be used when
+interpolating between stops. Note that the last mode value is
+ignored. By default, the mode is entirely RGB.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.getColors">
+<code class="descname">getColors</code><span class="sig-paren">(</span><em>mode=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.getColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.getColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list of all color stops converted to the specified mode.
+If mode is None, then no conversion is done.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.getGradient">
+<code class="descname">getGradient</code><span class="sig-paren">(</span><em>p1=None</em>, <em>p2=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.getGradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.getGradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QLinearGradient object spanning from QPoints p1 to p2.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.getLookupTable">
+<code class="descname">getLookupTable</code><span class="sig-paren">(</span><em>start=0.0</em>, <em>stop=1.0</em>, <em>nPts=512</em>, <em>alpha=None</em>, <em>mode='byte'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.getLookupTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.getLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an RGB(A) lookup table (ndarray).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>start</td>
+<td>The starting value in the lookup table (default=0.0)</td>
+</tr>
+<tr class="row-odd"><td>stop</td>
+<td>The final value in the lookup table (default=1.0)</td>
+</tr>
+<tr class="row-even"><td>nPts</td>
+<td>The number of points in the returned lookup table.</td>
+</tr>
+<tr class="row-odd"><td>alpha</td>
+<td>True, False, or None - Specifies whether or not alpha values are included
+in the table. If alpha is None, it will be automatically determined.</td>
+</tr>
+<tr class="row-even"><td>mode</td>
+<td>Determines return type: &#8216;byte&#8217; (0-255), &#8216;float&#8217; (0.0-1.0), or &#8216;qcolor&#8217;.
+See <a class="reference internal" href="#pyqtgraph.ColorMap.map" title="pyqtgraph.ColorMap.map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.isMapTrivial">
+<code class="descname">isMapTrivial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.isMapTrivial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.isMapTrivial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the gradient has exactly two stops in it: black at 0.0 and white at 1.0.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.map">
+<code class="descname">map</code><span class="sig-paren">(</span><em>data</em>, <em>mode='byte'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of colors corresponding to the values in <em>data</em>. 
+Data must be either a scalar position or an array (any shape) of positions.</p>
+<p>The <em>mode</em> argument determines the type of data returned:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>byte</td>
+<td>(default) Values are returned as 0-255 unsigned bytes.</td>
+</tr>
+<tr class="row-even"><td>float</td>
+<td>Values are returned as 0.0-1.0 floats.</td>
+</tr>
+<tr class="row-odd"><td>qcolor</td>
+<td>Values are returned as an array of QColor objects.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.mapToByte">
+<code class="descname">mapToByte</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.mapToByte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.mapToByte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function; see <a class="reference internal" href="#pyqtgraph.ColorMap.map" title="pyqtgraph.ColorMap.map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.mapToFloat">
+<code class="descname">mapToFloat</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.mapToFloat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.mapToFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function; see <a class="reference internal" href="#pyqtgraph.ColorMap.map" title="pyqtgraph.ColorMap.map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.mapToQColor">
+<code class="descname">mapToQColor</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.mapToQColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.mapToQColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function; see <a class="reference internal" href="#pyqtgraph.ColorMap.map" title="pyqtgraph.ColorMap.map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ColorMap.usesAlpha">
+<code class="descname">usesAlpha</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/colormap.html#ColorMap.usesAlpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ColorMap.usesAlpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if any stops have an alpha &lt; 255</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="3dgraphics/meshdata.html"
+                        title="previous chapter">MeshData</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphicsscene/index.html"
+                        title="next chapter">GraphicsScene and Mouse Events</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/colormap.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphicsscene/index.html" title="GraphicsScene and Mouse Events"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="3dgraphics/meshdata.html" title="MeshData"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="apireference.html" >API Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

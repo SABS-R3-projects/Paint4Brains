@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>IsocurveItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="AxisItem" href="axisitem.html" />
+    <link rel="prev" title="ScatterPlotItem" href="scatterplotitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="axisitem.html" title="AxisItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scatterplotitem.html" title="ScatterPlotItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="isocurveitem">
+<h1>IsocurveItem<a class="headerlink" href="#isocurveitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.IsocurveItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">IsocurveItem</code><span class="sig-paren">(</span><em>data=None</em>, <em>level=0</em>, <em>pen='w'</em>, <em>axisOrder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/IsocurveItem.html#IsocurveItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.IsocurveItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="graphicsobject.html#pyqtgraph.GraphicsObject" title="pyqtgraph.GraphicsObject"><code class="xref py py-class docutils literal"><span class="pre">GraphicsObject</span></code></a></p>
+<p>Item displaying an isocurve of a 2D array. To align this item correctly with an 
+ImageItem, call <code class="docutils literal"><span class="pre">isocurve.setParentItem(image)</span></code>.</p>
+<dl class="method">
+<dt id="pyqtgraph.IsocurveItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>data=None</em>, <em>level=0</em>, <em>pen='w'</em>, <em>axisOrder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/IsocurveItem.html#IsocurveItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.IsocurveItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new isocurve item.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>data</td>
+<td>A 2-dimensional ndarray. Can be initialized as None, and set
+later using <a class="reference internal" href="#pyqtgraph.IsocurveItem.setData" title="pyqtgraph.IsocurveItem.setData"><code class="xref py py-func docutils literal"><span class="pre">setData</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>level</td>
+<td>The cutoff value at which to draw the isocurve.</td>
+</tr>
+<tr class="row-even"><td>pen</td>
+<td>The color of the curve item. Can be anything valid for
+<a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>axisOrder</td>
+<td>May be either &#8216;row-major&#8217; or &#8216;col-major&#8217;. By default this uses
+the <code class="docutils literal"><span class="pre">imageAxisOrder</span></code>
+<a class="reference internal" href="../config_options.html#apiref-config"><span>global configuration option</span></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.IsocurveItem.setBrush">
+<code class="descname">setBrush</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/IsocurveItem.html#IsocurveItem.setBrush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.IsocurveItem.setBrush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the brush used to draw the isocurve. Arguments can be any that are valid 
+for <a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.IsocurveItem.setData">
+<code class="descname">setData</code><span class="sig-paren">(</span><em>data</em>, <em>level=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/IsocurveItem.html#IsocurveItem.setData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.IsocurveItem.setData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data/image to draw isocurves for.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>data</td>
+<td>A 2-dimensional ndarray.</td>
+</tr>
+<tr class="row-odd"><td>level</td>
+<td>The cutoff value at which to draw the curve. If level is not specified,
+the previously set level is used.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.IsocurveItem.setLevel">
+<code class="descname">setLevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/IsocurveItem.html#IsocurveItem.setLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.IsocurveItem.setLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the level at which the isocurve is drawn.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.IsocurveItem.setPen">
+<code class="descname">setPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/IsocurveItem.html#IsocurveItem.setPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.IsocurveItem.setPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pen used to draw the isocurve. Arguments can be any that are valid 
+for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scatterplotitem.html"
+                        title="previous chapter">ScatterPlotItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="axisitem.html"
+                        title="next chapter">AxisItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/isocurveitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="axisitem.html" title="AxisItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scatterplotitem.html" title="ScatterPlotItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

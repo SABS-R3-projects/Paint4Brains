@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PlotCurveItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="ScatterPlotItem" href="scatterplotitem.html" />
+    <link rel="prev" title="GraphicsLayout" href="graphicslayout.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scatterplotitem.html" title="ScatterPlotItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graphicslayout.html" title="GraphicsLayout"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="plotcurveitem">
+<h1>PlotCurveItem<a class="headerlink" href="#plotcurveitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.PlotCurveItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">PlotCurveItem</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing a single plot curve. Instances of this class are created
+automatically as part of PlotDataItem; these rarely need to be instantiated
+directly.</p>
+<p>Features:</p>
+<ul class="simple">
+<li>Fast data update</li>
+<li>Fill under curve</li>
+<li>Mouse interaction</li>
+</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigPlotChanged(self)</td>
+<td>Emitted when the data being plotted has changed</td>
+</tr>
+<tr class="row-odd"><td>sigClicked(self)</td>
+<td>Emitted when the curve is clicked</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forwards all arguments to <a class="reference internal" href="#pyqtgraph.PlotCurveItem.setData" title="pyqtgraph.PlotCurveItem.setData"><code class="xref py py-func docutils literal"><span class="pre">setData</span></code></a>.</p>
+<p>Some extra arguments are accepted as well:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>parent</td>
+<td>The parent GraphicsObject (optional)</td>
+</tr>
+<tr class="row-odd"><td>clickable</td>
+<td>If True, the item will emit sigClicked when it is
+clicked on. Defaults to False.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.mouseShape">
+<code class="descname">mouseShape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.mouseShape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.mouseShape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QPainterPath representing the clickable shape of the curve</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.setBrush">
+<code class="descname">setBrush</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.setBrush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.setBrush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the brush used when filling the area under the curve</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.setClickable">
+<code class="descname">setClickable</code><span class="sig-paren">(</span><em>s</em>, <em>width=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.setClickable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.setClickable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether the item responds to mouse clicks.</p>
+<p>The <em>width</em> argument specifies the width in pixels orthogonal to the
+curve that will respond to a mouse click.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.setData">
+<code class="descname">setData</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.setData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.setData" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>x, y</td>
+<td>(numpy arrays) Data to show</td>
+</tr>
+<tr class="row-odd"><td>pen</td>
+<td>Pen to use when drawing. Any single argument accepted by
+<a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a> is allowed.</td>
+</tr>
+<tr class="row-even"><td>shadowPen</td>
+<td>Pen for drawing behind the primary pen. Usually this
+is used to emphasize the curve by providing a
+high-contrast border. Any single argument accepted by
+<a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a> is allowed.</td>
+</tr>
+<tr class="row-odd"><td>fillLevel</td>
+<td>(float or None) Fill the area &#8216;under&#8217; the curve to
+<em>fillLevel</em></td>
+</tr>
+<tr class="row-even"><td>brush</td>
+<td>QBrush to use when filling. Any single argument accepted
+by <a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush</span></code></a> is allowed.</td>
+</tr>
+<tr class="row-odd"><td>antialias</td>
+<td>(bool) Whether to use antialiasing when drawing. This
+is disabled by default because it decreases performance.</td>
+</tr>
+<tr class="row-even"><td>stepMode</td>
+<td>If True, two orthogonal lines are drawn for each sample
+as steps. This is commonly used when drawing histograms.
+Note that in this case, len(x) == len(y) + 1</td>
+</tr>
+<tr class="row-odd"><td>connect</td>
+<td>Argument specifying how vertexes should be connected
+by line segments. Default is &#8220;all&#8221;, indicating full
+connection. &#8220;pairs&#8221; causes only even-numbered segments
+to be drawn. &#8220;finite&#8221; causes segments to be omitted if
+they are attached to nan or inf values. For any other
+connectivity, specify an array of boolean values.</td>
+</tr>
+</tbody>
+</table>
+<p>If non-keyword arguments are used, they will be interpreted as
+setData(y) for a single argument and setData(x, y) for two
+arguments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.setFillLevel">
+<code class="descname">setFillLevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.setFillLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.setFillLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the level filled to when filling under the curve</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.setPen">
+<code class="descname">setPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.setPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.setPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pen used to draw the curve.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotCurveItem.setShadowPen">
+<code class="descname">setShadowPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotCurveItem.html#PlotCurveItem.setShadowPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotCurveItem.setShadowPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the shadow pen used to draw behind tyhe primary pen.
+This pen must have a larger width than the primary 
+pen to be visible.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="graphicslayout.html"
+                        title="previous chapter">GraphicsLayout</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scatterplotitem.html"
+                        title="next chapter">ScatterPlotItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/plotcurveitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scatterplotitem.html" title="ScatterPlotItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graphicslayout.html" title="GraphicsLayout"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

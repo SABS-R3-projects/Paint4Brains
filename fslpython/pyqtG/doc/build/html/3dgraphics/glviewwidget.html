@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GLViewWidget &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s 3D Graphics System" href="index.html" />
+    <link rel="next" title="GLGridItem" href="glgriditem.html" />
+    <link rel="prev" title="PyQtGraph’s 3D Graphics System" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glgriditem.html" title="GLGridItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyQtGraph’s 3D Graphics System"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="glviewwidget">
+<h1>GLViewWidget<a class="headerlink" href="#glviewwidget" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.opengl.GLViewWidget">
+<em class="property">class </em><code class="descclassname">pyqtgraph.opengl.</code><code class="descname">GLViewWidget</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Basic widget for displaying 3D data</dt>
+<dd><ul class="first last simple">
+<li>Rotation/scale controls</li>
+<li>Axis/grid display</li>
+<li>Export options</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.cameraPosition">
+<code class="descname">cameraPosition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.cameraPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.cameraPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current position of camera based on center, dist, elevation, and azimuth</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.itemsAt">
+<code class="descname">itemsAt</code><span class="sig-paren">(</span><em>region=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.itemsAt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.itemsAt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of the items displayed in the region (x, y, w, h)
+relative to the widget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.orbit">
+<code class="descname">orbit</code><span class="sig-paren">(</span><em>azim</em>, <em>elev</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.orbit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.orbit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orbits the camera around the center position. <em>azim</em> and <em>elev</em> are given in degrees.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.paintGL">
+<code class="descname">paintGL</code><span class="sig-paren">(</span><em>region=None</em>, <em>viewport=None</em>, <em>useItemNames=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.paintGL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.paintGL" title="Permalink to this definition">¶</a></dt>
+<dd><p>viewport specifies the arguments to glViewport. If None, then we use self.opts[&#8216;viewport&#8217;]
+region specifies the sub-region of self.opts[&#8216;viewport&#8217;] that should be rendered.
+Note that we may use viewport != self.opts[&#8216;viewport&#8217;] when exporting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.pan">
+<code class="descname">pan</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>dz</em>, <em>relative=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.pan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.pan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves the center (look-at) position while holding the camera in place.</p>
+<p>If relative=True, then the coordinates are interpreted such that x
+if in the global xy plane and points to the right side of the view, y is
+in the global xy plane and orthogonal to x, and z points in the global z
+direction. Distances are scaled roughly such that a value of 1.0 moves
+by one pixel on screen.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.pixelSize">
+<code class="descname">pixelSize</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.pixelSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.pixelSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the approximate size of a screen pixel at the location pos
+Pos may be a Vector or an (N,3) array of locations</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.readQImage">
+<code class="descname">readQImage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.readQImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.readQImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the current buffer pixels out as a QImage.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLViewWidget.setBackgroundColor">
+<code class="descname">setBackgroundColor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLViewWidget.html#GLViewWidget.setBackgroundColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLViewWidget.setBackgroundColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the background color of the widget. Accepts the same arguments as
+pg.mkColor() and pg.glColor().</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">PyQtGraph&#8217;s 3D Graphics System</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glgriditem.html"
+                        title="next chapter">GLGridItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/3dgraphics/glviewwidget.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glgriditem.html" title="GLGridItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyQtGraph’s 3D Graphics System"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

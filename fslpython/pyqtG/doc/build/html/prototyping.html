@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rapid GUI prototyping &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Parameter Trees" href="parametertree/index.html" />
+    <link rel="prev" title="Exporting" href="exporting.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parametertree/index.html" title="Parameter Trees"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="exporting.html" title="Exporting"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rapid-gui-prototyping">
+<h1>Rapid GUI prototyping<a class="headerlink" href="#rapid-gui-prototyping" title="Permalink to this headline">¶</a></h1>
+<p>[Just an overview; documentation is not complete yet]</p>
+<p>PyQtGraph offers several powerful features which are commonly used in engineering and scientific applications.</p>
+<div class="section" id="parameter-trees">
+<h2>Parameter Trees<a class="headerlink" href="#parameter-trees" title="Permalink to this headline">¶</a></h2>
+<p>The parameter tree system provides a widget displaying a tree of modifiable values similar to those used in most GUI editor applications. This allows a large number of variables to be controlled by the user with relatively little programming effort. The system also provides separation between the data being controlled and the user interface controlling it (model/view architecture). Parameters may be grouped/nested to any depth and custom parameter types can be built by subclassing from Parameter and ParameterItem.</p>
+<p>See the <a class="reference external" href="parametertree">parametertree documentation</a> for more information.</p>
+</div>
+<div class="section" id="visual-programming-flowcharts">
+<h2>Visual Programming Flowcharts<a class="headerlink" href="#visual-programming-flowcharts" title="Permalink to this headline">¶</a></h2>
+<p>PyQtGraph&#8217;s flowcharts provide a visual programming environment similar in concept to LabView&#8211;functional modules are added to a flowchart and connected by wires to define a more complex and arbitrarily configurable algorithm. A small number of predefined modules (called Nodes) are included with pyqtgraph, but most flowchart developers will want to define their own library of Nodes. At their core, the Nodes are little more than 1) a Python function 2) a list of input/output terminals, and 3) an optional widget providing a control panel for the Node. Nodes may transmit/receive any type of Python object via their terminals.</p>
+<p>See the <a class="reference external" href="flowchart">flowchart documentation</a> and the flowchart examples for more information.</p>
+</div>
+<div class="section" id="graphical-canvas">
+<h2>Graphical Canvas<a class="headerlink" href="#graphical-canvas" title="Permalink to this headline">¶</a></h2>
+<p>The Canvas is a system designed to allow the user to add/remove items to a 2D canvas similar to most vector graphics applications. Items can be translated/scaled/rotated and each item may define its own custom control interface.</p>
+</div>
+<div class="section" id="dockable-widgets">
+<h2>Dockable Widgets<a class="headerlink" href="#dockable-widgets" title="Permalink to this headline">¶</a></h2>
+<p>The dockarea system allows the design of user interfaces which can be rearranged by the user at runtime. Docks can be moved, resized, stacked, and torn out of the main window. This is similar in principle to the docking system built into Qt, but offers a more deterministic dock placement API (in Qt it is very difficult to programatically generate complex dock arrangements). Additionally, Qt&#8217;s docks are designed to be used as small panels around the outer edge of a window. PyQtGraph&#8217;s docks were created with the notion that the entire window (or any portion of it) would consist of dockable components.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rapid GUI prototyping</a><ul>
+<li><a class="reference internal" href="#parameter-trees">Parameter Trees</a></li>
+<li><a class="reference internal" href="#visual-programming-flowcharts">Visual Programming Flowcharts</a></li>
+<li><a class="reference internal" href="#graphical-canvas">Graphical Canvas</a></li>
+<li><a class="reference internal" href="#dockable-widgets">Dockable Widgets</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="exporting.html"
+                        title="previous chapter">Exporting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parametertree/index.html"
+                        title="next chapter">Parameter Trees</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/prototyping.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parametertree/index.html" title="Parameter Trees"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="exporting.html" title="Exporting"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

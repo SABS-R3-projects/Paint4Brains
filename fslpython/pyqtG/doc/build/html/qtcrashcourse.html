@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Qt Crash Course &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Plotting in pyqtgraph" href="plotting.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Plotting in pyqtgraph"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="qt-crash-course">
+<h1>Qt Crash Course<a class="headerlink" href="#qt-crash-course" title="Permalink to this headline">¶</a></h1>
+<p>PyQtGraph makes extensive use of Qt for generating nearly all of its visual output and interfaces. Qt&#8217;s documentation is very well written and we encourage all pyqtgraph developers to familiarize themselves with it. The purpose of this section is to provide an introduction to programming with Qt (using either PyQt or PySide) for the pyqtgraph developer.</p>
+<div class="section" id="qwidgets-and-layouts">
+<h2>QWidgets and Layouts<a class="headerlink" href="#qwidgets-and-layouts" title="Permalink to this headline">¶</a></h2>
+<p>A Qt GUI is almost always composed of a few basic components:</p>
+<ul class="simple">
+<li>A window. This is often provided by QMainWindow, but note that all QWidgets can be displayed in their window by simply calling widget.show() if the widget does not have a parent.</li>
+<li>Multiple QWidget instances such as QPushButton, QLabel, QComboBox, etc.</li>
+<li>QLayout instances (optional, but strongly encouraged) which automatically manage the positioning of widgets to allow the GUI to resize in a usable way.</li>
+</ul>
+<p>PyQtGraph fits into this scheme by providing its own QWidget subclasses to be inserted into your GUI.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">PyQt4</span> <span class="kn">import</span> <span class="n">QtGui</span>  <span class="c1"># (the example applies equally well to PySide)</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="kn">as</span> <span class="nn">pg</span>
+
+<span class="c1">## Always start by initializing Qt (only once per application)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">([])</span>
+
+<span class="c1">## Define a top-level widget to hold everything</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">()</span>
+
+<span class="c1">## Create some widgets to be placed inside</span>
+<span class="n">btn</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;press me&#39;</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span><span class="s1">&#39;enter text&#39;</span><span class="p">)</span>
+<span class="n">listw</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QListWidget</span><span class="p">()</span>
+<span class="n">plot</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="p">()</span>
+
+<span class="c1">## Create a grid layout to manage the widgets size and position</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGridLayout</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+
+<span class="c1">## Add widgets to the layout in their proper positions</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1"># button goes in upper-left</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>   <span class="c1"># text edit goes in middle-left</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">listw</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># list widget goes in bottom-left</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># plot goes on right side, spanning 3 rows</span>
+
+<span class="c1">## Display the widget as a new window</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## Start the Qt event loop</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>More complex interfaces may be designed graphically using Qt Designer, which allows you to simply drag widgets into your window to define its appearance.</p>
+</div>
+<div class="section" id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
+<p>Virtually every class in pyqtgraph is an extension of base classes provided by Qt. When reading the documentation, remember that all of Qt&#8217;s classes start with the letter &#8216;Q&#8217;, whereas pyqtgraph&#8217;s classes do not. When reading through the methods for any class, it is often helpful to see which Qt base classes are used and look through the Qt documentation as well.</p>
+<p>Most of Qt&#8217;s classes define signals which can be difficult to tell apart from regular methods. Almost all signals explicity defined by pyqtgraph are named beginning with &#8216;sig&#8217; to indicate that these signals are not defined at the Qt level.</p>
+<p>In most cases, classes which end in &#8216;Widget&#8217; are subclassed from QWidget and can therefore be used as a GUI element in a Qt window. Classes which end in &#8216;Item&#8217; are subclasses of QGraphicsItem and can only be displayed within a QGraphicsView instance (such as GraphicsLayoutWidget or PlotWidget).</p>
+</div>
+<div class="section" id="signals-slots-and-events">
+<h2>Signals, Slots, and Events<a class="headerlink" href="#signals-slots-and-events" title="Permalink to this headline">¶</a></h2>
+<p>[ to be continued.. please post a request on the pyqtgraph forum if you&#8217;d like to read more ]</p>
+<p>Qt detects and reacts to user interaction by executing its <em>event loop</em>.</p>
+<blockquote>
+<div><ul class="simple">
+<li>what happens in the event loop?</li>
+<li>when do I need to use QApplication.exec_() ?</li>
+<li>what control do I have over event loop execution? (QApplication.processEvents)</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="graphicsview-and-graphicsitems">
+<h2>GraphicsView and GraphicsItems<a class="headerlink" href="#graphicsview-and-graphicsitems" title="Permalink to this headline">¶</a></h2>
+<p>More information about the architecture of Qt GraphicsView:
+<a class="reference external" href="http://qt-project.org/doc/qt-4.8/graphicsview.html">http://qt-project.org/doc/qt-4.8/graphicsview.html</a></p>
+</div>
+<div class="section" id="coordinate-systems-and-transformations">
+<h2>Coordinate Systems and Transformations<a class="headerlink" href="#coordinate-systems-and-transformations" title="Permalink to this headline">¶</a></h2>
+<p>More information about the coordinate systems in Qt GraphicsView:
+<a class="reference external" href="http://qt-project.org/doc/qt-4.8/graphicsview.html#the-graphics-view-coordinate-system">http://qt-project.org/doc/qt-4.8/graphicsview.html#the-graphics-view-coordinate-system</a></p>
+</div>
+<div class="section" id="mouse-and-keyboard-input">
+<h2>Mouse and Keyboard Input<a class="headerlink" href="#mouse-and-keyboard-input" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="qtimer-multi-threading">
+<h2>QTimer, Multi-Threading<a class="headerlink" href="#qtimer-multi-threading" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="multi-threading-vs-multi-processing-in-qt">
+<h2>Multi-threading vs Multi-processing in Qt<a class="headerlink" href="#multi-threading-vs-multi-processing-in-qt" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Qt Crash Course</a><ul>
+<li><a class="reference internal" href="#qwidgets-and-layouts">QWidgets and Layouts</a></li>
+<li><a class="reference internal" href="#naming-conventions">Naming Conventions</a></li>
+<li><a class="reference internal" href="#signals-slots-and-events">Signals, Slots, and Events</a></li>
+<li><a class="reference internal" href="#graphicsview-and-graphicsitems">GraphicsView and GraphicsItems</a></li>
+<li><a class="reference internal" href="#coordinate-systems-and-transformations">Coordinate Systems and Transformations</a></li>
+<li><a class="reference internal" href="#mouse-and-keyboard-input">Mouse and Keyboard Input</a></li>
+<li><a class="reference internal" href="#qtimer-multi-threading">QTimer, Multi-Threading</a></li>
+<li><a class="reference internal" href="#multi-threading-vs-multi-processing-in-qt">Multi-threading vs Multi-processing in Qt</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plotting.html"
+                        title="next chapter">Plotting in pyqtgraph</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/qtcrashcourse.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Plotting in pyqtgraph"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

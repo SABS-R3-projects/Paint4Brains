@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ParameterTree &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="ParameterTree API Reference" href="apiref.html" />
+    <link rel="next" title="Built-in Parameter Types" href="parametertypes.html" />
+    <link rel="prev" title="Parameter" href="parameter.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parametertypes.html" title="Built-in Parameter Types"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parameter.html" title="Parameter"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Parameter Trees</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="apiref.html" accesskey="U">ParameterTree API Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parametertree">
+<h1>ParameterTree<a class="headerlink" href="#parametertree" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.parametertree.ParameterTree">
+<em class="property">class </em><code class="descclassname">pyqtgraph.parametertree.</code><code class="descname">ParameterTree</code><span class="sig-paren">(</span><em>parent=None</em>, <em>showHeader=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterTree.html#ParameterTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Widget used to display or control data from a hierarchy of Parameters</p>
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterTree.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parent=None</em>, <em>showHeader=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterTree.html#ParameterTree.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterTree.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>parent</td>
+<td>(QWidget) An optional parent widget</td>
+</tr>
+<tr class="row-odd"><td>showHeader</td>
+<td>(bool) If True, then the QTreeView header is displayed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterTree.addParameters">
+<code class="descname">addParameters</code><span class="sig-paren">(</span><em>param</em>, <em>root=None</em>, <em>depth=0</em>, <em>showTop=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterTree.html#ParameterTree.addParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterTree.addParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds one top-level <a class="reference internal" href="parameter.html#pyqtgraph.parametertree.Parameter" title="pyqtgraph.parametertree.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
+to the view.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>param</td>
+<td>The <a class="reference internal" href="parameter.html#pyqtgraph.parametertree.Parameter" title="pyqtgraph.parametertree.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
+to add.</td>
+</tr>
+<tr class="row-odd"><td>root</td>
+<td>The item within the tree to which <em>param</em> should be added.
+By default, <em>param</em> is added as a top-level item.</td>
+</tr>
+<tr class="row-even"><td>showTop</td>
+<td>If False, then <em>param</em> will be hidden, and only its
+children will be visible in the tree.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterTree.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterTree.html#ParameterTree.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterTree.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all parameters from the tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterTree.focusNext">
+<code class="descname">focusNext</code><span class="sig-paren">(</span><em>item</em>, <em>forward=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterTree.html#ParameterTree.focusNext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterTree.focusNext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give input focus to the next (or previous) item after <em>item</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterTree.setParameters">
+<code class="descname">setParameters</code><span class="sig-paren">(</span><em>param</em>, <em>showTop=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterTree.html#ParameterTree.setParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterTree.setParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the top-level <a class="reference internal" href="parameter.html#pyqtgraph.parametertree.Parameter" title="pyqtgraph.parametertree.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
+to be displayed in this ParameterTree.</p>
+<p>If <em>showTop</em> is False, then the top-level parameter is hidden and only 
+its children will be visible. This is a convenience method equivalent 
+to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tree</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">tree</span><span class="o">.</span><span class="n">addParameters</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">showTop</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parameter.html"
+                        title="previous chapter">Parameter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parametertypes.html"
+                        title="next chapter">Built-in Parameter Types</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/parametertree/parametertree.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parametertypes.html" title="Built-in Parameter Types"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parameter.html" title="Parameter"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Parameter Trees</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="apiref.html" >ParameterTree API Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

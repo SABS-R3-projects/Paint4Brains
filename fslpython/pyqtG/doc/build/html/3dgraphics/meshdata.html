@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MeshData &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s 3D Graphics System" href="index.html" />
+    <link rel="next" title="ColorMap" href="../colormap.html" />
+    <link rel="prev" title="GLScatterPlotItem" href="glscatterplotitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../colormap.html" title="ColorMap"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="glscatterplotitem.html" title="GLScatterPlotItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="meshdata">
+<h1>MeshData<a class="headerlink" href="#meshdata" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.opengl.MeshData">
+<em class="property">class </em><code class="descclassname">pyqtgraph.opengl.</code><code class="descname">MeshData</code><span class="sig-paren">(</span><em>vertexes=None</em>, <em>faces=None</em>, <em>edges=None</em>, <em>vertexColors=None</em>, <em>faceColors=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for storing and operating on 3D mesh data. May contain:</p>
+<ul class="simple">
+<li>list of vertex locations</li>
+<li>list of edges</li>
+<li>list of triangles</li>
+<li>colors per vertex, edge, or tri</li>
+<li>normals per vertex or tri</li>
+</ul>
+<p>This class handles conversion between the standard [list of vertexes, list of faces]
+format (suitable for use with glDrawElements) and &#8216;indexed&#8217; [list of vertexes] format
+(suitable for use with glDrawArrays). It will automatically compute face normal
+vectors as well as averaged vertex normal vectors.</p>
+<p>The class attempts to be as efficient as possible in caching conversion results and
+avoiding unnecessary conversions.</p>
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>vertexes=None</em>, <em>faces=None</em>, <em>edges=None</em>, <em>vertexColors=None</em>, <em>faceColors=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>vertexes</td>
+<td>(Nv, 3) array of vertex coordinates.
+If faces is not specified, then this will instead be
+interpreted as (Nf, 3, 3) array of coordinates.</td>
+</tr>
+<tr class="row-odd"><td>faces</td>
+<td>(Nf, 3) array of indexes into the vertex array.</td>
+</tr>
+<tr class="row-even"><td>edges</td>
+<td>[not available yet]</td>
+</tr>
+<tr class="row-odd"><td>vertexColors</td>
+<td>(Nv, 4) array of vertex colors.
+If faces is not specified, then this will instead be
+interpreted as (Nf, 3, 4) array of colors.</td>
+</tr>
+<tr class="row-even"><td>faceColors</td>
+<td>(Nf, 4) array of face colors.</td>
+</tr>
+</tbody>
+</table>
+<p>All arguments are optional.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyqtgraph.opengl.MeshData.cylinder">
+<em class="property">static </em><code class="descname">cylinder</code><span class="sig-paren">(</span><em>rows, cols, radius=[1.0, 1.0], length=1.0, offset=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.cylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a MeshData instance with vertexes and faces computed
+for a cylindrical surface.
+The cylinder may be tapered with different radii at each end (truncated cone)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.edges">
+<code class="descname">edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array (Nf, 3) of vertex indexes, two per edge in the mesh.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.faceColors">
+<code class="descname">faceColors</code><span class="sig-paren">(</span><em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.faceColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.faceColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array (Nf, 4) of face colors.
+If indexed==&#8217;faces&#8217;, then instead return an indexed array
+(Nf, 3, 4)  (note this is just the same array with each color
+repeated three times).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.faceCount">
+<code class="descname">faceCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.faceCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.faceCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of faces in the mesh.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.faceNormals">
+<code class="descname">faceNormals</code><span class="sig-paren">(</span><em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.faceNormals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.faceNormals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array (Nf, 3) of normal vectors for each face.
+If indexed=&#8217;faces&#8217;, then instead return an indexed array
+(Nf, 3, 3)  (this is just the same array with each vector
+copied three times).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.faces">
+<code class="descname">faces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.faces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.faces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array (Nf, 3) of vertex indexes, three per triangular face in the mesh.</p>
+<p>If faces have not been computed for this mesh, the function returns None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.hasFaceColor">
+<code class="descname">hasFaceColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.hasFaceColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.hasFaceColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this data set has face color information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.hasFaceIndexedData">
+<code class="descname">hasFaceIndexedData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.hasFaceIndexedData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.hasFaceIndexedData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this object already has vertex positions indexed by face</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.hasVertexColor">
+<code class="descname">hasVertexColor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.hasVertexColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.hasVertexColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this data set has vertex color information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.restore">
+<code class="descname">restore</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.restore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the state of a mesh previously saved using save()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize this mesh to a string appropriate for disk storage</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.setFaceColors">
+<code class="descname">setFaceColors</code><span class="sig-paren">(</span><em>colors</em>, <em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.setFaceColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.setFaceColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the face color array (Nf, 4).
+If indexed==&#8217;faces&#8217;, then the array will be interpreted
+as indexed and should have shape (Nf, 3, 4)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.setFaces">
+<code class="descname">setFaces</code><span class="sig-paren">(</span><em>faces</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.setFaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.setFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the (Nf, 3) array of faces. Each rown in the array contains
+three indexes into the vertex array, specifying the three corners 
+of a triangular face.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.setVertexColors">
+<code class="descname">setVertexColors</code><span class="sig-paren">(</span><em>colors</em>, <em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.setVertexColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.setVertexColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the vertex color array (Nv, 4).
+If indexed==&#8217;faces&#8217;, then the array will be interpreted
+as indexed and should have shape (Nf, 3, 4)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.setVertexes">
+<code class="descname">setVertexes</code><span class="sig-paren">(</span><em>verts=None</em>, <em>indexed=None</em>, <em>resetNormals=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.setVertexes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.setVertexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the array (Nv, 3) of vertex coordinates.
+If indexed==&#8217;faces&#8217;, then the data must have shape (Nf, 3, 3) and is
+assumed to be already indexed as a list of faces.
+This will cause any pre-existing normal vectors to be cleared
+unless resetNormals=False.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyqtgraph.opengl.MeshData.sphere">
+<em class="property">static </em><code class="descname">sphere</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em>, <em>radius=1.0</em>, <em>offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a MeshData instance with vertexes and faces computed
+for a spherical surface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.vertexColors">
+<code class="descname">vertexColors</code><span class="sig-paren">(</span><em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.vertexColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.vertexColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array (Nv, 4) of vertex colors.
+If indexed==&#8217;faces&#8217;, then instead return an indexed array
+(Nf, 3, 4).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.vertexFaces">
+<code class="descname">vertexFaces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.vertexFaces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.vertexFaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return list mapping each vertex index to a list of face indexes that use the vertex.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.vertexNormals">
+<code class="descname">vertexNormals</code><span class="sig-paren">(</span><em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.vertexNormals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.vertexNormals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of normal vectors.
+By default, the array will be (N, 3) with one entry per unique vertex in the mesh.
+If indexed is &#8216;faces&#8217;, then the array will contain three normal vectors per face
+(and some vertexes may be repeated).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.MeshData.vertexes">
+<code class="descname">vertexes</code><span class="sig-paren">(</span><em>indexed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/MeshData.html#MeshData.vertexes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.MeshData.vertexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array (N,3) of the positions of vertexes in the mesh. 
+By default, each unique vertex appears only once in the array.
+If indexed is &#8216;faces&#8217;, then the array will instead contain three vertexes
+per face in the mesh (and a single vertex may appear more than once in the array).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="glscatterplotitem.html"
+                        title="previous chapter">GLScatterPlotItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../colormap.html"
+                        title="next chapter">ColorMap</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/3dgraphics/meshdata.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../colormap.html" title="ColorMap"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="glscatterplotitem.html" title="GLScatterPlotItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

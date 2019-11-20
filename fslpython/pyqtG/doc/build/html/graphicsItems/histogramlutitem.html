@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HistogramLUTItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="GradientLegend" href="gradientlegend.html" />
+    <link rel="prev" title="GradientEditorItem" href="gradienteditoritem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gradientlegend.html" title="GradientLegend"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gradienteditoritem.html" title="GradientEditorItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="histogramlutitem">
+<h1>HistogramLUTItem<a class="headerlink" href="#histogramlutitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.HistogramLUTItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">HistogramLUTItem</code><span class="sig-paren">(</span><em>image=None</em>, <em>fillHistogram=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a graphicsWidget which provides controls for adjusting the display of an image.
+Includes:</p>
+<ul class="simple">
+<li>Image histogram</li>
+<li>Movable region over histogram to select black/white levels</li>
+<li>Gradient editor to define color lookup table for single-channel images</li>
+</ul>
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>image=None</em>, <em>fillHistogram=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <em>image</em> (ImageItem) is provided, then the control will be automatically linked to the image and changes to the control will be immediately reflected in the image&#8217;s appearance.
+By default, the histogram is rendered with a fill. For performance, set <em>fillHistogram</em> = False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.autoHistogramRange">
+<code class="descname">autoHistogramRange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.autoHistogramRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.autoHistogramRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable auto-scaling on the histogram plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.getLevels">
+<code class="descname">getLevels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.getLevels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.getLevels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the min and max levels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.getLookupTable">
+<code class="descname">getLookupTable</code><span class="sig-paren">(</span><em>img=None</em>, <em>n=None</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.getLookupTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.getLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a lookup table from the color gradient defined by this 
+HistogramLUTItem.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.setHistogramRange">
+<code class="descname">setHistogramRange</code><span class="sig-paren">(</span><em>mn</em>, <em>mx</em>, <em>padding=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.setHistogramRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.setHistogramRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the Y range on the histogram plot. This disables auto-scaling.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.setImageItem">
+<code class="descname">setImageItem</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.setImageItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.setImageItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an ImageItem to have its levels and LUT automatically controlled
+by this HistogramLUTItem.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.HistogramLUTItem.setLevels">
+<code class="descname">setLevels</code><span class="sig-paren">(</span><em>mn</em>, <em>mx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/HistogramLUTItem.html#HistogramLUTItem.setLevels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.HistogramLUTItem.setLevels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the min and max levels.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gradienteditoritem.html"
+                        title="previous chapter">GradientEditorItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gradientlegend.html"
+                        title="next chapter">GradientLegend</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/histogramlutitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gradientlegend.html" title="GradientLegend"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gradienteditoritem.html" title="GradientEditorItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

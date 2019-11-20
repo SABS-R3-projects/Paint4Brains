@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Line, Fill, and Color &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Interactive Data Selection Controls" href="region_of_interest.html" />
+    <link rel="prev" title="3D Graphics" href="3dgraphics.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="region_of_interest.html" title="Interactive Data Selection Controls"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="3dgraphics.html" title="3D Graphics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="line-fill-and-color">
+<h1>Line, Fill, and Color<a class="headerlink" href="#line-fill-and-color" title="Permalink to this headline">¶</a></h1>
+<p>Qt relies on its QColor, QPen and QBrush classes for specifying line and fill styles for all of its drawing.
+Internally, pyqtgraph uses the same system but also allows many shorthand methods of specifying
+the same style options.</p>
+<p>Many functions and methods in pyqtgraph accept arguments specifying the line style (pen), fill style (brush), or color.
+For most of these function arguments, the following values may be used:</p>
+<ul class="simple">
+<li>single-character string representing color (b, g, r, c, m, y, k, w)</li>
+<li>(r, g, b) or (r, g, b, a) tuple</li>
+<li>single greyscale value (0.0 - 1.0)</li>
+<li>(index, maximum) tuple for automatically iterating through colors (see <a class="reference internal" href="functions.html#pyqtgraph.intColor" title="pyqtgraph.intColor"><code class="xref py py-func docutils literal"><span class="pre">intColor</span></code></a>)</li>
+<li>QColor</li>
+<li>QPen / QBrush where appropriate</li>
+</ul>
+<p>Notably, more complex pens and brushes can be easily built using the
+<a class="reference internal" href="functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen()</span></code></a> / <a class="reference internal" href="functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush()</span></code></a> functions or with Qt&#8217;s QPen and QBrush classes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mkPen</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">)</span>          <span class="c1">## Make a dashed yellow line 2px wide</span>
+<span class="n">mkPen</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>                                             <span class="c1">## solid grey line 1px wide</span>
+<span class="n">mkPen</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DotLine</span><span class="p">)</span>  <span class="c1">## Dotted pale-blue line</span>
+</pre></div>
+</div>
+<p>See the Qt documentation for &#8216;QPen&#8217; and &#8216;PenStyle&#8217; for more line-style options and &#8216;QBrush&#8217; for more fill options.
+Colors can also be built using <a class="reference internal" href="functions.html#pyqtgraph.mkColor" title="pyqtgraph.mkColor"><code class="xref py py-func docutils literal"><span class="pre">mkColor()</span></code></a>,
+<a class="reference internal" href="functions.html#pyqtgraph.intColor" title="pyqtgraph.intColor"><code class="xref py py-func docutils literal"><span class="pre">intColor()</span></code></a>, <a class="reference internal" href="functions.html#pyqtgraph.hsvColor" title="pyqtgraph.hsvColor"><code class="xref py py-func docutils literal"><span class="pre">hsvColor()</span></code></a>, or Qt&#8217;s QColor class.</p>
+<div class="section" id="default-background-and-foreground-colors">
+<h2>Default Background and Foreground Colors<a class="headerlink" href="#default-background-and-foreground-colors" title="Permalink to this headline">¶</a></h2>
+<p>By default, pyqtgraph uses a black background for its plots and grey for axes, text, and plot lines.
+These defaults can be changed using pyqtgraph.setConfigOption():</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="kn">as</span> <span class="nn">pg</span>
+
+<span class="c1">## Switch to using white background and black foreground</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">setConfigOption</span><span class="p">(</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">setConfigOption</span><span class="p">(</span><span class="s1">&#39;foreground&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="c1">## The following plot has inverted colors</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>(Note that this must be set <em>before</em> creating any widgets)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Line, Fill, and Color</a><ul>
+<li><a class="reference internal" href="#default-background-and-foreground-colors">Default Background and Foreground Colors</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="3dgraphics.html"
+                        title="previous chapter">3D Graphics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="region_of_interest.html"
+                        title="next chapter">Interactive Data Selection Controls</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/style.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="region_of_interest.html" title="Interactive Data Selection Controls"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="3dgraphics.html" title="3D Graphics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

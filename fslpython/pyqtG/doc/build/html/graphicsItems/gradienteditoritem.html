@@ -1,0 +1,555 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GradientEditorItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="HistogramLUTItem" href="histogramlutitem.html" />
+    <link rel="prev" title="LegendItem" href="legenditem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="histogramlutitem.html" title="HistogramLUTItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="legenditem.html" title="LegendItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gradienteditoritem">
+<h1>GradientEditorItem<a class="headerlink" href="#gradienteditoritem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.GradientEditorItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">GradientEditorItem</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="#pyqtgraph.TickSliderItem" title="pyqtgraph.TickSliderItem"><code class="xref py py-class docutils literal"><span class="pre">TickSliderItem</span></code></a></p>
+<p>An item that can be used to define a color gradient. Implements common pre-defined gradients that are 
+customizable by the user. :class: <cite>GradientWidget &lt;pyqtgraph.GradientWidget&gt;</cite> provides a widget
+with a GradientEditorItem that can be added to a GUI.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigGradientChanged(self)</td>
+<td>Signal is emitted anytime the gradient changes. The signal
+is emitted in real time while ticks are being dragged or
+colors are being changed.</td>
+</tr>
+<tr class="row-odd"><td>sigGradientChangeFinished(self)</td>
+<td>Signal is emitted when the gradient is finished changing.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new GradientEditorItem. 
+All arguments are passed to <a class="reference internal" href="#pyqtgraph.TickSliderItem.__init__" title="pyqtgraph.TickSliderItem.__init__"><code class="xref py py-func docutils literal"><span class="pre">TickSliderItem.__init__</span></code></a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>orientation</td>
+<td>Set the orientation of the gradient. Options are: &#8216;left&#8217;, &#8216;right&#8217;
+&#8216;top&#8217;, and &#8216;bottom&#8217;.</td>
+</tr>
+<tr class="row-odd"><td>allowAdd</td>
+<td>Default is True. Specifies whether ticks can be added to the item.</td>
+</tr>
+<tr class="row-even"><td>tickPen</td>
+<td>Default is white. Specifies the color of the outline of the ticks.
+Can be any of the valid arguments for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.addTick">
+<code class="descname">addTick</code><span class="sig-paren">(</span><em>x</em>, <em>color=None</em>, <em>movable=True</em>, <em>finish=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.addTick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.addTick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a tick to the gradient. Return the tick.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>x</td>
+<td>Position where tick should be added.</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>Color of added tick. If color is not specified, the color will be
+the color of the gradient at the specified position.</td>
+</tr>
+<tr class="row-even"><td>movable</td>
+<td>Specifies whether the tick is movable with the mouse.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.colorMap">
+<code class="descname">colorMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.colorMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.colorMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a ColorMap object representing the current state of the editor.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.getColor">
+<code class="descname">getColor</code><span class="sig-paren">(</span><em>x</em>, <em>toQColor=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.getColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.getColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a color for a given value.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>x</td>
+<td>Value (position on gradient) of requested color.</td>
+</tr>
+<tr class="row-odd"><td>toQColor</td>
+<td>If true, returns a QColor object, else returns a (r,g,b,a) tuple.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.getGradient">
+<code class="descname">getGradient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.getGradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.getGradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a QLinearGradient object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.getLookupTable">
+<code class="descname">getLookupTable</code><span class="sig-paren">(</span><em>nPts</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.getLookupTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.getLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an RGB(A) lookup table (ndarray).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>nPts</td>
+<td>The number of points in the returned lookup table.</td>
+</tr>
+<tr class="row-odd"><td>alpha</td>
+<td>True, False, or None - Specifies whether or not alpha values are included
+in the table.If alpha is None, alpha will be automatically determined.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.isLookupTrivial">
+<code class="descname">isLookupTrivial</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.isLookupTrivial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.isLookupTrivial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the gradient has exactly two stops in it: black at 0.0 and white at 1.0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.loadPreset">
+<code class="descname">loadPreset</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.loadPreset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.loadPreset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a predefined gradient. Currently defined gradients are: 
+&#8216;thermal&#8217;, &#8216;flame&#8217;, &#8216;yellowy&#8217;, &#8216;bipolar&#8217;, &#8216;spectrum&#8217;, &#8216;cyclic&#8217;, &#8216;greyclip&#8217;, &#8216;grey&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.restoreState">
+<code class="descname">restoreState</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.restoreState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.restoreState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the gradient specified in state.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>state</td>
+<td><p class="first">A dictionary with same structure as those returned by
+<a class="reference internal" href="#pyqtgraph.GradientEditorItem.saveState" title="pyqtgraph.GradientEditorItem.saveState"><code class="xref py py-func docutils literal"><span class="pre">saveState</span></code></a></p>
+<p>Keys must include:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>&#8216;mode&#8217;: hsv or rgb</li>
+<li>&#8216;ticks&#8217;: a list of tuples (pos, (r,g,b,a))</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.saveState">
+<code class="descname">saveState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.saveState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.saveState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary with parameters for rebuilding the gradient. Keys will include:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;mode&#8217;: hsv or rgb</li>
+<li>&#8216;ticks&#8217;: a list of tuples (pos, (r,g,b,a))</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.setColorMode">
+<code class="descname">setColorMode</code><span class="sig-paren">(</span><em>cm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.setColorMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.setColorMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the color mode for the gradient. Options are: &#8216;hsv&#8217;, &#8216;rgb&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.setOrientation">
+<code class="descname">setOrientation</code><span class="sig-paren">(</span><em>orientation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.setOrientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.setOrientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the orientation of the GradientEditorItem.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>orientation</td>
+<td>Options are: &#8216;left&#8217;, &#8216;right&#8217;, &#8216;top&#8217;, &#8216;bottom&#8217;
+The orientation option specifies which side of the gradient the
+ticks are on, as well as whether the gradient is vertical (&#8216;right&#8217;
+and &#8216;left&#8217;) or horizontal (&#8216;top&#8217; and &#8216;bottom&#8217;).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GradientEditorItem.usesAlpha">
+<code class="descname">usesAlpha</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#GradientEditorItem.usesAlpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GradientEditorItem.usesAlpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if any ticks have an alpha &lt; 255</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="tickslideritem">
+<h1>TickSliderItem<a class="headerlink" href="#tickslideritem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.TickSliderItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">TickSliderItem</code><span class="sig-paren">(</span><em>orientation='bottom'</em>, <em>allowAdd=True</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="graphicswidget.html#pyqtgraph.GraphicsWidget" title="pyqtgraph.GraphicsWidget"><code class="xref py py-class docutils literal"><span class="pre">GraphicsWidget</span></code></a></p>
+<p>A rectangular item with tick marks along its length that can (optionally) be moved by the user.</p>
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>orientation='bottom'</em>, <em>allowAdd=True</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>orientation</td>
+<td>Set the orientation of the gradient. Options are: &#8216;left&#8217;, &#8216;right&#8217;
+&#8216;top&#8217;, and &#8216;bottom&#8217;.</td>
+</tr>
+<tr class="row-odd"><td>allowAdd</td>
+<td>Specifies whether ticks can be added to the item by the user.</td>
+</tr>
+<tr class="row-even"><td>tickPen</td>
+<td>Default is white. Specifies the color of the outline of the ticks.
+Can be any of the valid arguments for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.addTick">
+<code class="descname">addTick</code><span class="sig-paren">(</span><em>x</em>, <em>color=None</em>, <em>movable=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.addTick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.addTick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a tick to the item.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>x</td>
+<td>Position where tick should be added.</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>Color of added tick. If color is not specified, the color will be
+white.</td>
+</tr>
+<tr class="row-even"><td>movable</td>
+<td>Specifies whether the tick is movable with the mouse.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.getTick">
+<code class="descname">getTick</code><span class="sig-paren">(</span><em>tick</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.getTick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.getTick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Tick object at the specified index.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>tick</td>
+<td>An integer corresponding to the index of the desired tick. If the
+argument is not an integer it will be returned unchanged.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.listTicks">
+<code class="descname">listTicks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.listTicks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.listTicks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a sorted list of all the Tick objects on the slider.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.removeTick">
+<code class="descname">removeTick</code><span class="sig-paren">(</span><em>tick</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.removeTick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.removeTick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the specified tick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.setOrientation">
+<code class="descname">setOrientation</code><span class="sig-paren">(</span><em>orientation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.setOrientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.setOrientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the orientation of the TickSliderItem.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>orientation</td>
+<td>Options are: &#8216;left&#8217;, &#8216;right&#8217;, &#8216;top&#8217;, &#8216;bottom&#8217;
+The orientation option specifies which side of the slider the
+ticks are on, as well as whether the slider is vertical (&#8216;right&#8217;
+and &#8216;left&#8217;) or horizontal (&#8216;top&#8217; and &#8216;bottom&#8217;).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.setTickColor">
+<code class="descname">setTickColor</code><span class="sig-paren">(</span><em>tick</em>, <em>color</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.setTickColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.setTickColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the color of the specified tick.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>tick</td>
+<td>Can be either an integer corresponding to the index of the tick
+or a Tick object. Ex: if you had a slider with 3 ticks and you
+wanted to change the middle tick, the index would be 1.</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>The color to make the tick. Can be any argument that is valid for
+<a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.setTickValue">
+<code class="descname">setTickValue</code><span class="sig-paren">(</span><em>tick</em>, <em>val</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.setTickValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.setTickValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the position (along the slider) of the tick.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>tick</td>
+<td>Can be either an integer corresponding to the index of the tick
+or a Tick object. Ex: if you had a slider with 3 ticks and you
+wanted to change the middle tick, the index would be 1.</td>
+</tr>
+<tr class="row-odd"><td>val</td>
+<td>The desired position of the tick. If val is &lt; 0, position will be
+set to 0. If val is &gt; 1, position will be set to 1.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.TickSliderItem.tickValue">
+<code class="descname">tickValue</code><span class="sig-paren">(</span><em>tick</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/GradientEditorItem.html#TickSliderItem.tickValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.TickSliderItem.tickValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value (from 0.0 to 1.0) of the specified tick.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>tick</td>
+<td>Can be either an integer corresponding to the index of the tick
+or a Tick object. Ex: if you had a slider with 3 ticks and you
+wanted the value of the middle tick, the index would be 1.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GradientEditorItem</a></li>
+<li><a class="reference internal" href="#tickslideritem">TickSliderItem</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="legenditem.html"
+                        title="previous chapter">LegendItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="histogramlutitem.html"
+                        title="next chapter">HistogramLUTItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/gradienteditoritem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="histogramlutitem.html" title="HistogramLUTItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="legenditem.html" title="LegendItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

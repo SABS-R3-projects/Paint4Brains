@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Mouse Interaction &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="How to use pyqtgraph" href="how_to_use.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="how_to_use.html" title="How to use pyqtgraph"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mouse-interaction">
+<h1>Mouse Interaction<a class="headerlink" href="#mouse-interaction" title="Permalink to this headline">¶</a></h1>
+<p>Most applications that use pyqtgraph&#8217;s data visualization will generate widgets that can be interactively scaled, panned, and otherwise configured using the mouse. This section describes mouse interaction with these widgets.</p>
+<div class="section" id="d-graphics">
+<h2>2D Graphics<a class="headerlink" href="#d-graphics" title="Permalink to this headline">¶</a></h2>
+<p>In pyqtgraph, most 2D visualizations follow the following mouse interaction:</p>
+<ul class="simple">
+<li>Left button: Interacts with items in the scene (select/move objects, etc). If there are no movable objects under the mouse cursor, then dragging with the left button will pan the scene instead.</li>
+<li>Right button drag: Scales the scene. Dragging left/right scales horizontally; dragging up/down scales vertically (although some scenes will have their x/y scales locked together). If there are x/y axes fisible in the scene, then right-dragging over the axis will _only_ affect that axis.</li>
+<li>Right button click: Clicking the right button in most cases will show a context menu with a variety of options depending on the object(s) under the mouse cursor.</li>
+<li>Middle button (or wheel) drag: Dragging the mouse with the wheel pressed down will always pan the scene (this is useful in instances where panning with the left button is prevented by other objects in the scene).</li>
+<li>Wheel spin: Zooms the scene in and out.</li>
+</ul>
+<p>For machines where dragging with the right or middle buttons is difficult (usually Mac), another mouse interaction mode exists. In this mode, dragging with the left mouse button draws a box over a region of the scene. After the button is released, the scene is scaled and panned to fit the box. This mode can be accessed in the context menu or by calling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pyqtgraph</span><span class="o">.</span><span class="n">setConfigOption</span><span class="p">(</span><span class="s1">&#39;leftButtonPan&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="context-menu">
+<h2>Context Menu<a class="headerlink" href="#context-menu" title="Permalink to this headline">¶</a></h2>
+<p>Right-clicking on most scenes will show a context menu with various options for changing the behavior of the scene. Some of the options available in this menu are:</p>
+<ul class="simple">
+<li>Enable/disable automatic scaling when the data range changes</li>
+<li>Link the axes of multiple views together</li>
+<li>Enable disable mouse interaction per axis</li>
+<li>Explicitly set the visible range values</li>
+</ul>
+<p>The exact set of items available in the menu depends on the contents of the scene and the object clicked on.</p>
+</div>
+<div class="section" id="id1">
+<h2>3D Graphics<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>3D visualizations use the following mouse interaction:</p>
+<ul class="simple">
+<li>Left button drag: Rotates the scene around a central point</li>
+<li>Middle button drag: Pan the scene by moving the central &#8220;look-at&#8221; point within the x-y plane</li>
+<li>Middle button drag + CTRL: Pan the scene by moving the central &#8220;look-at&#8221; point along the z axis</li>
+<li>Wheel spin: zoom in/out</li>
+<li>Wheel + CTRL: change field-of-view angle</li>
+</ul>
+<p>And keyboard controls:</p>
+<ul class="simple">
+<li>Arrow keys rotate around central point, just like dragging the left mouse button</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Mouse Interaction</a><ul>
+<li><a class="reference internal" href="#d-graphics">2D Graphics</a></li>
+<li><a class="reference internal" href="#context-menu">Context Menu</a></li>
+<li><a class="reference internal" href="#id1">3D Graphics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="how_to_use.html"
+                        title="next chapter">How to use pyqtgraph</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/mouse_interaction.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="how_to_use.html" title="How to use pyqtgraph"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

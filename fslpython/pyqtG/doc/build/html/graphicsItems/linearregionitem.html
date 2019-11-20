@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LinearRegionItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="InfiniteLine" href="infiniteline.html" />
+    <link rel="prev" title="ViewBox" href="viewbox.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="infiniteline.html" title="InfiniteLine"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="viewbox.html" title="ViewBox"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="linearregionitem">
+<h1>LinearRegionItem<a class="headerlink" href="#linearregionitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.LinearRegionItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">LinearRegionItem</code><span class="sig-paren">(</span><em>values=[0, 1], orientation=None, brush=None, movable=True, bounds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="uigraphicsitem.html#pyqtgraph.UIGraphicsItem" title="pyqtgraph.UIGraphicsItem"><code class="xref py py-class docutils literal"><span class="pre">UIGraphicsItem</span></code></a></p>
+<p>Used for marking a horizontal or vertical region in plots.
+The region can be dragged and is bounded by lines which can be dragged individually.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigRegionChangeFinished(self)</td>
+<td>Emitted when the user has finished dragging the region (or one of its lines)
+and when the region is changed programatically.</td>
+</tr>
+<tr class="row-odd"><td>sigRegionChanged(self)</td>
+<td>Emitted while the user is dragging the region (or one of its lines)
+and when the region is changed programatically.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.LinearRegionItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>values=[0, 1], orientation=None, brush=None, movable=True, bounds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new LinearRegionItem.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>values</td>
+<td>A list of the positions of the lines in the region. These are not
+limits; limits can be set by specifying bounds.</td>
+</tr>
+<tr class="row-odd"><td>orientation</td>
+<td>Options are LinearRegionItem.Vertical or LinearRegionItem.Horizontal.
+If not specified it will be vertical.</td>
+</tr>
+<tr class="row-even"><td>brush</td>
+<td>Defines the brush that fills the region. Can be any arguments that
+are valid for <a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush</span></code></a>. Default is
+transparent blue.</td>
+</tr>
+<tr class="row-odd"><td>movable</td>
+<td>If True, the region and individual lines are movable by the user; if
+False, they are static.</td>
+</tr>
+<tr class="row-even"><td>bounds</td>
+<td>Optional [min, max] bounding values for the region</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.LinearRegionItem.getRegion">
+<code class="descname">getRegion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem.getRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem.getRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the values at the edges of the region.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.LinearRegionItem.setBounds">
+<code class="descname">setBounds</code><span class="sig-paren">(</span><em>bounds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem.setBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem.setBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional [min, max] bounding values for the region. To have no bounds on the
+region use [None, None].
+Does not affect the current position of the region unless it is outside the new bounds. 
+See <a class="reference internal" href="#pyqtgraph.LinearRegionItem.setRegion" title="pyqtgraph.LinearRegionItem.setRegion"><code class="xref py py-func docutils literal"><span class="pre">setRegion</span></code></a> to set the position 
+of the region.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.LinearRegionItem.setBrush">
+<code class="descname">setBrush</code><span class="sig-paren">(</span><em>*br</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem.setBrush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem.setBrush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the brush that fills the region. Can have any arguments that are valid
+for <a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.LinearRegionItem.setMovable">
+<code class="descname">setMovable</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem.setMovable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem.setMovable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set lines to be movable by the user, or not. If lines are movable, they will 
+also accept HoverEvents.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.LinearRegionItem.setRegion">
+<code class="descname">setRegion</code><span class="sig-paren">(</span><em>rgn</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/LinearRegionItem.html#LinearRegionItem.setRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.LinearRegionItem.setRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values for the edges of the region.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>rgn</td>
+<td>A list or tuple of the lower and upper values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="viewbox.html"
+                        title="previous chapter">ViewBox</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="infiniteline.html"
+                        title="next chapter">InfiniteLine</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/linearregionitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="infiniteline.html" title="InfiniteLine"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="viewbox.html" title="ViewBox"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GLGraphicsItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s 3D Graphics System" href="index.html" />
+    <link rel="next" title="GLScatterPlotItem" href="glscatterplotitem.html" />
+    <link rel="prev" title="GLAxisItem" href="glaxisitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glscatterplotitem.html" title="GLScatterPlotItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="glaxisitem.html" title="GLAxisItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="glgraphicsitem">
+<h1>GLGraphicsItem<a class="headerlink" href="#glgraphicsitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.opengl.GLGraphicsItem.</code><code class="descname">GLGraphicsItem</code><span class="sig-paren">(</span><em>parentItem=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parentItem=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.applyTransform">
+<code class="descname">applyTransform</code><span class="sig-paren">(</span><em>tr</em>, <em>local</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.applyTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.applyTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply this object&#8217;s transform by <em>tr</em>. 
+If local is True, then <em>tr</em> is multiplied on the right of the current transform:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">newTransform</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">tr</span>
+</pre></div>
+</div>
+<p>If local is False, then <em>tr</em> is instead multiplied on the left:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">newTransform</span> <span class="o">=</span> <span class="n">tr</span> <span class="o">*</span> <span class="n">transform</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.childItems">
+<code class="descname">childItems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.childItems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.childItems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of this item&#8217;s children in the scenegraph hierarchy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.depthValue">
+<code class="descname">depthValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.depthValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.depthValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the depth value of this item. See setDepthValue for more information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.hide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide this item. 
+This is equivalent to setVisible(False).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.initializeGL">
+<code class="descname">initializeGL</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.initializeGL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.initializeGL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after an item is added to a GLViewWidget. 
+The widget&#8217;s GL context is made current before this method is called.
+(So this would be an appropriate time to generate lists, upload textures, etc.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.paint">
+<code class="descname">paint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.paint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.paint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the GLViewWidget to draw this item.
+It is the responsibility of the item to set up its own modelview matrix,
+but the caller will take care of pushing/popping.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.parentItem">
+<code class="descname">parentItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.parentItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.parentItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a this item&#8217;s parent in the scenegraph hierarchy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.resetTransform">
+<code class="descname">resetTransform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.resetTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.resetTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset this item&#8217;s transform to an identity transformation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.rotate">
+<code class="descname">rotate</code><span class="sig-paren">(</span><em>angle</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.rotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate the object around the axis specified by (x,y,z).
+<em>angle</em> is in degrees.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.scale">
+<code class="descname">scale</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>local=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale the object by (<em>dx</em>, <em>dy</em>, <em>dz</em>) in its local coordinate system.
+If <em>local</em> is False, then scale takes place in the parent&#8217;s coordinates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setDepthValue">
+<code class="descname">setDepthValue</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.setDepthValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setDepthValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the depth value of this item. Default is 0.
+This controls the order in which items are drawn&#8211;those with a greater depth value will be drawn later.
+Items with negative depth values are drawn before their parent.
+(This is analogous to QGraphicsItem.zValue)
+The depthValue does NOT affect the position of the item or the values it imparts to the GL depth buffer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setGLOptions">
+<code class="descname">setGLOptions</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.setGLOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setGLOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the OpenGL state options to use immediately before drawing this item.
+(Note that subclasses must call setupGLState before painting for this to work)</p>
+<p>The simplest way to invoke this method is to pass in the name of
+a predefined set of options (see the GLOptions variable):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>opaque</td>
+<td>Enables depth testing and disables blending</td>
+</tr>
+<tr class="row-even"><td>translucent</td>
+<td>Enables depth testing and blending
+Elements must be drawn sorted back-to-front for
+translucency to work correctly.</td>
+</tr>
+<tr class="row-odd"><td>additive</td>
+<td>Disables depth testing, enables blending.
+Colors are added together, so sorting is not required.</td>
+</tr>
+</tbody>
+</table>
+<p>It is also possible to specify any arbitrary settings as a dictionary. 
+This may consist of {&#8216;functionName&#8217;: (args...)} pairs where functionName must 
+be a callable attribute of OpenGL.GL, or {GL_STATE_VAR: bool} pairs 
+which will be interpreted as calls to glEnable or glDisable(GL_STATE_VAR).</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="n">GL_ALPHA_TEST</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">GL_CULL_FACE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s1">&#39;glBlendFunc&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setParentItem">
+<code class="descname">setParentItem</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.setParentItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setParentItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this item&#8217;s parent in the scenegraph hierarchy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setTransform">
+<code class="descname">setTransform</code><span class="sig-paren">(</span><em>tr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.setTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the local transform for this object.
+Must be a <code class="xref py py-class docutils literal"><span class="pre">Transform3D</span></code> instance. This transform
+determines how the local coordinate system of the item is mapped to the coordinate
+system of its parent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setVisible">
+<code class="descname">setVisible</code><span class="sig-paren">(</span><em>vis</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.setVisible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setVisible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the visibility of this item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setupGLState">
+<code class="descname">setupGLState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.setupGLState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setupGLState" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is responsible for preparing the GL state options needed to render 
+this item (blending, depth testing, etc). The method is called immediately before painting the item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make this item visible if it was previously hidden.
+This is equivalent to setVisible(True).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.transform">
+<code class="descname">transform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return this item&#8217;s transform object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.translate">
+<code class="descname">translate</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>dz</em>, <em>local=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate the object by (<em>dx</em>, <em>dy</em>, <em>dz</em>) in its parent&#8217;s coordinate system.
+If <em>local</em> is True, then translation takes place in local coordinates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates that this item needs to be redrawn, and schedules an update 
+with the view it is displayed in.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.updateGLOptions">
+<code class="descname">updateGLOptions</code><span class="sig-paren">(</span><em>opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.updateGLOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.updateGLOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the OpenGL state options to use immediately before drawing this item.
+<em>opts</em> must be a dictionary as specified by setGLOptions.
+Values may also be None, in which case the key will be ignored.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.viewTransform">
+<code class="descname">viewTransform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.viewTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.viewTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the transform mapping this item&#8217;s local coordinate system to the 
+view coordinate system.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.visible">
+<code class="descname">visible</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/GLGraphicsItem.html#GLGraphicsItem.visible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the item is currently set to be visible.
+Note that this does not guarantee that the item actually appears in the
+view, as it may be obscured or outside of the current view area.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="glaxisitem.html"
+                        title="previous chapter">GLAxisItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glscatterplotitem.html"
+                        title="next chapter">GLScatterPlotItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/3dgraphics/glgraphicsitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glscatterplotitem.html" title="GLScatterPlotItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="glaxisitem.html" title="GLAxisItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

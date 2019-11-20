@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>InfiniteLine &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="ROI" href="roi.html" />
+    <link rel="prev" title="LinearRegionItem" href="linearregionitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="roi.html" title="ROI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="linearregionitem.html" title="LinearRegionItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="infiniteline">
+<h1>InfiniteLine<a class="headerlink" href="#infiniteline" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.InfiniteLine">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">InfiniteLine</code><span class="sig-paren">(</span><em>pos=None</em>, <em>angle=90</em>, <em>pen=None</em>, <em>movable=False</em>, <em>bounds=None</em>, <em>hoverPen=None</em>, <em>label=None</em>, <em>labelOpts=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="graphicsobject.html#pyqtgraph.GraphicsObject" title="pyqtgraph.GraphicsObject"><code class="xref py py-class docutils literal"><span class="pre">GraphicsObject</span></code></a></p>
+<p>Displays a line of infinite length.
+This line may be dragged to indicate a position in data coordinates.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigDragged(self)</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>sigPositionChangeFinished(self)</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigPositionChanged(self)</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>pos=None</em>, <em>angle=90</em>, <em>pen=None</em>, <em>movable=False</em>, <em>bounds=None</em>, <em>hoverPen=None</em>, <em>label=None</em>, <em>labelOpts=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>Position of the line. This can be a QPointF or a single value for
+vertical/horizontal lines.</td>
+</tr>
+<tr class="row-odd"><td>angle</td>
+<td>Angle of line in degrees. 0 is horizontal, 90 is vertical.</td>
+</tr>
+<tr class="row-even"><td>pen</td>
+<td>Pen to use when drawing line. Can be any arguments that are valid
+for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a>. Default pen is transparent
+yellow.</td>
+</tr>
+<tr class="row-odd"><td>movable</td>
+<td>If True, the line can be dragged to a new position by the user.</td>
+</tr>
+<tr class="row-even"><td>hoverPen</td>
+<td>Pen to use when drawing line when hovering over it. Can be any
+arguments that are valid for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a>.
+Default pen is red.</td>
+</tr>
+<tr class="row-odd"><td>bounds</td>
+<td>Optional [min, max] bounding values. Bounds are only valid if the
+line is vertical or horizontal.</td>
+</tr>
+<tr class="row-even"><td>label</td>
+<td>Text to be displayed in a label attached to the line, or
+None to show no label (default is None). May optionally
+include formatting strings to display the line value.</td>
+</tr>
+<tr class="row-odd"><td>labelOpts</td>
+<td>A dict of keyword arguments to use when constructing the
+text label. See <code class="xref py py-class docutils literal"><span class="pre">InfLineLabel</span></code>.</td>
+</tr>
+<tr class="row-even"><td>name</td>
+<td>Name of the item</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.setAngle">
+<code class="descname">setAngle</code><span class="sig-paren">(</span><em>angle</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.setAngle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.setAngle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes angle argument in degrees.
+0 is horizontal; 90 is vertical.</p>
+<p>Note that the use of value() and setValue() changes if the line is
+not vertical or horizontal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.setBounds">
+<code class="descname">setBounds</code><span class="sig-paren">(</span><em>bounds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.setBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.setBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the (minimum, maximum) allowable values when dragging.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.setHoverPen">
+<code class="descname">setHoverPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.setHoverPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.setHoverPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pen for drawing the line while the mouse hovers over it.
+Allowable arguments are any that are valid
+for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a>.</p>
+<p>If the line is not movable, then hovering is also disabled.</p>
+<p>Added in version 0.9.9.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.setMovable">
+<code class="descname">setMovable</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.setMovable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.setMovable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the line is movable by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.setPen">
+<code class="descname">setPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.setPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.setPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pen for drawing the line. Allowable arguments are any that are valid
+for <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.setValue">
+<code class="descname">setValue</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the position of the line. If line is horizontal or vertical, v can be
+a single value. Otherwise, a 2D coordinate must be specified (list, tuple and
+QPointF are all acceptable).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the line. Will be a single number for horizontal and
+vertical lines, and a list of [x,y] values for diagonal lines.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.InfiniteLine.viewTransformChanged">
+<code class="descname">viewTransformChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/InfiniteLine.html#InfiniteLine.viewTransformChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.InfiniteLine.viewTransformChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called whenever the transformation matrix of the view has changed.
+(eg, the view range has changed or the view was resized)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="linearregionitem.html"
+                        title="previous chapter">LinearRegionItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="roi.html"
+                        title="next chapter">ROI</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/infiniteline.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="roi.html" title="ROI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="linearregionitem.html" title="LinearRegionItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

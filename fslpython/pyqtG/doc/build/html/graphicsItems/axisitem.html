@@ -1,0 +1,456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AxisItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="TextItem" href="textitem.html" />
+    <link rel="prev" title="IsocurveItem" href="isocurveitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="textitem.html" title="TextItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="isocurveitem.html" title="IsocurveItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="axisitem">
+<h1>AxisItem<a class="headerlink" href="#axisitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.AxisItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">AxisItem</code><span class="sig-paren">(</span><em>orientation</em>, <em>pen=None</em>, <em>linkView=None</em>, <em>parent=None</em>, <em>maxTickLength=-5</em>, <em>showValues=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>GraphicsItem showing a single plot axis with ticks, values, and label.
+Can be configured to fit on any side of a plot, and can automatically synchronize its displayed scale with ViewBox items.
+Ticks can be extended to draw a grid.
+If maxTickLength is negative, ticks point into the plot.</p>
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>orientation</em>, <em>pen=None</em>, <em>linkView=None</em>, <em>parent=None</em>, <em>maxTickLength=-5</em>, <em>showValues=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>orientation</td>
+<td>one of &#8216;left&#8217;, &#8216;right&#8217;, &#8216;top&#8217;, or &#8216;bottom&#8217;</td>
+</tr>
+<tr class="row-odd"><td>maxTickLength</td>
+<td>(px) maximum length of ticks to draw. Negative values draw
+into the plot, positive values draw outward.</td>
+</tr>
+<tr class="row-even"><td>linkView</td>
+<td>(ViewBox) causes the range of values displayed in the axis
+to be linked to the visible range of a ViewBox.</td>
+</tr>
+<tr class="row-odd"><td>showValues</td>
+<td>(bool) Whether to display values adjacent to ticks</td>
+</tr>
+<tr class="row-even"><td>pen</td>
+<td>(QPen) Pen used when drawing ticks.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.enableAutoSIPrefix">
+<code class="descname">enableAutoSIPrefix</code><span class="sig-paren">(</span><em>enable=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.enableAutoSIPrefix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.enableAutoSIPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable (or disable) automatic SI prefix scaling on this axis.</p>
+<p>When enabled, this feature automatically determines the best SI prefix 
+to prepend to the label units, while ensuring that axis values are scaled
+accordingly.</p>
+<p>For example, if the axis spans values from -0.1 to 0.1 and has units set 
+to &#8216;V&#8217; then the axis would display values -100 to 100
+and the units would appear as &#8216;mV&#8217;</p>
+<p>This feature is enabled by default, and is only available when a suffix
+(unit string) is provided to display on the label.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.generateDrawSpecs">
+<code class="descname">generateDrawSpecs</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.generateDrawSpecs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.generateDrawSpecs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls tickValues() and tickStrings() to determine where and how ticks should
+be drawn, then generates from this a set of drawing commands to be 
+interpreted by drawPicture().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.linkToView">
+<code class="descname">linkToView</code><span class="sig-paren">(</span><em>view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.linkToView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.linkToView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link this axis to a ViewBox, causing its displayed range to match the visible range of the view.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.linkedView">
+<code class="descname">linkedView</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.linkedView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.linkedView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ViewBox this axis is linked to</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setGrid">
+<code class="descname">setGrid</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the alpha value (0-255) for the grid, or False to disable.</p>
+<p>When grid lines are enabled, the axis tick lines are extended to cover
+the extent of the linked ViewBox, if any.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setHeight">
+<code class="descname">setHeight</code><span class="sig-paren">(</span><em>h=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the height of this axis reserved for ticks and tick labels.
+The height of the axis label is automatically added.</p>
+<p>If <em>height</em> is None, then the value will be determined automatically
+based on the size of the tick text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setLabel">
+<code class="descname">setLabel</code><span class="sig-paren">(</span><em>text=None</em>, <em>units=None</em>, <em>unitPrefix=None</em>, <em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the text displayed adjacent to the axis.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>text</td>
+<td>The text (excluding units) to display on the label for this
+axis.</td>
+</tr>
+<tr class="row-odd"><td>units</td>
+<td>The units for this axis. Units should generally be given
+without any scaling prefix (eg, &#8216;V&#8217; instead of &#8216;mV&#8217;). The
+scaling prefix will be automatically prepended based on the
+range of data displayed.</td>
+</tr>
+<tr class="row-even"><td><a href="#id1"><span class="problematic" id="id2">**</span></a>args</td>
+<td>All extra keyword arguments become CSS style options for
+the &lt;span&gt; tag which will surround the axis label and units.</td>
+</tr>
+</tbody>
+</table>
+<p>The final text generated for the label will look like:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;span style=&quot;...options...&quot;&gt;{text} (prefix{units})&lt;/span&gt;
+</pre></div>
+</div>
+<p>Each extra keyword argument will become a CSS option in the above template. 
+For example, you can set the font size and color of the label:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">labelStyle</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;#FFF&#39;</span><span class="p">,</span> <span class="s1">&#39;font-size&#39;</span><span class="p">:</span> <span class="s1">&#39;14pt&#39;</span><span class="p">}</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;label text&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">labelStyle</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setLogMode">
+<code class="descname">setLogMode</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setLogMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setLogMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <em>log</em> is True, then ticks are displayed on a logarithmic scale and values
+are adjusted accordingly. (This is usually accessed by changing the log mode 
+of a <a class="reference internal" href="plotitem.html#pyqtgraph.PlotItem.setLogMode" title="pyqtgraph.PlotItem.setLogMode"><code class="xref py py-func docutils literal"><span class="pre">PlotItem</span></code></a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setPen">
+<code class="descname">setPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pen used for drawing text, axes, ticks, and grid lines.
+If no arguments are given, the default foreground color will be used 
+(see <code class="xref py py-func docutils literal"><span class="pre">setConfigOption</span></code>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setRange">
+<code class="descname">setRange</code><span class="sig-paren">(</span><em>mn</em>, <em>mx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the range of values displayed by the axis.
+Usually this is handled automatically by linking the axis to a ViewBox with <a class="reference internal" href="#pyqtgraph.AxisItem.linkToView" title="pyqtgraph.AxisItem.linkToView"><code class="xref py py-func docutils literal"><span class="pre">linkToView</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setScale">
+<code class="descname">setScale</code><span class="sig-paren">(</span><em>scale=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setScale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value scaling for this axis.</p>
+<p>Setting this value causes the axis to draw ticks and tick labels as if
+the view coordinate system were scaled. By default, the axis scaling is 
+1.0.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setStyle">
+<code class="descname">setStyle</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setStyle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setStyle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set various style options.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Keyword Arguments:</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>tickLength</td>
+<td>(int) The maximum length of ticks in pixels.
+Positive values point toward the text; negative
+values point away.</td>
+</tr>
+<tr class="row-odd"><td>tickTextOffset</td>
+<td>(int) reserved spacing between text and axis in px</td>
+</tr>
+<tr class="row-even"><td>tickTextWidth</td>
+<td>(int) Horizontal space reserved for tick text in px</td>
+</tr>
+<tr class="row-odd"><td>tickTextHeight</td>
+<td>(int) Vertical space reserved for tick text in px</td>
+</tr>
+<tr class="row-even"><td>autoExpandTextSpace</td>
+<td>(bool) Automatically expand text space if the tick
+strings become too long.</td>
+</tr>
+<tr class="row-odd"><td>tickFont</td>
+<td>(QFont or None) Determines the font used for tick
+values. Use None for the default font.</td>
+</tr>
+<tr class="row-even"><td>stopAxisAtTick</td>
+<td>(tuple: (bool min, bool max)) If True, the axis
+line is drawn only as far as the last tick.
+Otherwise, the line is drawn to the edge of the
+AxisItem boundary.</td>
+</tr>
+<tr class="row-odd"><td>textFillLimits</td>
+<td><p class="first">(list of (tick #, % fill) tuples). This structure
+determines how the AxisItem decides how many ticks
+should have text appear next to them. Each tuple in
+the list specifies what fraction of the axis length
+may be occupied by text, given the number of ticks
+that already have text displayed. For example:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> <span class="c1"># Never fill more than 80% of the axis</span>
+ <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">),</span> <span class="c1"># If we already have 2 ticks with text,</span>
+           <span class="c1"># fill no more than 60% of the axis</span>
+ <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">),</span> <span class="c1"># If we already have 4 ticks with text,</span>
+           <span class="c1"># fill no more than 40% of the axis</span>
+ <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)]</span> <span class="c1"># If we already have 6 ticks with text,</span>
+           <span class="c1"># fill no more than 20% of the axis</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>showValues</td>
+<td>(bool) indicates whether text is displayed adjacent
+to ticks.</td>
+</tr>
+</tbody>
+</table>
+<p>Added in version 0.9.9</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setTickSpacing">
+<code class="descname">setTickSpacing</code><span class="sig-paren">(</span><em>major=None</em>, <em>minor=None</em>, <em>levels=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setTickSpacing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setTickSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly determine the spacing of major and minor ticks. This 
+overrides the default behavior of the tickSpacing method, and disables
+the effect of setTicks(). Arguments may be either <em>major</em> and <em>minor</em>, 
+or <em>levels</em> which is a list of (spacing, offset) tuples for each 
+tick level desired.</p>
+<p>If no arguments are given, then the default behavior of tickSpacing
+is enabled.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1"># two levels, all offsets = 0</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">setTickSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># three levels, all offsets = 0</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">setTickSpacing</span><span class="p">([(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="c1"># reset to default</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">setTickSpacing</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setTicks">
+<code class="descname">setTicks</code><span class="sig-paren">(</span><em>ticks</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setTicks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setTicks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly determine which ticks to display.
+This overrides the behavior specified by tickSpacing(), tickValues(), and tickStrings()
+The format for <em>ticks</em> looks like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">[</span> <span class="p">(</span><span class="n">majorTickValue1</span><span class="p">,</span> <span class="n">majorTickString1</span><span class="p">),</span> <span class="p">(</span><span class="n">majorTickValue2</span><span class="p">,</span> <span class="n">majorTickString2</span><span class="p">),</span> <span class="o">...</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="p">(</span><span class="n">minorTickValue1</span><span class="p">,</span> <span class="n">minorTickString1</span><span class="p">),</span> <span class="p">(</span><span class="n">minorTickValue2</span><span class="p">,</span> <span class="n">minorTickString2</span><span class="p">),</span> <span class="o">...</span> <span class="p">],</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>If <em>ticks</em> is None, then the default tick system will be used instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.setWidth">
+<code class="descname">setWidth</code><span class="sig-paren">(</span><em>w=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.setWidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.setWidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the width of this axis reserved for ticks and tick labels.
+The width of the axis label is automatically added.</p>
+<p>If <em>width</em> is None, then the value will be determined automatically
+based on the size of the tick text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.showLabel">
+<code class="descname">showLabel</code><span class="sig-paren">(</span><em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.showLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.showLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show/hide the label text for this axis.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.tickSpacing">
+<code class="descname">tickSpacing</code><span class="sig-paren">(</span><em>minVal</em>, <em>maxVal</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.tickSpacing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.tickSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return values describing the desired spacing and offset of ticks.</p>
+<p>This method is called whenever the axis needs to be redrawn and is a 
+good method to override in subclasses that require control over tick locations.</p>
+<p>The return value must be a list of tuples, one for each set of ticks:</p>
+<div class="highlight-python"><div class="highlight"><pre>[
+    (major tick spacing, offset),
+    (minor tick spacing, offset),
+    (sub-minor tick spacing, offset),
+    ...
+]
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.tickStrings">
+<code class="descname">tickStrings</code><span class="sig-paren">(</span><em>values</em>, <em>scale</em>, <em>spacing</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.tickStrings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.tickStrings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the strings that should be placed next to ticks. This method is called 
+when redrawing the axis and is a good method to override in subclasses.
+The method is called with a list of tick values, a scaling factor (see below), and the 
+spacing between ticks (this is required since, in some instances, there may be only 
+one tick and thus no other way to determine the tick spacing)</p>
+<p>The scale argument is used when the axis label is displaying units which may have an SI scaling prefix.
+When determining the text to display, use value*scale to correctly account for this prefix.
+For example, if the axis label&#8217;s units are set to &#8216;V&#8217;, then a tick value of 0.001 might
+be accompanied by a scale value of 1000. This indicates that the label is displaying &#8216;mV&#8217;, and 
+thus the tick should display 0.001 * 1000 = 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.AxisItem.tickValues">
+<code class="descname">tickValues</code><span class="sig-paren">(</span><em>minVal</em>, <em>maxVal</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/AxisItem.html#AxisItem.tickValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.AxisItem.tickValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the values and spacing of ticks to draw:</p>
+<div class="highlight-python"><div class="highlight"><pre>[  
+    (spacing, [major ticks]), 
+    (spacing, [minor ticks]), 
+    ... 
+]
+</pre></div>
+</div>
+<p>By default, this method calls tickSpacing to determine the correct tick locations.
+This is a good method to override in subclasses.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="isocurveitem.html"
+                        title="previous chapter">IsocurveItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="textitem.html"
+                        title="next chapter">TextItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/axisitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="textitem.html" title="TextItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="isocurveitem.html" title="IsocurveItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

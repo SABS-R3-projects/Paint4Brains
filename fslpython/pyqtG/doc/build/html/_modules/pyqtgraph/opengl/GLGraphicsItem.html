@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyqtgraph.opengl.GLGraphicsItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../../../index.html" />
+    <link rel="up" title="pyqtgraph" href="../../pyqtgraph.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../pyqtgraph.html" accesskey="U">pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyqtgraph.opengl.GLGraphicsItem</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">OpenGL.GL</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">OpenGL</span> <span class="kn">import</span> <span class="n">GL</span>
+<span class="kn">from</span> <span class="nn">..Qt</span> <span class="kn">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">Transform3D</span>
+<span class="kn">from</span> <span class="nn">..python2_3</span> <span class="kn">import</span> <span class="nb">basestring</span>
+
+
+<span class="n">GLOptions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;opaque&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GL_DEPTH_TEST</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">GL_BLEND</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">GL_ALPHA_TEST</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">GL_CULL_FACE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;translucent&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GL_DEPTH_TEST</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">GL_BLEND</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">GL_ALPHA_TEST</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">GL_CULL_FACE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="s1">&#39;glBlendFunc&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;additive&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GL_DEPTH_TEST</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">GL_BLEND</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">GL_ALPHA_TEST</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">GL_CULL_FACE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="s1">&#39;glBlendFunc&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE</span><span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">}</span>    
+
+
+<div class="viewcode-block" id="GLGraphicsItem"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem">[docs]</a><span class="k">class</span> <span class="nc">GLGraphicsItem</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="p">):</span>
+    <span class="n">_nextId</span> <span class="o">=</span> <span class="mi">0</span>
+    
+<div class="viewcode-block" id="GLGraphicsItem.__init__"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parentItem</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">QtCore</span><span class="o">.</span><span class="n">QObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">GLGraphicsItem</span><span class="o">.</span><span class="n">_nextId</span>
+        <span class="n">GLGraphicsItem</span><span class="o">.</span><span class="n">_nextId</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__view</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__children</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__transform</span> <span class="o">=</span> <span class="n">Transform3D</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__visible</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setParentItem</span><span class="p">(</span><span class="n">parentItem</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDepthValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__glOpts</span> <span class="o">=</span> <span class="p">{}</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.setParentItem"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setParentItem">[docs]</a>    <span class="k">def</span> <span class="nf">setParentItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set this item&#39;s parent in the scenegraph hierarchy.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span><span class="o">.</span><span class="n">__children</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">__children</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span> <span class="o">=</span> <span class="n">item</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span><span class="o">.</span><span class="n">view</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">()</span><span class="o">.</span><span class="n">removeItem</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span><span class="o">.</span><span class="n">view</span><span class="p">()</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GLGraphicsItem.setGLOptions"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setGLOptions">[docs]</a>    <span class="k">def</span> <span class="nf">setGLOptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the OpenGL state options to use immediately before drawing this item.</span>
+<span class="sd">        (Note that subclasses must call setupGLState before painting for this to work)</span>
+<span class="sd">        </span>
+<span class="sd">        The simplest way to invoke this method is to pass in the name of</span>
+<span class="sd">        a predefined set of options (see the GLOptions variable):</span>
+<span class="sd">        </span>
+<span class="sd">        ============= ======================================================</span>
+<span class="sd">        opaque        Enables depth testing and disables blending</span>
+<span class="sd">        translucent   Enables depth testing and blending</span>
+<span class="sd">                      Elements must be drawn sorted back-to-front for</span>
+<span class="sd">                      translucency to work correctly.</span>
+<span class="sd">        additive      Disables depth testing, enables blending.</span>
+<span class="sd">                      Colors are added together, so sorting is not required.</span>
+<span class="sd">        ============= ======================================================</span>
+<span class="sd">        </span>
+<span class="sd">        It is also possible to specify any arbitrary settings as a dictionary. </span>
+<span class="sd">        This may consist of {&#39;functionName&#39;: (args...)} pairs where functionName must </span>
+<span class="sd">        be a callable attribute of OpenGL.GL, or {GL_STATE_VAR: bool} pairs </span>
+<span class="sd">        which will be interpreted as calls to glEnable or glDisable(GL_STATE_VAR).</span>
+<span class="sd">        </span>
+<span class="sd">        For example::</span>
+<span class="sd">            </span>
+<span class="sd">            {</span>
+<span class="sd">                GL_ALPHA_TEST: True,</span>
+<span class="sd">                GL_CULL_FACE: False,</span>
+<span class="sd">                &#39;glBlendFunc&#39;: (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA),</span>
+<span class="sd">            }</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="n">opts</span> <span class="o">=</span> <span class="n">GLOptions</span><span class="p">[</span><span class="n">opts</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__glOpts</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.updateGLOptions"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.updateGLOptions">[docs]</a>    <span class="k">def</span> <span class="nf">updateGLOptions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">opts</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modify the OpenGL state options to use immediately before drawing this item.</span>
+<span class="sd">        *opts* must be a dictionary as specified by setGLOptions.</span>
+<span class="sd">        Values may also be None, in which case the key will be ignored.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__glOpts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span></div>
+        
+    
+<div class="viewcode-block" id="GLGraphicsItem.parentItem"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.parentItem">[docs]</a>    <span class="k">def</span> <span class="nf">parentItem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a this item&#39;s parent in the scenegraph hierarchy.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parent</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.childItems"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.childItems">[docs]</a>    <span class="k">def</span> <span class="nf">childItems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of this item&#39;s children in the scenegraph hierarchy.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__children</span><span class="p">)</span></div>
+        
+    <span class="k">def</span> <span class="nf">_setView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__view</span> <span class="o">=</span> <span class="n">v</span>
+        
+    <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__view</span>
+        
+<div class="viewcode-block" id="GLGraphicsItem.setDepthValue"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setDepthValue">[docs]</a>    <span class="k">def</span> <span class="nf">setDepthValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the depth value of this item. Default is 0.</span>
+<span class="sd">        This controls the order in which items are drawn--those with a greater depth value will be drawn later.</span>
+<span class="sd">        Items with negative depth values are drawn before their parent.</span>
+<span class="sd">        (This is analogous to QGraphicsItem.zValue)</span>
+<span class="sd">        The depthValue does NOT affect the position of the item or the values it imparts to the GL depth buffer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__depthValue</span> <span class="o">=</span> <span class="n">value</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.depthValue"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.depthValue">[docs]</a>    <span class="k">def</span> <span class="nf">depthValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the depth value of this item. See setDepthValue for more information.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__depthValue</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.setTransform"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setTransform">[docs]</a>    <span class="k">def</span> <span class="nf">setTransform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the local transform for this object.</span>
+<span class="sd">        Must be a :class:`Transform3D &lt;pyqtgraph.Transform3D&gt;` instance. This transform</span>
+<span class="sd">        determines how the local coordinate system of the item is mapped to the coordinate</span>
+<span class="sd">        system of its parent.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__transform</span> <span class="o">=</span> <span class="n">Transform3D</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.resetTransform"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.resetTransform">[docs]</a>    <span class="k">def</span> <span class="nf">resetTransform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset this item&#39;s transform to an identity transformation.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__transform</span><span class="o">.</span><span class="n">setToIdentity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.applyTransform"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.applyTransform">[docs]</a>    <span class="k">def</span> <span class="nf">applyTransform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">local</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Multiply this object&#39;s transform by *tr*. </span>
+<span class="sd">        If local is True, then *tr* is multiplied on the right of the current transform::</span>
+<span class="sd">        </span>
+<span class="sd">            newTransform = transform * tr</span>
+<span class="sd">            </span>
+<span class="sd">        If local is False, then *tr* is instead multiplied on the left::</span>
+<span class="sd">        </span>
+<span class="sd">            newTransform = tr * transform</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">local</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setTransform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span> <span class="o">*</span> <span class="n">tr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setTransform</span><span class="p">(</span><span class="n">tr</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">())</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.transform"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return this item&#39;s transform object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transform</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.viewTransform"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.viewTransform">[docs]</a>    <span class="k">def</span> <span class="nf">viewTransform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the transform mapping this item&#39;s local coordinate system to the </span>
+<span class="sd">        view coordinate system.&quot;&quot;&quot;</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transform</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parentItem</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">tr</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span> <span class="o">*</span> <span class="n">tr</span>
+        <span class="k">return</span> <span class="n">Transform3D</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.translate"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Translate the object by (*dx*, *dy*, *dz*) in its parent&#39;s coordinate system.</span>
+<span class="sd">        If *local* is True, then translation takes place in local coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">Transform3D</span><span class="p">()</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">applyTransform</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="n">local</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.rotate"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.rotate">[docs]</a>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rotate the object around the axis specified by (x,y,z).</span>
+<span class="sd">        *angle* is in degrees.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">Transform3D</span><span class="p">()</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">applyTransform</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="n">local</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GLGraphicsItem.scale"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scale the object by (*dx*, *dy*, *dz*) in its local coordinate system.</span>
+<span class="sd">        If *local* is False, then scale takes place in the parent&#39;s coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">Transform3D</span><span class="p">()</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">applyTransform</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="n">local</span><span class="o">=</span><span class="n">local</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="GLGraphicsItem.hide"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.hide">[docs]</a>    <span class="k">def</span> <span class="nf">hide</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Hide this item. </span>
+<span class="sd">        This is equivalent to setVisible(False).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.show"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make this item visible if it was previously hidden.</span>
+<span class="sd">        This is equivalent to setVisible(True).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GLGraphicsItem.setVisible"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setVisible">[docs]</a>    <span class="k">def</span> <span class="nf">setVisible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the visibility of this item.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__visible</span> <span class="o">=</span> <span class="n">vis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.visible"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.visible">[docs]</a>    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if the item is currently set to be visible.</span>
+<span class="sd">        Note that this does not guarantee that the item actually appears in the</span>
+<span class="sd">        view, as it may be obscured or outside of the current view area.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__visible</span></div>
+    
+    
+<div class="viewcode-block" id="GLGraphicsItem.initializeGL"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.initializeGL">[docs]</a>    <span class="k">def</span> <span class="nf">initializeGL</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called after an item is added to a GLViewWidget. </span>
+<span class="sd">        The widget&#39;s GL context is made current before this method is called.</span>
+<span class="sd">        (So this would be an appropriate time to generate lists, upload textures, etc.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+    
+<div class="viewcode-block" id="GLGraphicsItem.setupGLState"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.setupGLState">[docs]</a>    <span class="k">def</span> <span class="nf">setupGLState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is responsible for preparing the GL state options needed to render </span>
+<span class="sd">        this item (blending, depth testing, etc). The method is called immediately before painting the item.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__glOpts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">GL</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+                <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">glEnable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">glDisable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="GLGraphicsItem.paint"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.paint">[docs]</a>    <span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called by the GLViewWidget to draw this item.</span>
+<span class="sd">        It is the responsibility of the item to set up its own modelview matrix,</span>
+<span class="sd">        but the caller will take care of pushing/popping.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupGLState</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLGraphicsItem.update"><a class="viewcode-back" href="../../../3dgraphics/glgraphicsitem.html#pyqtgraph.opengl.GLGraphicsItem.GLGraphicsItem.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indicates that this item needs to be redrawn, and schedules an update </span>
+<span class="sd">        with the view it is displayed in.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+    <span class="k">def</span> <span class="nf">mapToParent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">point</span>
+        <span class="k">return</span> <span class="n">tr</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">mapFromParent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">point</span>
+        <span class="k">return</span> <span class="n">tr</span><span class="o">.</span><span class="n">inverted</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">mapToView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewTransform</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">point</span>
+        <span class="k">return</span> <span class="n">tr</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">mapFromView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewTransform</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">point</span>
+        <span class="k">return</span> <span class="n">tr</span><span class="o">.</span><span class="n">inverted</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">point</span><span class="p">)</span></div>
+        
+        
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../pyqtgraph.html" >pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

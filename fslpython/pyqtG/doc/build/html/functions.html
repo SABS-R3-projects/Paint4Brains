@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyQtGraph’s Helper Functions &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="up" title="API Reference" href="apireference.html" />
+    <link rel="next" title="PyQtGraph’s Graphics Items" href="graphicsItems/index.html" />
+    <link rel="prev" title="Global Configuration Options" href="config_options.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphicsItems/index.html" title="PyQtGraph’s Graphics Items"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="config_options.html" title="Global Configuration Options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="apireference.html" accesskey="U">API Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyqtgraph-s-helper-functions">
+<h1>PyQtGraph&#8217;s Helper Functions<a class="headerlink" href="#pyqtgraph-s-helper-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="simple-data-display-functions">
+<h2>Simple Data Display Functions<a class="headerlink" href="#simple-data-display-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.plot">
+<code class="descclassname">pyqtgraph.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph.html#plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a <code class="xref py py-class docutils literal"><span class="pre">PlotWindow</span></code> 
+(this is just a window with <a class="reference internal" href="widgets/plotwidget.html#pyqtgraph.PlotWidget" title="pyqtgraph.PlotWidget"><code class="xref py py-class docutils literal"><span class="pre">PlotWidget</span></code></a> inside), plot data in it.
+Accepts a <em>title</em> argument to set the title of the window.
+All other arguments are used to plot data. (see <a class="reference internal" href="graphicsItems/plotitem.html#pyqtgraph.PlotItem.plot" title="pyqtgraph.PlotItem.plot"><code class="xref py py-func docutils literal"><span class="pre">PlotItem.plot()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.image">
+<code class="descclassname">pyqtgraph.</code><code class="descname">image</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph.html#image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return an <code class="xref py py-class docutils literal"><span class="pre">ImageWindow</span></code> 
+(this is just a window with <a class="reference internal" href="widgets/imageview.html#pyqtgraph.ImageView" title="pyqtgraph.ImageView"><code class="xref py py-class docutils literal"><span class="pre">ImageView</span></code></a> widget inside), show image data inside.
+Will show 2D or 3D image data.
+Accepts a <em>title</em> argument to set the title of the window.
+All other arguments are used to show data. (see <a class="reference internal" href="widgets/imageview.html#pyqtgraph.ImageView.setImage" title="pyqtgraph.ImageView.setImage"><code class="xref py py-func docutils literal"><span class="pre">ImageView.setImage()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.dbg">
+<code class="descclassname">pyqtgraph.</code><code class="descname">dbg</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph.html#dbg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.dbg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a console window and begin watching for exceptions.</p>
+<p>All arguments are passed to <code class="xref py py-func docutils literal"><span class="pre">ConsoleWidget.__init__()</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="color-pen-and-brush-functions">
+<h2>Color, Pen, and Brush Functions<a class="headerlink" href="#color-pen-and-brush-functions" title="Permalink to this headline">¶</a></h2>
+<p>Qt uses the classes QColor, QPen, and QBrush to determine how to draw lines and fill shapes. These classes are highly capable but somewhat awkward to use. PyQtGraph offers the functions <a class="reference internal" href="#pyqtgraph.mkColor" title="pyqtgraph.mkColor"><code class="xref py py-func docutils literal"><span class="pre">mkColor()</span></code></a>, <a class="reference internal" href="#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen()</span></code></a>, and <a class="reference internal" href="#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush()</span></code></a> to simplify the process of creating these classes. In most cases, however, it will be unnecessary to call these functions directly&#8211;any function or method that accepts <em>pen</em> or <em>brush</em> arguments will make use of these functions for you. For example, the following three lines all have the same effect:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">mkPen</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">))</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">QPen</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="pyqtgraph.mkColor">
+<code class="descclassname">pyqtgraph.</code><code class="descname">mkColor</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#mkColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.mkColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function for constructing QColor from a variety of argument types. Accepted arguments are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&#8216;c&#8217;</td>
+<td>one of: r, g, b, c, m, y, k, w</td>
+</tr>
+<tr class="row-even"><td>R, G, B, [A]</td>
+<td>integers 0-255</td>
+</tr>
+<tr class="row-odd"><td>(R, G, B, [A])</td>
+<td>tuple of integers 0-255</td>
+</tr>
+<tr class="row-even"><td>float</td>
+<td>greyscale, 0.0-1.0</td>
+</tr>
+<tr class="row-odd"><td>int</td>
+<td>see <a class="reference internal" href="#pyqtgraph.intColor" title="pyqtgraph.intColor"><code class="xref py py-func docutils literal"><span class="pre">intColor()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>(int, hues)</td>
+<td>see <a class="reference internal" href="#pyqtgraph.intColor" title="pyqtgraph.intColor"><code class="xref py py-func docutils literal"><span class="pre">intColor()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>&#8220;RGB&#8221;</td>
+<td>hexadecimal strings; may begin with &#8216;#&#8217;</td>
+</tr>
+<tr class="row-even"><td>&#8220;RGBA&#8221;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>&#8220;RRGGBB&#8221;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>&#8220;RRGGBBAA&#8221;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>QColor</td>
+<td>QColor instance; makes a copy.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.mkPen">
+<code class="descclassname">pyqtgraph.</code><code class="descname">mkPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#mkPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.mkPen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function for constructing QPen.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mkPen</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+<span class="n">mkPen</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mkPen</span><span class="p">(</span><span class="n">cosmetic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">mkPen</span><span class="p">({</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s2">&quot;FF0&quot;</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="n">mkPen</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>   <span class="c1"># (no pen)</span>
+</pre></div>
+</div>
+<p>In these examples, <em>color</em> may be replaced with any arguments accepted by <a class="reference internal" href="#pyqtgraph.mkColor" title="pyqtgraph.mkColor"><code class="xref py py-func docutils literal"><span class="pre">mkColor()</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.mkBrush">
+<code class="descclassname">pyqtgraph.</code><code class="descname">mkBrush</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#mkBrush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.mkBrush" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Convenience function for constructing Brush.</div>
+<div class="line">This function always constructs a solid brush and accepts the same arguments as <a class="reference internal" href="#pyqtgraph.mkColor" title="pyqtgraph.mkColor"><code class="xref py py-func docutils literal"><span class="pre">mkColor()</span></code></a></div>
+<div class="line">Calling mkBrush(None) returns an invisible brush.</div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.hsvColor">
+<code class="descclassname">pyqtgraph.</code><code class="descname">hsvColor</code><span class="sig-paren">(</span><em>hue</em>, <em>sat=1.0</em>, <em>val=1.0</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#hsvColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.hsvColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a QColor from HSVa values. (all arguments are float 0.0-1.0)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.intColor">
+<code class="descclassname">pyqtgraph.</code><code class="descname">intColor</code><span class="sig-paren">(</span><em>index</em>, <em>hues=9</em>, <em>values=1</em>, <em>maxValue=255</em>, <em>minValue=150</em>, <em>maxHue=360</em>, <em>minHue=0</em>, <em>sat=255</em>, <em>alpha=255</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#intColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.intColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a QColor from a single index. Useful for stepping through a predefined list of colors.</p>
+<p>The argument <em>index</em> determines which color from the set will be returned. All other arguments determine what the set of predefined colors will be</p>
+<p>Colors are chosen by cycling across hues while varying the value (brightness). 
+By default, this selects from a list of 9 hues.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.colorTuple">
+<code class="descclassname">pyqtgraph.</code><code class="descname">colorTuple</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#colorTuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.colorTuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple (R,G,B,A) from a QColor</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.colorStr">
+<code class="descclassname">pyqtgraph.</code><code class="descname">colorStr</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#colorStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.colorStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a hex string code from a QColor</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.glColor">
+<code class="descclassname">pyqtgraph.</code><code class="descname">glColor</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#glColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.glColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a color to OpenGL color format (r,g,b,a) floats 0.0-1.0
+Accepts same arguments as <a class="reference internal" href="#pyqtgraph.mkColor" title="pyqtgraph.mkColor"><code class="xref py py-func docutils literal"><span class="pre">mkColor</span></code></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="data-slicing">
+<h2>Data Slicing<a class="headerlink" href="#data-slicing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.affineSlice">
+<code class="descclassname">pyqtgraph.</code><code class="descname">affineSlice</code><span class="sig-paren">(</span><em>data</em>, <em>shape</em>, <em>origin</em>, <em>vectors</em>, <em>axes</em>, <em>order=1</em>, <em>returnCoords=False</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#affineSlice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.affineSlice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a slice of any orientation through an array. This is useful for extracting sections of multi-dimensional arrays such as MRI images for viewing as 1D or 2D data.</p>
+<p>The slicing axes are aribtrary; they do not need to be orthogonal to the original data or even to each other. It is possible to use this function to extract arbitrary linear, rectangular, or parallelepiped shapes from within larger datasets. The original data is interpolated onto a new array of coordinates using scipy.ndimage.map_coordinates if it is available (see the scipy documentation for more information about this). If scipy is not available, then a slower implementation of map_coordinates is used.</p>
+<p>For a graphical interface to this function, see <a class="reference internal" href="graphicsItems/roi.html#pyqtgraph.ROI.getArrayRegion" title="pyqtgraph.ROI.getArrayRegion"><code class="xref py py-func docutils literal"><span class="pre">ROI.getArrayRegion</span></code></a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><em>data</em></td>
+<td>(ndarray) the original dataset</td>
+</tr>
+<tr class="row-odd"><td><em>shape</em></td>
+<td>the shape of the slice to take (Note the return value may have more dimensions than len(shape))</td>
+</tr>
+<tr class="row-even"><td><em>origin</em></td>
+<td>the location in the original dataset that will become the origin of the sliced data.</td>
+</tr>
+<tr class="row-odd"><td><em>vectors</em></td>
+<td>list of unit vectors which point in the direction of the slice axes. Each vector must have the same
+length as <em>axes</em>. If the vectors are not unit length, the result will be scaled relative to the
+original data. If the vectors are not orthogonal, the result will be sheared relative to the
+original data.</td>
+</tr>
+<tr class="row-even"><td><em>axes</em></td>
+<td>The axes in the original dataset which correspond to the slice <em>vectors</em></td>
+</tr>
+<tr class="row-odd"><td><em>order</em></td>
+<td>The order of spline interpolation. Default is 1 (linear). See scipy.ndimage.map_coordinates
+for more information.</td>
+</tr>
+<tr class="row-even"><td><em>returnCoords</em></td>
+<td>If True, return a tuple (result, coords) where coords is the array of coordinates used to select
+values from the original dataset.</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><em>All extra keyword arguments are passed to scipy.ndimage.map_coordinates.</em></td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>Note the following must be true:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">len(shape) == len(vectors) </div>
+<div class="line">len(origin) == len(axes) == len(vectors[i])</div>
+</div>
+</div></blockquote>
+<p>Example: start with a 4D fMRI data set, take a diagonal-planar slice out of the last 3 axes</p>
+<blockquote>
+<div><ul class="simple">
+<li>data = array with dims (time, x, y, z) = (100, 40, 40, 40)</li>
+<li>The plane to pull out is perpendicular to the vector (x,y,z) = (1,1,1)</li>
+<li>The origin of the slice will be at (x,y,z) = (40, 0, 0)</li>
+<li>We will slice a 20x20 plane from each timepoint, giving a final shape (100, 20, 20)</li>
+</ul>
+</div></blockquote>
+<p>The call for this example would look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">affineSlice</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">vectors</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="coordinate-transformation">
+<h2>Coordinate Transformation<a class="headerlink" href="#coordinate-transformation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.transformToArray">
+<code class="descclassname">pyqtgraph.</code><code class="descname">transformToArray</code><span class="sig-paren">(</span><em>tr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#transformToArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.transformToArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a QTransform, return a 3x3 numpy array.
+Given a QMatrix4x4, return a 4x4 numpy array.</p>
+<p>Example: map an array of x,y coordinates through a transform:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1">## coordinates to map are (1,5), (2,6), (3,7), and (4,8)</span>
+<span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>  <span class="c1"># the extra &#39;1&#39; coordinate is needed for translation to work</span>
+
+<span class="c1">## Make an example transform</span>
+<span class="n">tr</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTransform</span><span class="p">()</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">tr</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1">## convert to array</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">transformToArray</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># ignore the perspective portion of the transformation</span>
+
+<span class="c1">## map coordinates through transform</span>
+<span class="n">mapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.transformCoordinates">
+<code class="descclassname">pyqtgraph.</code><code class="descname">transformCoordinates</code><span class="sig-paren">(</span><em>tr</em>, <em>coords</em>, <em>transpose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#transformCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.transformCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map a set of 2D or 3D coordinates through a QTransform or QMatrix4x4.
+The shape of coords must be (2,...) or (3,...)
+The mapping will _ignore_ any perspective transformations.</p>
+<p>For coordinate arrays with ndim=2, this is basically equivalent to matrix multiplication.
+Most arrays, however, prefer to put the coordinate axis at the end (eg. shape=(...,3)). To 
+allow this, use transpose=True.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.solve3DTransform">
+<code class="descclassname">pyqtgraph.</code><code class="descname">solve3DTransform</code><span class="sig-paren">(</span><em>points1</em>, <em>points2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#solve3DTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.solve3DTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a 3D transformation matrix that maps points1 onto points2.
+Points must be specified as either lists of 4 Vectors or 
+(4, 3) arrays.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.solveBilinearTransform">
+<code class="descclassname">pyqtgraph.</code><code class="descname">solveBilinearTransform</code><span class="sig-paren">(</span><em>points1</em>, <em>points2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#solveBilinearTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.solveBilinearTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a bilinear transformation matrix (2x4) that maps points1 onto points2.
+Points must be specified as a list of 4 Vector, Point, QPointF, etc.</p>
+<p>To use this matrix to map a point [x,y]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="si-unit-conversion-functions">
+<h2>SI Unit Conversion Functions<a class="headerlink" href="#si-unit-conversion-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.siFormat">
+<code class="descclassname">pyqtgraph.</code><code class="descname">siFormat</code><span class="sig-paren">(</span><em>x</em>, <em>precision=3</em>, <em>suffix=''</em>, <em>space=True</em>, <em>error=None</em>, <em>minVal=1e-25</em>, <em>allowUnicode=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#siFormat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.siFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number x formatted in engineering notation with SI prefix.</p>
+<dl class="docutils">
+<dt>Example::</dt>
+<dd>siFormat(0.0001, suffix=&#8217;V&#8217;)  # returns &#8220;100 μV&#8221;</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.siScale">
+<code class="descclassname">pyqtgraph.</code><code class="descname">siScale</code><span class="sig-paren">(</span><em>x</em>, <em>minVal=1e-25</em>, <em>allowUnicode=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#siScale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.siScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the recommended scale factor and SI prefix string for x.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">siScale</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">)</span>   <span class="c1"># returns (1e6, &#39;μ&#39;)</span>
+<span class="c1"># This indicates that the number 0.0001 is best represented as 0.0001 * 1e6 = 100 μUnits</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.siEval">
+<code class="descclassname">pyqtgraph.</code><code class="descname">siEval</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#siEval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.siEval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a value written in SI notation to its equivalent prefixless value</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">siEval</span><span class="p">(</span><span class="s2">&quot;100 μV&quot;</span><span class="p">)</span>  <span class="c1"># returns 0.0001</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="image-preparation-functions">
+<h2>Image Preparation Functions<a class="headerlink" href="#image-preparation-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.makeARGB">
+<code class="descclassname">pyqtgraph.</code><code class="descname">makeARGB</code><span class="sig-paren">(</span><em>data</em>, <em>lut=None</em>, <em>levels=None</em>, <em>scale=None</em>, <em>useRGBA=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#makeARGB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.makeARGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an array of values into an ARGB array suitable for building QImages,
+OpenGL textures, etc.</p>
+<p>Returns the ARGB array (unsigned byte) and a boolean indicating whether
+there is alpha channel data. This is a two stage process:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Rescale the data based on the values in the <em>levels</em> argument (min, max).</li>
+<li>Determine the final output by passing the rescaled values through a
+lookup table.</li>
+</ol>
+</div></blockquote>
+<p>Both stages are optional.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>data</td>
+<td>numpy array of int/float types. If</td>
+</tr>
+<tr class="row-odd"><td>levels</td>
+<td><p class="first">List [min, max]; optionally rescale data before converting through the
+lookup table. The data is rescaled such that min-&gt;0 and max-&gt;*scale*:</p>
+<div class="highlight-python"><div class="highlight"><pre>rescaled = (clip(data, min, max) - min) * (*scale* / (max - min))
+</pre></div>
+</div>
+<p class="last">It is also possible to use a 2D (N,2) array of values for levels. In this case,
+it is assumed that each pair of min,max values in the levels array should be
+applied to a different subset of the input data (for example, the input data may
+already have RGB values and the levels are used to independently scale each
+channel). The use of this feature requires that levels.shape[0] == data.shape[-1].</p>
+</td>
+</tr>
+<tr class="row-even"><td>scale</td>
+<td>The maximum value to which data will be rescaled before being passed through the
+lookup table (or returned if there is no lookup table). By default this will
+be set to the length of the lookup table, or 255 if no lookup table is provided.</td>
+</tr>
+<tr class="row-odd"><td>lut</td>
+<td>Optional lookup table (array with dtype=ubyte).
+Values in data will be converted to color by indexing directly from lut.
+The output data shape will be input.shape + lut.shape[1:].
+Lookup tables can be built using ColorMap or GradientWidget.</td>
+</tr>
+<tr class="row-even"><td>useRGBA</td>
+<td>If True, the data is returned in RGBA order (useful for building OpenGL textures).
+The default is False, which returns in ARGB order for use with QImage
+(Note that &#8216;ARGB&#8217; is a term used by the Qt documentation; the <em>actual</em> order
+is BGRA).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.makeQImage">
+<code class="descclassname">pyqtgraph.</code><code class="descname">makeQImage</code><span class="sig-paren">(</span><em>imgData</em>, <em>alpha=None</em>, <em>copy=True</em>, <em>transpose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#makeQImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.makeQImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn an ARGB array into QImage.
+By default, the data is copied; changes to the array will not
+be reflected in the image. The image will be given a &#8216;data&#8217; attribute
+pointing to the array which shares its data to prevent python
+freeing that memory while the image is in use.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>imgData</td>
+<td>Array of data to convert. Must have shape (width, height, 3 or 4)
+and dtype=ubyte. The order of values in the 3rd axis must be
+(b, g, r, a).</td>
+</tr>
+<tr class="row-odd"><td>alpha</td>
+<td>If True, the QImage returned will have format ARGB32. If False,
+the format will be RGB32. By default, _alpha_ is True if
+array.shape[2] == 4.</td>
+</tr>
+<tr class="row-even"><td>copy</td>
+<td>If True, the data is copied before converting to QImage.
+If False, the new QImage points directly to the data in the array.
+Note that the array must be contiguous for this to work
+(see numpy.ascontiguousarray).</td>
+</tr>
+<tr class="row-odd"><td>transpose</td>
+<td>If True (the default), the array x/y axes are transposed before
+creating the image. Note that Qt expects the axes to be in
+(height, width) order whereas pyqtgraph usually prefers the
+opposite.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.applyLookupTable">
+<code class="descclassname">pyqtgraph.</code><code class="descname">applyLookupTable</code><span class="sig-paren">(</span><em>data</em>, <em>lut</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#applyLookupTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.applyLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses values in <em>data</em> as indexes to select values from <em>lut</em>.
+The returned data has shape data.shape + lut.shape[1:]</p>
+<p>Note: color gradient lookup tables can be generated using GradientWidget.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.rescaleData">
+<code class="descclassname">pyqtgraph.</code><code class="descname">rescaleData</code><span class="sig-paren">(</span><em>data</em>, <em>scale</em>, <em>offset</em>, <em>dtype=None</em>, <em>clip=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#rescaleData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.rescaleData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return data rescaled and optionally cast to a new dtype:</p>
+<p>data =&gt; (data-offset) * scale</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.imageToArray">
+<code class="descclassname">pyqtgraph.</code><code class="descname">imageToArray</code><span class="sig-paren">(</span><em>img</em>, <em>copy=False</em>, <em>transpose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#imageToArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.imageToArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a QImage into numpy array. The image must have format RGB32, ARGB32, or ARGB32_Premultiplied.
+By default, the image is not copied; changes made to the array will appear in the QImage as well (beware: if 
+the QImage is collected before the array, there may be trouble).
+The array will have shape (width, height, (b,g,r,a)).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="mesh-generation-functions">
+<h2>Mesh Generation Functions<a class="headerlink" href="#mesh-generation-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.isocurve">
+<code class="descclassname">pyqtgraph.</code><code class="descname">isocurve</code><span class="sig-paren">(</span><em>data</em>, <em>level</em>, <em>connected=False</em>, <em>extendToEdge=False</em>, <em>path=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#isocurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.isocurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate isocurve from 2D data using marching squares algorithm.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>data</td>
+<td>2D numpy array of scalar values</td>
+</tr>
+<tr class="row-odd"><td>level</td>
+<td>The level at which to generate an isosurface</td>
+</tr>
+<tr class="row-even"><td>connected</td>
+<td>If False, return a single long list of point pairs
+If True, return multiple long lists of connected point
+locations. (This is slower but better for drawing
+continuous lines)</td>
+</tr>
+<tr class="row-odd"><td>extendToEdge</td>
+<td>If True, extend the curves to reach the exact edges of
+the data.</td>
+</tr>
+<tr class="row-even"><td>path</td>
+<td>if True, return a QPainterPath rather than a list of
+vertex coordinates. This forces connected=True.</td>
+</tr>
+</tbody>
+</table>
+<p>This function is SLOW; plenty of room for optimization here.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.isosurface">
+<code class="descclassname">pyqtgraph.</code><code class="descname">isosurface</code><span class="sig-paren">(</span><em>data</em>, <em>level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#isosurface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.isosurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate isosurface from volumetric data using marching cubes algorithm.
+See Paul Bourke, &#8220;Polygonising a Scalar Field&#8221;  
+(<a class="reference external" href="http://paulbourke.net/geometry/polygonise/">http://paulbourke.net/geometry/polygonise/</a>)</p>
+<p><em>data</em>   3D numpy array of scalar values. Must be contiguous.
+<em>level</em>  The level at which to generate an isosurface</p>
+<p>Returns an array of vertex coordinates (Nv, 3) and an array of 
+per-face vertex indexes (Nf, 3)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="miscellaneous-functions">
+<h2>Miscellaneous Functions<a class="headerlink" href="#miscellaneous-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyqtgraph.eq">
+<code class="descclassname">pyqtgraph.</code><code class="descname">eq</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#eq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>The great missing equivalence function: Guaranteed evaluation to a single bool value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.arrayToQPath">
+<code class="descclassname">pyqtgraph.</code><code class="descname">arrayToQPath</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>connect='all'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#arrayToQPath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.arrayToQPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an array of x,y coordinats to QPainterPath as efficiently as possible.
+The <em>connect</em> argument may be &#8216;all&#8217;, indicating that each point should be
+connected to the next; &#8216;pairs&#8217;, indicating that each pair of points
+should be connected, or an array of int32 values (0 or 1) indicating
+connections.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.pseudoScatter">
+<code class="descclassname">pyqtgraph.</code><code class="descname">pseudoScatter</code><span class="sig-paren">(</span><em>data</em>, <em>spacing=None</em>, <em>shuffle=True</em>, <em>bidir=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph/functions.html#pseudoScatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.pseudoScatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for examining the distribution of values in a set. Produces scattering as in beeswarm or column scatter plots.</p>
+<p>Given a list of x-values, construct a set of y-values such that an x,y scatter-plot
+will not have overlapping points (it will look similar to a histogram).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.systemInfo">
+<code class="descclassname">pyqtgraph.</code><code class="descname">systemInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph.html#systemInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.systemInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyqtgraph.exit">
+<code class="descclassname">pyqtgraph.</code><code class="descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyqtgraph.html#exit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Causes python to exit without garbage-collecting any objects, and thus avoids
+calling object destructor methods. This is a sledgehammer workaround for 
+a variety of bugs in PyQt and Pyside that cause crashes on exit.</p>
+<p>This function does the following in an attempt to &#8216;safely&#8217; terminate
+the process:</p>
+<ul class="simple">
+<li>Invoke atexit callbacks</li>
+<li>Close all open file handles</li>
+<li>os._exit()</li>
+</ul>
+<p>Note: there is some potential for causing damage with this function if you
+are using objects that _require_ their destructors to be called (for example,
+to properly terminate log files, disconnect from devices, etc). Situations
+like this are probably quite rare, but use at your own risk.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyQtGraph&#8217;s Helper Functions</a><ul>
+<li><a class="reference internal" href="#simple-data-display-functions">Simple Data Display Functions</a></li>
+<li><a class="reference internal" href="#color-pen-and-brush-functions">Color, Pen, and Brush Functions</a></li>
+<li><a class="reference internal" href="#data-slicing">Data Slicing</a></li>
+<li><a class="reference internal" href="#coordinate-transformation">Coordinate Transformation</a></li>
+<li><a class="reference internal" href="#si-unit-conversion-functions">SI Unit Conversion Functions</a></li>
+<li><a class="reference internal" href="#image-preparation-functions">Image Preparation Functions</a></li>
+<li><a class="reference internal" href="#mesh-generation-functions">Mesh Generation Functions</a></li>
+<li><a class="reference internal" href="#miscellaneous-functions">Miscellaneous Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="config_options.html"
+                        title="previous chapter">Global Configuration Options</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphicsItems/index.html"
+                        title="next chapter">PyQtGraph&#8217;s Graphics Items</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/functions.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphicsItems/index.html" title="PyQtGraph’s Graphics Items"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="config_options.html" title="Global Configuration Options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="apireference.html" >API Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

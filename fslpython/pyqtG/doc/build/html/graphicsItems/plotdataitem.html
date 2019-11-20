@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PlotDataItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="PlotItem" href="plotitem.html" />
+    <link rel="prev" title="PyQtGraph’s Graphics Items" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotitem.html" title="PlotItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyQtGraph’s Graphics Items"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="plotdataitem">
+<h1>PlotDataItem<a class="headerlink" href="#plotdataitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.PlotDataItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">PlotDataItem</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="graphicsobject.html#pyqtgraph.GraphicsObject" title="pyqtgraph.GraphicsObject"><code class="xref py py-class docutils literal"><span class="pre">GraphicsObject</span></code></a></p>
+<p>GraphicsItem for displaying plot curves, scatter plots, or both. 
+While it is possible to use <a class="reference internal" href="plotcurveitem.html#pyqtgraph.PlotCurveItem" title="pyqtgraph.PlotCurveItem"><code class="xref py py-class docutils literal"><span class="pre">PlotCurveItem</span></code></a> or
+<a class="reference internal" href="scatterplotitem.html#pyqtgraph.ScatterPlotItem" title="pyqtgraph.ScatterPlotItem"><code class="xref py py-class docutils literal"><span class="pre">ScatterPlotItem</span></code></a> individually, this class
+provides a unified interface to both. Instances of <code class="xref py py-class docutils literal"><span class="pre">PlotDataItem</span></code> are 
+usually created by plot() methods such as <a class="reference internal" href="../functions.html#pyqtgraph.plot" title="pyqtgraph.plot"><code class="xref py py-func docutils literal"><span class="pre">pyqtgraph.plot()</span></code></a> and
+<a class="reference internal" href="plotitem.html#pyqtgraph.PlotItem.plot" title="pyqtgraph.PlotItem.plot"><code class="xref py py-func docutils literal"><span class="pre">PlotItem.plot()</span></code></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigPlotChanged(self)</td>
+<td>Emitted when the data in this item is updated.</td>
+</tr>
+<tr class="row-odd"><td>sigClicked(self)</td>
+<td>Emitted when the item is clicked.</td>
+</tr>
+<tr class="row-even"><td>sigPointsClicked(self, points)</td>
+<td>Emitted when a plot point is clicked
+Sends the list of points under the mouse.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>There are many different ways to create a PlotDataItem:</p>
+<p><strong>Data initialization arguments:</strong> (x,y data only)</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>PlotDataItem(xValues, yValues)</td>
+<td>x and y values may be any sequence (including ndarray) of real numbers</td>
+</tr>
+<tr class="row-even"><td>PlotDataItem(yValues)</td>
+<td>y values only &#8211; x will be automatically set to range(len(y))</td>
+</tr>
+<tr class="row-odd"><td>PlotDataItem(x=xValues, y=yValues)</td>
+<td>x and y given by keyword arguments</td>
+</tr>
+<tr class="row-even"><td>PlotDataItem(ndarray(Nx2))</td>
+<td>numpy array with shape (N, 2) where x=data[:,0] and y=data[:,1]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>Data initialization arguments:</strong> (x,y data AND may include spot style)</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>PlotDataItem(recarray)</td>
+<td>numpy array with dtype=[(&#8216;x&#8217;, float), (&#8216;y&#8217;, float), ...]</td>
+</tr>
+<tr class="row-even"><td>PlotDataItem(list-of-dicts)</td>
+<td>[{&#8216;x&#8217;: x, &#8216;y&#8217;: y, ...},   ...]</td>
+</tr>
+<tr class="row-odd"><td>PlotDataItem(dict-of-lists)</td>
+<td>{&#8216;x&#8217;: [...], &#8216;y&#8217;: [...],  ...}</td>
+</tr>
+<tr class="row-even"><td>PlotDataItem(MetaArray)</td>
+<td>1D array of Y values with X sepecified as axis values
+OR 2D array with a column &#8216;y&#8217; and extra columns as needed.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>Line style keyword arguments:</strong></p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>connect</td>
+<td>Specifies how / whether vertexes should be connected. See
+<a class="reference internal" href="../functions.html#pyqtgraph.arrayToQPath" title="pyqtgraph.arrayToQPath"><code class="xref py py-func docutils literal"><span class="pre">arrayToQPath()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>pen</td>
+<td>Pen to use for drawing line between points.
+Default is solid grey, 1px width. Use None to disable line drawing.
+May be any single argument accepted by <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>shadowPen</td>
+<td>Pen for secondary line to draw behind the primary line. disabled by default.
+May be any single argument accepted by <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>fillLevel</td>
+<td>Fill the area between the curve and fillLevel</td>
+</tr>
+<tr class="row-odd"><td>fillBrush</td>
+<td>Fill to use when fillLevel is specified.
+May be any single argument accepted by <a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>stepMode</td>
+<td>If True, two orthogonal lines are drawn for each sample
+as steps. This is commonly used when drawing histograms.
+Note that in this case, <cite>len(x) == len(y) + 1</cite>
+(added in version 0.9.9)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>Point style keyword arguments:</strong>  (see <a class="reference internal" href="scatterplotitem.html#pyqtgraph.ScatterPlotItem.setData" title="pyqtgraph.ScatterPlotItem.setData"><code class="xref py py-func docutils literal"><span class="pre">ScatterPlotItem.setData()</span></code></a> for more information)</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>symbol</td>
+<td>Symbol to use for drawing points OR list of symbols,
+one per point. Default is no symbol.
+Options are o, s, t, d, +, or any QPainterPath</td>
+</tr>
+<tr class="row-even"><td>symbolPen</td>
+<td>Outline pen for drawing points OR list of pens, one
+per point. May be any single argument accepted by
+<a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">mkPen()</span></code></a></td>
+</tr>
+<tr class="row-odd"><td>symbolBrush</td>
+<td>Brush for filling points OR list of brushes, one per
+point. May be any single argument accepted by
+<a class="reference internal" href="../functions.html#pyqtgraph.mkBrush" title="pyqtgraph.mkBrush"><code class="xref py py-func docutils literal"><span class="pre">mkBrush()</span></code></a></td>
+</tr>
+<tr class="row-even"><td>symbolSize</td>
+<td>Diameter of symbols OR list of diameters.</td>
+</tr>
+<tr class="row-odd"><td>pxMode</td>
+<td>(bool) If True, then symbolSize is specified in
+pixels. If False, then symbolSize is
+specified in data coordinates.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>Optimization keyword arguments:</strong></p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>antialias</td>
+<td>(bool) By default, antialiasing is disabled to improve performance.
+Note that in some cases (in particluar, when pxMode=True), points
+will be rendered antialiased even if this is set to False.</td>
+</tr>
+<tr class="row-even"><td>decimate</td>
+<td>deprecated.</td>
+</tr>
+<tr class="row-odd"><td>downsample</td>
+<td>(int) Reduce the number of samples displayed by this value</td>
+</tr>
+<tr class="row-even"><td>downsampleMethod</td>
+<td>&#8216;subsample&#8217;: Downsample by taking the first of N samples.
+This method is fastest and least accurate.
+&#8216;mean&#8217;: Downsample by taking the mean of N samples.
+&#8216;peak&#8217;: Downsample by drawing a saw wave that follows the min
+and max of the original data. This method produces the best
+visual representation of the data but is slower.</td>
+</tr>
+<tr class="row-odd"><td>autoDownsample</td>
+<td>(bool) If True, resample the data before plotting to avoid plotting
+multiple line segments per pixel. This can improve performance when
+viewing very high-density data, but increases the initial overhead
+and memory usage.</td>
+</tr>
+<tr class="row-even"><td>clipToView</td>
+<td>(bool) If True, only plot data that is visible within the X range of
+the containing ViewBox. This can improve performance when plotting
+very large data sets where only a fraction of the data is visible
+at any time.</td>
+</tr>
+<tr class="row-odd"><td>identical</td>
+<td><em>deprecated</em></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>Meta-info keyword arguments:</strong></p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>name</td>
+<td>name of dataset. This would appear in a legend</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.dataBounds">
+<code class="descname">dataBounds</code><span class="sig-paren">(</span><em>ax</em>, <em>frac=1.0</em>, <em>orthoRange=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.dataBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.dataBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the range occupied by the data (along a specific axis) in this item.
+This method is called by ViewBox when auto-scaling.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>ax</td>
+<td>(0 or 1) the axis for which to return this item&#8217;s data range</td>
+</tr>
+<tr class="row-odd"><td>frac</td>
+<td>(float 0.0-1.0) Specifies what fraction of the total data
+range to return. By default, the entire range is returned.
+This allows the ViewBox to ignore large spikes in the data
+when auto-scaling.</td>
+</tr>
+<tr class="row-even"><td>orthoRange</td>
+<td>([min,max] or None) Specifies that only the data within the
+given range (orthogonal to <em>ax</em>) should me measured when
+returning the data range. (For example, a ViewBox might ask
+what is the y-range of all data with x-values between min
+and max)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.pixelPadding">
+<code class="descname">pixelPadding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.pixelPadding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.pixelPadding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size in pixels that this item may draw beyond the values returned by dataBounds().
+This method is called by ViewBox when auto-scaling.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.setData">
+<code class="descname">setData</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.setData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.setData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear any data displayed by this item and display new data.
+See <a class="reference internal" href="#pyqtgraph.PlotDataItem.__init__" title="pyqtgraph.PlotDataItem.__init__"><code class="xref py py-func docutils literal"><span class="pre">__init__()</span></code></a> for details; it accepts the same arguments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.setDownsampling">
+<code class="descname">setDownsampling</code><span class="sig-paren">(</span><em>ds=None</em>, <em>auto=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.setDownsampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.setDownsampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the downsampling mode of this item. Downsampling reduces the number
+of samples drawn to increase performance.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>ds</td>
+<td>(int) Reduce visible plot samples by this factor. To disable,
+set ds=1.</td>
+</tr>
+<tr class="row-odd"><td>auto</td>
+<td>(bool) If True, automatically pick <em>ds</em> based on visible range</td>
+</tr>
+<tr class="row-even"><td>mode</td>
+<td>&#8216;subsample&#8217;: Downsample by taking the first of N samples.
+This method is fastest and least accurate.
+&#8216;mean&#8217;: Downsample by taking the mean of N samples.
+&#8216;peak&#8217;: Downsample by drawing a saw wave that follows the min
+and max of the original data. This method produces the best
+visual representation of the data but is slower.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.setPen">
+<code class="descname">setPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.setPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.setPen" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Sets the pen used to draw lines between points.</div>
+<div class="line"><em>pen</em> can be a QPen or any argument accepted by <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">pyqtgraph.mkPen()</span></code></a></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.PlotDataItem.setShadowPen">
+<code class="descname">setShadowPen</code><span class="sig-paren">(</span><em>*args</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/PlotDataItem.html#PlotDataItem.setShadowPen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.PlotDataItem.setShadowPen" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line">Sets the shadow pen used to draw lines between points (this is for enhancing contrast or 
+emphacizing data). </div>
+<div class="line">This line is drawn behind the primary pen (see <a class="reference internal" href="#pyqtgraph.PlotDataItem.setPen" title="pyqtgraph.PlotDataItem.setPen"><code class="xref py py-func docutils literal"><span class="pre">setPen()</span></code></a>)
+and should generally be assigned greater width than the primary pen.</div>
+<div class="line"><em>pen</em> can be a QPen or any argument accepted by <a class="reference internal" href="../functions.html#pyqtgraph.mkPen" title="pyqtgraph.mkPen"><code class="xref py py-func docutils literal"><span class="pre">pyqtgraph.mkPen()</span></code></a></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">PyQtGraph&#8217;s Graphics Items</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plotitem.html"
+                        title="next chapter">PlotItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/plotdataitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotitem.html" title="PlotItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyQtGraph’s Graphics Items"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

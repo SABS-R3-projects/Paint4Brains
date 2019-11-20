@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GraphicsView &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Widgets" href="index.html" />
+    <link rel="next" title="DataTreeWidget" href="datatreewidget.html" />
+    <link rel="prev" title="ScatterPlotWidget" href="scatterplotwidget.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datatreewidget.html" title="DataTreeWidget"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scatterplotwidget.html" title="ScatterPlotWidget"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Widgets</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graphicsview">
+<h1>GraphicsView<a class="headerlink" href="#graphicsview" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.GraphicsView">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">GraphicsView</code><span class="sig-paren">(</span><em>parent=None</em>, <em>useOpenGL=None</em>, <em>background='default'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-implementation of QGraphicsView that removes scrollbars and allows unambiguous control of the 
+viewed coordinate range. Also automatically creates a GraphicsScene and a central QGraphicsWidget
+that is automatically scaled to the full view geometry.</p>
+<p>This widget is the basis for <a class="reference internal" href="plotwidget.html#pyqtgraph.PlotWidget" title="pyqtgraph.PlotWidget"><code class="xref py py-class docutils literal"><span class="pre">PlotWidget</span></code></a>, 
+<a class="reference internal" href="graphicslayoutwidget.html#pyqtgraph.GraphicsLayoutWidget" title="pyqtgraph.GraphicsLayoutWidget"><code class="xref py py-class docutils literal"><span class="pre">GraphicsLayoutWidget</span></code></a>, and the view widget in
+<a class="reference internal" href="imageview.html#pyqtgraph.ImageView" title="pyqtgraph.ImageView"><code class="xref py py-class docutils literal"><span class="pre">ImageView</span></code></a>.</p>
+<p>By default, the view coordinate system matches the widget&#8217;s pixel coordinates and 
+automatically updates when the view is resized. This can be overridden by setting 
+autoPixelRange=False. The exact visible range can be set with setRange().</p>
+<p>The view can be panned using the middle mouse button and scaled using the right mouse button if
+enabled via enableMouse()  (but ordinarily, we use ViewBox for this functionality).</p>
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parent=None</em>, <em>useOpenGL=None</em>, <em>background='default'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>parent</td>
+<td>Optional parent widget</td>
+</tr>
+<tr class="row-odd"><td>useOpenGL</td>
+<td>If True, the GraphicsView will use OpenGL to do all of its
+rendering. This can improve performance on some systems,
+but may also introduce bugs (the combination of
+QGraphicsView and QGLWidget is still an &#8216;experimental&#8217;
+feature of Qt)</td>
+</tr>
+<tr class="row-even"><td>background</td>
+<td>Set the background color of the GraphicsView. Accepts any
+single argument accepted by
+<a class="reference internal" href="../functions.html#pyqtgraph.mkColor" title="pyqtgraph.mkColor"><code class="xref py py-func docutils literal"><span class="pre">mkColor</span></code></a>. By
+default, the background color is determined using the
+&#8216;backgroundColor&#8217; configuration option (see
+<a class="reference internal" href="../config_options.html#pyqtgraph.setConfigOptions" title="pyqtgraph.setConfigOptions"><code class="xref py py-func docutils literal"><span class="pre">setConfigOptions</span></code></a>).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.pixelSize">
+<code class="descname">pixelSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.pixelSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.pixelSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return vector with the length and width of one view pixel in scene coordinates</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.scaleToImage">
+<code class="descname">scaleToImage</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.scaleToImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.scaleToImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales such that pixels in image are the same size as screen pixels. This may result in a significant performance increase.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.setAntialiasing">
+<code class="descname">setAntialiasing</code><span class="sig-paren">(</span><em>aa</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.setAntialiasing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.setAntialiasing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable default antialiasing.
+Note that this will only affect items that do not specify their own antialiasing options.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.setBackground">
+<code class="descname">setBackground</code><span class="sig-paren">(</span><em>background</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.setBackground"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.setBackground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the background color of the GraphicsView.
+To use the defaults specified py pyqtgraph.setConfigOption, use background=&#8217;default&#8217;.
+To make the background transparent, use background=None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.setCentralWidget">
+<code class="descname">setCentralWidget</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.setCentralWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.setCentralWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a QGraphicsWidget to automatically fill the entire view (the item will be automatically
+resize whenever the GraphicsView is resized).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsView.viewRect">
+<code class="descname">viewRect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/GraphicsView.html#GraphicsView.viewRect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsView.viewRect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the boundaries of the view in scene coordinates</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scatterplotwidget.html"
+                        title="previous chapter">ScatterPlotWidget</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datatreewidget.html"
+                        title="next chapter">DataTreeWidget</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/graphicsview.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datatreewidget.html" title="DataTreeWidget"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scatterplotwidget.html" title="ScatterPlotWidget"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Widgets</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

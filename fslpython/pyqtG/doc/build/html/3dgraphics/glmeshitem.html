@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GLMeshItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s 3D Graphics System" href="index.html" />
+    <link rel="next" title="GLLinePlotItem" href="gllineplotitem.html" />
+    <link rel="prev" title="GLImageItem" href="glimageitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gllineplotitem.html" title="GLLinePlotItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="glimageitem.html" title="GLImageItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="glmeshitem">
+<h1>GLMeshItem<a class="headerlink" href="#glmeshitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.opengl.GLMeshItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.opengl.</code><code class="descname">GLMeshItem</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLMeshItem.html#GLMeshItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLMeshItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <code class="xref py py-class docutils literal"><span class="pre">GLGraphicsItem</span></code></p>
+<p>Displays a 3D triangle mesh.</p>
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLMeshItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLMeshItem.html#GLMeshItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLMeshItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>meshdata</td>
+<td>MeshData object from which to determine geometry for
+this item.</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>Default face color used if no vertex or face colors
+are specified.</td>
+</tr>
+<tr class="row-even"><td>edgeColor</td>
+<td>Default edge color to use if no edge colors are
+specified in the mesh data.</td>
+</tr>
+<tr class="row-odd"><td>drawEdges</td>
+<td>If True, a wireframe mesh will be drawn.
+(default=False)</td>
+</tr>
+<tr class="row-even"><td>drawFaces</td>
+<td>If True, mesh faces are drawn. (default=True)</td>
+</tr>
+<tr class="row-odd"><td>shader</td>
+<td>Name of shader program to use when drawing faces.
+(None for no shader)</td>
+</tr>
+<tr class="row-even"><td>smooth</td>
+<td>If True, normal vectors are computed for each vertex
+and interpolated within each face.</td>
+</tr>
+<tr class="row-odd"><td>computeNormals</td>
+<td>If False, then computation of normal vectors is
+disabled. This can provide a performance boost for
+meshes that do not make use of normals.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLMeshItem.meshDataChanged">
+<code class="descname">meshDataChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLMeshItem.html#GLMeshItem.meshDataChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLMeshItem.meshDataChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method must be called to inform the item that the MeshData object
+has been altered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLMeshItem.setColor">
+<code class="descname">setColor</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLMeshItem.html#GLMeshItem.setColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLMeshItem.setColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the default color to use when no vertex or face colors are specified.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLMeshItem.setMeshData">
+<code class="descname">setMeshData</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLMeshItem.html#GLMeshItem.setMeshData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLMeshItem.setMeshData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set mesh data for this item. This can be invoked two ways:</p>
+<ol class="arabic simple">
+<li>Specify <em>meshdata</em> argument with a new MeshData object</li>
+<li>Specify keyword arguments to be passed to MeshData(..) to create a new instance.</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLMeshItem.setShader">
+<code class="descname">setShader</code><span class="sig-paren">(</span><em>shader</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLMeshItem.html#GLMeshItem.setShader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLMeshItem.setShader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the shader used when rendering faces in the mesh. (see the GL shaders example)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="glimageitem.html"
+                        title="previous chapter">GLImageItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gllineplotitem.html"
+                        title="next chapter">GLLinePlotItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/3dgraphics/glmeshitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gllineplotitem.html" title="GLLinePlotItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="glimageitem.html" title="GLImageItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

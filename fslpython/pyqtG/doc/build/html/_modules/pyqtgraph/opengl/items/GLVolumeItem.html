@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyqtgraph.opengl.items.GLVolumeItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../../../../index.html" />
+    <link rel="up" title="pyqtgraph" href="../../../pyqtgraph.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../../pyqtgraph.html" accesskey="U">pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyqtgraph.opengl.items.GLVolumeItem</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">OpenGL.GL</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="nn">GLGraphicsItem</span> <span class="kn">import</span> <span class="n">GLGraphicsItem</span>
+<span class="kn">from</span> <span class="nn">...Qt</span> <span class="kn">import</span> <span class="n">QtGui</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">debug</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GLVolumeItem&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="GLVolumeItem"><a class="viewcode-back" href="../../../../3dgraphics/glvolumeitem.html#pyqtgraph.opengl.GLVolumeItem">[docs]</a><span class="k">class</span> <span class="nc">GLVolumeItem</span><span class="p">(</span><span class="n">GLGraphicsItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Bases:** :class:`GLGraphicsItem &lt;pyqtgraph.opengl.GLGraphicsItem&gt;`</span>
+<span class="sd">    </span>
+<span class="sd">    Displays volumetric data. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+<div class="viewcode-block" id="GLVolumeItem.__init__"><a class="viewcode-back" href="../../../../3dgraphics/glvolumeitem.html#pyqtgraph.opengl.GLVolumeItem.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sliceDensity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">glOptions</span><span class="o">=</span><span class="s1">&#39;translucent&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ==============  =======================================================================================</span>
+<span class="sd">        **Arguments:**</span>
+<span class="sd">        data            Volume data to be rendered. *Must* be 4D numpy array (x, y, z, RGBA) with dtype=ubyte.</span>
+<span class="sd">        sliceDensity    Density of slices to render through the volume. A value of 1 means one slice per voxel.</span>
+<span class="sd">        smooth          (bool) If True, the volume slices are rendered with linear interpolation </span>
+<span class="sd">        ==============  =======================================================================================</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">sliceDensity</span> <span class="o">=</span> <span class="n">sliceDensity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span> <span class="o">=</span> <span class="n">smooth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_needUpload</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">texture</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">GLGraphicsItem</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setGLOptions</span><span class="p">(</span><span class="n">glOptions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+        
+    <span class="k">def</span> <span class="nf">setData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_needUpload</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">_uploadData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">texture</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">texture</span> <span class="o">=</span> <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">texture</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">smooth</span><span class="p">:</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">)</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_NEAREST</span><span class="p">)</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_NEAREST</span><span class="p">)</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_BORDER</span><span class="p">)</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_BORDER</span><span class="p">)</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="n">GL_TEXTURE_WRAP_R</span><span class="p">,</span> <span class="n">GL_CLAMP_TO_BORDER</span><span class="p">)</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+        
+        <span class="c1">## Test texture dimensions first</span>
+        <span class="n">glTexImage3D</span><span class="p">(</span><span class="n">GL_PROXY_TEXTURE_3D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">glGetTexLevelParameteriv</span><span class="p">(</span><span class="n">GL_PROXY_TEXTURE_3D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_TEXTURE_WIDTH</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;OpenGL failed to create 3D texture (</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">); too large for this hardware.&quot;</span> <span class="o">%</span> <span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+        
+        <span class="n">glTexImage3D</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+        <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">lists</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">glGenLists</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lists</span><span class="p">[(</span><span class="n">ax</span><span class="p">,</span><span class="n">d</span><span class="p">)]</span> <span class="o">=</span> <span class="n">l</span>
+                <span class="n">glNewList</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">GL_COMPILE</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">drawVolume</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+                <span class="n">glEndList</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_needUpload</span> <span class="o">=</span> <span class="bp">False</span>
+        
+    <span class="k">def</span> <span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needUpload</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_uploadData</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupGLState</span><span class="p">()</span>
+        
+        <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">)</span>
+        <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">texture</span><span class="p">)</span>
+        
+        <span class="c1">#glEnable(GL_DEPTH_TEST)</span>
+        <span class="c1">#glDisable(GL_CULL_FACE)</span>
+        <span class="c1">#glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)</span>
+        <span class="c1">#glEnable( GL_BLEND )</span>
+        <span class="c1">#glEnable( GL_ALPHA_TEST )</span>
+        <span class="n">glColor4f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVector3D</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="o">/</span><span class="mf">2.</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]])</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapFromParent</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">cameraPosition</span><span class="p">())</span> <span class="o">-</span> <span class="n">center</span>
+        <span class="c1">#print &quot;center&quot;, center, &quot;cam&quot;, view.cameraPosition(), self.mapFromParent(view.cameraPosition()), &quot;diff&quot;, cam</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cam</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">cam</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">cam</span><span class="o">.</span><span class="n">z</span><span class="p">()])</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">cam</span><span class="p">))</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">cam</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">glCallList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lists</span><span class="p">[(</span><span class="n">ax</span><span class="p">,</span><span class="n">d</span><span class="p">)])</span>  <span class="c1">## draw axes</span>
+        <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_TEXTURE_3D</span><span class="p">)</span>
+                
+    <span class="k">def</span> <span class="nf">drawVolume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="mi">5</span>
+        
+        <span class="n">imax</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">imax</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        
+        <span class="n">tp</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">vp</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">nudge</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="o">/</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">+</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">+</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">+</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">+</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">tp</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">nudge</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        
+        <span class="n">vp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">vp</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">imax</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sliceDensity</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">slices</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            
+        <span class="n">glBegin</span><span class="p">(</span><span class="n">GL_QUADS</span><span class="p">)</span>
+        <span class="n">tzVals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">nudge</span><span class="p">[</span><span class="n">ax</span><span class="p">],</span> <span class="mf">1.0</span><span class="o">-</span><span class="n">nudge</span><span class="p">[</span><span class="n">ax</span><span class="p">],</span> <span class="n">slices</span><span class="p">)</span>
+        <span class="n">vzVals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">ax</span><span class="p">],</span> <span class="n">slices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">tzVals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">vzVals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+            <span class="n">tp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+            <span class="n">tp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+            <span class="n">tp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+            <span class="n">tp</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+            
+            <span class="n">vp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
+            <span class="n">vp</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
+            <span class="n">vp</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
+            <span class="n">vp</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">ax</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
+            
+            
+            <span class="n">glTexCoord3f</span><span class="p">(</span><span class="o">*</span><span class="n">tp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">glVertex3f</span><span class="p">(</span><span class="o">*</span><span class="n">vp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">glTexCoord3f</span><span class="p">(</span><span class="o">*</span><span class="n">tp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">glVertex3f</span><span class="p">(</span><span class="o">*</span><span class="n">vp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">glTexCoord3f</span><span class="p">(</span><span class="o">*</span><span class="n">tp</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">glVertex3f</span><span class="p">(</span><span class="o">*</span><span class="n">vp</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">glTexCoord3f</span><span class="p">(</span><span class="o">*</span><span class="n">tp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">glVertex3f</span><span class="p">(</span><span class="o">*</span><span class="n">vp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">glEnd</span><span class="p">()</span></div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <span class="c1">## Interesting idea:</span>
+        <span class="c1">## remove projection/modelview matrixes, recreate in texture coords. </span>
+        <span class="c1">## it _sorta_ works, but needs tweaking.</span>
+        <span class="c1">#mvm = glGetDoublev(GL_MODELVIEW_MATRIX)</span>
+        <span class="c1">#pm = glGetDoublev(GL_PROJECTION_MATRIX)</span>
+        <span class="c1">#m = QtGui.QMatrix4x4(mvm.flatten()).inverted()[0]</span>
+        <span class="c1">#p = QtGui.QMatrix4x4(pm.flatten()).inverted()[0]</span>
+        
+        <span class="c1">#glMatrixMode(GL_PROJECTION)</span>
+        <span class="c1">#glPushMatrix()</span>
+        <span class="c1">#glLoadIdentity()</span>
+        <span class="c1">#N=1</span>
+        <span class="c1">#glOrtho(-N,N,-N,N,-100,100)</span>
+        
+        <span class="c1">#glMatrixMode(GL_MODELVIEW)</span>
+        <span class="c1">#glLoadIdentity()</span>
+        
+        
+        <span class="c1">#glMatrixMode(GL_TEXTURE)</span>
+        <span class="c1">#glLoadIdentity()</span>
+        <span class="c1">#glMultMatrixf(m.copyDataTo())</span>
+        
+        <span class="c1">#view = self.view()</span>
+        <span class="c1">#w = view.width()</span>
+        <span class="c1">#h = view.height()</span>
+        <span class="c1">#dist = view.opts[&#39;distance&#39;]</span>
+        <span class="c1">#fov = view.opts[&#39;fov&#39;]</span>
+        <span class="c1">#nearClip = dist * .1</span>
+        <span class="c1">#farClip = dist * 5.</span>
+        <span class="c1">#r = nearClip * np.tan(fov)</span>
+        <span class="c1">#t = r * h / w</span>
+        
+        <span class="c1">#p = QtGui.QMatrix4x4()</span>
+        <span class="c1">#p.frustum( -r, r, -t, t, nearClip, farClip)</span>
+        <span class="c1">#glMultMatrixf(p.inverted()[0].copyDataTo())</span>
+        
+        
+        <span class="c1">#glBegin(GL_QUADS)</span>
+        
+        <span class="c1">#M=1</span>
+        <span class="c1">#for i in range(500):</span>
+            <span class="c1">#z = i/500.</span>
+            <span class="c1">#w = -i/500.</span>
+            <span class="c1">#glTexCoord3f(-M, -M, z)</span>
+            <span class="c1">#glVertex3f(-N, -N, w)</span>
+            <span class="c1">#glTexCoord3f(M, -M, z)</span>
+            <span class="c1">#glVertex3f(N, -N, w)</span>
+            <span class="c1">#glTexCoord3f(M, M, z)</span>
+            <span class="c1">#glVertex3f(N, N, w)</span>
+            <span class="c1">#glTexCoord3f(-M, M, z)</span>
+            <span class="c1">#glVertex3f(-N, N, w)</span>
+        <span class="c1">#glEnd()</span>
+        <span class="c1">#glDisable(GL_TEXTURE_3D)</span>
+
+        <span class="c1">#glMatrixMode(GL_PROJECTION)</span>
+        <span class="c1">#glPopMatrix()</span>
+        
+        
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../../pyqtgraph.html" >pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

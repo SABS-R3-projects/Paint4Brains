@@ -1,0 +1,586 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parameter &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="ParameterTree API Reference" href="apiref.html" />
+    <link rel="next" title="ParameterTree" href="parametertree.html" />
+    <link rel="prev" title="ParameterTree API Reference" href="apiref.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parametertree.html" title="ParameterTree"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="apiref.html" title="ParameterTree API Reference"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Parameter Trees</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="apiref.html" accesskey="U">ParameterTree API Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parameter">
+<h1>Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.parametertree.Parameter">
+<em class="property">class </em><code class="descclassname">pyqtgraph.parametertree.</code><code class="descname">Parameter</code><span class="sig-paren">(</span><em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Parameter is the basic unit of data in a parameter tree. Each parameter has
+a name, a type, a value, and several other properties that modify the behavior of the 
+Parameter. Parameters may have parent / child / sibling relationships to construct
+organized hierarchies. Parameters generally do not have any inherent GUI or visual
+interpretation; instead they manage ParameterItem instances which take care of
+display and user interaction.</p>
+<p>Note: It is fairly uncommon to use the Parameter class directly; mostly you 
+will use subclasses which provide specialized type and data handling. The static
+pethod Parameter.create(...) is an easy way to generate instances of these subclasses.</p>
+<p>For more Parameter types, see ParameterTree.parameterTypes module.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>sigStateChanged(self, change, info)</td>
+<td>Emitted when anything changes about this parameter at
+all.
+The second argument is a string indicating what changed
+(&#8216;value&#8217;, &#8216;childAdded&#8217;, etc..)
+The third argument can be any extra information about
+the change</td>
+</tr>
+<tr class="row-odd"><td>sigTreeStateChanged(self, changes)</td>
+<td>Emitted when any child in the tree changes state
+(but only if monitorChildren() is called)
+the format of <em>changes</em> is [(param, change, info), ...]</td>
+</tr>
+<tr class="row-even"><td>sigValueChanged(self, value)</td>
+<td>Emitted when value is finished changing</td>
+</tr>
+<tr class="row-odd"><td>sigValueChanging(self, value)</td>
+<td>Emitted immediately for all value changes,
+including during editing.</td>
+</tr>
+<tr class="row-even"><td>sigChildAdded(self, child, index)</td>
+<td>Emitted when a child is added</td>
+</tr>
+<tr class="row-odd"><td>sigChildRemoved(self, child)</td>
+<td>Emitted when a child is removed</td>
+</tr>
+<tr class="row-even"><td>sigRemoved(self)</td>
+<td>Emitted when this parameter is removed</td>
+</tr>
+<tr class="row-odd"><td>sigParentChanged(self, parent)</td>
+<td>Emitted when this parameter&#8217;s parent has changed</td>
+</tr>
+<tr class="row-even"><td>sigLimitsChanged(self, limits)</td>
+<td>Emitted when this parameter&#8217;s limits have changed</td>
+</tr>
+<tr class="row-odd"><td>sigDefaultChanged(self, default)</td>
+<td>Emitted when this parameter&#8217;s default value has changed</td>
+</tr>
+<tr class="row-even"><td>sigNameChanged(self, name)</td>
+<td>Emitted when this parameter&#8217;s name has changed</td>
+</tr>
+<tr class="row-odd"><td>sigOptionsChanged(self, opts)</td>
+<td>Emitted when any of this parameter&#8217;s options have changed</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a Parameter object. Although it is rare to directly create a
+Parameter instance, the options available to this method are also allowed
+by most Parameter subclasses.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Keyword Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>name</td>
+<td>The name to give this Parameter. This is the name that
+will appear in the left-most column of a ParameterTree
+for this Parameter.</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>The value to initially assign to this Parameter.</td>
+</tr>
+<tr class="row-even"><td>default</td>
+<td>The default value for this Parameter (most Parameters
+provide an option to &#8216;reset to default&#8217;).</td>
+</tr>
+<tr class="row-odd"><td>children</td>
+<td>A list of children for this Parameter. Children
+may be given either as a Parameter instance or as a
+dictionary to pass to Parameter.create(). In this way,
+it is possible to specify complex hierarchies of
+Parameters from a single nested data structure.</td>
+</tr>
+<tr class="row-even"><td>readonly</td>
+<td>If True, the user will not be allowed to edit this
+Parameter. (default=False)</td>
+</tr>
+<tr class="row-odd"><td>enabled</td>
+<td>If False, any widget(s) for this parameter will appear
+disabled. (default=True)</td>
+</tr>
+<tr class="row-even"><td>visible</td>
+<td>If False, the Parameter will not appear when displayed
+in a ParameterTree. (default=True)</td>
+</tr>
+<tr class="row-odd"><td>renamable</td>
+<td>If True, the user may rename this Parameter.
+(default=False)</td>
+</tr>
+<tr class="row-even"><td>removable</td>
+<td>If True, the user may remove this Parameter.
+(default=False)</td>
+</tr>
+<tr class="row-odd"><td>expanded</td>
+<td>If True, the Parameter will appear expanded when
+displayed in a ParameterTree (its children will be
+visible). (default=True)</td>
+</tr>
+<tr class="row-even"><td>title</td>
+<td>(str or None) If specified, then the parameter will be
+displayed to the user using this string as its name.
+However, the parameter will still be referred to
+internally using the <em>name</em> specified above. Note that
+this option is not compatible with renamable=True.
+(default=None; added in version 0.9.9)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.addChild">
+<code class="descname">addChild</code><span class="sig-paren">(</span><em>child</em>, <em>autoIncrementName=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.addChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.addChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add another parameter to the end of this parameter&#8217;s child list.</p>
+<p>See insertChild() for a description of the <em>autoIncrementName</em> 
+argument.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.addChildren">
+<code class="descname">addChildren</code><span class="sig-paren">(</span><em>children</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.addChildren"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.addChildren" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list or dict of children to this parameter. This method calls
+addChild once for each value in <em>children</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.blockTreeChangeSignal">
+<code class="descname">blockTreeChangeSignal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.blockTreeChangeSignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.blockTreeChangeSignal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to temporarily block and accumulate tree change signals.
+<em>You must remember to unblock</em>, so it is advisable to use treeChangeBlocker() instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.child">
+<code class="descname">child</code><span class="sig-paren">(</span><em>*names</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.child"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a child parameter. 
+Accepts the name of the child or a tuple (path, to, child)</p>
+<p>Added in version 0.9.9. Ealier versions used the &#8216;param&#8217; method, which is still
+implemented for backward compatibility.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.childPath">
+<code class="descname">childPath</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.childPath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.childPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path of parameter names from self to child.
+If child is not a (grand)child of self, return None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.children">
+<code class="descname">children</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of this parameter&#8217;s children.
+Warning: this overrides QObject.children</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.clearChildren">
+<code class="descname">clearChildren</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.clearChildren"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.clearChildren" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all child parameters.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pyqtgraph.parametertree.Parameter.create">
+<em class="property">static </em><code class="descname">create</code><span class="sig-paren">(</span><em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static method that creates a new Parameter (or subclass) instance using 
+opts[&#8216;type&#8217;] to select the appropriate class.</p>
+<p>All options are passed directly to the new Parameter&#8217;s __init__ method.
+Use registerParameterType() to add new class types.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.defaultValue">
+<code class="descname">defaultValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.defaultValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.defaultValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the default value for this parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.getValues">
+<code class="descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tree of all values that are children of this parameter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.hasChildren">
+<code class="descname">hasChildren</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.hasChildren"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.hasChildren" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this Parameter has children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.hasDefault">
+<code class="descname">hasDefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.hasDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.hasDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this parameter has a default value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.hide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide this parameter. It and its children will no longer be visible in any ParameterTree
+widgets it is connected to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.insertChild">
+<code class="descname">insertChild</code><span class="sig-paren">(</span><em>pos</em>, <em>child</em>, <em>autoIncrementName=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.insertChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.insertChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a new child at pos.
+If pos is a Parameter, then insert at the position of that Parameter.
+If child is a dict, then a parameter is constructed using
+<a class="reference internal" href="#pyqtgraph.parametertree.Parameter.create" title="pyqtgraph.parametertree.Parameter.create"><code class="xref py py-func docutils literal"><span class="pre">Parameter.create</span></code></a>.</p>
+<p>By default, the child&#8217;s &#8216;autoIncrementName&#8217; option determines whether
+the name will be adjusted to avoid prior name collisions. This 
+behavior may be overridden by specifying the <em>autoIncrementName</em> 
+argument. This argument was added in version 0.9.9.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.isType">
+<code class="descname">isType</code><span class="sig-paren">(</span><em>typ</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.isType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.isType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this parameter type matches the name <em>typ</em>.
+This can occur either of two ways:</p>
+<ul class="simple">
+<li>If self.type() == <em>typ</em></li>
+<li>If this parameter&#8217;s class is registered with the name <em>typ</em></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.makeTreeItem">
+<code class="descname">makeTreeItem</code><span class="sig-paren">(</span><em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.makeTreeItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.makeTreeItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a TreeWidgetItem suitable for displaying/controlling the content of 
+this parameter. This is called automatically when a ParameterTree attempts
+to display this Parameter.
+Most subclasses will want to override this function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of this Parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.parent">
+<code class="descname">parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the parent of this parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.parentChanged">
+<code class="descname">parentChanged</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.parentChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.parentChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called when the parameter&#8217;s parent has changed.
+It may be useful to extend this method in subclasses.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.readonly">
+<code class="descname">readonly</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.readonly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.readonly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this parameter is read-only. (this is the opposite of writable())</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove this parameter from its parent&#8217;s child list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.removeChild">
+<code class="descname">removeChild</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.removeChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.removeChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a child parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.restoreState">
+<code class="descname">restoreState</code><span class="sig-paren">(</span><em>state</em>, <em>recursive=True</em>, <em>addChildren=True</em>, <em>removeChildren=True</em>, <em>blockSignals=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.restoreState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.restoreState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the state of this parameter and its children from a structure generated using saveState()
+If recursive is True, then attempt to restore the state of child parameters as well.
+If addChildren is True, then any children which are referenced in the state object will be
+created if they do not already exist.
+If removeChildren is True, then any children which are not referenced in the state object will 
+be removed.
+If blockSignals is True, no signals will be emitted until the tree has been completely restored. 
+This prevents signal handlers from responding to a partially-rebuilt network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.saveState">
+<code class="descname">saveState</code><span class="sig-paren">(</span><em>filter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.saveState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.saveState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a structure representing the entire state of the parameter tree.
+The tree state may be restored from this structure using restoreState().</p>
+<p>If <em>filter</em> is set to &#8216;user&#8217;, then only user-settable data will be included in the
+returned state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setDefault">
+<code class="descname">setDefault</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the default value for this parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setLimits">
+<code class="descname">setLimits</code><span class="sig-paren">(</span><em>limits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setLimits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setLimits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set limits on the acceptable values for this parameter. 
+The format of limits depends on the type of the parameter and
+some parameters do not make use of limits at all.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setName">
+<code class="descname">setName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to change the name of this parameter; return the actual name. 
+(The parameter may reject the name change or automatically pick a different name)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setOpts">
+<code class="descname">setOpts</code><span class="sig-paren">(</span><em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setOpts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set any arbitrary options on this parameter.
+The exact behavior of this function will depend on the parameter type, but
+most parameters will accept a common set of options: value, name, limits,
+default, readonly, removable, renamable, visible, enabled, and expanded.</p>
+<p>See <a class="reference internal" href="#pyqtgraph.parametertree.Parameter.__init__" title="pyqtgraph.parametertree.Parameter.__init__"><code class="xref py py-func docutils literal"><span class="pre">Parameter.__init__</span></code></a>
+for more information on default options.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setReadonly">
+<code class="descname">setReadonly</code><span class="sig-paren">(</span><em>readonly=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setReadonly"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setReadonly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether this Parameter&#8217;s value may be edited by the user
+(this is the opposite of setWritable()).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setToDefault">
+<code class="descname">setToDefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setToDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setToDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this parameter&#8217;s value to the default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setValue">
+<code class="descname">setValue</code><span class="sig-paren">(</span><em>value</em>, <em>blockSignal=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of this Parameter; return the actual value that was set.
+(this may be different from the value that was requested)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.setWritable">
+<code class="descname">setWritable</code><span class="sig-paren">(</span><em>writable=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.setWritable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.setWritable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether this Parameter should be editable by the user. (This is 
+exactly the opposite of setReadonly).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>s=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show this parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.treeChangeBlocker">
+<code class="descname">treeChangeBlocker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.treeChangeBlocker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.treeChangeBlocker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an object that can be used to temporarily block and accumulate
+sigTreeStateChanged signals. This is meant to be used when numerous changes are 
+about to be made to the tree and only one change signal should be
+emitted at the end.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">param</span><span class="o">.</span><span class="n">treeChangeBlocker</span><span class="p">():</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">addChild</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">removeChild</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.treeStateChanged">
+<code class="descname">treeStateChanged</code><span class="sig-paren">(</span><em>param</em>, <em>changes</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.treeStateChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.treeStateChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the state of any sub-parameter has changed.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>param</td>
+<td>The immediate child whose tree state has changed.
+note that the change may have originated from a grandchild.</td>
+</tr>
+<tr class="row-odd"><td>changes</td>
+<td>List of tuples describing all changes that have been made
+in this event: (param, changeDescr, data)</td>
+</tr>
+</tbody>
+</table>
+<p>This function can be extended to react to tree state changes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.type">
+<code class="descname">type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the type string for this Parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.unblockTreeChangeSignal">
+<code class="descname">unblockTreeChangeSignal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.unblockTreeChangeSignal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.unblockTreeChangeSignal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unblocks enission of sigTreeStateChanged and flushes the changes out through a single signal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of this Parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.valueIsDefault">
+<code class="descname">valueIsDefault</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.valueIsDefault"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.valueIsDefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this parameter&#8217;s value is equal to the default value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.Parameter.writable">
+<code class="descname">writable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/Parameter.html#Parameter.writable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.Parameter.writable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this parameter&#8217;s value can be changed by the user.
+Note that the value of the parameter can <em>always</em> be changed by
+calling setValue().</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="apiref.html"
+                        title="previous chapter">ParameterTree API Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parametertree.html"
+                        title="next chapter">ParameterTree</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/parametertree/parameter.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parametertree.html" title="ParameterTree"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="apiref.html" title="ParameterTree API Reference"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Parameter Trees</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="apiref.html" >ParameterTree API Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

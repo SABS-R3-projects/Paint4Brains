@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Mouse Interaction" href="mouse_interaction.html" />
+    <link rel="prev" title="Welcome to the documentation for pyqtgraph" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mouse_interaction.html" title="Mouse Interaction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to the documentation for pyqtgraph"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-pyqtgraph">
+<h2>What is pyqtgraph?<a class="headerlink" href="#what-is-pyqtgraph" title="Permalink to this headline">¶</a></h2>
+<p>PyQtGraph is a graphics and user interface library for Python that provides
+functionality commonly required in engineering and science applications. Its
+primary goals are 1) to provide fast, interactive graphics for displaying data
+(plots, video, etc.) and 2) to provide tools to aid in rapid application
+development (for example, property trees such as used in Qt Designer).</p>
+<p>PyQtGraph makes heavy use of the Qt GUI platform (via PyQt or PySide) for its
+high-performance graphics and numpy for heavy number crunching. In particular,
+pyqtgraph uses Qt&#8217;s GraphicsView framework which is a highly capable graphics
+system on its own; we bring optimized and simplified primitives to this
+framework to allow data visualization with minimal effort.</p>
+<p>It is known to run on Linux, Windows, and OSX</p>
+</div>
+<div class="section" id="what-can-it-do">
+<h2>What can it do?<a class="headerlink" href="#what-can-it-do" title="Permalink to this headline">¶</a></h2>
+<p>Amongst the core features of pyqtgraph are:</p>
+<ul class="simple">
+<li>Basic data visualization primitives: Images, line and scatter plots</li>
+<li>Fast enough for realtime update of video/plot data</li>
+<li>Interactive scaling/panning, averaging, FFTs, SVG/PNG export</li>
+<li>Widgets for marking/selecting plot regions</li>
+<li>Widgets for marking/selecting image region-of-interest and automatically
+slicing multi-dimensional image data</li>
+<li>Framework for building customized image region-of-interest widgets</li>
+<li>Docking system that replaces/complements Qt&#8217;s dock system to allow more
+complex (and more predictable) docking arrangements</li>
+<li>ParameterTree widget for rapid prototyping of dynamic interfaces (Similar to
+the property trees in Qt Designer and many other applications)</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<span id="id1"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>PyQtGraph includes an extensive set of examples that can be accessed by
+running:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pyqtgraph.examples</span>
+<span class="n">pyqtgraph</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Or by running <code class="docutils literal"><span class="pre">python</span> <span class="pre">examples/</span></code> from the source root.</p>
+<p>This will start a launcher with a list of available examples. Select an item
+from the list to view its source code and double-click an item to run the
+example.</p>
+<p>Note If you have installed pyqtgraph with <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></code>
+then the examples are incorrectly exposed as a top-level module. In this case,
+use <code class="docutils literal"><span class="pre">import</span> <span class="pre">examples;</span> <span class="pre">examples.run()</span></code>.</p>
+</div>
+<div class="section" id="how-does-it-compare-to">
+<h2>How does it compare to...<a class="headerlink" href="#how-does-it-compare-to" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>matplotlib: For plotting, pyqtgraph is not nearly as complete/mature as
+matplotlib, but runs much faster. Matplotlib is more aimed toward making
+publication-quality graphics, whereas pyqtgraph is intended for use in data
+acquisition and analysis applications. Matplotlib is more intuitive for
+matlab programmers; pyqtgraph is more intuitive for python/qt programmers.
+Matplotlib (to my knowledge) does not include many of pyqtgraph&#8217;s features
+such as image interaction, volumetric rendering, parameter trees,
+flowcharts, etc.</li>
+<li>pyqwt5: About as fast as pyqwt5, but not quite as complete for plotting
+functionality. Image handling in pyqtgraph is much more complete (again, no
+ROI widgets in qwt). Also, pyqtgraph is written in pure python, so it is
+more portable than pyqwt, which often lags behind pyqt in development (I
+originally used pyqwt, but decided it was too much trouble to rely on it
+as a dependency in my projects). Like matplotlib, pyqwt (to my knowledge)
+does not include many of pyqtgraph&#8217;s features such as image interaction,
+volumetric rendering, parameter trees, flowcharts, etc.</li>
+</ul>
+<p>(My experience with these libraries is somewhat outdated; please correct me if
+I am wrong here)</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#what-is-pyqtgraph">What is pyqtgraph?</a></li>
+<li><a class="reference internal" href="#what-can-it-do">What can it do?</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#how-does-it-compare-to">How does it compare to...</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to the documentation for pyqtgraph</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mouse_interaction.html"
+                        title="next chapter">Mouse Interaction</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/introduction.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mouse_interaction.html" title="Mouse Interaction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to the documentation for pyqtgraph"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

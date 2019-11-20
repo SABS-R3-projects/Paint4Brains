@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>UIGraphicsItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="GraphicsWidgetAnchor" href="graphicswidgetanchor.html" />
+    <link rel="prev" title="GraphicsItem" href="graphicsitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphicswidgetanchor.html" title="GraphicsWidgetAnchor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graphicsitem.html" title="GraphicsItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="uigraphicsitem">
+<h1>UIGraphicsItem<a class="headerlink" href="#uigraphicsitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.UIGraphicsItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">UIGraphicsItem</code><span class="sig-paren">(</span><em>bounds=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/UIGraphicsItem.html#UIGraphicsItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.UIGraphicsItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for graphics items with boundaries relative to a GraphicsView or ViewBox.
+The purpose of this class is to allow the creation of GraphicsItems which live inside 
+a scalable view, but whose boundaries will always stay fixed relative to the view&#8217;s boundaries.
+For example: GridItem, InfiniteLine</p>
+<p>The view can be specified on initialization or it can be automatically detected when the item is painted.</p>
+<p>NOTE: Only the item&#8217;s boundingRect is affected; the item is not transformed in any way. Use viewRangeChanged
+to respond to changes in the view.</p>
+<dl class="method">
+<dt id="pyqtgraph.UIGraphicsItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>bounds=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/UIGraphicsItem.html#UIGraphicsItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.UIGraphicsItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>bounds</td>
+<td>QRectF with coordinates relative to view box. The default is QRectF(0,0,1,1),
+which means the item will have the same bounds as the view.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.UIGraphicsItem.dataBounds">
+<code class="descname">dataBounds</code><span class="sig-paren">(</span><em>axis</em>, <em>frac=1.0</em>, <em>orthoRange=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/UIGraphicsItem.html#UIGraphicsItem.dataBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.UIGraphicsItem.dataBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by ViewBox for determining the auto-range bounds.
+By default, UIGraphicsItems are excluded from autoRange.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.UIGraphicsItem.mouseShape">
+<code class="descname">mouseShape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/UIGraphicsItem.html#UIGraphicsItem.mouseShape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.UIGraphicsItem.mouseShape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the shape of this item after expanding by 2 pixels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.UIGraphicsItem.setNewBounds">
+<code class="descname">setNewBounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/UIGraphicsItem.html#UIGraphicsItem.setNewBounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.UIGraphicsItem.setNewBounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the item&#8217;s bounding rect to match the viewport</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.UIGraphicsItem.viewRangeChanged">
+<code class="descname">viewRangeChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/UIGraphicsItem.html#UIGraphicsItem.viewRangeChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.UIGraphicsItem.viewRangeChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the view widget/viewbox is resized/rescaled</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="graphicsitem.html"
+                        title="previous chapter">GraphicsItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphicswidgetanchor.html"
+                        title="next chapter">GraphicsWidgetAnchor</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/uigraphicsitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphicswidgetanchor.html" title="GraphicsWidgetAnchor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graphicsitem.html" title="GraphicsItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

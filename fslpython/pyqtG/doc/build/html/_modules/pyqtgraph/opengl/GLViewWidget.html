@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyqtgraph.opengl.GLViewWidget &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../../../index.html" />
+    <link rel="up" title="pyqtgraph" href="../../pyqtgraph.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../pyqtgraph.html" accesskey="U">pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyqtgraph.opengl.GLViewWidget</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">..Qt</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtOpenGL</span><span class="p">,</span> <span class="n">USE_PYQT5</span>
+<span class="kn">from</span> <span class="nn">OpenGL.GL</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">OpenGL.GL.framebufferobjects</span> <span class="kn">as</span> <span class="nn">glfbo</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">fn</span>
+
+<span class="c1">##Vector = QtGui.QVector3D</span>
+
+<span class="n">ShareWidget</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="GLViewWidget"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget">[docs]</a><span class="k">class</span> <span class="nc">GLViewWidget</span><span class="p">(</span><span class="n">QtOpenGL</span><span class="o">.</span><span class="n">QGLWidget</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic widget for displaying 3D data</span>
+<span class="sd">        - Rotation/scale controls</span>
+<span class="sd">        - Axis/grid display</span>
+<span class="sd">        - Export options</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="GLViewWidget.__init__"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">ShareWidget</span>
+
+        <span class="k">if</span> <span class="n">ShareWidget</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1">## create a dummy widget to allow sharing objects (textures, shaders, etc) between views</span>
+            <span class="n">ShareWidget</span> <span class="o">=</span> <span class="n">QtOpenGL</span><span class="o">.</span><span class="n">QGLWidget</span><span class="p">()</span>
+            
+        <span class="n">QtOpenGL</span><span class="o">.</span><span class="n">QGLWidget</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">ShareWidget</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ClickFocus</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;center&#39;</span><span class="p">:</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>  <span class="c1">## will always appear at the center of the widget</span>
+            <span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>         <span class="c1">## distance of camera from center</span>
+            <span class="s1">&#39;fov&#39;</span><span class="p">:</span>  <span class="mi">60</span><span class="p">,</span>               <span class="c1">## horizontal field of view in degrees</span>
+            <span class="s1">&#39;elevation&#39;</span><span class="p">:</span>  <span class="mi">30</span><span class="p">,</span>         <span class="c1">## camera&#39;s angle of elevation in degrees</span>
+            <span class="s1">&#39;azimuth&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>            <span class="c1">## camera&#39;s azimuthal angle in degrees </span>
+                                      <span class="c1">## (rotation around z-axis 0 points along x-axis)</span>
+            <span class="s1">&#39;viewport&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>         <span class="c1">## glViewport params; None == whole widget</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setBackgroundColor</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noRepeatKeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Right</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Left</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Up</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Down</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_PageUp</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_PageDown</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keysPressed</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyTimer</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QTimer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyTimer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evalKeyState</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">makeCurrent</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">addItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;initializeGL&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">makeCurrent</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">initializeGL</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">checkOpenGLVersion</span><span class="p">(</span><span class="s1">&#39;Error while adding item </span><span class="si">%s</span><span class="s1"> to GLViewWidget.&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+                
+        <span class="n">item</span><span class="o">.</span><span class="n">_setView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#print &quot;set view&quot;, item, self, item.view()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">removeItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">_setView</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        
+        
+    <span class="k">def</span> <span class="nf">initializeGL</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resizeGL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+        
+<div class="viewcode-block" id="GLViewWidget.setBackgroundColor"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.setBackgroundColor">[docs]</a>    <span class="k">def</span> <span class="nf">setBackgroundColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the background color of the widget. Accepts the same arguments as</span>
+<span class="sd">        pg.mkColor() and pg.glColor().</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;bgcolor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">glColor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+    <span class="k">def</span> <span class="nf">getViewport</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">vp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;viewport&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">vp</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vp</span>
+        
+    <span class="k">def</span> <span class="nf">resizeGL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">pass</span>
+        <span class="c1">#glViewport(*self.getViewport())</span>
+        <span class="c1">#self.update()</span>
+
+    <span class="k">def</span> <span class="nf">setProjection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionMatrix</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+        <span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_PROJECTION</span><span class="p">)</span>
+        <span class="n">glLoadIdentity</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">copyDataTo</span><span class="p">())</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">glMultMatrixf</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">projectionMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c1"># Xw = (Xnd + 1) * width/2 + X</span>
+        <span class="k">if</span> <span class="n">region</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+        
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getViewport</span><span class="p">()</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span>
+        <span class="n">fov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;fov&#39;</span><span class="p">]</span>
+        <span class="n">nearClip</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">0.001</span>
+        <span class="n">farClip</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">1000.</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">nearClip</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">fov</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">h</span> <span class="o">/</span> <span class="n">w</span>
+
+        <span class="c1"># convert screen coordinates (region) to normalized device coordinates</span>
+        <span class="c1"># Xnd = (Xw - X0) * 2/width - 1</span>
+        <span class="c1">## Note that X0 and width in these equations must be the values used in viewport</span>
+        <span class="n">left</span>  <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="p">((</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="p">((</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bottom</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">((</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">top</span>    <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">((</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">region</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">/</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMatrix4x4</span><span class="p">()</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">frustum</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">nearClip</span><span class="p">,</span> <span class="n">farClip</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tr</span>
+        
+    <span class="k">def</span> <span class="nf">setModelview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_MODELVIEW</span><span class="p">)</span>
+        <span class="n">glLoadIdentity</span><span class="p">()</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewMatrix</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">copyDataTo</span><span class="p">())</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">glMultMatrixf</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+        
+    <span class="k">def</span> <span class="nf">viewMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMatrix4x4</span><span class="p">()</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">])</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;azimuth&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="n">center</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="o">-</span><span class="n">center</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="o">-</span><span class="n">center</span><span class="o">.</span><span class="n">z</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">tr</span>
+
+<div class="viewcode-block" id="GLViewWidget.itemsAt"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.itemsAt">[docs]</a>    <span class="k">def</span> <span class="nf">itemsAt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of the items displayed in the region (x, y, w, h)</span>
+<span class="sd">        relative to the widget.        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">region</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">region</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        
+        <span class="c1">#buf = np.zeros(100000, dtype=np.uint)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">glSelectBuffer</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">glRenderMode</span><span class="p">(</span><span class="n">GL_SELECT</span><span class="p">)</span>
+            <span class="n">glInitNames</span><span class="p">()</span>
+            <span class="n">glPushName</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_itemNames</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paintGL</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">useItemNames</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">glRenderMode</span><span class="p">(</span><span class="n">GL_RENDER</span><span class="p">)</span>
+            
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[(</span><span class="n">h</span><span class="o">.</span><span class="n">near</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">]</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_itemNames</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span></div>
+    
+<div class="viewcode-block" id="GLViewWidget.paintGL"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.paintGL">[docs]</a>    <span class="k">def</span> <span class="nf">paintGL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">viewport</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">useItemNames</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        viewport specifies the arguments to glViewport. If None, then we use self.opts[&#39;viewport&#39;]</span>
+<span class="sd">        region specifies the sub-region of self.opts[&#39;viewport&#39;] that should be rendered.</span>
+<span class="sd">        Note that we may use viewport != self.opts[&#39;viewport&#39;] when exporting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">viewport</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">glViewport</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">getViewport</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">glViewport</span><span class="p">(</span><span class="o">*</span><span class="n">viewport</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setProjection</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setModelview</span><span class="p">()</span>
+        <span class="n">bgcolor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;bgcolor&#39;</span><span class="p">]</span>
+        <span class="n">glClearColor</span><span class="p">(</span><span class="o">*</span><span class="n">bgcolor</span><span class="p">)</span>
+        <span class="n">glClear</span><span class="p">(</span> <span class="n">GL_DEPTH_BUFFER_BIT</span> <span class="o">|</span> <span class="n">GL_COLOR_BUFFER_BIT</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drawItemTree</span><span class="p">(</span><span class="n">useItemNames</span><span class="o">=</span><span class="n">useItemNames</span><span class="p">)</span></div>
+        
+    <span class="k">def</span> <span class="nf">drawItemTree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">useItemNames</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">parentItem</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">childItems</span><span class="p">()</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">depthValue</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">visible</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="n">item</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">glPushAttrib</span><span class="p">(</span><span class="n">GL_ALL_ATTRIB_BITS</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">useItemNames</span><span class="p">:</span>
+                        <span class="n">glLoadName</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">_id</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_itemNames</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">paint</span><span class="p">()</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">debug</span>
+                    <span class="n">debug</span><span class="o">.</span><span class="n">printExc</span><span class="p">()</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Error while drawing item </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="n">ver</span> <span class="o">=</span> <span class="n">glGetString</span><span class="p">(</span><span class="n">GL_VERSION</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">ver</span> <span class="o">=</span> <span class="n">ver</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="k">print</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot; The original exception is printed above; however, pyqtgraph requires OpenGL version 2.0 or greater for many of its 3D features and your OpenGL version is </span><span class="si">%s</span><span class="s2">. Installing updated display drivers may resolve this issue.&quot;</span> <span class="o">%</span> <span class="n">ver</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">glPopAttrib</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_MODELVIEW</span><span class="p">)</span>
+                <span class="n">glPushMatrix</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tr</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">transform</span><span class="p">()</span>
+                    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">copyDataTo</span><span class="p">())</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+                    <span class="n">glMultMatrixf</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">drawItemTree</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">useItemNames</span><span class="o">=</span><span class="n">useItemNames</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">glMatrixMode</span><span class="p">(</span><span class="n">GL_MODELVIEW</span><span class="p">)</span>
+                    <span class="n">glPopMatrix</span><span class="p">()</span>
+            
+    <span class="k">def</span> <span class="nf">setCameraPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">elevation</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">azimuth</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span>
+        <span class="k">if</span> <span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="k">if</span> <span class="n">azimuth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;azimuth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">azimuth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        
+        
+        
+<div class="viewcode-block" id="GLViewWidget.cameraPosition"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.cameraPosition">[docs]</a>    <span class="k">def</span> <span class="nf">cameraPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return current position of camera based on center, dist, elevation, and azimuth&quot;&quot;&quot;</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span>
+        <span class="n">elev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+        <span class="n">azim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;azimuth&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+        
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span>
+            <span class="n">center</span><span class="o">.</span><span class="n">x</span><span class="p">()</span> <span class="o">+</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azim</span><span class="p">),</span>
+            <span class="n">center</span><span class="o">.</span><span class="n">y</span><span class="p">()</span> <span class="o">+</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azim</span><span class="p">),</span>
+            <span class="n">center</span><span class="o">.</span><span class="n">z</span><span class="p">()</span> <span class="o">+</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">elev</span><span class="p">)</span>
+        <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">pos</span></div>
+
+<div class="viewcode-block" id="GLViewWidget.orbit"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.orbit">[docs]</a>    <span class="k">def</span> <span class="nf">orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">azim</span><span class="p">,</span> <span class="n">elev</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Orbits the camera around the center position. *azim* and *elev* are given in degrees.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;azimuth&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">azim</span>
+        <span class="c1">#self.opts[&#39;elevation&#39;] += elev</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;elevation&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">elev</span><span class="p">,</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLViewWidget.pan"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.pan">[docs]</a>    <span class="k">def</span> <span class="nf">pan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the center (look-at) position while holding the camera in place. </span>
+<span class="sd">        </span>
+<span class="sd">        If relative=True, then the coordinates are interpreted such that x</span>
+<span class="sd">        if in the global xy plane and points to the right side of the view, y is</span>
+<span class="sd">        in the global xy plane and orthogonal to x, and z points in the global z</span>
+<span class="sd">        direction. Distances are scaled roughly such that a value of 1.0 moves</span>
+<span class="sd">        by one pixel on screen.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">relative</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVector3D</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cPos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cameraPosition</span><span class="p">()</span>
+            <span class="n">cVec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">cPos</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">cVec</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>  <span class="c1">## distance from camera to center</span>
+            <span class="n">xDist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;fov&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span><span class="p">)</span>  <span class="c1">## approx. width of view at distance of center point</span>
+            <span class="n">xScale</span> <span class="o">=</span> <span class="n">xDist</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+            <span class="n">zVec</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVector3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">xVec</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVector3D</span><span class="o">.</span><span class="n">crossProduct</span><span class="p">(</span><span class="n">zVec</span><span class="p">,</span> <span class="n">cVec</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+            <span class="n">yVec</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVector3D</span><span class="o">.</span><span class="n">crossProduct</span><span class="p">(</span><span class="n">xVec</span><span class="p">,</span> <span class="n">zVec</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">xVec</span> <span class="o">*</span> <span class="n">xScale</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">yVec</span> <span class="o">*</span> <span class="n">xScale</span> <span class="o">*</span> <span class="n">dy</span> <span class="o">+</span> <span class="n">zVec</span> <span class="o">*</span> <span class="n">xScale</span> <span class="o">*</span> <span class="n">dz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="GLViewWidget.pixelSize"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.pixelSize">[docs]</a>    <span class="k">def</span> <span class="nf">pixelSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the approximate size of a screen pixel at the location pos</span>
+<span class="sd">        Pos may be a Vector or an (N,3) array of locations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cameraPosition</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">cam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cam</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,)</span><span class="o">*</span><span class="p">(</span><span class="n">pos</span><span class="o">.</span><span class="n">ndim</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="mi">3</span><span class="p">,))</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="p">((</span><span class="n">pos</span><span class="o">-</span><span class="n">cam</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="n">cam</span><span class="p">)</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="n">xDist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;fov&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xDist</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">()</span></div>
+        
+    <span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mousePos</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mousePos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mousePos</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">buttons</span><span class="p">()</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">LeftButton</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="o">-</span><span class="n">diff</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">diff</span><span class="o">.</span><span class="n">y</span><span class="p">())</span>
+            <span class="c1">#print self.opts[&#39;azimuth&#39;], self.opts[&#39;elevation&#39;]</span>
+        <span class="k">elif</span> <span class="n">ev</span><span class="o">.</span><span class="n">buttons</span><span class="p">()</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">MidButton</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">modifiers</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ControlModifier</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pan</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">diff</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">relative</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pan</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">diff</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">relative</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">mouseReleaseEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="k">pass</span>
+        <span class="c1"># Example item selection code:</span>
+        <span class="c1">#region = (ev.pos().x()-5, ev.pos().y()-5, 10, 10)</span>
+        <span class="c1">#print(self.itemsAt(region))</span>
+        
+        <span class="c1">## debugging code: draw the picking region</span>
+        <span class="c1">#glViewport(*self.getViewport())</span>
+        <span class="c1">#glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT )</span>
+        <span class="c1">#region = (region[0], self.height()-(region[1]+region[3]), region[2], region[3])</span>
+        <span class="c1">#self.paintGL(region=region)</span>
+        <span class="c1">#self.swapBuffers()</span>
+        
+        
+    <span class="k">def</span> <span class="nf">wheelEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">USE_PYQT5</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">delta</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">angleDelta</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">delta</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">angleDelta</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ev</span><span class="o">.</span><span class="n">modifiers</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ControlModifier</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;fov&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.999</span><span class="o">**</span><span class="n">delta</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.999</span><span class="o">**</span><span class="n">delta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">key</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">noRepeatKeys</span><span class="p">:</span>
+            <span class="n">ev</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">isAutoRepeat</span><span class="p">():</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keysPressed</span><span class="p">[</span><span class="n">ev</span><span class="o">.</span><span class="n">key</span><span class="p">()]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evalKeyState</span><span class="p">()</span>
+      
+    <span class="k">def</span> <span class="nf">keyReleaseEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">key</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">noRepeatKeys</span><span class="p">:</span>
+            <span class="n">ev</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ev</span><span class="o">.</span><span class="n">isAutoRepeat</span><span class="p">():</span>
+                <span class="k">return</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">keysPressed</span><span class="p">[</span><span class="n">ev</span><span class="o">.</span><span class="n">key</span><span class="p">()]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">keysPressed</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evalKeyState</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">evalKeyState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keysPressed</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keysPressed</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Right</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">azim</span><span class="o">=-</span><span class="n">speed</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Left</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">azim</span><span class="o">=</span><span class="n">speed</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Up</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">elev</span><span class="o">=-</span><span class="n">speed</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_Down</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">orbit</span><span class="p">(</span><span class="n">azim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="n">speed</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_PageUp</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_PageDown</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">keyTimer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keyTimer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">checkOpenGLVersion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="c1">## Only to be called from within exception handler.</span>
+        <span class="n">ver</span> <span class="o">=</span> <span class="n">glGetString</span><span class="p">(</span><span class="n">GL_VERSION</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">debug</span>
+            <span class="n">pyqtgraph</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">printExc</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot; The original exception is printed above; however, pyqtgraph requires OpenGL version 2.0 or greater for many of its 3D features and your OpenGL version is </span><span class="si">%s</span><span class="s2">. Installing updated display drivers may resolve this issue.&quot;</span> <span class="o">%</span> <span class="n">ver</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span>
+            
+
+            
+<div class="viewcode-block" id="GLViewWidget.readQImage"><a class="viewcode-back" href="../../../3dgraphics/glviewwidget.html#pyqtgraph.opengl.GLViewWidget.readQImage">[docs]</a>    <span class="k">def</span> <span class="nf">readQImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the current buffer pixels out as a QImage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repaint</span><span class="p">()</span>
+        <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ubyte</span><span class="p">)</span>
+        <span class="n">pixels</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">128</span>
+        <span class="n">pixels</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">pixels</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span>
+        
+        <span class="n">glReadPixels</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">pixels</span><span class="p">)</span>
+        
+        <span class="c1"># swap B,R channels for Qt</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">pixels</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">pixels</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+        <span class="n">pixels</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># flip vertical</span>
+        
+        <span class="n">img</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">makeQImage</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">img</span></div>
+        
+        
+    <span class="k">def</span> <span class="nf">renderToArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">GL_BGRA</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">textureSize</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+        <span class="n">w</span><span class="p">,</span><span class="n">h</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">makeCurrent</span><span class="p">()</span>
+        <span class="n">tex</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">fb</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ubyte</span><span class="p">)</span>
+            <span class="n">fb</span> <span class="o">=</span> <span class="n">glfbo</span><span class="o">.</span><span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">glfbo</span><span class="o">.</span><span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">glfbo</span><span class="o">.</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">fb</span> <span class="p">)</span>
+            
+            <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">)</span>
+            <span class="n">tex</span> <span class="o">=</span> <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">tex</span><span class="p">)</span>
+            <span class="n">texwidth</span> <span class="o">=</span> <span class="n">textureSize</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">texwidth</span><span class="p">,</span><span class="n">texwidth</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ubyte</span><span class="p">)</span>
+            
+            <span class="c1">## Test texture dimensions first</span>
+            <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_PROXY_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">texwidth</span><span class="p">,</span> <span class="n">texwidth</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">glGetTexLevelParameteriv</span><span class="p">(</span><span class="n">GL_PROXY_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_TEXTURE_WIDTH</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;OpenGL failed to create 2D texture (</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">); too large for this hardware.&quot;</span> <span class="o">%</span> <span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1">## create teture</span>
+            <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">texwidth</span><span class="p">,</span> <span class="n">texwidth</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;viewport&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>  <span class="c1"># viewport is the complete image; this ensures that paintGL(region=...) </span>
+                                                  <span class="c1"># is interpreted correctly.</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="n">w</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="n">texwidth</span><span class="o">-</span><span class="n">p2</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="n">texwidth</span><span class="o">-</span><span class="n">p2</span><span class="p">):</span>
+                    <span class="n">x2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">texwidth</span><span class="p">,</span> <span class="n">w</span><span class="o">+</span><span class="n">padding</span><span class="p">)</span>
+                    <span class="n">y2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="o">+</span><span class="n">texwidth</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="n">padding</span><span class="p">)</span>
+                    <span class="n">w2</span> <span class="o">=</span> <span class="n">x2</span><span class="o">-</span><span class="n">x</span>
+                    <span class="n">h2</span> <span class="o">=</span> <span class="n">y2</span><span class="o">-</span><span class="n">y</span>
+                    
+                    <span class="c1">## render to texture</span>
+                    <span class="n">glfbo</span><span class="o">.</span><span class="n">glFramebufferTexture2D</span><span class="p">(</span><span class="n">glfbo</span><span class="o">.</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="n">glfbo</span><span class="o">.</span><span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">tex</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    
+                    <span class="bp">self</span><span class="o">.</span><span class="n">paintGL</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="n">y</span><span class="o">-</span><span class="n">h2</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">h2</span><span class="p">),</span> <span class="n">viewport</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">h2</span><span class="p">))</span>  <span class="c1"># only render sub-region</span>
+                    
+                    <span class="c1">## read texture back to array</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">glGetTexImage</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ubyte</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">texwidth</span><span class="p">,</span><span class="n">texwidth</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="n">padding</span><span class="p">:</span><span class="n">x2</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="n">padding</span><span class="p">:</span><span class="n">y2</span><span class="o">-</span><span class="n">padding</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">padding</span><span class="p">:</span><span class="n">w2</span><span class="o">-</span><span class="n">padding</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">h2</span><span class="o">-</span><span class="n">padding</span><span class="p">):</span><span class="o">-</span><span class="n">padding</span><span class="p">]</span>
+                    
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;viewport&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">glfbo</span><span class="o">.</span><span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">glfbo</span><span class="o">.</span><span class="n">GL_FRAMEBUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">glDeleteTextures</span><span class="p">([</span><span class="n">tex</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">fb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">glfbo</span><span class="o">.</span><span class="n">glDeleteFramebuffers</span><span class="p">([</span><span class="n">fb</span><span class="p">])</span>
+            
+        <span class="k">return</span> <span class="n">output</span></div>
+        
+        
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../pyqtgraph.html" >pyqtgraph</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

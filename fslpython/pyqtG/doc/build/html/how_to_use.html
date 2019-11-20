@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to use pyqtgraph &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Mouse Interaction" href="mouse_interaction.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mouse_interaction.html" title="Mouse Interaction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-use-pyqtgraph">
+<h1>How to use pyqtgraph<a class="headerlink" href="#how-to-use-pyqtgraph" title="Permalink to this headline">¶</a></h1>
+<p>There are a few suggested ways to use pyqtgraph:</p>
+<ul class="simple">
+<li>From the interactive shell (python -i, ipython, etc)</li>
+<li>Displaying pop-up windows from an application</li>
+<li>Embedding widgets in a PyQt application</li>
+</ul>
+<div class="section" id="command-line-use">
+<h2>Command-line use<a class="headerlink" href="#command-line-use" title="Permalink to this headline">¶</a></h2>
+<p>PyQtGraph makes it very easy to visualize data from the command line. Observe:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="kn">as</span> <span class="nn">pg</span>
+<span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>   <span class="c1"># data can be a list of values or a numpy array</span>
+</pre></div>
+</div>
+<p>The example above would open a window displaying a line plot of the data given. The call to <a class="reference internal" href="functions.html#pyqtgraph.plot" title="pyqtgraph.plot"><code class="xref py py-func docutils literal"><span class="pre">pg.plot</span></code></a> returns a handle to the <a class="reference internal" href="widgets/plotwidget.html#pyqtgraph.PlotWidget" title="pyqtgraph.PlotWidget"><code class="xref py py-class docutils literal"><span class="pre">plot</span> <span class="pre">widget</span></code></a> that is created, allowing more data to be added to the same window. <strong>Note:</strong> interactive plotting from the python prompt is only available with PyQt; PySide does not run the Qt event loop while the interactive prompt is running. If you wish to use pyqtgraph interactively with PySide, see the &#8216;console&#8217; <a class="reference internal" href="introduction.html#examples"><span>example</span></a>.</p>
+<p>Further examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pw</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xVals</span><span class="p">,</span> <span class="n">yVals</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>  <span class="c1"># plot x vs y in red</span>
+<span class="n">pw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xVals</span><span class="p">,</span> <span class="n">yVals2</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+
+<span class="n">win</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">GraphicsWindow</span><span class="p">()</span>  <span class="c1"># Automatically generates grids with multiple items</span>
+<span class="n">win</span><span class="o">.</span><span class="n">addPlot</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">win</span><span class="o">.</span><span class="n">addPlot</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">win</span><span class="o">.</span><span class="n">addPlot</span><span class="p">(</span><span class="n">data3</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">colspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">pg</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">imageData</span><span class="p">)</span>  <span class="c1"># imageData must be a numpy array with 2 to 4 dimensions</span>
+</pre></div>
+</div>
+<p>We&#8217;re only scratching the surface here&#8211;these functions accept many different data formats and options for customizing the appearance of your data.</p>
+</div>
+<div class="section" id="displaying-windows-from-within-an-application">
+<h2>Displaying windows from within an application<a class="headerlink" href="#displaying-windows-from-within-an-application" title="Permalink to this headline">¶</a></h2>
+<p>While I consider this approach somewhat lazy, it is often the case that &#8216;lazy&#8217; is indistinguishable from &#8216;highly efficient&#8217;. The approach here is simply to use the very same functions that would be used on the command line, but from within an existing application. I often use this when I simply want to get a immediate feedback about the state of data in my application without taking the time to build a user interface for it.</p>
+</div>
+<div class="section" id="embedding-widgets-inside-pyqt-applications">
+<h2>Embedding widgets inside PyQt applications<a class="headerlink" href="#embedding-widgets-inside-pyqt-applications" title="Permalink to this headline">¶</a></h2>
+<p>For the serious application developer, all of the functionality in pyqtgraph is available via <a class="reference internal" href="widgets/index.html#api-widgets"><span>widgets</span></a> that can be embedded just like any other Qt widgets. Most importantly, see: <a class="reference internal" href="widgets/plotwidget.html#pyqtgraph.PlotWidget" title="pyqtgraph.PlotWidget"><code class="xref py py-class docutils literal"><span class="pre">PlotWidget</span></code></a>, <a class="reference internal" href="widgets/imageview.html#pyqtgraph.ImageView" title="pyqtgraph.ImageView"><code class="xref py py-class docutils literal"><span class="pre">ImageView</span></code></a>, <a class="reference internal" href="widgets/graphicslayoutwidget.html#pyqtgraph.GraphicsLayoutWidget" title="pyqtgraph.GraphicsLayoutWidget"><code class="xref py py-class docutils literal"><span class="pre">GraphicsLayoutWidget</span></code></a>, and <a class="reference internal" href="widgets/graphicsview.html#pyqtgraph.GraphicsView" title="pyqtgraph.GraphicsView"><code class="xref py py-class docutils literal"><span class="pre">GraphicsView</span></code></a>. PyQtGraph&#8217;s widgets can be included in Designer&#8217;s ui files via the &#8220;Promote To...&#8221; functionality:</p>
+<ol class="arabic simple">
+<li>In Designer, create a QGraphicsView widget (&#8220;Graphics View&#8221; under the &#8220;Display Widgets&#8221; category).</li>
+<li>Right-click on the QGraphicsView and select &#8220;Promote To...&#8221;.</li>
+<li>Under &#8220;Promoted class name&#8221;, enter the class name you wish to use (&#8220;PlotWidget&#8221;, &#8220;GraphicsLayoutWidget&#8221;, etc).</li>
+<li>Under &#8220;Header file&#8221;, enter &#8220;pyqtgraph&#8221;.</li>
+<li>Click &#8220;Add&#8221;, then click &#8220;Promote&#8221;.</li>
+</ol>
+<p>See the designer documentation for more information on promoting widgets. The &#8220;VideoSpeedTest&#8221; and &#8220;ScatterPlotSpeedTest&#8221; examples both demonstrate the use of .ui files that are compiled to .py modules using pyuic4 or pyside-uic. The &#8220;designerExample&#8221; example demonstrates dynamically generating python classes from .ui files (no pyuic4 / pyside-uic needed).</p>
+</div>
+<div class="section" id="pyqt-and-pyside">
+<h2>PyQt and PySide<a class="headerlink" href="#pyqt-and-pyside" title="Permalink to this headline">¶</a></h2>
+<p>PyQtGraph supports two popular python wrappers for the Qt library: PyQt and PySide. Both packages provide nearly identical
+APIs and functionality, but for various reasons (discussed elsewhere) you may prefer to use one package or the other. When
+pyqtgraph is first imported, it automatically determines which library to use by making the fillowing checks:</p>
+<ol class="arabic simple">
+<li>If PyQt4 is already imported, use that</li>
+<li>Else, if PySide is already imported, use that</li>
+<li>Else, attempt to import PyQt4</li>
+<li>If that import fails, attempt to import PySide.</li>
+</ol>
+<p>If you have both libraries installed on your system and you wish to force pyqtgraph to use one or the other, simply
+make sure it is imported before pyqtgraph:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">PySide</span>  <span class="c1">## this will force pyqtgraph to use PySide instead of PyQt4</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="kn">as</span> <span class="nn">pg</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="embedding-pyqtgraph-as-a-sub-package-of-a-larger-project">
+<h2>Embedding PyQtGraph as a sub-package of a larger project<a class="headerlink" href="#embedding-pyqtgraph-as-a-sub-package-of-a-larger-project" title="Permalink to this headline">¶</a></h2>
+<p>When writing applications or python packages that make use of pyqtgraph, it is most common to install pyqtgraph system-wide (or within a virtualenv) and simply call <cite>import pyqtgraph</cite> from within your application. The main benefit to this is that pyqtgraph is configured independently of your application and thus you (or your users) are free to install newer versions of pyqtgraph without changing anything in your application. This is standard practice when developing with python.</p>
+<p>However, it is also often the case, especially for scientific applications, that software is written for a very specific purpose and then archived. If we want to ensure that the software will still work ten years later, then it is preferrable to tie the application to a very specific version of pyqtgraph and <em>avoid</em> importing the system-installed version of pyqtgraph, which may be much newer (and potentially incompatible). This is especially the case when the application requires site-specific modifications to the pyqtgraph package which may not be present in the main releases.</p>
+<p>PyQtGraph facilitates this usage through two mechanisms. First, all internal import statements in pyqtgraph are relative, which allows the package to be renamed or used as a sub-package without any naming conflicts with other versions of pyqtgraph on the system (that is, pyqtgraph never refers to itself internally as &#8216;pyqtgraph&#8217;). Second, a git subtree repository is available at <a class="reference external" href="https://github.com/pyqtgraph/pyqtgraph-core.git">https://github.com/pyqtgraph/pyqtgraph-core.git</a> that contains only the &#8216;pyqtgraph/&#8217; subtree, allowing the code to be cloned directly as a subtree of the application which uses it.</p>
+<p>The basic approach is to clone the repository into the appropriate location in your package. When you import pyqtgraph from within your package, be sure to use the full name to avoid importing any system-installed pyqtgraph packages. For example, imagine a simple project has the following structure:</p>
+<div class="highlight-python"><div class="highlight"><pre>my_project/
+    __init__.py
+    plotting.py
+        &quot;&quot;&quot;Plotting functions used by this package&quot;&quot;&quot;
+        import pyqtgraph as pg
+        def my_plot_function(*data):
+            pg.plot(*data)
+</pre></div>
+</div>
+<p>To embed a specific version of pyqtgraph, we would clone the pyqtgraph-core repository inside the project:</p>
+<div class="highlight-python"><div class="highlight"><pre>my_project$ git clone https://github.com/pyqtgraph/pyqtgraph-core.git
+</pre></div>
+</div>
+<p>Then adjust the import statements accordingly:</p>
+<div class="highlight-python"><div class="highlight"><pre>my_project/
+    __init__.py
+    pyqtgraph/
+    plotting.py
+        &quot;&quot;&quot;Plotting functions used by this package&quot;&quot;&quot;
+        import my_project.pyqtgraph as pg  # be sure to use the local subpackage
+                                           # rather than any globally-installed
+                                           # versions.
+        def my_plot_function(*data):
+            pg.plot(*data)
+</pre></div>
+</div>
+<p>Use <code class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">pyqtgraph-core-x.x.x</span></code> to select a specific version of the repository, or use <code class="docutils literal"><span class="pre">git</span> <span class="pre">pull</span></code> to pull pyqtgraph updates from upstream (see the git documentation for more information).</p>
+<p>For projects that already use git for code control, it is also possible to include pyqtgraph as a git subtree within your own repository. The major advantage to this approach is that, in addition to being able to pull pyqtgraph updates from the upstream repository, it is also possible to commit your local pyqtgraph changes into the project repository and push those changes upstream:</p>
+<div class="highlight-python"><div class="highlight"><pre>my_project$ git remote add pyqtgraph-core https://github.com/pyqtgraph/pyqtgraph-core.git
+my_project$ git fetch pyqtgraph-core
+my_project$ git merge -s ours --no-commit pyqtgraph-core/core
+my_project$ mkdir pyqtgraph
+my_project$ git read-tree -u --prefix=pyqtgraph/ pyqtgraph-core/core
+my_project$ git commit -m &quot;Added pyqtgraph to project repository&quot;
+</pre></div>
+</div>
+<p>See the <code class="docutils literal"><span class="pre">git</span> <span class="pre">subtree</span></code> documentation for more information.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to use pyqtgraph</a><ul>
+<li><a class="reference internal" href="#command-line-use">Command-line use</a></li>
+<li><a class="reference internal" href="#displaying-windows-from-within-an-application">Displaying windows from within an application</a></li>
+<li><a class="reference internal" href="#embedding-widgets-inside-pyqt-applications">Embedding widgets inside PyQt applications</a></li>
+<li><a class="reference internal" href="#pyqt-and-pyside">PyQt and PySide</a></li>
+<li><a class="reference internal" href="#embedding-pyqtgraph-as-a-sub-package-of-a-larger-project">Embedding PyQtGraph as a sub-package of a larger project</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mouse_interaction.html"
+                        title="previous chapter">Mouse Interaction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/how_to_use.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mouse_interaction.html" title="Mouse Interaction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

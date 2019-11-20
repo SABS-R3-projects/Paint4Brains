@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>flowchart.Node &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="Visual Programming with Flowcharts" href="index.html" />
+    <link rel="next" title="flowchart.Terminal" href="terminal.html" />
+    <link rel="prev" title="flowchart.Flowchart" href="flowchart.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="terminal.html" title="flowchart.Terminal"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="flowchart.html" title="flowchart.Flowchart"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Visual Programming with Flowcharts</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="flowchart-node">
+<h1>flowchart.Node<a class="headerlink" href="#flowchart-node" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.flowchart.Node">
+<em class="property">class </em><code class="descclassname">pyqtgraph.flowchart.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>name</em>, <em>terminals=None</em>, <em>allowAddInput=False</em>, <em>allowAddOutput=False</em>, <em>allowRemove=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Node represents the basic processing unit of a flowchart. 
+A Node subclass implements at least:</p>
+<ol class="arabic simple">
+<li>A list of input / ouptut terminals and their properties</li>
+<li>a process() function which takes the names of input terminals as keyword arguments and returns a dict with the names of output terminals as keys.</li>
+</ol>
+<p>A flowchart thus consists of multiple instances of Node subclasses, each of which is connected
+to other by wires between their terminals. A flowchart is, itself, also a special subclass of Node.
+This allows Nodes within the flowchart to connect to the input/output nodes of the flowchart itself.</p>
+<p>Optionally, a node class can implement the ctrlWidget() method, which must return a QWidget (usually containing other widgets) that will be displayed in the flowchart control panel. Some nodes implement fairly complex control widgets, but most nodes follow a simple form-like pattern: a list of parameter names and a single value (represented as spin box, check box, etc..) for each parameter. To make this easier, the CtrlNode subclass allows you to instead define a simple data structure that CtrlNode will use to automatically generate the control widget.</p>
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>terminals=None</em>, <em>allowAddInput=False</em>, <em>allowAddOutput=False</em>, <em>allowRemove=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>name</td>
+<td>The name of this specific node instance. It can be any
+string, but must be unique within a flowchart. Usually,
+we simply let the flowchart decide on a name when calling
+Flowchart.addNode(...)</td>
+</tr>
+<tr class="row-odd"><td>terminals</td>
+<td><p class="first">Dict-of-dicts specifying the terminals present on this Node.
+Terminal specifications look like:</p>
+<div class="highlight-python"><div class="highlight"><pre>&#39;inputTerminalName&#39;: {&#39;io&#39;: &#39;in&#39;}
+&#39;outputTerminalName&#39;: {&#39;io&#39;: &#39;out&#39;}
+</pre></div>
+</div>
+<p class="last">There are a number of optional parameters for terminals:
+multi, pos, renamable, removable, multiable, bypass. See
+the Terminal class for more information.</p>
+</td>
+</tr>
+<tr class="row-even"><td>allowAddInput</td>
+<td>bool; whether the user is allowed to add inputs by the
+context menu.</td>
+</tr>
+<tr class="row-odd"><td>allowAddOutput</td>
+<td>bool; whether the user is allowed to add outputs by the
+context menu.</td>
+</tr>
+<tr class="row-even"><td>allowRemove</td>
+<td>bool; whether the user is allowed to remove this node by the
+context menu.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.addInput">
+<code class="descname">addInput</code><span class="sig-paren">(</span><em>name='Input'</em>, <em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.addInput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.addInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new input terminal to this Node with the given name. Extra
+keyword arguments are passed to Terminal.__init__.</p>
+<p>This is a convenience function that just calls addTerminal(io=&#8217;in&#8217;, ...)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.addOutput">
+<code class="descname">addOutput</code><span class="sig-paren">(</span><em>name='Output'</em>, <em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.addOutput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.addOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new output terminal to this Node with the given name. Extra
+keyword arguments are passed to Terminal.__init__.</p>
+<p>This is a convenience function that just calls addTerminal(io=&#8217;out&#8217;, ...)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.addTerminal">
+<code class="descname">addTerminal</code><span class="sig-paren">(</span><em>name</em>, <em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.addTerminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.addTerminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new terminal to this Node with the given name. Extra
+keyword arguments are passed to Terminal.__init__.</p>
+<p>Causes sigTerminalAdded to be emitted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.bypass">
+<code class="descname">bypass</code><span class="sig-paren">(</span><em>byp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.bypass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.bypass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether this node should be bypassed.</p>
+<p>When bypassed, a Node&#8217;s process() method is never called. In some cases,
+data is automatically copied directly from specific input nodes to 
+output nodes instead (see the bypass argument to Terminal.__init__). 
+This is usually called when the user disables a node from the flowchart 
+control panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans up after the node&#8211;removes terminals, graphicsItem, widget</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.connected">
+<code class="descname">connected</code><span class="sig-paren">(</span><em>localTerm</em>, <em>remoteTerm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.connected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called whenever one of this node&#8217;s terminals is connected elsewhere.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.ctrlWidget">
+<code class="descname">ctrlWidget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.ctrlWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.ctrlWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return this Node&#8217;s control widget.</p>
+<p>By default, Nodes have no control widget. Subclasses may reimplement this 
+method to provide a custom widget. This method is called by Flowcharts
+when they are constructing their Node list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.dependentNodes">
+<code class="descname">dependentNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.dependentNodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.dependentNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of nodes which provide direct input to this node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.disconnected">
+<code class="descname">disconnected</code><span class="sig-paren">(</span><em>localTerm</em>, <em>remoteTerm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.disconnected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.disconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called whenever one of this node&#8217;s terminals is disconnected from another.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.graphicsItem">
+<code class="descname">graphicsItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.graphicsItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.graphicsItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the GraphicsItem for this node. Subclasses may re-implement
+this method to customize their appearance in the flowchart.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.inputValues">
+<code class="descname">inputValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.inputValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.inputValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict of all input values currently assigned to this node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.inputs">
+<code class="descname">inputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.inputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dict of all input terminals.
+Warning: do not modify.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.isBypassed">
+<code class="descname">isBypassed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.isBypassed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.isBypassed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this Node is currently bypassed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.name">
+<code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of this node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.nextTerminalName">
+<code class="descname">nextTerminalName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.nextTerminalName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.nextTerminalName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an unused terminal name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.outputValues">
+<code class="descname">outputValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.outputValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.outputValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict of all output values currently generated by this node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.outputs">
+<code class="descname">outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return dict of all output terminals.
+Warning: do not modify.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process data through this node. This method is called any time the flowchart 
+wants the node to process data. It will be called with one keyword argument
+corresponding to each input terminal, and must return a dict mapping the name
+of each output terminal to its new value.</p>
+<p>This method is also called with a &#8216;display&#8217; keyword argument, which indicates
+whether the node should update its display (if it implements any) while processing
+this data. This is primarily used to disable expensive display operations
+during batch processing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.processBypassed">
+<code class="descname">processBypassed</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.processBypassed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.processBypassed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the flowchart would normally call Node.process, but this node is currently bypassed.
+The default implementation looks for output terminals with a bypass connection and returns the
+corresponding values. Most Node subclasses will _not_ need to reimplement this method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.removeTerminal">
+<code class="descname">removeTerminal</code><span class="sig-paren">(</span><em>term</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.removeTerminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.removeTerminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the specified terminal from this Node. May specify either the 
+terminal&#8217;s name or the terminal itself.</p>
+<p>Causes sigTerminalRemoved to be emitted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.rename">
+<code class="descname">rename</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename this node. This will cause sigRenamed to be emitted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.restoreState">
+<code class="descname">restoreState</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.restoreState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.restoreState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the state of this node from a structure previously generated
+by saveState().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.saveState">
+<code class="descname">saveState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.saveState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.saveState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary representing the current state of this node
+(excluding input / output values). This is used for saving/reloading
+flowcharts. The default implementation returns this Node&#8217;s position,
+bypass state, and information about each of its terminals.</p>
+<p>Subclasses may want to extend this method, adding extra keys to the returned
+dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.setInput">
+<code class="descname">setInput</code><span class="sig-paren">(</span><em>**args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.setInput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.setInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the values on input terminals. For most nodes, this will happen automatically through Terminal.inputChanged.
+This is normally only used for nodes with no connected inputs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.terminalRenamed">
+<code class="descname">terminalRenamed</code><span class="sig-paren">(</span><em>term</em>, <em>oldName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.terminalRenamed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.terminalRenamed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called after a terminal has been renamed</p>
+<p>Causes sigTerminalRenamed to be emitted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.flowchart.Node.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>signal=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/flowchart/Node.html#Node.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.flowchart.Node.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect all input values, attempt to process new output values, and propagate downstream.
+Subclasses should call update() whenever thir internal state has changed
+(such as when the user interacts with the Node&#8217;s control widget). Update
+is automatically called when the inputs to the node are changed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="flowchart.html"
+                        title="previous chapter">flowchart.Flowchart</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="terminal.html"
+                        title="next chapter">flowchart.Terminal</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/flowchart/node.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="terminal.html" title="flowchart.Terminal"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="flowchart.html" title="flowchart.Flowchart"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Visual Programming with Flowcharts</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

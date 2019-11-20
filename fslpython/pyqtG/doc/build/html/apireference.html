@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Reference &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Global Configuration Options" href="config_options.html" />
+    <link rel="prev" title="Internals - Extensions to Qt’s GraphicsView" href="internals.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="config_options.html" title="Global Configuration Options"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="internals.html" title="Internals - Extensions to Qt’s GraphicsView"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Global Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">PyQtGraph&#8217;s Helper Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#simple-data-display-functions">Simple Data Display Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#color-pen-and-brush-functions">Color, Pen, and Brush Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#data-slicing">Data Slicing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#coordinate-transformation">Coordinate Transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#si-unit-conversion-functions">SI Unit Conversion Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#image-preparation-functions">Image Preparation Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#mesh-generation-functions">Mesh Generation Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html#miscellaneous-functions">Miscellaneous Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="graphicsItems/index.html">PyQtGraph&#8217;s Graphics Items</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/plotdataitem.html">PlotDataItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/plotitem.html">PlotItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/imageitem.html">ImageItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/graphitem.html">GraphItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/viewbox.html">ViewBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/linearregionitem.html">LinearRegionItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/infiniteline.html">InfiniteLine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/roi.html">ROI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/graphicslayout.html">GraphicsLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/plotcurveitem.html">PlotCurveItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/scatterplotitem.html">ScatterPlotItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/isocurveitem.html">IsocurveItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/axisitem.html">AxisItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/textitem.html">TextItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/errorbaritem.html">ErrorBarItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/arrowitem.html">ArrowItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/fillbetweenitem.html">FillBetweenItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/curvepoint.html">CurvePoint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/curvearrow.html">CurveArrow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/griditem.html">GridItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/scalebar.html">ScaleBar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/labelitem.html">LabelItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/vtickgroup.html">VTickGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/legenditem.html">LegendItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/gradienteditoritem.html">GradientEditorItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/gradienteditoritem.html#tickslideritem">TickSliderItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/histogramlutitem.html">HistogramLUTItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/gradientlegend.html">GradientLegend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/buttonitem.html">ButtonItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/graphicsobject.html">GraphicsObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/graphicswidget.html">GraphicsWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/graphicsitem.html">GraphicsItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/uigraphicsitem.html">UIGraphicsItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsItems/graphicswidgetanchor.html">GraphicsWidgetAnchor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="widgets/index.html">PyQtGraph&#8217;s Widgets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="widgets/plotwidget.html">PlotWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/imageview.html">ImageView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/dockarea.html">dockarea module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/spinbox.html">SpinBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/gradientwidget.html">GradientWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/histogramlutwidget.html">HistogramLUTWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/parametertree.html">parametertree module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/consolewidget.html">ConsoleWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/colormapwidget.html">ColorMapWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/scatterplotwidget.html">ScatterPlotWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/graphicsview.html">GraphicsView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/datatreewidget.html">DataTreeWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/tablewidget.html">TableWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/treewidget.html">TreeWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/checktable.html">CheckTable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/colorbutton.html">ColorButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/graphicslayoutwidget.html">GraphicsLayoutWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/progressdialog.html">ProgressDialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/filedialog.html">FileDialog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/joystickbutton.html">JoystickButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/multiplotwidget.html">MultiPlotWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/verticallabel.html">VerticalLabel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/remotegraphicsview.html">RemoteGraphicsView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/matplotlibwidget.html">MatplotlibWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/feedbackbutton.html">FeedbackButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/combobox.html">ComboBox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/layoutwidget.html">LayoutWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/pathbutton.html">PathButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/valuelabel.html">ValueLabel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="widgets/busycursor.html">BusyCursor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3dgraphics/index.html">PyQtGraph&#8217;s 3D Graphics System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glviewwidget.html">GLViewWidget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glgriditem.html">GLGridItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glsurfaceplotitem.html">GLSurfacePlotItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glvolumeitem.html">GLVolumeItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glimageitem.html">GLImageItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glmeshitem.html">GLMeshItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/gllineplotitem.html">GLLinePlotItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glaxisitem.html">GLAxisItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glgraphicsitem.html">GLGraphicsItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/glscatterplotitem.html">GLScatterPlotItem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3dgraphics/meshdata.html">MeshData</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="colormap.html">ColorMap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parametertree/index.html">Parameter Trees</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parametertree/apiref.html">ParameterTree API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="graphicsscene/index.html">GraphicsScene and Mouse Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="graphicsscene/graphicsscene.html">GraphicsScene</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsscene/hoverevent.html">HoverEvent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsscene/mouseclickevent.html">MouseClickEvent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphicsscene/mousedragevent.html">MouseDragEvent</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="flowchart/index.html">Visual Programming with Flowcharts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="flowchart/flowchart.html">flowchart.Flowchart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flowchart/node.html">flowchart.Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flowchart/terminal.html">flowchart.Terminal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flowchart/index.html#basic-use">Basic Use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flowchart/index.html#implementing-custom-nodes">Implementing Custom Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flowchart/index.html#using-nodes-without-flowcharts">Using Nodes Without Flowcharts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="internals.html"
+                        title="previous chapter">Internals - Extensions to Qt&#8217;s GraphicsView</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="config_options.html"
+                        title="next chapter">Global Configuration Options</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/apireference.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="config_options.html" title="Global Configuration Options"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="internals.html" title="Internals - Extensions to Qt’s GraphicsView"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

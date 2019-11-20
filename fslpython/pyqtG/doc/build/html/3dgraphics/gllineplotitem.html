@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GLLinePlotItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s 3D Graphics System" href="index.html" />
+    <link rel="next" title="GLAxisItem" href="glaxisitem.html" />
+    <link rel="prev" title="GLMeshItem" href="glmeshitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glaxisitem.html" title="GLAxisItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="glmeshitem.html" title="GLMeshItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gllineplotitem">
+<h1>GLLinePlotItem<a class="headerlink" href="#gllineplotitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.opengl.GLLinePlotItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.opengl.</code><code class="descname">GLLinePlotItem</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLLinePlotItem.html#GLLinePlotItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLLinePlotItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws line plots in 3D.</p>
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLLinePlotItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLLinePlotItem.html#GLLinePlotItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLLinePlotItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>All keyword arguments are passed to setData()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.opengl.GLLinePlotItem.setData">
+<code class="descname">setData</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/opengl/items/GLLinePlotItem.html#GLLinePlotItem.setData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.opengl.GLLinePlotItem.setData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the data displayed by this item. All arguments are optional; 
+for example it is allowed to update vertex positions while leaving 
+colors unchanged, etc.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td colspan="2"><strong>Arguments:</strong></td>
+</tr>
+<tr class="row-even"><td>pos</td>
+<td>(N,3) array of floats specifying point locations.</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>(N,4) array of floats (0.0-1.0) or
+tuple of floats specifying
+a single color for the entire item.</td>
+</tr>
+<tr class="row-even"><td>width</td>
+<td>float specifying line width</td>
+</tr>
+<tr class="row-odd"><td>antialias</td>
+<td>enables smooth line drawing</td>
+</tr>
+<tr class="row-even"><td>mode</td>
+<td><dl class="first last docutils">
+<dt>&#8216;lines&#8217;: Each pair of vertexes draws a single line</dt>
+<dd>segment.</dd>
+<dt>&#8216;line_strip&#8217;: All vertexes are drawn as a</dt>
+<dd>continuous set of line segments.</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="glmeshitem.html"
+                        title="previous chapter">GLMeshItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glaxisitem.html"
+                        title="next chapter">GLAxisItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/3dgraphics/gllineplotitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glaxisitem.html" title="GLAxisItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="glmeshitem.html" title="GLMeshItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s 3D Graphics System</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

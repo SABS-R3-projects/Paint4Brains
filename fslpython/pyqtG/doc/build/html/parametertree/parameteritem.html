@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ParameterItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="ParameterTree API Reference" href="apiref.html" />
+    <link rel="next" title="Visual Programming with Flowcharts" href="../flowchart/index.html" />
+    <link rel="prev" title="Built-in Parameter Types" href="parametertypes.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../flowchart/index.html" title="Visual Programming with Flowcharts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parametertypes.html" title="Built-in Parameter Types"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Parameter Trees</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="apiref.html" accesskey="U">ParameterTree API Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parameteritem">
+<h1>ParameterItem<a class="headerlink" href="#parameteritem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.parametertree.ParameterItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.parametertree.</code><code class="descname">ParameterItem</code><span class="sig-paren">(</span><em>param</em>, <em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract ParameterTree item. 
+Used to represent the state of a Parameter from within a ParameterTree.</p>
+<ul class="simple">
+<li>Sets first column of item to name</li>
+<li>generates context menu if item is renamable or removable</li>
+<li>handles child added / removed events</li>
+<li>provides virtual functions for handling changes from parameter</li>
+</ul>
+<p>For more ParameterItem types, see ParameterTree.parameterTypes module.</p>
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>param</em>, <em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.columnChangedEvent">
+<code class="descname">columnChangedEvent</code><span class="sig-paren">(</span><em>col</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.columnChangedEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.columnChangedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the text in a column has been edited (or otherwise changed).
+By default, we only use changes to column 0 to rename the parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.defaultChanged">
+<code class="descname">defaultChanged</code><span class="sig-paren">(</span><em>param</em>, <em>default</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.defaultChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.defaultChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the parameter&#8217;s default value has changed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.focusNext">
+<code class="descname">focusNext</code><span class="sig-paren">(</span><em>forward=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.focusNext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.focusNext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give focus to the next (or previous) focusable item in the parameter tree</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.isFocusable">
+<code class="descname">isFocusable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.isFocusable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.isFocusable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if this item should be included in the tab-focus order</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.limitsChanged">
+<code class="descname">limitsChanged</code><span class="sig-paren">(</span><em>param</em>, <em>limits</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.limitsChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.limitsChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the parameter&#8217;s limits have changed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.optsChanged">
+<code class="descname">optsChanged</code><span class="sig-paren">(</span><em>param</em>, <em>opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.optsChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.optsChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when any options are changed that are not
+name, value, default, or limits</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.selected">
+<code class="descname">selected</code><span class="sig-paren">(</span><em>sel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.selected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when this item has been selected (sel=True) OR deselected (sel=False)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.setFocus">
+<code class="descname">setFocus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.setFocus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.setFocus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give input focus to this item.
+Can be reimplemented to display editor widgets, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.parametertree.ParameterItem.treeWidgetChanged">
+<code class="descname">treeWidgetChanged</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/parametertree/ParameterItem.html#ParameterItem.treeWidgetChanged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.parametertree.ParameterItem.treeWidgetChanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when this item is added or removed from a tree.
+Expansion, visibility, and column widgets must all be configured AFTER 
+the item is added to a tree, not during __init__.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parametertypes.html"
+                        title="previous chapter">Built-in Parameter Types</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../flowchart/index.html"
+                        title="next chapter">Visual Programming with Flowcharts</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/parametertree/parameteritem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../flowchart/index.html" title="Visual Programming with Flowcharts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parametertypes.html" title="Built-in Parameter Types"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Parameter Trees</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="apiref.html" >ParameterTree API Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

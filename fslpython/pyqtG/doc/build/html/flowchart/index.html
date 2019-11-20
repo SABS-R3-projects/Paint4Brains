@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Visual Programming with Flowcharts &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="next" title="flowchart.Flowchart" href="flowchart.html" />
+    <link rel="prev" title="ParameterItem" href="../parametertree/parameteritem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="flowchart.html" title="flowchart.Flowchart"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../parametertree/parameteritem.html" title="ParameterItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="visual-programming-with-flowcharts">
+<h1>Visual Programming with Flowcharts<a class="headerlink" href="#visual-programming-with-flowcharts" title="Permalink to this headline">¶</a></h1>
+<p>PyQtGraph&#8217;s flowcharts provide a visual programming environment similar in concept to LabView&#8211;functional modules are added to a flowchart and connected by wires to define a more complex and arbitrarily configurable algorithm. A small number of predefined modules (called Nodes) are included with pyqtgraph, but most flowchart developers will want to define their own library of Nodes. At their core, the Nodes are little more than 1) a python function 2) a list of input/output terminals, and 3) an optional widget providing a control panel for the Node. Nodes may transmit/receive any type of Python object via their terminals.</p>
+<p>One major limitation of flowcharts is that there is no mechanism for looping within a flowchart. (however individual Nodes may contain loops (they may contain any Python code at all), and an entire flowchart may be executed from within a loop).</p>
+<p>There are two distinct modes of executing the code in a flowchart:</p>
+<ol class="arabic simple">
+<li>Provide data to the input terminals of the flowchart. This method is slower and will provide a graphical representation of the data as it passes through the flowchart. This is useful for debugging as it allows the user to inspect the data at each terminal and see where exceptions occurred within the flowchart.</li>
+<li>Call <a class="reference internal" href="flowchart.html#pyqtgraph.flowchart.Flowchart.process" title="pyqtgraph.flowchart.Flowchart.process"><code class="xref py py-func docutils literal"><span class="pre">Flowchart.process()</span></code></a>. This method does not update the displayed state of the flowchart and only retains the state of each terminal as long as it is needed. Additionally, Nodes which do not contribute to the output values of the flowchart (such as plotting nodes) are ignored. This mode allows for faster processing of large data sets and avoids memory issues which can occur if too much data is present in the flowchart at once (e.g., when processing image data through several stages).</li>
+</ol>
+<p>See the flowchart example for more information.</p>
+<p>API Reference:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="flowchart.html">flowchart.Flowchart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">flowchart.Node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminal.html">flowchart.Terminal</a></li>
+</ul>
+</div>
+<div class="section" id="basic-use">
+<h2>Basic Use<a class="headerlink" href="#basic-use" title="Permalink to this headline">¶</a></h2>
+<p>Flowcharts are most useful in situations where you have a processing stage in your application that you would like to be arbitrarily configurable by the user. Rather than giving a pre-defined algorithm with parameters for the user to tweak, you supply a set of pre-defined functions and allow the user to arrange and connect these functions how they like. A very common example is the use of filter networks in audio / video processing applications.</p>
+<p>To begin, you must decide what the input and output variables will be for your flowchart. Create a flowchart with one terminal defined for each variable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1">## This example creates just a single input and a single output.</span>
+<span class="c1">## Flowcharts may define any number of terminals, though.</span>
+<span class="kn">from</span> <span class="nn">pyqtgraph.flowchart</span> <span class="kn">import</span> <span class="n">Flowchart</span>
+<span class="n">fc</span> <span class="o">=</span> <span class="n">Flowchart</span><span class="p">(</span><span class="n">terminals</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;nameOfInputTerminal&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;io&#39;</span><span class="p">:</span> <span class="s1">&#39;in&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;nameOfOutputTerminal&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;io&#39;</span><span class="p">:</span> <span class="s1">&#39;out&#39;</span><span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>In the example above, each terminal is defined by a dictionary of options which define the behavior of that terminal (see <a class="reference internal" href="terminal.html#pyqtgraph.flowchart.Terminal.__init__" title="pyqtgraph.flowchart.Terminal.__init__"><code class="xref py py-func docutils literal"><span class="pre">Terminal.__init__()</span></code></a> for more information and options). Note that Terminals are not typed; any python object may be passed from one Terminal to another.</p>
+<p>Once the flowchart is created, add its control widget to your application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ctrl</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">ctrlWidget</span><span class="p">()</span>
+<span class="n">myLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ctrl</span><span class="p">)</span>  <span class="c1">## read Qt docs on QWidget and layouts for more information</span>
+</pre></div>
+</div>
+<p>The control widget provides several features:</p>
+<ul class="simple">
+<li>Displays a list of all nodes in the flowchart containing the control widget for
+each node.</li>
+<li>Provides access to the flowchart design window via the &#8216;flowchart&#8217; button</li>
+<li>Interface for saving / restoring flowcharts to disk.</li>
+</ul>
+<p>At this point your user has the ability to generate flowcharts based on the built-in node library. It is recommended to provide a default set of flowcharts for your users to build from.</p>
+<p>All that remains is to process data through the flowchart. As noted above, there are two ways to do this:</p>
+<ol class="arabic" id="processing-methods">
+<li><p class="first">Set the values of input terminals with <a class="reference internal" href="flowchart.html#pyqtgraph.flowchart.Flowchart.setInput" title="pyqtgraph.flowchart.Flowchart.setInput"><code class="xref py py-func docutils literal"><span class="pre">Flowchart.setInput()</span></code></a>, then read the values of output terminals with <a class="reference internal" href="flowchart.html#pyqtgraph.flowchart.Flowchart.output" title="pyqtgraph.flowchart.Flowchart.output"><code class="xref py py-func docutils literal"><span class="pre">Flowchart.output()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fc</span><span class="o">.</span><span class="n">setInput</span><span class="p">(</span><span class="n">nameOfInputTerminal</span><span class="o">=</span><span class="n">newValue</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">output</span><span class="p">()</span>  <span class="c1"># returns {terminalName:value}</span>
+</pre></div>
+</div>
+<p>This method updates all of the values displayed in the flowchart design window, allowing the user to inspect values at all terminals in the flowchart and indicating the location of errors that occurred during processing.</p>
+</li>
+<li><p class="first">Call <a class="reference internal" href="flowchart.html#pyqtgraph.flowchart.Flowchart.process" title="pyqtgraph.flowchart.Flowchart.process"><code class="xref py py-func docutils literal"><span class="pre">Flowchart.process()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">output</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">nameOfInputTerminal</span><span class="o">=</span><span class="n">newValue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This method processes data without updating any of the displayed terminal values. Additionally, all <a class="reference internal" href="node.html#pyqtgraph.flowchart.Node.process" title="pyqtgraph.flowchart.Node.process"><code class="xref py py-func docutils literal"><span class="pre">Node.process()</span></code></a> methods are called with display=False to request that they not invoke any custom display code. This allows data to be processed both more quickly and with a smaller memory footprint, but errors that occur during Flowchart.process() will be more difficult for the user to diagnose. It is thus recommended to use this method for batch processing through flowcharts that have already been tested and debugged with method 1.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="implementing-custom-nodes">
+<h2>Implementing Custom Nodes<a class="headerlink" href="#implementing-custom-nodes" title="Permalink to this headline">¶</a></h2>
+<p>PyQtGraph includes a small library of built-in flowchart nodes. This library is intended to cover some of the most commonly-used functions as well as provide examples for some more exotic Node types. Most applications that use the flowchart system will find the built-in library insufficient and will thus need to implement custom Node classes.</p>
+<p>A node subclass implements at least:</p>
+<ol class="arabic simple">
+<li>A list of input / output terminals and their properties</li>
+<li>A <a class="reference internal" href="node.html#pyqtgraph.flowchart.Node.process" title="pyqtgraph.flowchart.Node.process"><code class="xref py py-func docutils literal"><span class="pre">process()</span></code></a> function which takes the names of input terminals as keyword arguments and returns a dict with the names of output terminals as keys.</li>
+</ol>
+<p>Optionally, a Node subclass can implement the <a class="reference internal" href="node.html#pyqtgraph.flowchart.Node.ctrlWidget" title="pyqtgraph.flowchart.Node.ctrlWidget"><code class="xref py py-func docutils literal"><span class="pre">ctrlWidget()</span></code></a> method, which must return a QWidget (usually containing other widgets) that will be displayed in the flowchart control panel. A minimal Node subclass looks like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SpecialFunctionNode</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;SpecialFunction: short description</span>
+
+<span class="sd">    This description will appear in the flowchart design window when the user</span>
+<span class="sd">    selects a node of this type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nodeName</span> <span class="o">=</span> <span class="s1">&#39;SpecialFunction&#39;</span> <span class="c1"># Node type name that will appear to the user.</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>  <span class="c1"># all Nodes are provided a unique name when they</span>
+                               <span class="c1"># are created.</span>
+        <span class="n">Node</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">terminals</span><span class="o">=</span><span class="p">{</span>  <span class="c1"># Initialize with a dict</span>
+                                               <span class="c1"># describing the I/O terminals</span>
+                                               <span class="c1"># on this Node.</span>
+            <span class="s1">&#39;inputTerminalName&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;io&#39;</span><span class="p">:</span> <span class="s1">&#39;in&#39;</span><span class="p">},</span>
+            <span class="s1">&#39;anotherInputTerminal&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;io&#39;</span><span class="p">:</span> <span class="s1">&#39;in&#39;</span><span class="p">},</span>
+            <span class="s1">&#39;outputTerminalName&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;io&#39;</span><span class="p">:</span> <span class="s1">&#39;out&#39;</span><span class="p">},</span>
+            <span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="c1"># kwds will have one keyword argument per input terminal.</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;outputTerminalName&#39;</span><span class="p">:</span> <span class="n">result</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">ctrlWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># this method is optional</span>
+        <span class="k">return</span> <span class="n">someQWidget</span>
+</pre></div>
+</div>
+<p>Some nodes implement fairly complex control widgets, but most nodes follow a simple form-like pattern: a list of parameter names and a single value (represented as spin box, check box, etc..) for each parameter. To make this easier, the <code class="xref py py-class docutils literal"><span class="pre">CtrlNode</span></code> subclass allows you to instead define a simple data structure that CtrlNode will use to automatically generate the control widget. This is used in  many of the built-in library nodes (especially the filters).</p>
+<p>There are many other optional parameters for nodes and terminals &#8211; whether the user is allowed to add/remove/rename terminals, whether one terminal may be connected to many others or just one, etc. See the documentation on the <a class="reference internal" href="node.html#pyqtgraph.flowchart.Node" title="pyqtgraph.flowchart.Node"><code class="xref py py-class docutils literal"><span class="pre">Node</span></code></a> and <a class="reference internal" href="terminal.html#pyqtgraph.flowchart.Terminal" title="pyqtgraph.flowchart.Terminal"><code class="xref py py-class docutils literal"><span class="pre">Terminal</span></code></a> classes for more details.</p>
+<p>After implementing a new Node subclass, you will most likely want to register the class so that it appears in the menu of Nodes the user can select from:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pyqtgraph.flowchart.library</span> <span class="kn">as</span> <span class="nn">fclib</span>
+<span class="n">fclib</span><span class="o">.</span><span class="n">registerNodeType</span><span class="p">(</span><span class="n">SpecialFunctionNode</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;Category&#39;</span><span class="p">,</span> <span class="s1">&#39;Sub-Category&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>The second argument to registerNodeType is a list of tuples, with each tuple describing a menu location in which SpecialFunctionNode should appear.</p>
+<p>See the FlowchartCustomNode example for more information.</p>
+<div class="section" id="debugging-custom-nodes">
+<h3>Debugging Custom Nodes<a class="headerlink" href="#debugging-custom-nodes" title="Permalink to this headline">¶</a></h3>
+<p>When designing flowcharts or custom Nodes, it is important to set the input of the flowchart with data that at least has the same types and structure as the data you intend to process (see <a class="reference internal" href="#processing-methods">processing methods</a> #1 above). When you use <a class="reference internal" href="flowchart.html#pyqtgraph.flowchart.Flowchart.setInput" title="pyqtgraph.flowchart.Flowchart.setInput"><code class="xref py py-func docutils literal"><span class="pre">Flowchart.setInput()</span></code></a>, the flowchart displays visual feedback in its design window that can tell you what data is present at any terminal and whether there were errors in processing. Nodes that generated errors are displayed with a red border. If you select a Node, its input and output values will be displayed as well as the exception that occurred while the node was processing, if any.</p>
+</div>
+</div>
+<div class="section" id="using-nodes-without-flowcharts">
+<h2>Using Nodes Without Flowcharts<a class="headerlink" href="#using-nodes-without-flowcharts" title="Permalink to this headline">¶</a></h2>
+<p>Flowchart Nodes implement a very useful generalization in data processing by combining a function with a GUI for configuring that function. This generalization is useful even outside the context of a flowchart. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1">## We defined a useful filter Node for use in flowcharts, but would like to</span>
+<span class="c1">## re-use its processing code and GUI without having a flowchart present.</span>
+<span class="n">filterNode</span> <span class="o">=</span> <span class="n">MyFilterNode</span><span class="p">(</span><span class="s2">&quot;filterNodeName&quot;</span><span class="p">)</span>
+
+<span class="c1">## get the Node&#39;s control widget and place it inside the main window</span>
+<span class="n">filterCtrl</span> <span class="o">=</span> <span class="n">filterNode</span><span class="o">.</span><span class="n">ctrlWidget</span><span class="p">()</span>
+<span class="n">someLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">filterCtrl</span><span class="p">)</span>
+
+<span class="c1">## later on, process data through the node</span>
+<span class="n">filteredData</span> <span class="o">=</span> <span class="n">filterNode</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">inputTerminal</span><span class="o">=</span><span class="n">rawData</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Visual Programming with Flowcharts</a><ul>
+<li><a class="reference internal" href="#basic-use">Basic Use</a></li>
+<li><a class="reference internal" href="#implementing-custom-nodes">Implementing Custom Nodes</a><ul>
+<li><a class="reference internal" href="#debugging-custom-nodes">Debugging Custom Nodes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-nodes-without-flowcharts">Using Nodes Without Flowcharts</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../parametertree/parameteritem.html"
+                        title="previous chapter">ParameterItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="flowchart.html"
+                        title="next chapter">flowchart.Flowchart</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/flowchart/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="flowchart.html" title="flowchart.Flowchart"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../parametertree/parameteritem.html" title="ParameterItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

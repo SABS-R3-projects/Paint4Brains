@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SpinBox &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Widgets" href="index.html" />
+    <link rel="next" title="GradientWidget" href="gradientwidget.html" />
+    <link rel="prev" title="dockarea module" href="dockarea.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gradientwidget.html" title="GradientWidget"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dockarea.html" title="dockarea module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Widgets</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spinbox">
+<h1>SpinBox<a class="headerlink" href="#spinbox" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.SpinBox">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">SpinBox</code><span class="sig-paren">(</span><em>parent=None</em>, <em>value=0.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> QtGui.QAbstractSpinBox</p>
+<p>QSpinBox widget on steroids. Allows selection of numerical value, with extra features:</p>
+<ul class="simple">
+<li>SI prefix notation (eg, automatically display &#8220;300 mV&#8221; instead of &#8220;0.003 V&#8221;)</li>
+<li>Float values with linear and decimal stepping (1-9, 10-90, 100-900, etc.)</li>
+<li>Option for unbounded values</li>
+<li>Delayed signals (allows multiple rapid changes with only one change signal)</li>
+</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Signals:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>valueChanged(value)</td>
+<td>Same as QSpinBox; emitted every time the value
+has changed.</td>
+</tr>
+<tr class="row-odd"><td>sigValueChanged(self)</td>
+<td>Emitted when value has changed, but also combines
+multiple rapid changes into one signal (eg,
+when rolling the mouse wheel).</td>
+</tr>
+<tr class="row-even"><td>sigValueChanging(self, value)</td>
+<td>Emitted immediately for all value changes.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parent=None</em>, <em>value=0.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>parent</td>
+<td>Sets the parent widget for this SpinBox (optional). Default is None.</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>(float/int) initial value. Default is 0.0.</td>
+</tr>
+<tr class="row-even"><td>bounds</td>
+<td>(min,max) Minimum and maximum values allowed in the SpinBox.
+Either may be None to leave the value unbounded. By default, values are unbounded.</td>
+</tr>
+<tr class="row-odd"><td>suffix</td>
+<td>(str) suffix (units) to display after the numerical value. By default, suffix is an empty str.</td>
+</tr>
+<tr class="row-even"><td>siPrefix</td>
+<td>(bool) If True, then an SI prefix is automatically prepended
+to the units and the value is scaled accordingly. For example,
+if value=0.003 and suffix=&#8217;V&#8217;, then the SpinBox will display
+&#8220;300 mV&#8221; (but a call to SpinBox.value will still return 0.003). Default is False.</td>
+</tr>
+<tr class="row-odd"><td>step</td>
+<td>(float) The size of a single step. This is used when clicking the up/
+down arrows, when rolling the mouse wheel, or when pressing
+keyboard arrows while the widget has keyboard focus. Note that
+the interpretation of this value is different when specifying
+the &#8216;dec&#8217; argument. Default is 0.01.</td>
+</tr>
+<tr class="row-even"><td>dec</td>
+<td>(bool) If True, then the step value will be adjusted to match
+the current size of the variable (for example, a value of 15
+might step in increments of 1 whereas a value of 1500 would
+step in increments of 100). In this case, the &#8216;step&#8217; argument
+is interpreted <em>relative</em> to the current value. The most common
+&#8216;step&#8217; values when dec=True are 0.1, 0.2, 0.5, and 1.0. Default is False.</td>
+</tr>
+<tr class="row-odd"><td>minStep</td>
+<td>(float) When dec=True, this specifies the minimum allowable step size.</td>
+</tr>
+<tr class="row-even"><td>int</td>
+<td>(bool) if True, the value is forced to integer type. Default is False</td>
+</tr>
+<tr class="row-odd"><td>decimals</td>
+<td>(int) Number of decimal values to display. Default is 2.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.editingFinishedEvent">
+<code class="descname">editingFinishedEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.editingFinishedEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.editingFinishedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edit has finished; set value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.interpret">
+<code class="descname">interpret</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.interpret"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.interpret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return value of text. Return False if text is invalid, raise exception if text is intermediate</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.selectNumber">
+<code class="descname">selectNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.selectNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.selectNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the numerical portion of the text to allow quick editing by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setDecimals">
+<code class="descname">setDecimals</code><span class="sig-paren">(</span><em>decimals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setDecimals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setDecimals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the number of decimals to be displayed when formatting numeric
+values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setMaximum">
+<code class="descname">setMaximum</code><span class="sig-paren">(</span><em>m</em>, <em>update=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setMaximum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setMaximum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the maximum allowed value (or None for no limit)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setMinimum">
+<code class="descname">setMinimum</code><span class="sig-paren">(</span><em>m</em>, <em>update=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setMinimum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setMinimum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the minimum allowed value (or None for no limit)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setOpts">
+<code class="descname">setOpts</code><span class="sig-paren">(</span><em>**opts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setOpts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the behavior of the SpinBox. Accepts most of the arguments 
+allowed in <a class="reference internal" href="#pyqtgraph.SpinBox.__init__" title="pyqtgraph.SpinBox.__init__"><code class="xref py py-func docutils literal"><span class="pre">__init__</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setPrefix">
+<code class="descname">setPrefix</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setPrefix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a string prefix.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setRange">
+<code class="descname">setRange</code><span class="sig-paren">(</span><em>r0</em>, <em>r1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the upper and lower limits for values in the spinbox.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setSingleStep">
+<code class="descname">setSingleStep</code><span class="sig-paren">(</span><em>step</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setSingleStep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setSingleStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the step size used when responding to the mouse wheel, arrow
+buttons, or arrow keys.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setSuffix">
+<code class="descname">setSuffix</code><span class="sig-paren">(</span><em>suf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setSuffix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setSuffix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the string suffix appended to the spinbox text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.setValue">
+<code class="descname">setValue</code><span class="sig-paren">(</span><em>value=None</em>, <em>update=True</em>, <em>delaySignal=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of this spin. 
+If the value is out of bounds, it will be clipped to the nearest boundary.
+If the spin is integer type, the value will be coerced to int.
+Returns the actual value set.</p>
+<p>If value is None, then the current value is used (this is for resetting
+the value after bounds, etc. have changed)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.SpinBox.value">
+<code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/SpinBox.html#SpinBox.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.SpinBox.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of this SpinBox.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dockarea.html"
+                        title="previous chapter">dockarea module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gradientwidget.html"
+                        title="next chapter">GradientWidget</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/spinbox.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gradientwidget.html" title="GradientWidget"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dockarea.html" title="dockarea module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Widgets</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

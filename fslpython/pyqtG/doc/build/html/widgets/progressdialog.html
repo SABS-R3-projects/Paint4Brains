@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ProgressDialog &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Widgets" href="index.html" />
+    <link rel="next" title="FileDialog" href="filedialog.html" />
+    <link rel="prev" title="GraphicsLayoutWidget" href="graphicslayoutwidget.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filedialog.html" title="FileDialog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graphicslayoutwidget.html" title="GraphicsLayoutWidget"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Widgets</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="progressdialog">
+<h1>ProgressDialog<a class="headerlink" href="#progressdialog" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.ProgressDialog">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">ProgressDialog</code><span class="sig-paren">(</span><em>labelText</em>, <em>minimum=0</em>, <em>maximum=100</em>, <em>cancelText='Cancel'</em>, <em>parent=None</em>, <em>wait=250</em>, <em>busyCursor=False</em>, <em>disable=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/ProgressDialog.html#ProgressDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ProgressDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends QProgressDialog for use in &#8216;with&#8217; statements.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">ProgressDialog</span><span class="p">(</span><span class="s2">&quot;Processing..&quot;</span><span class="p">,</span> <span class="n">minVal</span><span class="p">,</span> <span class="n">maxVal</span><span class="p">)</span> <span class="k">as</span> <span class="n">dlg</span><span class="p">:</span>
+    <span class="c1"># do stuff</span>
+    <span class="n">dlg</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>   <span class="c1">## could also use dlg += 1</span>
+    <span class="k">if</span> <span class="n">dlg</span><span class="o">.</span><span class="n">wasCanceled</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Processing canceled by user&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pyqtgraph.ProgressDialog.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>labelText</em>, <em>minimum=0</em>, <em>maximum=100</em>, <em>cancelText='Cancel'</em>, <em>parent=None</em>, <em>wait=250</em>, <em>busyCursor=False</em>, <em>disable=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/widgets/ProgressDialog.html#ProgressDialog.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ProgressDialog.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>labelText</td>
+<td>(required)</td>
+</tr>
+<tr class="row-odd"><td>cancelText</td>
+<td>Text to display on cancel button, or None to disable it.</td>
+</tr>
+<tr class="row-even"><td>minimum</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>maximum</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>parent</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>wait</td>
+<td>Length of time (im ms) to wait before displaying dialog</td>
+</tr>
+<tr class="row-even"><td>busyCursor</td>
+<td>If True, show busy cursor until dialog finishes</td>
+</tr>
+<tr class="row-odd"><td>disable</td>
+<td>If True, the progress dialog will not be displayed
+and calls to wasCanceled() will always return False.
+If ProgressDialog is entered from a non-gui thread, it will
+always be disabled.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="graphicslayoutwidget.html"
+                        title="previous chapter">GraphicsLayoutWidget</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="filedialog.html"
+                        title="next chapter">FileDialog</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/widgets/progressdialog.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filedialog.html" title="FileDialog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graphicslayoutwidget.html" title="GraphicsLayoutWidget"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Widgets</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ImageItem &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="PyQtGraph’s Graphics Items" href="index.html" />
+    <link rel="next" title="GraphItem" href="graphitem.html" />
+    <link rel="prev" title="PlotItem" href="plotitem.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphitem.html" title="GraphItem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plotitem.html" title="PlotItem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="imageitem">
+<h1>ImageItem<a class="headerlink" href="#imageitem" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.ImageItem">
+<em class="property">class </em><code class="descclassname">pyqtgraph.</code><code class="descname">ImageItem</code><span class="sig-paren">(</span><em>image=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Bases:</strong> <a class="reference internal" href="graphicsobject.html#pyqtgraph.GraphicsObject" title="pyqtgraph.GraphicsObject"><code class="xref py py-class docutils literal"><span class="pre">GraphicsObject</span></code></a></p>
+<p>GraphicsObject displaying an image. Optimized for rapid update (ie video display).
+This item displays either a 2D numpy array (height, width) or
+a 3D array (height, width, RGBa). This array is optionally scaled (see 
+<a class="reference internal" href="#pyqtgraph.ImageItem.setLevels" title="pyqtgraph.ImageItem.setLevels"><code class="xref py py-func docutils literal"><span class="pre">setLevels</span></code></a>) and/or colored
+with a lookup table (see <a class="reference internal" href="#pyqtgraph.ImageItem.setLookupTable" title="pyqtgraph.ImageItem.setLookupTable"><code class="xref py py-func docutils literal"><span class="pre">setLookupTable</span></code></a>)
+before being displayed.</p>
+<p>ImageItem is frequently used in conjunction with 
+<a class="reference internal" href="histogramlutitem.html#pyqtgraph.HistogramLUTItem" title="pyqtgraph.HistogramLUTItem"><code class="xref py py-class docutils literal"><span class="pre">HistogramLUTItem</span></code></a> or 
+<a class="reference internal" href="../widgets/histogramlutwidget.html#pyqtgraph.HistogramLUTWidget" title="pyqtgraph.HistogramLUTWidget"><code class="xref py py-class docutils literal"><span class="pre">HistogramLUTWidget</span></code></a> to provide a GUI
+for controlling the levels and lookup table used to display the image.</p>
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>image=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="#pyqtgraph.ImageItem.setImage" title="pyqtgraph.ImageItem.setImage"><code class="xref py py-func docutils literal"><span class="pre">setImage</span></code></a> for all allowed initialization arguments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.dataTransform">
+<code class="descname">dataTransform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.dataTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.dataTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the transform that maps from this image&#8217;s input array to its
+local coordinate system.</p>
+<p>This transform corrects for the transposition that occurs when image data
+is interpreted in row-major order.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.getHistogram">
+<code class="descname">getHistogram</code><span class="sig-paren">(</span><em>bins='auto'</em>, <em>step='auto'</em>, <em>targetImageSize=200</em>, <em>targetHistogramSize=500</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.getHistogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.getHistogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns x and y arrays containing the histogram values for the current image.
+For an explanation of the return format, see numpy.histogram().</p>
+<p>The <em>step</em> argument causes pixels to be skipped when computing the histogram to save time.
+If <em>step</em> is &#8216;auto&#8217;, then a step is chosen such that the analyzed data has
+dimensions roughly <em>targetImageSize</em> for each axis.</p>
+<p>The <em>bins</em> argument and any extra keyword arguments are passed to 
+np.histogram(). If <em>bins</em> is &#8216;auto&#8217;, then a bin number is automatically
+chosen based on the image characteristics:</p>
+<ul class="simple">
+<li>Integer images will have approximately <em>targetHistogramSize</em> bins, 
+with each bin having an integer width.</li>
+<li>All other types will have <em>targetHistogramSize</em> bins.</li>
+</ul>
+<p>This method is also used when automatically computing levels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.inverseDataTransform">
+<code class="descname">inverseDataTransform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.inverseDataTransform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.inverseDataTransform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the transform that maps from this image&#8217;s local coordinate
+system to its input array.</p>
+<p>See dataTransform() for more information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.pixelSize">
+<code class="descname">pixelSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.pixelSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.pixelSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>return scene-size of a single pixel in the image</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.quickMinMax">
+<code class="descname">quickMinMax</code><span class="sig-paren">(</span><em>targetSize=1000000.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.quickMinMax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.quickMinMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the min/max values of the image data by subsampling.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>fileName</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save this image to file. Note that this saves the visible image (after scale/color changes), not the original data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setAutoDownsample">
+<code class="descname">setAutoDownsample</code><span class="sig-paren">(</span><em>ads</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setAutoDownsample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setAutoDownsample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the automatic downsampling mode for this ImageItem.</p>
+<p>Added in version 0.9.9</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setCompositionMode">
+<code class="descname">setCompositionMode</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setCompositionMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setCompositionMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the composition mode of the item (see QPainter::CompositionMode
+in the Qt documentation). This is useful when overlaying multiple ImageItems.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="58%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Most common arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>QtGui.QPainter.CompositionMode_SourceOver</td>
+<td>Default; image replaces the background if it
+is opaque. Otherwise, it uses the alpha channel to blend
+the image with the background.</td>
+</tr>
+<tr class="row-odd"><td>QtGui.QPainter.CompositionMode_Overlay</td>
+<td>The image color is mixed with the background color to
+reflect the lightness or darkness of the background.</td>
+</tr>
+<tr class="row-even"><td>QtGui.QPainter.CompositionMode_Plus</td>
+<td>Both the alpha and color of the image and background pixels
+are added together.</td>
+</tr>
+<tr class="row-odd"><td>QtGui.QPainter.CompositionMode_Multiply</td>
+<td>The output is the image color multiplied by the background.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setImage">
+<code class="descname">setImage</code><span class="sig-paren">(</span><em>image=None</em>, <em>autoLevels=None</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the image displayed by this item. For more information on how the image
+is processed before displaying, see <a class="reference internal" href="../functions.html#pyqtgraph.makeARGB" title="pyqtgraph.makeARGB"><code class="xref py py-func docutils literal"><span class="pre">makeARGB</span></code></a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Arguments:</strong></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>image</td>
+<td>(numpy array) Specifies the image data. May be 2D (width, height) or
+3D (width, height, RGBa). The array dtype must be integer or floating
+point of any bit depth. For 3D arrays, the third dimension must
+be of length 3 (RGB) or 4 (RGBA). See <em>notes</em> below.</td>
+</tr>
+<tr class="row-odd"><td>autoLevels</td>
+<td>(bool) If True, this forces the image to automatically select
+levels based on the maximum and minimum values in the data.
+By default, this argument is true unless the levels argument is
+given.</td>
+</tr>
+<tr class="row-even"><td>lut</td>
+<td>(numpy array) The color lookup table to use when displaying the image.
+See <a class="reference internal" href="#pyqtgraph.ImageItem.setLookupTable" title="pyqtgraph.ImageItem.setLookupTable"><code class="xref py py-func docutils literal"><span class="pre">setLookupTable</span></code></a>.</td>
+</tr>
+<tr class="row-odd"><td>levels</td>
+<td>(min, max) The minimum and maximum values to use when rescaling the image
+data. By default, this will be set to the minimum and maximum values
+in the image. If the image array has dtype uint8, no rescaling is necessary.</td>
+</tr>
+<tr class="row-even"><td>opacity</td>
+<td>(float 0.0-1.0)</td>
+</tr>
+<tr class="row-odd"><td>compositionMode</td>
+<td>See <a class="reference internal" href="#pyqtgraph.ImageItem.setCompositionMode" title="pyqtgraph.ImageItem.setCompositionMode"><code class="xref py py-func docutils literal"><span class="pre">setCompositionMode</span></code></a></td>
+</tr>
+<tr class="row-even"><td>border</td>
+<td>Sets the pen used when drawing the image border. Default is None.</td>
+</tr>
+<tr class="row-odd"><td>autoDownsample</td>
+<td>(bool) If True, the image is automatically downsampled to match the
+screen resolution. This improves performance for large images and
+reduces aliasing.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes:</strong></p>
+<p>For backward compatibility, image data is assumed to be in column-major order (column, row).
+However, most image data is stored in row-major order (row, column) and will need to be
+transposed before calling setImage():</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">imageitem</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span><span class="n">imagedata</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This requirement can be changed by calling <code class="docutils literal"><span class="pre">image.setOpts(axisOrder='row-major')</span></code> or
+by changing the <code class="docutils literal"><span class="pre">imageAxisOrder</span></code> <a class="reference internal" href="../config_options.html#apiref-config"><span>global configuration option</span></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setLevels">
+<code class="descname">setLevels</code><span class="sig-paren">(</span><em>levels</em>, <em>update=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setLevels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setLevels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set image scaling levels. Can be one of:</p>
+<ul class="simple">
+<li>[blackLevel, whiteLevel]</li>
+<li>[[minRed, maxRed], [minGreen, maxGreen], [minBlue, maxBlue]]</li>
+</ul>
+<p>Only the first format is compatible with lookup tables. See <a class="reference internal" href="../functions.html#pyqtgraph.makeARGB" title="pyqtgraph.makeARGB"><code class="xref py py-func docutils literal"><span class="pre">makeARGB</span></code></a>
+for more details on how levels are applied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setLookupTable">
+<code class="descname">setLookupTable</code><span class="sig-paren">(</span><em>lut</em>, <em>update=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setLookupTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setLookupTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the lookup table (numpy array) to use for this image. (see 
+<a class="reference internal" href="../functions.html#pyqtgraph.makeARGB" title="pyqtgraph.makeARGB"><code class="xref py py-func docutils literal"><span class="pre">makeARGB</span></code></a> for more information on how this is used).
+Optionally, lut can be a callable that accepts the current image as an 
+argument and returns the lookup table to use.</p>
+<p>Ordinarily, this table is supplied by a <a class="reference internal" href="histogramlutitem.html#pyqtgraph.HistogramLUTItem" title="pyqtgraph.HistogramLUTItem"><code class="xref py py-class docutils literal"><span class="pre">HistogramLUTItem</span></code></a>
+or <a class="reference internal" href="gradienteditoritem.html#pyqtgraph.GradientEditorItem" title="pyqtgraph.GradientEditorItem"><code class="xref py py-class docutils literal"><span class="pre">GradientEditorItem</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setPxMode">
+<code class="descname">setPxMode</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setPxMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setPxMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set whether the item ignores transformations and draws directly to screen pixels.
+If True, the item will not inherit any scale or rotation transformations from its
+parent items, but its position will be transformed as usual.
+(see GraphicsItem::ItemIgnoresTransformations in the Qt documentation)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.ImageItem.setRect">
+<code class="descname">setRect</code><span class="sig-paren">(</span><em>rect</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/graphicsItems/ImageItem.html#ImageItem.setRect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.ImageItem.setRect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale and translate the image to fit within rect (must be a QRect or QRectF).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plotitem.html"
+                        title="previous chapter">PlotItem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="graphitem.html"
+                        title="next chapter">GraphItem</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsItems/imageitem.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="graphitem.html" title="GraphItem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plotitem.html" title="PlotItem"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >PyQtGraph&#8217;s Graphics Items</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

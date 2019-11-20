@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Interactive Data Selection Controls &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="index.html" />
+    <link rel="next" title="Exporting" href="exporting.html" />
+    <link rel="prev" title="Line, Fill, and Color" href="style.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exporting.html" title="Exporting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="style.html" title="Line, Fill, and Color"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="interactive-data-selection-controls">
+<h1>Interactive Data Selection Controls<a class="headerlink" href="#interactive-data-selection-controls" title="Permalink to this headline">¶</a></h1>
+<p>PyQtGraph includes graphics items which allow the user to select and mark regions of data.</p>
+<div class="section" id="linear-selection-and-marking">
+<h2>Linear Selection and Marking<a class="headerlink" href="#linear-selection-and-marking" title="Permalink to this headline">¶</a></h2>
+<p>Two classes allow marking and selecting 1-dimensional data: <a class="reference internal" href="graphicsItems/linearregionitem.html#pyqtgraph.LinearRegionItem" title="pyqtgraph.LinearRegionItem"><code class="xref py py-class docutils literal"><span class="pre">LinearRegionItem</span></code></a> and <a class="reference internal" href="graphicsItems/infiniteline.html#pyqtgraph.InfiniteLine" title="pyqtgraph.InfiniteLine"><code class="xref py py-class docutils literal"><span class="pre">InfiniteLine</span></code></a>. The first class, <a class="reference internal" href="graphicsItems/linearregionitem.html#pyqtgraph.LinearRegionItem" title="pyqtgraph.LinearRegionItem"><code class="xref py py-class docutils literal"><span class="pre">LinearRegionItem</span></code></a>, may be added to any ViewBox or PlotItem to mark either a horizontal or vertical region. The region can be dragged and its bounding edges can be moved independently. The second class, <a class="reference internal" href="graphicsItems/infiniteline.html#pyqtgraph.InfiniteLine" title="pyqtgraph.InfiniteLine"><code class="xref py py-class docutils literal"><span class="pre">InfiniteLine</span></code></a>, is usually used to mark a specific position along the x or y axis. These may be dragged by the user.</p>
+</div>
+<div class="section" id="d-selection-and-marking">
+<h2>2D Selection and Marking<a class="headerlink" href="#d-selection-and-marking" title="Permalink to this headline">¶</a></h2>
+<p>To select a 2D region from an image, pyqtgraph uses the <a class="reference internal" href="graphicsItems/roi.html#pyqtgraph.ROI" title="pyqtgraph.ROI"><code class="xref py py-class docutils literal"><span class="pre">ROI</span></code></a> class or any of its subclasses. By default, <a class="reference internal" href="graphicsItems/roi.html#pyqtgraph.ROI" title="pyqtgraph.ROI"><code class="xref py py-class docutils literal"><span class="pre">ROI</span></code></a> simply displays a rectangle which can be moved by the user to mark a specific region (most often this will be a region of an image, but this is not required). To allow the ROI to be resized or rotated, there are several methods for adding handles (<a class="reference internal" href="graphicsItems/roi.html#pyqtgraph.ROI.addScaleHandle" title="pyqtgraph.ROI.addScaleHandle"><code class="xref py py-func docutils literal"><span class="pre">addScaleHandle</span></code></a>, <a class="reference internal" href="graphicsItems/roi.html#pyqtgraph.ROI.addRotateHandle" title="pyqtgraph.ROI.addRotateHandle"><code class="xref py py-func docutils literal"><span class="pre">addRotateHandle</span></code></a>, etc.) which can be dragged by the user. These handles may be placed at any location relative to the ROI and may scale/rotate the ROI around any arbitrary center point. There are several ROI subclasses with a variety of shapes and modes of interaction.</p>
+<p>To automatically extract a region of image data using an ROI and an ImageItem, use <a class="reference internal" href="graphicsItems/roi.html#pyqtgraph.ROI.getArrayRegion" title="pyqtgraph.ROI.getArrayRegion"><code class="xref py py-func docutils literal"><span class="pre">ROI.getArrayRegion</span></code></a>. ROI classes use the <a class="reference internal" href="functions.html#pyqtgraph.affineSlice" title="pyqtgraph.affineSlice"><code class="xref py py-func docutils literal"><span class="pre">affineSlice</span></code></a> function to perform this extraction.</p>
+<p>ROI can also be used as a control for moving/rotating/scaling items in a scene similar to most vetctor graphics editing applications.</p>
+<p>See the ROITypes example for more information.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Interactive Data Selection Controls</a><ul>
+<li><a class="reference internal" href="#linear-selection-and-marking">Linear Selection and Marking</a></li>
+<li><a class="reference internal" href="#d-selection-and-marking">2D Selection and Marking</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="style.html"
+                        title="previous chapter">Line, Fill, and Color</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="exporting.html"
+                        title="next chapter">Exporting</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/region_of_interest.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exporting.html" title="Exporting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="style.html" title="Line, Fill, and Color"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

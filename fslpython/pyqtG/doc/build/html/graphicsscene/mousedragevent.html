@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MouseDragEvent &mdash; pyqtgraph 0.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="pyqtgraph 0.10.0 documentation" href="../index.html" />
+    <link rel="up" title="GraphicsScene and Mouse Events" href="index.html" />
+    <link rel="prev" title="MouseClickEvent" href="mouseclickevent.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mouseclickevent.html" title="MouseClickEvent"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">GraphicsScene and Mouse Events</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mousedragevent">
+<h1>MouseDragEvent<a class="headerlink" href="#mousedragevent" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent">
+<em class="property">class </em><code class="descclassname">pyqtgraph.GraphicsScene.mouseEvents.</code><code class="descname">MouseDragEvent</code><span class="sig-paren">(</span><em>moveEvent</em>, <em>pressEvent</em>, <em>lastEvent</em>, <em>start=False</em>, <em>finish=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances of this class are delivered to items in a <a class="reference internal" href="graphicsscene.html#pyqtgraph.GraphicsScene" title="pyqtgraph.GraphicsScene"><code class="xref py py-class docutils literal"><span class="pre">GraphicsScene</span></code></a> via their mouseDragEvent() method when the item is being mouse-dragged.</p>
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.accept">
+<code class="descname">accept</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.accept"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>An item should call this method if it can handle the event. This will prevent the event being delivered to any other items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.button">
+<code class="descname">button</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.button"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the button that initiated the drag (may be different from the buttons currently pressed)
+(see QGraphicsSceneMouseEvent::button in the Qt documentation)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttonDownPos">
+<code class="descname">buttonDownPos</code><span class="sig-paren">(</span><em>btn=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.buttonDownPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttonDownPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the position of the mouse at the time the drag was initiated
+in the coordinate system of the item that the event was delivered to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttonDownScenePos">
+<code class="descname">buttonDownScenePos</code><span class="sig-paren">(</span><em>btn=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.buttonDownScenePos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttonDownScenePos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the scene position of the mouse at the time <em>btn</em> was pressed.
+If <em>btn</em> is omitted, then the button that initiated the drag is assumed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttonDownScreenPos">
+<code class="descname">buttonDownScreenPos</code><span class="sig-paren">(</span><em>btn=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.buttonDownScreenPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttonDownScreenPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the screen position (pixels relative to widget) of the mouse at the time <em>btn</em> was pressed.
+If <em>btn</em> is omitted, then the button that initiated the drag is assumed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttons">
+<code class="descname">buttons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.buttons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.buttons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the buttons currently pressed on the mouse.
+(see QGraphicsSceneMouseEvent::buttons in the Qt documentation)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.ignore">
+<code class="descname">ignore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.ignore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.ignore" title="Permalink to this definition">¶</a></dt>
+<dd><p>An item should call this method if it cannot handle the event. This will allow the event to be delivered to other items.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.isFinish">
+<code class="descname">isFinish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.isFinish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.isFinish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns False if this is the last event in a drag. Note that this
+event will have the same position as the previous one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.isStart">
+<code class="descname">isStart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.isStart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.isStart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this event is the first since a drag was initiated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.lastPos">
+<code class="descname">lastPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.lastPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.lastPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the previous position of the mouse in the coordinate system of the item
+that the event was delivered to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.lastScenePos">
+<code class="descname">lastScenePos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.lastScenePos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.lastScenePos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the scene position of the mouse immediately prior to this event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.lastScreenPos">
+<code class="descname">lastScreenPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.lastScreenPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.lastScreenPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the screen position of the mouse immediately prior to this event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.modifiers">
+<code class="descname">modifiers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.modifiers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.modifiers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return any keyboard modifiers currently pressed.
+(see QGraphicsSceneMouseEvent::modifiers in the Qt documentation)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.pos">
+<code class="descname">pos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current position of the mouse in the coordinate system of the item
+that the event was delivered to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.scenePos">
+<code class="descname">scenePos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.scenePos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.scenePos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current scene position of the mouse.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.screenPos">
+<code class="descname">screenPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyqtgraph/GraphicsScene/mouseEvents.html#MouseDragEvent.screenPos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyqtgraph.GraphicsScene.mouseEvents.MouseDragEvent.screenPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current screen position (pixels relative to widget) of the mouse.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mouseclickevent.html"
+                        title="previous chapter">MouseClickEvent</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/graphicsscene/mousedragevent.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mouseclickevent.html" title="MouseClickEvent"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyqtgraph 0.10.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../apireference.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >GraphicsScene and Mouse Events</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2011, Luke Campagnola.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>
