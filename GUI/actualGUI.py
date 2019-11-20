@@ -58,6 +58,7 @@ class Widget(QWidget):
         self.horizontalLayout.addWidget(self.w1)
 
         self.win = pg.GraphicsView()
+        self.setWindowTitle('First attempt')
         self.horizontalLayout.addWidget(self.win)
         self.view = pg.ViewBox()
         self.view.setAspectLocked(True)
