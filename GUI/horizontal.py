@@ -86,7 +86,7 @@ class Window(QWidget):
         self.data = data
         self.maxim = np.max(data)
         self.win = pg.GraphicsView()
-        self.img = pg.ImageItem(self.data[self.i] / self.maxim)
+        self.img = pg.ImageItem(self.get_data(self.i) / self.maxim)
         self.buttons = ViewButtons(self.update0, self.update1, self.update2)
 
         self.setWindowTitle('First attempt')
@@ -104,36 +104,47 @@ class Window(QWidget):
         self.w1.slider.valueChanged.connect(self.update_after_slider)
         self.img.setDrawKernel(kern, mask=kern, center=(1, 1), mode='add')
 
+    def get_data(self, i):
+        if self.section == 0:
+            return self.data[i]
+        elif self.section == 1:
+            return np.flip(self.data[:, i].transpose())
+        elif self.section == 2:
+            return np.flip(self.data[:, :, i].transpose())
+
+    def set_data(self, i, x):
+        if self.section == 0:
+            self.data[i] = x
+        elif self.section == 1:
+            self.data[:, i] = np.flip(x.transpose())
+        elif self.section == 2:
+            self.data[:, :, i] = np.flip(x.transpose())
+
     def update_after_slider(self):
-        self.data[self.i] = self.img.image
+        # Causes many problems:
+        # self.set_data(self.i, self.img.image)
         self.i = self.w1.x
-        self.img.setImage(self.data[self.i] / self.maxim)
+        self.img.setImage(self.get_data(self.i) / self.maxim)
         self.img.setDrawKernel(kern, mask=kern, center=(1, 1), mode='add')
 
-    def update_section_helper(self, dimen):
-        self.data[self.i] = self.img.image
-        if (dimen - self.section)%3 == 1:
-            self.data = np.transpose(self.data,(2,0,1))
-        if (dimen - self.section)%3 == 2:
-            self.data = np.transpose(self.data,(1,2,0))
-        self.section = dimen
-        self.i = int(self.data.shape[0] / 2)
-        self.w1.maximum = self.data.shape[0] - 1
-        self.w1.slider.setMaximum(self.data.shape[0] - 1)
-        self.img.setImage(self.data[self.i] / self.maxim)
+    def update_section_helper(self):
+        self.i = int(self.data.shape[self.section] / 2)
+        self.w1.maximum = self.data.shape[self.section] - 1
+        self.w1.slider.setMaximum(self.data.shape[self.section] - 1)
+        self.img.setImage(self.get_data(self.i) / self.maxim)
         self.img.setDrawKernel(kern, mask=kern, center=(1, 1), mode='add')
 
     def update0(self):
-        self.update_section_helper(0)
+        self.section = 0
+        self.update_section_helper()
 
     def update1(self):
-        self.update_section_helper(1)
+        self.section = 1
+        self.update_section_helper()
 
     def update2(self):
-        self.update_section_helper(2)
-
-
-
+        self.section = 2
+        self.update_section_helper()
 
 
 if __name__ == '__main__':
