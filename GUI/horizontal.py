@@ -10,8 +10,11 @@ import numpy as np
 import nibabel as nib
 
 file_x = "80yearold.nii"
+file_y = "579_LeftHippo.nii"
 xim = nib.load(file_x)
 dat = xim.get_fdata()
+yim = nib.load(file_y)
+hip_dat = yim.get_fdata()
 
 kern = np.array([
     [0.0, 0.0, 0.0],
@@ -28,12 +31,16 @@ class ViewButtons(QWidget):
         self.btn1 = QPushButton()
         self.btn1.setIcon(QtGui.QIcon('one.png'))
         self.btn1.setIconSize(QtCore.QSize(100, 100))
-        self.btn2 = QPushButton("button2")
-        self.btn3 = QPushButton("button3")
+        self.btn2 = QPushButton()
+        self.btn2.setIcon(QtGui.QIcon('button2.png'))
+        self.btn2.setIconSize(QtCore.QSize(100, 100))
+        self.btn3 = QPushButton()
+        self.btn3.setIcon(QtGui.QIcon('button3.png'))
+        self.btn3.setIconSize(QtCore.QSize(100, 100))
 
-        self.btn1.setFixedSize(100, 100)
-        self.btn2.setFixedSize(100, 100)
-        self.btn3.setFixedSize(100, 100)
+        self.btn1.setFixedSize(120, 120)
+        self.btn2.setFixedSize(120, 120)
+        self.btn3.setFixedSize(120, 120)
 
         self.layout.addWidget(self.btn1)
         self.layout.addWidget(self.btn2)
@@ -76,13 +83,14 @@ class Slider(QWidget):
 
 
 class Window(QWidget):
-    def __init__(self, data, parent=None):
+    def __init__(self, data, segment, parent=None):
         super(Window, self).__init__(parent=parent)
         self.verticalLayout = QVBoxLayout()
+        self.labelled_data = segment
         self.section = 0
-        self.w1 = Slider(0, data.shape[0] - 1)
-        self.w1.slider.setMaximum(data.shape[0] - 1)
-        self.i = int(data.shape[0] / 2)
+        self.w1 = Slider(0, data.shape[self.section] - 1)
+        self.w1.slider.setMaximum(data.shape[self.section] - 1)
+        self.i = int(data.shape[self.section] / 2)
         self.data = data
         self.maxim = np.max(data)
         self.win = pg.GraphicsView()
@@ -110,7 +118,7 @@ class Window(QWidget):
         elif self.section == 1:
             return np.flip(self.data[:, i].transpose())
         elif self.section == 2:
-            return np.flip(self.data[:, :, i].transpose())
+            return np.flip(self.data[:, :, i].transpose(),axis = 1)
 
     def set_data(self, i, x):
         if self.section == 0:
@@ -118,7 +126,7 @@ class Window(QWidget):
         elif self.section == 1:
             self.data[:, i] = np.flip(x.transpose())
         elif self.section == 2:
-            self.data[:, :, i] = np.flip(x.transpose())
+            self.data[:, :, i] = np.flip(x.transpose(), axis = 1)
 
     def update_after_slider(self):
         # Causes many problems:
@@ -149,7 +157,7 @@ class Window(QWidget):
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
-    w = Window(dat)
+    w = Window(dat, hip_dat)
     w.show()
 
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
