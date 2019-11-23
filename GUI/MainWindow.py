@@ -49,7 +49,6 @@ class MainWindow(QWidget):
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
         self.w1.slider.valueChanged.connect(self.update_after_slider)
-        # May want to set mode to "set"
         self.over_img.setDrawKernel(pen, mask=pen, center=(1, 1), mode='add')
 
     def get_data(self, i):
@@ -77,14 +76,14 @@ class MainWindow(QWidget):
             self.label_data[:, :, i] = np.flip(x.transpose(), axis=1)
 
     def update_after_slider(self):
-        # Causes many problems:
-        # self.set_data(self.i, self.img.image)
+        self.label_data = np.clip(self.label_data, 0, 1)
         self.i = self.w1.x
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.over_img.setImage(self.get_label_data(self.i))
         self.over_img.setDrawKernel(pen, mask=pen, center=(1, 1), mode='add')
 
     def update_section_helper(self):
+        self.label_data = np.clip(self.label_data, 0, 1)
         self.i = int(self.data.shape[self.section] / 2)
         self.w1.maximum = self.data.shape[self.section] - 1
         self.w1.slider.setMaximum(self.data.shape[self.section] - 1)
