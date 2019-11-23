@@ -4,7 +4,6 @@ from GUI.Slider import Slider
 from GUI.PlaneSelectionButtons import PlaneSelectionButtons
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
-from matplotlib import cm
 
 pen = np.array([
     [0, 0, 0],
