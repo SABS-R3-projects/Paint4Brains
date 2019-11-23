@@ -11,10 +11,10 @@ class PlaneSelectionButtons(QWidget):
         self.btn1.setIcon(QtGui.QIcon('one.png'))
         self.btn1.setIconSize(QtCore.QSize(100, 100))
         self.btn2 = QPushButton()
-        self.btn2.setIcon(QtGui.QIcon('button2.png'))
+        self.btn2.setIcon(QtGui.QIcon('two.png'))
         self.btn2.setIconSize(QtCore.QSize(100, 100))
         self.btn3 = QPushButton()
-        self.btn3.setIcon(QtGui.QIcon('button3.png'))
+        self.btn3.setIcon(QtGui.QIcon('three.png'))
         self.btn3.setIconSize(QtCore.QSize(100, 100))
 
         self.btn1.setFixedSize(120, 120)
