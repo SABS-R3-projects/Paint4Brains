@@ -23,9 +23,9 @@ kern = np.array([
 ])
 
 
-class ViewButtons(QWidget):
+class PlaneSelectionButtons(QWidget):
     def __init__(self, button1, button2, button3, parent=None):
-        super(ViewButtons, self).__init__(parent=parent)
+        super(PlaneSelectionButtons, self).__init__(parent=parent)
 
         self.layout = QVBoxLayout(self)
         self.btn1 = QPushButton()
@@ -82,9 +82,9 @@ class Slider(QWidget):
         self.label.setText("Slice: \n{0:.4g}".format(self.x))
 
 
-class Window(QWidget):
+class MainWindow(QWidget):
     def __init__(self, data, segment, parent=None):
-        super(Window, self).__init__(parent=parent)
+        super(MainWindow, self).__init__(parent=parent)
         self.verticalLayout = QVBoxLayout()
         self.labelled_data = segment
         self.section = 0
@@ -95,7 +95,7 @@ class Window(QWidget):
         self.maxim = np.max(data)
         self.win = pg.GraphicsView()
         self.img = pg.ImageItem(self.get_data(self.i) / self.maxim)
-        self.buttons = ViewButtons(self.update0, self.update1, self.update2)
+        self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
 
         self.setWindowTitle('First attempt')
         self.verticalLayout.addWidget(self.win)
@@ -157,7 +157,7 @@ class Window(QWidget):
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
-    w = Window(dat, hip_dat)
+    w = MainWindow(dat, hip_dat)
     w.show()
 
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
