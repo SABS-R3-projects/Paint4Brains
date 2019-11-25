@@ -5,11 +5,13 @@ from GUI.PlaneSelectionButtons import PlaneSelectionButtons
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
 
-pen = np.array([
-    [0, 0, 0],
+cross = np.array([
     [0, 1, 0],
-    [0, 0, 0]
+    [1, 1, 1],
+    [0, 1, 0]
 ]).astype(np.uint8)
+
+dot = np.array([[1]]).astype(np.uint8)
 
 
 class MainWindow(QWidget):
@@ -24,6 +26,7 @@ class MainWindow(QWidget):
         self.data = data
         self.maxim = np.max(data)
         self.win = pg.GraphicsView()
+
 
         self.over_img = pg.ImageItem(self.get_label_data(self.i), autoDownSmaple=False, opacity=0.3,
                                      compositionMode=QtGui.QPainter.CompositionMode_Plus)
@@ -49,7 +52,7 @@ class MainWindow(QWidget):
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
         self.w1.slider.valueChanged.connect(self.update_after_slider)
-        self.over_img.setDrawKernel(pen, mask=pen, center=(1, 1), mode='add')
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
     def get_data(self, i):
         if self.section == 0:
@@ -80,7 +83,7 @@ class MainWindow(QWidget):
         self.i = self.w1.x
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.over_img.setImage(self.get_label_data(self.i))
-        self.over_img.setDrawKernel(pen, mask=pen, center=(1, 1), mode='add')
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
     def update_section_helper(self):
         self.label_data = np.clip(self.label_data, 0, 1)
@@ -89,7 +92,7 @@ class MainWindow(QWidget):
         self.w1.slider.setMaximum(self.data.shape[self.section] - 1)
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.over_img.setImage(self.get_label_data(self.i))
-        self.over_img.setDrawKernel(pen, mask=pen, center=(1, 1), mode='add')
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
     def update0(self):
         self.section = 0

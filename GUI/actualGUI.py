@@ -2,13 +2,15 @@ import sys
 from pyqtgraph.Qt import QtCore, QtGui
 import nibabel as nib
 from GUI.MainWindow import MainWindow
+import numpy as np
 
-file_x = "segmented.nii"
-file_y = "segmented_left_hippo.nii"
+file_x = 'segmented.nii'
+file_y = 'segmented_left_hippo.nii'
 xim = nib.load(file_x)
 yim = nib.load(file_y)
-lab_dat = yim.get_data()
-dat = xim.get_fdata()
+# 80 year old and manually segmented have different axis
+lab_dat = np.flip(yim.get_data().transpose())
+dat = np.flip(xim.get_fdata().transpose())
 dimension = dat.shape
 
 if __name__ == '__main__':
