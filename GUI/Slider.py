@@ -26,6 +26,10 @@ class Slider(QWidget):
         self.slider.valueChanged.connect(self.set_label_value)
         self.x = None
         self.set_label_value(self.slider.value())
+        # Changing the style is a thing
+        # self.setStyleSheet("QSlider::groove:horizontal{height: 10px;margin: 00;}\n"
+        #                                 "QSlider::handle:horizontal {background-color: black; border: 1px; height:40px;width: 40px;margin: 00;}\n"
+        #                                 "")
 
     def set_label_value(self, value):
         self.x = int(self.minimum + (float(value) / (self.slider.maximum() - self.slider.minimum())) * (
