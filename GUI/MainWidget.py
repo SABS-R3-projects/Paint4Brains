@@ -27,6 +27,7 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Inputting data
+        
         self.label_data = np.zeros(data.shape) #np.flip(labels.transpose())
         self.data = np.flip(data.transpose())
         self.maxim = np.max(data)
@@ -47,6 +48,7 @@ class MainWidget(QWidget):
         # Adding the images and setting it to drawing mode
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
+
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, data.shape[self.section] - 1)
