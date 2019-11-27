@@ -6,7 +6,7 @@ import numpy as np
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, data, labels, parent=None):
+    def __init__(self, data, parent=None):
         super(MainWindow, self).__init__(parent=parent)
 
         self.main_widget = MainWidget(data, self)
@@ -52,8 +52,6 @@ class MainWindow(QMainWindow):
         self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
 
     def save(self):
-        # AAAAAAAAAAAAAAAAAAAAAAAAAAAH
-        # Somehow flips things around each time I save
         if self.label_filename == '':
             return
         saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename, "Nii Files (*.nii)")
@@ -64,6 +62,6 @@ class MainWindow(QMainWindow):
         else:
             saving_filename = saving_filename[0]
 
-        image = nib.Nifti1Image(self.main_widget.label_data, np.eye(4))
+        image = nib.Nifti1Image(np.flip(self.main_widget.label_data).transpose(), np.eye(4))
         print(saving_filename)
         nib.save(image, saving_filename)
