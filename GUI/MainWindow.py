@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow
 import numpy as np
-from GUI.Slider import Slider
-from GUI.PlaneSelectionButtons import PlaneSelectionButtons
+from Slider import Slider
+from PlaneSelectionButtons import PlaneSelectionButtons
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
 
