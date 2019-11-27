@@ -26,7 +26,7 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Inputting data
-        self.label_data = labels
+        self.label_data = np.zeros(data.shape)
         self.data = data
         self.maxim = np.max(data)
         self.section = 0
@@ -88,6 +88,10 @@ class MainWidget(QWidget):
             self.label_data[:, i] = np.flip(x.transpose())
         elif self.section == 2:
             self.label_data[:, :, i] = np.flip(x.transpose(), axis=1)
+
+    def load_label_data(self, x):
+        self.label_data = x
+
 
     def update_after_slider(self):
         self.label_data = np.clip(self.label_data, 0, 1)
