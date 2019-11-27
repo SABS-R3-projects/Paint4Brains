@@ -52,10 +52,10 @@ class MainWindow(QMainWindow):
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
         # Creating a slider to go through image slices
-        self.w1 = Slider(0, data.shape[self.section] - 1)
-        self.w1.slider.setMaximum(data.shape[self.section] - 1)
-        self.w1.slider.setValue(self.i)
-        self.w1.slider.valueChanged.connect(self.update_after_slider)
+        self.widget_slider = Slider(0, data.shape[self.section] - 1)
+        self.widget_slider.slider.setMaximum(data.shape[self.section] - 1)
+        self.widget_slider.slider.setValue(self.i)
+        self.widget_slider.slider.valueChanged.connect(self.update_after_slider)
 
         # Arranging the layout
         self.horizontalLayout = QHBoxLayout()
@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         spacerItem = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.verticalLayout.addSpacerItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.verticalLayout.addWidget(self.w1)
+        self.verticalLayout.addWidget(self.widget_slider)
 
         # Making a menu
         self.statusBar()
@@ -102,15 +102,15 @@ class MainWindow(QMainWindow):
 
     def update_after_slider(self):
         self.label_data = np.clip(self.label_data, 0, 1)
-        self.i = self.w1.x
+        self.i = self.widget_slider.x
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.over_img.setImage(self.get_label_data(self.i))
 
     def update_section_helper(self):
         self.label_data = np.clip(self.label_data, 0, 1)
         self.i = int(self.data.shape[self.section] / 2)
-        self.w1.maximum = self.data.shape[self.section] - 1
-        self.w1.slider.setMaximum(self.data.shape[self.section] - 1)
+        self.widget_slider.maximum = self.data.shape[self.section] - 1
+        self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.over_img.setImage(self.get_label_data(self.i))
 
