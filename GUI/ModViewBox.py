@@ -1,7 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow, QAction, qApp
 import numpy as np
-from Slider import Slider
-from PlaneSelectionButtons import PlaneSelectionButtons
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
 from pyqtgraph.Point import Point
@@ -12,18 +9,18 @@ from pyqtgraph import functions as fn
 class ModViewBox(ViewBox):
     def __init__(self, parent=None):
         super(ModViewBox, self).__init__(parent=parent)
+        # By default not in drawing mode
         self.drawing = False
+        self.state['mouseMode'] = 3
 
     def mouseDragEvent(self, ev, axis=None):
-        ## if axis is specified, event will only affect that axis.
-        ev.accept()  ## we accept all buttons
+        ## Overwritting mouseDragEvent to take drawmode into account.
+        ev.accept()
 
         pos = ev.pos()
         lastPos = ev.lastPos()
         dif = pos - lastPos
         dif = dif * -1
-
-        self.state['mouseMode'] = 3
 
         ## Ignore axes if mouse is disabled
         mouseEnabled = np.array(self.state['mouseEnabled'], dtype=np.float)
@@ -31,12 +28,12 @@ class ModViewBox(ViewBox):
         if axis is not None:
             mask[1 - axis] = 0.0
 
+        # If in drawing mode (editted part):
         if self.drawing:
             self.state['mouseMode'] = self.RectMode
-            ## Scale or translate based on mouse button
+            # If right button is selected draw zoom in boxes:
             if ev.button() & QtCore.Qt.RightButton:
-                if ev.isFinish():  ## This is the final move in the drag; change the view scale now
-                    # print "finish"
+                if ev.isFinish():
                     self.rbScaleBox.hide()
                     ax = QtCore.QRectF(Point(ev.buttonDownPos(ev.button())), Point(pos))
                     ax = self.childGroup.mapRectFromParent(ax)
@@ -44,9 +41,8 @@ class ModViewBox(ViewBox):
                     self.axHistoryPointer += 1
                     self.axHistory = self.axHistory[:self.axHistoryPointer] + [ax]
                 else:
-                    ## update shape of scale box
                     self.updateScaleBox(ev.buttonDownPos(), ev.pos())
-
+            # If Left Button is selected drag image (This will be overwritten in the image by the drawing kernel)
             elif ev.button() & QtCore.Qt.LeftButton:
                 tr = dif * mask
                 tr = self.mapToView(tr) - self.mapToView(Point(0, 0))
@@ -57,7 +53,7 @@ class ModViewBox(ViewBox):
                 if x is not None or y is not None:
                     self.translateBy(x=x, y=y)
                 self.sigRangeChangedManually.emit(self.state['mouseEnabled'])
-
+            # If Middle Button (wheel) zoom in or out.
             elif ev.button() & QtCore.Qt.MidButton:
                 if self.state['aspectLocked'] is not False:
                     mask[0] = 0
@@ -77,7 +73,7 @@ class ModViewBox(ViewBox):
                 self._resetTarget()
                 self.scaleBy(x=x, y=y, center=center)
                 self.sigRangeChangedManually.emit(self.state['mouseEnabled'])
-
+        # If not in drawing mode: (original functionality)
         else:
             ## Scale or translate based on mouse button
             if ev.button() & (QtCore.Qt.LeftButton | QtCore.Qt.MidButton):
@@ -123,5 +119,3 @@ class ModViewBox(ViewBox):
                 self._resetTarget()
                 self.scaleBy(x=x, y=y, center=center)
                 self.sigRangeChangedManually.emit(self.state['mouseEnabled'])
-
-
