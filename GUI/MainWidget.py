@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 import numpy as np
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
+from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
 
@@ -21,7 +22,7 @@ class MainWidget(QWidget):
 
         # Creating viewing box to see data
         self.win = pg.GraphicsView()
-        self.view = pg.ViewBox()
+        self.view = ModViewBox()
         self.view.setAspectLocked(True)
         self.win.setCentralItem(self.view)
 
@@ -91,6 +92,7 @@ class MainWidget(QWidget):
     def load_label_data(self, x):
         self.label_data = x
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+        self.view.drawing = True
 
     def update_after_slider(self):
         self.label_data = np.clip(self.label_data, 0, 1)
@@ -116,6 +118,7 @@ class MainWidget(QWidget):
 
     def unsetDrawKernel(self):
         self.over_img.drawKernel = None
+        self.view.drawing = False
 
     def update2(self):
         self.section = 2
