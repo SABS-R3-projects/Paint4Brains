@@ -1,7 +1,7 @@
 import sys
 from pyqtgraph.Qt import QtCore, QtGui
 import nibabel as nib
-from GUI.MainWindow import MainWindow
+from MainWindow import MainWindow
 import numpy as np
 
 file_x = 'segmented.nii'
