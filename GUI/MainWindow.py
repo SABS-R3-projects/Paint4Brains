@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
 
         self.main_widget = MainWidget(data, self)
         self.setCentralWidget(self.main_widget)
-        self.label_filename = None
+        self.label_filename = ""
         self.label_data = None
 
         # Making a menu
@@ -23,11 +23,17 @@ class MainWindow(QMainWindow):
 
         # Actions in file bar (This enables shortcuts too)
         # Exit:
-        exitAction = QAction('Load Labelled Data', self)
-        exitAction.setShortcut('Ctrl+L')
-        exitAction.setStatusTip('Load Labels')
-        exitAction.triggered.connect(self.load)
-        self.file.addAction(exitAction)
+        loadAction = QAction('Load Labelled Data', self)
+        loadAction.setShortcut('Ctrl+L')
+        loadAction.setStatusTip('Load Labels')
+        loadAction.triggered.connect(self.load)
+        self.file.addAction(loadAction)
+
+        saveAction = QAction('Save Labelled Data', self)
+        saveAction.setShortcut('Ctrl+S')
+        saveAction.setStatusTip('Load Labels')
+        saveAction.triggered.connect(self.save)
+        self.file.addAction(saveAction)
 
         viewBoxActionsList = self.main_widget.view.menu.actions()
 
@@ -44,3 +50,20 @@ class MainWindow(QMainWindow):
             return
         self.label_data = nib.load(self.label_filename)
         self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
+
+    def save(self):
+        # AAAAAAAAAAAAAAAAAAAAAAAAAAAH
+        # Somehow flips things around each time I save
+        if self.label_filename == '':
+            return
+        saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename, "Nii Files (*.nii)")
+        if saving_filename[1] != "Nii Files (*.nii)":
+            return
+        elif (saving_filename[0])[-4:] != ".nii":
+            saving_filename = saving_filename[0] + ".nii"
+        else:
+            saving_filename = saving_filename[0]
+
+        image = nib.Nifti1Image(self.main_widget.label_data, np.eye(4))
+        print(saving_filename)
+        nib.save(image, saving_filename)

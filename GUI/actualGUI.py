@@ -9,8 +9,8 @@ file_y = 'segmented_left_hippo.nii'
 xim = nib.load(file_x)
 yim = nib.load(file_y)
 # 80 year old and manually segmented have different axis
-lab_dat = np.flip(yim.get_data().transpose())
-dat = np.flip(xim.get_fdata().transpose())
+lab_dat = yim.get_data()
+dat = xim.get_fdata()
 dimension = dat.shape
 
 if __name__ == '__main__':

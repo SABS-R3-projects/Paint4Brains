@@ -27,8 +27,8 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Inputting data
-        self.label_data = np.zeros(data.shape)
-        self.data = data
+        self.label_data = np.zeros(data.shape) #np.flip(labels.transpose())
+        self.data = np.flip(data.transpose())
         self.maxim = np.max(data)
         self.section = 0
         self.i = int(data.shape[self.section] / 2)
@@ -90,7 +90,7 @@ class MainWidget(QWidget):
             self.label_data[:, :, i] = np.flip(x.transpose(), axis=1)
 
     def load_label_data(self, x):
-        self.label_data = x
+        self.label_data = x #np.flip(x.transpose())
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.view.drawing = True
 
@@ -116,12 +116,10 @@ class MainWidget(QWidget):
         self.section = 1
         self.update_section_helper()
 
-    def unsetDrawKernel(self):
-        self.over_img.drawKernel = None
-        self.view.drawing = False
-
     def update2(self):
         self.section = 2
         self.update_section_helper()
-        print(self.view.menu.title)
 
+    def unsetDrawKernel(self):
+        self.over_img.drawKernel = None
+        self.view.drawing = False
