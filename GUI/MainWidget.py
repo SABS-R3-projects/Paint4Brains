@@ -46,7 +46,6 @@ class MainWidget(QWidget):
         # Adding the images and setting it to drawing mode
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
-        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, data.shape[self.section] - 1)
@@ -91,7 +90,7 @@ class MainWidget(QWidget):
 
     def load_label_data(self, x):
         self.label_data = x
-
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
     def update_after_slider(self):
         self.label_data = np.clip(self.label_data, 0, 1)
@@ -115,6 +114,11 @@ class MainWidget(QWidget):
         self.section = 1
         self.update_section_helper()
 
+    def unsetDrawKernel(self):
+        self.over_img.drawKernel = None
+
     def update2(self):
         self.section = 2
         self.update_section_helper()
+        print(self.view.menu.title)
+

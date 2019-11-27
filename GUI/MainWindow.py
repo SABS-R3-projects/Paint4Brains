@@ -30,6 +30,12 @@ class MainWindow(QMainWindow):
         exitAction.triggered.connect(self.load)
         self.file.addAction(exitAction)
 
+        exitAction = QAction('View', self)
+        exitAction.setShortcut('Ctrl+O')
+        exitAction.setStatusTip('Reset')
+        exitAction.triggered.connect(self.load)
+        self.view_menu.addAction(self.main_widget.view.menu.menuAction())
+
     def load(self):
         self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Oh Hi there", "Nii Files (*.nii)")
         if isinstance(self.label_filename, tuple):
