@@ -35,29 +35,30 @@ class ModViewBox(ViewBox):
             self.state['mouseMode'] = self.RectMode
             ## Scale or translate based on mouse button
             if ev.button() & QtCore.Qt.RightButton:
-                if self.state['mouseMode'] == ViewBox.RectMode:
-                    if ev.isFinish():  ## This is the final move in the drag; change the view scale now
-                        # print "finish"
-                        self.rbScaleBox.hide()
-                        ax = QtCore.QRectF(Point(ev.buttonDownPos(ev.button())), Point(pos))
-                        ax = self.childGroup.mapRectFromParent(ax)
-                        self.showAxRect(ax)
-                        self.axHistoryPointer += 1
-                        self.axHistory = self.axHistory[:self.axHistoryPointer] + [ax]
-                    else:
-                        ## update shape of scale box
-                        self.updateScaleBox(ev.buttonDownPos(), ev.pos())
+                if ev.isFinish():  ## This is the final move in the drag; change the view scale now
+                    # print "finish"
+                    self.rbScaleBox.hide()
+                    ax = QtCore.QRectF(Point(ev.buttonDownPos(ev.button())), Point(pos))
+                    ax = self.childGroup.mapRectFromParent(ax)
+                    self.showAxRect(ax)
+                    self.axHistoryPointer += 1
+                    self.axHistory = self.axHistory[:self.axHistoryPointer] + [ax]
                 else:
-                    tr = dif * mask
-                    tr = self.mapToView(tr) - self.mapToView(Point(0, 0))
-                    x = tr.x() if mask[0] == 1 else None
-                    y = tr.y() if mask[1] == 1 else None
+                    ## update shape of scale box
+                    self.updateScaleBox(ev.buttonDownPos(), ev.pos())
 
-                    self._resetTarget()
-                    if x is not None or y is not None:
-                        self.translateBy(x=x, y=y)
-                    self.sigRangeChangedManually.emit(self.state['mouseEnabled'])
-            elif ev.button() & (QtCore.Qt.LeftButton | QtCore.Qt.MidButton):
+            elif ev.button() & QtCore.Qt.LeftButton:
+                tr = dif * mask
+                tr = self.mapToView(tr) - self.mapToView(Point(0, 0))
+                x = tr.x() if mask[0] == 1 else None
+                y = tr.y() if mask[1] == 1 else None
+
+                self._resetTarget()
+                if x is not None or y is not None:
+                    self.translateBy(x=x, y=y)
+                self.sigRangeChangedManually.emit(self.state['mouseEnabled'])
+
+            elif ev.button() & QtCore.Qt.MidButton:
                 if self.state['aspectLocked'] is not False:
                     mask[0] = 0
 
