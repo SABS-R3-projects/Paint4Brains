@@ -20,7 +20,6 @@ class MainWindow(QMainWindow):
         self.file = menu_bar.addMenu("File")
         self.edit = menu_bar.addMenu("Edit")
         self.view_menu = menu_bar.addMenu("View")
-        self.extra_menu = menu_bar.addMenu("This is intentionally very long to see what happens")
 
         # Actions in file bar (This enables shortcuts too)
         # Exit:
@@ -30,11 +29,12 @@ class MainWindow(QMainWindow):
         exitAction.triggered.connect(self.load)
         self.file.addAction(exitAction)
 
-        exitAction = QAction('View', self)
-        exitAction.setShortcut('Ctrl+O')
-        exitAction.setStatusTip('Reset')
-        exitAction.triggered.connect(self.load)
-        self.view_menu.addAction(self.main_widget.view.menu.menuAction())
+        viewBoxActionsList = self.main_widget.view.menu.actions()
+
+        resetViewAction = viewBoxActionsList[0]
+        resetViewAction.setText("Reset View")
+        resetViewAction.setShortcut('Ctrl+V')
+        self.view_menu.addAction(resetViewAction)
 
     def load(self):
         self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Oh Hi there", "Nii Files (*.nii)")
