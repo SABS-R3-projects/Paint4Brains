@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp
 from MainWidget import MainWidget
+import nibabel as nib
 
 
 class MainWindow(QMainWindow):
@@ -17,7 +18,8 @@ class MainWindow(QMainWindow):
         self.view_menu = menu_bar.addMenu("View")
         self.extra_menu = menu_bar.addMenu("This is intentionally very long to see what happens")
 
-        # Options in file bar
+        # Actions in file bar (This enables shortcuts too)
+        # Exit:
         exitAction = QAction('Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
