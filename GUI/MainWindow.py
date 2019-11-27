@@ -1,13 +1,18 @@
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp
 from MainWidget import MainWidget
+import pyqtgraph as pg
+import nibabel as nib
+import numpy as np
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, data, labels, parent=None):
+    def __init__(self, data, parent=None):
         super(MainWindow, self).__init__(parent=parent)
 
-        self.main_widget = MainWidget(data, labels, self)
+        self.main_widget = MainWidget(data, self)
         self.setCentralWidget(self.main_widget)
+        self.label_filename = ""
+        self.label_data = None
 
         # Making a menu
         self.statusBar()
@@ -15,11 +20,48 @@ class MainWindow(QMainWindow):
         self.file = menu_bar.addMenu("File")
         self.edit = menu_bar.addMenu("Edit")
         self.view_menu = menu_bar.addMenu("View")
-        self.extra_menu = menu_bar.addMenu("This is intentionally very long to see what happens")
 
-        # Options in file bar
-        exitAction = QAction('Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
-        self.file.addAction(exitAction)
+        # Actions in file bar (This enables shortcuts too)
+        # Exit:
+        loadAction = QAction('Load Labelled Data', self)
+        loadAction.setShortcut('Ctrl+L')
+        loadAction.setStatusTip('Load Labels')
+        loadAction.triggered.connect(self.load)
+        self.file.addAction(loadAction)
+
+        saveAction = QAction('Save Labelled Data', self)
+        saveAction.setShortcut('Ctrl+S')
+        saveAction.setStatusTip('Load Labels')
+        saveAction.triggered.connect(self.save)
+        self.file.addAction(saveAction)
+
+        viewBoxActionsList = self.main_widget.view.menu.actions()
+
+        resetViewAction = viewBoxActionsList[0]
+        resetViewAction.setText("Reset View")
+        resetViewAction.setShortcut('Ctrl+V')
+        self.view_menu.addAction(resetViewAction)
+
+    def load(self):
+        self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Oh Hi there", "Nii Files (*.nii)")
+        if isinstance(self.label_filename, tuple):
+            self.label_filename = self.label_filename[0]  # Qt4/5 API difference
+        if self.label_filename == '':
+            return
+        self.label_data = nib.load(self.label_filename)
+        self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
+
+    def save(self):
+        if self.label_filename == '':
+            return
+        saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename, "Nii Files (*.nii)")
+        if saving_filename[1] != "Nii Files (*.nii)":
+            return
+        elif (saving_filename[0])[-4:] != ".nii":
+            saving_filename = saving_filename[0] + ".nii"
+        else:
+            saving_filename = saving_filename[0]
+
+        image = nib.Nifti1Image(np.flip(self.main_widget.label_data).transpose(), np.eye(4))
+        print(saving_filename)
+        nib.save(image, saving_filename)

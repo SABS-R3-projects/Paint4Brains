@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 import numpy as np
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
+from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
 
@@ -21,13 +22,14 @@ class MainWidget(QWidget):
 
         # Creating viewing box to see data
         self.win = pg.GraphicsView()
-        self.view = pg.ViewBox()
+        self.view = ModViewBox()
         self.view.setAspectLocked(True)
         self.win.setCentralItem(self.view)
 
         # Inputting data
-        self.label_data = labels
-        self.data = data
+        
+        self.label_data = np.zeros(data.shape) #np.flip(labels.transpose())
+        self.data = np.flip(data.transpose())
         self.maxim = np.max(data)
         self.section = 0
         self.i = int(data.shape[self.section] / 2)
@@ -46,7 +48,7 @@ class MainWidget(QWidget):
         # Adding the images and setting it to drawing mode
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
-        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, data.shape[self.section] - 1)
@@ -89,6 +91,11 @@ class MainWidget(QWidget):
         elif self.section == 2:
             self.label_data[:, :, i] = np.flip(x.transpose(), axis=1)
 
+    def load_label_data(self, x):
+        self.label_data = x #np.flip(x.transpose())
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+        self.view.drawing = True
+
     def update_after_slider(self):
         self.label_data = np.clip(self.label_data, 0, 1)
         self.i = self.widget_slider.x
@@ -114,3 +121,7 @@ class MainWidget(QWidget):
     def update2(self):
         self.section = 2
         self.update_section_helper()
+
+    def unsetDrawKernel(self):
+        self.over_img.drawKernel = None
+        self.view.drawing = False
