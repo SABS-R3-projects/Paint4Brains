@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
         if file is None:
             data = self.load_initial()
         else:
-            xim = nib.load(file_x)
+            xim = nib.load(file)
             data = xim.get_fdata()
         self.label_filename = ""
         self.label_data = None
