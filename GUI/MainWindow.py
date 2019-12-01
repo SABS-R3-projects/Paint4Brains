@@ -53,7 +53,14 @@ class MainWindow(QMainWindow):
         if isinstance(self.data_filename, tuple):
             self.data_filename = self.data_filename[0]  # Qt4/5 API difference
         if self.data_filename == '':
-            return self.load_initial()
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Can not start without initial brain")
+            msg.setInformativeText("Please load a brain image either via the command line or via the initial load window")
+            msg.setWindowTitle("Error: Failed to load")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+            return #self.load_initial()
         data = nib.load(self.data_filename)
         return data.get_fdata()
 
