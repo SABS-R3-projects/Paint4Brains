@@ -4,14 +4,15 @@ import nibabel as nib
 from MainWindow import MainWindow
 import numpy as np
 
-file_x = 'segmented.nii'
-xim = nib.load(file_x)
-dat = xim.get_fdata()
-dimension = dat.shape
+if len(sys.argv) > 1:
+    file_x = sys.argv[1]
+else:
+    file_x = None
+
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
-    w = MainWindow(dat)
+    w = MainWindow(file_x)
     w.show()
 
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):

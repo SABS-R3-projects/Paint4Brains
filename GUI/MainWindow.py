@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
 from MainWidget import MainWidget
 import pyqtgraph as pg
 import nibabel as nib
@@ -6,13 +6,19 @@ import numpy as np
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, data, parent=None):
+    def __init__(self, file, parent=None):
         super(MainWindow, self).__init__(parent=parent)
+        self.data_filename = file
+        if file is None:
+            data = self.load_initial()
+        else:
+            xim = nib.load(file_x)
+            data = xim.get_fdata()
+        self.label_filename = ""
+        self.label_data = None
 
         self.main_widget = MainWidget(data, self)
         self.setCentralWidget(self.main_widget)
-        self.label_filename = ""
-        self.label_data = None
 
         # Making a menu
         self.statusBar()
@@ -42,8 +48,17 @@ class MainWindow(QMainWindow):
         resetViewAction.setShortcut('Ctrl+V')
         self.view_menu.addAction(resetViewAction)
 
+    def load_initial(self):
+        self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain", "Please select full brain scan", "Nii Files (*.nii)")
+        if isinstance(self.data_filename, tuple):
+            self.data_filename = self.data_filename[0]  # Qt4/5 API difference
+        if self.data_filename == '':
+            return self.load_initial()
+        data = nib.load(self.data_filename)
+        return data.get_fdata()
+
     def load(self):
-        self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Oh Hi there", "Nii Files (*.nii)")
+        self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Please select the desired label data", "Nii Files (*.nii)")
         if isinstance(self.label_filename, tuple):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
