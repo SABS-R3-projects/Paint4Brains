@@ -6,7 +6,15 @@ import numpy as np
 
 
 class MainWindow(QMainWindow):
+    """MainWindow class.
+    Wraps MainWidget to allow a Menu
+    """
     def __init__(self, file, parent=None):
+        """Initialises the Main Window
+        Basically calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
+        Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
+        Another thing it does is load the nib files from a string containing the path
+        """
         super(MainWindow, self).__init__(parent=parent)
         self.data_filename = file
         if file is None:
@@ -41,6 +49,7 @@ class MainWindow(QMainWindow):
         saveAction.triggered.connect(self.save)
         self.file.addAction(saveAction)
 
+        # Predefined actions that usually appear when you right click. Recycling one that resets the view here.
         viewBoxActionsList = self.main_widget.view.menu.actions()
 
         resetViewAction = viewBoxActionsList[0]
@@ -59,6 +68,11 @@ class MainWindow(QMainWindow):
         self.edit.addAction(nodrawAction)
 
     def load_initial(self):
+        """ Loads the "base" brain
+        The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
+        command line beforehand (this can be set in pycharm too) or through a window that appears on start (gets annoying).
+        If you try to open it with nothing it complains and gives you an error message.
+        """
         self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain", "Please select full brain scan", "Nii Files (*.nii)")
         if isinstance(self.data_filename, tuple):
             self.data_filename = self.data_filename[0]  # Qt4/5 API difference
