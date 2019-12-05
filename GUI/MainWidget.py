@@ -28,7 +28,7 @@ class MainWidget(QWidget):
 
         # Inputting data
         
-        self.label_data = np.zeros(data.shape) #np.flip(labels.transpose())
+        self.label_data = np.zeros(data.shape)
         self.data = np.flip(data.transpose())
         self.maxim = np.max(data)
         self.section = 0
