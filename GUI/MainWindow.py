@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox, QUndoStack
 from MainWidget import MainWidget
 import pyqtgraph as pg
 import nibabel as nib
@@ -47,6 +47,10 @@ class MainWindow(QMainWindow):
         resetViewAction.setText("Reset View")
         resetViewAction.setShortcut('Ctrl+V')
         self.view_menu.addAction(resetViewAction)
+
+        for i in range(1, len(viewBoxActionsList)):
+            ViewActions = viewBoxActionsList[i]
+            self.view_menu.addAction(ViewActions)
 
     def load_initial(self):
         self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain", "Please select full brain scan", "Nii Files (*.nii)")

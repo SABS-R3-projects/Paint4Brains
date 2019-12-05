@@ -4,7 +4,16 @@ from PyQt5.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSlider, QSpacerIt
 
 
 class Slider(QWidget):
+    """
+    Slider class.
+    Implements the slider to be used in the GUI
+    """
     def __init__(self, minimum, maximum, parent=None):
+        """ Initialises the slider
+        Basically a number of nested Horizontal and Vertical Layouts, with a label showing the current value
+        and a slider imported from Qt. Each time the slider in the gui is moved, the value of self.x and the label
+        are updated by the method set_label_value
+        """
         super(Slider, self).__init__(parent=parent)
         self.verticalLayout = QHBoxLayout(self)
         self.label = QLabel(self)
@@ -32,6 +41,9 @@ class Slider(QWidget):
         #                                 "")
 
     def set_label_value(self, value):
+        """ Function to be called each time slider is moved.
+        Updates the label and the stored value.
+        """
         self.x = int(self.minimum + (float(value) / (self.slider.maximum() - self.slider.minimum())) * (
                 self.maximum - self.minimum))
         self.label.setText("Slice: \n{0:.4g}".format(self.x))
