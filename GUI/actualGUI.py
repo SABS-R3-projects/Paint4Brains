@@ -4,6 +4,7 @@ import nibabel as nib
 from MainWindow import MainWindow
 import numpy as np
 
+# checks if there are any extra parameters when calling python and assigns it to file_x if there is
 if len(sys.argv) > 1:
     file_x = sys.argv[1]
 else:
@@ -11,6 +12,7 @@ else:
 
 
 if __name__ == '__main__':
+    # Basically just runs the MainWindow class
     app = QtGui.QApplication([])
     w = MainWindow(file_x)
     w.show()
