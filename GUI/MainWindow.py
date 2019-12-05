@@ -89,6 +89,10 @@ class MainWindow(QMainWindow):
         return data.get_fdata()
 
     def load(self):
+        """ Loads some labelled data
+        Opens a loading window through which you can select what label data file to load. Once a file is uploaded
+        it automatically sets the app to drawing mode
+        """
         self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Please select the desired label data", "Nii Files (*.nii)")
         if isinstance(self.label_filename, tuple):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
@@ -98,6 +102,10 @@ class MainWindow(QMainWindow):
         self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
 
     def save(self):
+        """ Saves the edited labelled data into a new file
+        Saves edits into a new .nii file. Opens a window in which you can type the name of the new file you are saving.
+        It still does not copy the headers (something to do)
+        """
         if self.label_filename == '':
             return
         saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename, "Nii Files (*.nii)")
