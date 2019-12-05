@@ -3,9 +3,17 @@ from pyqtgraph.Qt import QtCore, QtGui
 
 
 class PlaneSelectionButtons(QWidget):
+    """
+    Plane selection Buttons class.
+    Implements the buttons with which you can pick the brain view orientation
+    """
     def __init__(self, button1, button2, button3, parent=None):
         super(PlaneSelectionButtons, self).__init__(parent=parent)
-
+        """ Initialises the 3 buttons on the left side 
+        Basically a number of QT buttons arranged in a vertical layout. When the class is initialised the three 
+        functions to be executed when pressing the buttons are given as input. The buttons are decorated with images
+        and I have fixed the size.
+        """
         self.layout = QVBoxLayout(self)
         self.btn1 = QPushButton()
         self.btn1.setIcon(QtGui.QIcon('one.png'))
