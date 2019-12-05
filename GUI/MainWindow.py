@@ -52,6 +52,12 @@ class MainWindow(QMainWindow):
             ViewActions = viewBoxActionsList[i]
             self.view_menu.addAction(ViewActions)
 
+        nodrawAction = QAction('Deactivate drawing', self)
+        nodrawAction.setShortcut('Ctrl+D')
+        nodrawAction.setStatusTip('Deactivate drawing')
+        nodrawAction.triggered.connect(self.main_widget.unsetDrawKernel)
+        self.edit.addAction(nodrawAction)
+
     def load_initial(self):
         self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain", "Please select full brain scan", "Nii Files (*.nii)")
         if isinstance(self.data_filename, tuple):
