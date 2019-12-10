@@ -6,6 +6,8 @@ from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
 
+# Here I define the different type of paint brushes with which you can edit the image.
+# For now it is constantly set to dot.
 cross = np.array([
     [0, 1, 0],
     [1, 1, 1],
@@ -16,7 +18,7 @@ dot = np.array([[1]]).astype(np.uint8)
 
 
 class MainWidget(QWidget):
-    def __init__(self, data, labels, parent=None):
+    def __init__(self, data, parent=None):
         super(MainWidget, self).__init__(parent=parent)
         # Creating a central widget to take everything in
 
@@ -68,6 +70,11 @@ class MainWidget(QWidget):
         self.verticalLayout.addWidget(self.widget_slider)
 
     def get_data(self, i):
+        """ Returns the 2-D slice at point i of the full MRI data (not labels).
+
+        Depending on the desired view (self.section) it returns a different 2-D slice of the 3-D data.
+        A number of transposes and flips are done to return the 2_D image with a sensible orientation
+        """
         if self.section == 0:
             return self.data[i]
         elif self.section == 1:
@@ -76,6 +83,11 @@ class MainWidget(QWidget):
             return np.flip(self.data[:, :, i].transpose(), axis=1)
 
     def get_label_data(self, i):
+        """ Returns the 2-D slice at point i of the labelled data.
+
+        Depending on the desired view (self.section) it returns 2-D slice with respect to a different axis of the 3-D data.
+        A number of transposes and flips are done to return the 2_D image with a sensible orientation
+        """
         if self.section == 0:
             return self.label_data[i]
         elif self.section == 1:
@@ -84,6 +96,11 @@ class MainWidget(QWidget):
             return np.flip(self.label_data[:, :, i].transpose(), axis=1)
 
     def set_label_data(self, i, x):
+        """ Sets the data at a certain slice i to the 2-D array x.
+
+        Depending on the desired view (self.section) it sets a 2-D slice with respect to a different axis of the 3-D data
+        This function is not currently used.
+        """
         if self.section == 0:
             self.label_data[i] = x
         elif self.section == 1:
@@ -92,17 +109,37 @@ class MainWidget(QWidget):
             self.label_data[:, :, i] = np.flip(x.transpose(), axis=1)
 
     def load_label_data(self, x):
-        self.label_data = x #np.flip(x.transpose())
+        """ Loads a given 3-D binary array (x) into the GUI.
+
+        It then sets the GUI into drawing mode, so that the uploaded labeled data can be edited
+        The paintbrush is hardcoded to a point for now
+        """
+        self.label_data = x
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.view.drawing = True
 
     def update_after_slider(self):
+        """ Updates the viewed image after moving the slider.
+
+        Updates the displayed slice depending on the new value of the slider.
+        It does this for both the labels and image data.
+
+        IMPORTANT: it ensures that the labelled data is binary (0 or 1) (np.clip)
+        """
         self.label_data = np.clip(self.label_data, 0, 1)
         self.i = self.widget_slider.x
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.over_img.setImage(self.get_label_data(self.i))
 
     def update_section_helper(self):
+        """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
+
+        Ensures that the viewed slice exists;
+        Sets the slider limits to sensible values;
+        Updates the view of label and image data.
+
+        IMPORTANT: it ensures that the labelled data is binary (0 or 1) (np.clip)
+        """
         self.label_data = np.clip(self.label_data, 0, 1)
         self.i = int(self.data.shape[self.section] / 2)
         self.widget_slider.maximum = self.data.shape[self.section] - 1
@@ -111,17 +148,37 @@ class MainWidget(QWidget):
         self.over_img.setImage(self.get_label_data(self.i))
 
     def update0(self):
+        """ Sets the view along axis 0
+
+        This affects both labels and image data.
+        This function is called by the first button.
+        """
         self.section = 0
         self.update_section_helper()
 
     def update1(self):
+        """ Sets the view along axis 1
+
+        This affects both labels and image data.
+        This function is called by the second button.
+        """
         self.section = 1
         self.update_section_helper()
 
     def update2(self):
+        """ Sets the view along axis 2
+
+        This affects both labels and image data.
+        This function is called by the third button.
+        """
         self.section = 2
         self.update_section_helper()
 
     def unsetDrawKernel(self):
+        """ Deactivates drawing mode
+
+        It does this by deactivating the drawing kernel and
+        setting the value of the drawing parameter in the modified view box to False.
+        """
         self.over_img.drawKernel = None
         self.view.drawing = False
