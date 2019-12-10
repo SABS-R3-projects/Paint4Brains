@@ -1,8 +1,6 @@
 import sys
 from pyqtgraph.Qt import QtCore, QtGui
-import nibabel as nib
 from MainWindow import MainWindow
-import numpy as np
 
 # checks if there are any extra parameters when calling python and assigns it to file_x if there is
 if len(sys.argv) > 1:
