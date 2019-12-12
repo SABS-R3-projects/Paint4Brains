@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 import numpy as np
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
+from EditingButtons import EditingButtons
 from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
@@ -14,11 +15,12 @@ cross = np.array([
     [0, 1, 0],
     [1, 1, 1],
     [0, 1, 0]
-]).astype(np.uint8)
+]).astype(np.int8)
 
-dot = np.array([[1]]).astype(np.uint8)
+dot = np.array([[1]]).astype(np.int8)
 
-rubber = np.array([[-1]]).astype(np.uint8)
+rubber = np.array([[-1]]).astype(np.int8)
+
 
 class MainWidget(QWidget):
     def __init__(self, data, parent=None):
@@ -56,6 +58,10 @@ class MainWidget(QWidget):
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
 
+        # Creating Editing Button
+        editing_icon_list = ['images/pen.jpeg', 'images/eraser.png', 'images/cross.png']
+        function_list = [self.edit_button1, self.edit_button2, self.edit_button3]
+        self.editing_buttons = EditingButtons(function_list, editing_icon_list)
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
@@ -65,10 +71,12 @@ class MainWidget(QWidget):
 
         # Arranging the layout
         self.horizontalLayout = QHBoxLayout()
+
         self.horizontalLayout.addWidget(self.buttons)
         self.horizontalLayout.addWidget(self.win)
 
         self.verticalLayout = QVBoxLayout(self)
+        self.verticalLayout.addWidget(self.editing_buttons)
         spacerItem = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.verticalLayout.addSpacerItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -119,8 +127,8 @@ class MainWidget(QWidget):
         It then sets the GUI into drawing mode, so that the uploaded labeled data can be edited
         The paintbrush is hardcoded to a point for now
         """
-        self.label_data = x
-        self.over_img.setDrawKernel(dot, mask=cross, center=(0, 0), mode='add')
+        self.label_data = x.astype(np.int8)
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.view.drawing = True
 
     def update_after_slider(self):
@@ -180,6 +188,12 @@ class MainWidget(QWidget):
         self.update_section_helper()
 
     def extract(self):
+        """ Performs brain extraction using the DeepBrain neural network
+
+        This extraction produces a probability mask.
+        At the moment it is hard coded such that we keep voxels with probability larger than a half.
+        If the brain has already been extracted it loads a previous version.
+        """
         if self.extracted:
             return 0
         elif len(self.only_brain) == 0:
@@ -194,6 +208,11 @@ class MainWidget(QWidget):
         self.extracted = True
 
     def full_brain(self):
+        """ Returns the image to the original brain + head image
+
+        Returns the background image to the unextracted brain.
+        Stores the extracted brain.
+        """
         if self.extracted:
             self.data = self.full_head
             self.extracted = False
@@ -207,3 +226,34 @@ class MainWidget(QWidget):
         """
         self.over_img.drawKernel = None
         self.view.drawing = False
+
+    def edit_button1(self):
+        """ Sets the drawing mode to DOT
+
+        This is basically a square of one voxel in size with value one.
+        For all the editing buttons the matrix used to edit is defined at the top of the file
+        """
+        if self.view.drawing:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+            self.label_data = np.clip(self.label_data, 0, 1)
+
+    def edit_button2(self):
+        """ Sets the drawing mode to RUBBER
+
+        Similar to DOT but removes the label from voxels .
+        """
+        if self.view.drawing:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
+            self.label_data = np.clip(self.label_data, 0, 1)
+
+    def edit_button3(self):
+        """ Sets the drawing mode to SQUARE
+
+        This sets the paintbrush to a cross of 3x3 voxels in size.
+        """
+        if self.view.drawing:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
+            self.label_data = np.clip(self.label_data, 0, 1)
