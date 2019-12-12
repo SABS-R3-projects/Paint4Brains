@@ -15,19 +15,19 @@ class Slider(QWidget):
         are updated by the method set_label_value
         """
         super(Slider, self).__init__(parent=parent)
-        self.verticalLayout = QHBoxLayout(self)
+        self.horiLayout = QHBoxLayout(self)
         self.label = QLabel(self)
-        self.verticalLayout.addWidget(self.label)
-        self.horizontalLayout = QVBoxLayout()
+        self.horiLayout.addWidget(self.label)
+        self.verticalLayout = QVBoxLayout()
         spacerItem = QSpacerItem(20, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
+        self.verticalLayout.addItem(spacerItem)
         self.slider = QSlider(self)
         self.slider.setMinimum(0)
         self.slider.setOrientation(Qt.Horizontal)
-        self.horizontalLayout.addWidget(self.slider)
+        self.verticalLayout.addWidget(self.slider)
         spacerItem1 = QSpacerItem(20, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.verticalLayout.addItem(spacerItem1)
+        self.horiLayout.addLayout(self.verticalLayout)
         self.resize(self.sizeHint())
 
         self.minimum = minimum
