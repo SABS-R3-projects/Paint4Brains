@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 import numpy as np
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
+from EditingButtons import EditingButtons
 from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
@@ -56,6 +57,11 @@ class MainWidget(QWidget):
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
 
+        # Creating Editing Button
+        editing_icon_list = ['pen.jpeg','eraser.png']
+        function_list = [self.edit_button1, self.edit_button2]
+        self.editing_buttons = EditingButtons(function_list, editing_icon_list)
+
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
@@ -65,14 +71,17 @@ class MainWidget(QWidget):
 
         # Arranging the layout
         self.horizontalLayout = QHBoxLayout()
+
         self.horizontalLayout.addWidget(self.buttons)
         self.horizontalLayout.addWidget(self.win)
 
         self.verticalLayout = QVBoxLayout(self)
+        self.verticalLayout.addWidget(self.editing_buttons)
         spacerItem = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.verticalLayout.addSpacerItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout.addWidget(self.widget_slider)
+
 
     def get_data(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -207,3 +216,9 @@ class MainWidget(QWidget):
         """
         self.over_img.drawKernel = None
         self.view.drawing = False
+
+    def edit_button1(self):
+        print("FIRST BUTTON")
+
+    def edit_button2(self):
+        print("SECOND BUTTON")
