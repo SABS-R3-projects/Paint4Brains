@@ -16,6 +16,7 @@ cross = np.array([
 
 dot = np.array([[1]]).astype(np.uint8)
 
+rubber = np.array([[-1]]).astype(np.uint8)
 
 class MainWidget(QWidget):
     def __init__(self, data, parent=None):
@@ -115,7 +116,7 @@ class MainWidget(QWidget):
         The paintbrush is hardcoded to a point for now
         """
         self.label_data = x
-        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+        self.over_img.setDrawKernel(dot, mask=cross, center=(0, 0), mode='add')
         self.view.drawing = True
 
     def update_after_slider(self):
