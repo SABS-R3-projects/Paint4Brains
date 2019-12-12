@@ -5,6 +5,8 @@ from PlaneSelectionButtons import PlaneSelectionButtons
 from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
+from deepbrain import Extractor
+import nibabel as nb
 
 # Here I define the different type of paint brushes with which you can edit the image.
 # For now it is constantly set to dot.
@@ -30,11 +32,12 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Inputting data
-
         self.data = np.flip(data.transpose())
         self.label_data = np.zeros(self.data.shape)
+        self.full_head = self.data.copy()
         self.maxim = np.max(self.data)
         self.section = 0
+        self.extracted = False
         self.i = int(self.data.shape[self.section] / 2)
 
         # Making Images out of data
@@ -174,6 +177,22 @@ class MainWidget(QWidget):
         """
         self.section = 2
         self.update_section_helper()
+
+    def extract(self):
+        if self.extracted:
+            return 0
+        else:
+            self.extracted = True
+            ext = Extractor()
+            prob = ext.run(self.data)
+            print("DONE")
+            mask2 = np.where(prob > 0.6, 1, 0)  # An outline of the extracted brain
+            self.data = self.data * mask2
+
+    def full_brain(self):
+        if self.extracted:
+            self.data = self.full_head
+            self.extracted = False
 
     def unsetDrawKernel(self):
         """ Deactivates drawing mode
