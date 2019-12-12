@@ -59,7 +59,7 @@ class MainWidget(QWidget):
         self.view.addItem(self.over_img)
 
         # Creating Editing Button
-        editing_icon_list = ['pen.jpeg', 'eraser.png', "pen.jpg"]
+        editing_icon_list = ['images/pen.jpeg', 'images/eraser.png', 'images/pen.jpeg']
         function_list = [self.edit_button1, self.edit_button2, self.edit_button3]
         self.editing_buttons = EditingButtons(function_list, editing_icon_list)
 
