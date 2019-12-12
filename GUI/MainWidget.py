@@ -188,6 +188,12 @@ class MainWidget(QWidget):
         self.update_section_helper()
 
     def extract(self):
+        """ Performs brain extraction using the DeepBrain neural network
+
+        This extraction produces a probability mask.
+        At the moment it is hard coded such that we keep voxels with probability larger than a half.
+        If the brain has already been extracted it loads a previous version.
+        """
         if self.extracted:
             return 0
         elif len(self.only_brain) == 0:
@@ -202,6 +208,11 @@ class MainWidget(QWidget):
         self.extracted = True
 
     def full_brain(self):
+        """ Returns the image to the original brain + head image
+
+        Returns the background image to the unextracted brain.
+        Stores the extracted brain.
+        """
         if self.extracted:
             self.data = self.full_head
             self.extracted = False
@@ -217,16 +228,29 @@ class MainWidget(QWidget):
         self.view.drawing = False
 
     def edit_button1(self):
+        """ Sets the drawing mode to DOT
+
+        This is basically a square of one voxel in size with value one.
+        For all the editing buttons the matrix used to edit is defined at the top of the file
+        """
         self.label_data = np.clip(self.label_data, 0, 1)
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.label_data = np.clip(self.label_data, 0, 1)
 
     def edit_button2(self):
+        """ Sets the drawing mode to RUBBER
+
+        Similar to DOT but removes the label from voxels .
+        """
         self.label_data = np.clip(self.label_data, 0, 1)
         self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
         self.label_data = np.clip(self.label_data, 0, 1)
 
     def edit_button3(self):
+        """ Sets the drawing mode to SQUARE
+
+        This sets the paintbrush to a cross of 3x3 voxels in size.
+        """
         self.label_data = np.clip(self.label_data, 0, 1)
         self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
         self.label_data = np.clip(self.label_data, 0, 1)
