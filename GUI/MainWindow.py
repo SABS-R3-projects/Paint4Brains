@@ -34,6 +34,7 @@ class MainWindow(QMainWindow):
         self.file = menu_bar.addMenu("File")
         self.edit = menu_bar.addMenu("Edit")
         self.view_menu = menu_bar.addMenu("View")
+        self.tools = menu_bar.addMenu("Tools")
 
         # Actions in file bar (This enables shortcuts too)
         # Exit:
@@ -66,6 +67,19 @@ class MainWindow(QMainWindow):
         nodrawAction.setStatusTip('Deactivate drawing')
         nodrawAction.triggered.connect(self.main_widget.unsetDrawKernel)
         self.edit.addAction(nodrawAction)
+
+        extractAction = QAction('Extract Brain', self)
+        extractAction.setShortcut('Ctrl+E')
+        extractAction.setStatusTip('Extract Brain')
+        extractAction.triggered.connect(self.main_widget.extract)
+        self.tools.addAction(extractAction)
+
+        unextractAction = QAction('See Full Brain', self)
+        unextractAction.setShortcut('Ctrl+U')
+        unextractAction.setStatusTip('See Full Brain')
+        unextractAction.triggered.connect(self.main_widget.full_brain)
+        self.tools.addAction(unextractAction)
+
 
     def load_initial(self):
         """ Loads the "base" brain
