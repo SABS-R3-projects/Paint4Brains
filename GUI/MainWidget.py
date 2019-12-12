@@ -59,8 +59,8 @@ class MainWidget(QWidget):
         self.view.addItem(self.over_img)
 
         # Creating Editing Button
-        editing_icon_list = ['pen.jpeg', 'eraser.png']
-        function_list = [self.edit_button1, self.edit_button2]
+        editing_icon_list = ['pen.jpeg', 'eraser.png', "pen.jpg"]
+        function_list = [self.edit_button1, self.edit_button2, self.edit_button3]
         self.editing_buttons = EditingButtons(function_list, editing_icon_list)
 
         # Creating a slider to go through image slices
@@ -224,4 +224,9 @@ class MainWidget(QWidget):
     def edit_button2(self):
         self.label_data = np.clip(self.label_data, 0, 1)
         self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
+        self.label_data = np.clip(self.label_data, 0, 1)
+
+    def edit_button3(self):
+        self.label_data = np.clip(self.label_data, 0, 1)
+        self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
         self.label_data = np.clip(self.label_data, 0, 1)
