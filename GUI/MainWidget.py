@@ -233,24 +233,27 @@ class MainWidget(QWidget):
         This is basically a square of one voxel in size with value one.
         For all the editing buttons the matrix used to edit is defined at the top of the file
         """
-        self.label_data = np.clip(self.label_data, 0, 1)
-        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
-        self.label_data = np.clip(self.label_data, 0, 1)
+        if self.view.drawing:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+            self.label_data = np.clip(self.label_data, 0, 1)
 
     def edit_button2(self):
         """ Sets the drawing mode to RUBBER
 
         Similar to DOT but removes the label from voxels .
         """
-        self.label_data = np.clip(self.label_data, 0, 1)
-        self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
-        self.label_data = np.clip(self.label_data, 0, 1)
+        if self.view.drawing:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
+            self.label_data = np.clip(self.label_data, 0, 1)
 
     def edit_button3(self):
         """ Sets the drawing mode to SQUARE
 
         This sets the paintbrush to a cross of 3x3 voxels in size.
         """
-        self.label_data = np.clip(self.label_data, 0, 1)
-        self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
-        self.label_data = np.clip(self.label_data, 0, 1)
+        if self.view.drawing:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
+            self.label_data = np.clip(self.label_data, 0, 1)
