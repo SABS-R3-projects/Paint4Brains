@@ -30,12 +30,12 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Inputting data
-        
-        self.label_data = np.zeros(data.shape)
+
         self.data = np.flip(data.transpose())
-        self.maxim = np.max(data)
+        self.label_data = np.zeros(self.data.shape)
+        self.maxim = np.max(self.data)
         self.section = 0
-        self.i = int(data.shape[self.section] / 2)
+        self.i = int(self.data.shape[self.section] / 2)
 
         # Making Images out of data
         self.over_img = pg.ImageItem(self.get_label_data(self.i), autoDownSmaple=False, opacity=0.3,
@@ -54,8 +54,8 @@ class MainWidget(QWidget):
 
 
         # Creating a slider to go through image slices
-        self.widget_slider = Slider(0, data.shape[self.section] - 1)
-        self.widget_slider.slider.setMaximum(data.shape[self.section] - 1)
+        self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
+        self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
         self.widget_slider.slider.setValue(self.i)
         self.widget_slider.slider.valueChanged.connect(self.update_after_slider)
 
