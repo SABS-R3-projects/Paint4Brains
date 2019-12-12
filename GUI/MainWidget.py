@@ -15,11 +15,12 @@ cross = np.array([
     [0, 1, 0],
     [1, 1, 1],
     [0, 1, 0]
-]).astype(np.uint8)
+]).astype(np.int8)
 
-dot = np.array([[1]]).astype(np.uint8)
+dot = np.array([[1]]).astype(np.int8)
 
-rubber = np.array([[-1]]).astype(np.uint8)
+rubber = np.array([[-1]]).astype(np.int8)
+
 
 class MainWidget(QWidget):
     def __init__(self, data, parent=None):
@@ -58,10 +59,9 @@ class MainWidget(QWidget):
         self.view.addItem(self.over_img)
 
         # Creating Editing Button
-        editing_icon_list = ['pen.jpeg','eraser.png']
+        editing_icon_list = ['pen.jpeg', 'eraser.png']
         function_list = [self.edit_button1, self.edit_button2]
         self.editing_buttons = EditingButtons(function_list, editing_icon_list)
-
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
@@ -81,7 +81,6 @@ class MainWidget(QWidget):
         self.verticalLayout.addSpacerItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout.addWidget(self.widget_slider)
-
 
     def get_data(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -128,8 +127,8 @@ class MainWidget(QWidget):
         It then sets the GUI into drawing mode, so that the uploaded labeled data can be edited
         The paintbrush is hardcoded to a point for now
         """
-        self.label_data = x
-        self.over_img.setDrawKernel(dot, mask=cross, center=(0, 0), mode='add')
+        self.label_data = x.astype(np.int8)
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.view.drawing = True
 
     def update_after_slider(self):
@@ -218,7 +217,11 @@ class MainWidget(QWidget):
         self.view.drawing = False
 
     def edit_button1(self):
-        print("FIRST BUTTON")
+        self.label_data = np.clip(self.label_data, 0, 1)
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+        self.label_data = np.clip(self.label_data, 0, 1)
 
     def edit_button2(self):
-        print("SECOND BUTTON")
+        self.label_data = np.clip(self.label_data, 0, 1)
+        self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
+        self.label_data = np.clip(self.label_data, 0, 1)
