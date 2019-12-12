@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QHBoxLayout, QWidget, QPushButton, QSpacerItem, QSizePolicy
 from pyqtgraph.Qt import QtCore, QtGui
 
 
@@ -17,7 +17,6 @@ class EditingButtons(QWidget):
         self.button = []
         self.layout = QHBoxLayout(self)
         for i, buttons in enumerate(function_list):
-            #self.btn1 = QPushButton()
             bt = QPushButton()
             bt.setIcon(QtGui.QIcon(icon_list[i]))
             bt.setFixedSize(30, 30)
@@ -26,4 +25,6 @@ class EditingButtons(QWidget):
             self.layout.addWidget(bt)
             bt.clicked.connect(buttons)
 
+        spacerItem = QSpacerItem(5, 5, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.layout.addSpacerItem(spacerItem)
         self.layout.setSpacing(0)
