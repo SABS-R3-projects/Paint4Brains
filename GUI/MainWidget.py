@@ -38,6 +38,7 @@ class MainWidget(QWidget):
         self.maxim = np.max(self.data)
         self.section = 0
         self.extracted = False
+        self.only_brain = []
         self.i = int(self.data.shape[self.section] / 2)
 
         # Making Images out of data
@@ -181,18 +182,22 @@ class MainWidget(QWidget):
     def extract(self):
         if self.extracted:
             return 0
-        else:
-            self.extracted = True
+        elif len(self.only_brain) == 0:
             ext = Extractor()
             prob = ext.run(self.data)
-            print("DONE")
-            mask2 = np.where(prob > 0.6, 1, 0)  # An outline of the extracted brain
-            self.data = self.data * mask2
+            print("EXTRACTION DONE")
+            mask2 = np.where(prob > 0.5, 1, 0)
+            self.only_brain = self.data * mask2
+
+        self.data = self.only_brain
+        self.img.setImage(self.get_data(self.i) / self.maxim)
+        self.extracted = True
 
     def full_brain(self):
         if self.extracted:
             self.data = self.full_head
             self.extracted = False
+        self.img.setImage(self.get_data(self.i) / self.maxim)
 
     def unsetDrawKernel(self):
         """ Deactivates drawing mode
