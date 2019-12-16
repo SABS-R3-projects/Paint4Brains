@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
 
         self.main_widget = MainWidget(data, self)
         self.setCentralWidget(self.main_widget)
+        self.setWindowTitle("Paint4Brains")
 
         # Making a menu
         self.statusBar()
