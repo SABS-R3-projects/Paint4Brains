@@ -40,8 +40,10 @@ class MainWidget(QWidget):
         self.full_head = self.data.copy()
         self.maxim = np.max(self.data)
         self.section = 0
+        self.normalized = 0
         self.extracted = False
-        self.segmented = False # Itai added
+        self.segmented = False
+        self.overlaid = False
         self.only_brain = []
         self.i = int(self.data.shape[self.section] / 2)
 
@@ -210,20 +212,37 @@ class MainWidget(QWidget):
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.extracted = True
 
-    #Itai Added
-    def segment(self):
 
+    def normalize(self):
+        """
+        Method that returns an intensity-normalized image using the zero/mean unit stdev method
+        To be edited
+        """
+        if self.normalized:
+            return 0
+        else:
+            pass
+
+    def segment(self):
+        """
+        Method that returns a segmented brain
+        To be edited
+        """
         if self.segmented:
             return 0
         else:
-            if not self.extracted:
-                self.extract()
-            else:
-                os.chdir("/home/sabs-r3/Desktop/Brain_imaging/quickNAT")
-                from quickNAT import run
+            pass
 
-                #To be modified to add quicknat
-                pass
+    def overlay(self):
+        """
+        Method that overlays a segmented mask on top of the original brain
+        To be edited
+        """
+        if self.overlaid:
+            return 0
+        else:
+            pass
+
 
     def full_brain(self):
         """ Returns the image to the original brain + head image
