@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow, QAction, qApp
 import numpy as np
+import os #Itai added
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
 from EditingButtons import EditingButtons
@@ -40,6 +41,7 @@ class MainWidget(QWidget):
         self.maxim = np.max(self.data)
         self.section = 0
         self.extracted = False
+        self.segmented = False # Itai added
         self.only_brain = []
         self.i = int(self.data.shape[self.section] / 2)
 
@@ -187,6 +189,7 @@ class MainWidget(QWidget):
         self.section = 2
         self.update_section_helper()
 
+
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network
 
@@ -206,6 +209,21 @@ class MainWidget(QWidget):
         self.data = self.only_brain
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.extracted = True
+
+    #Itai Added
+    def segment(self):
+
+        if self.segmented:
+            return 0
+        else:
+            if not self.extracted:
+                self.extract()
+            else:
+                os.chdir("/home/sabs-r3/Desktop/Brain_imaging/quickNAT")
+                from quickNAT import run
+
+                #To be modified to add quicknat
+                pass
 
     def full_brain(self):
         """ Returns the image to the original brain + head image

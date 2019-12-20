@@ -74,6 +74,12 @@ class MainWindow(QMainWindow):
         extractAction.triggered.connect(self.main_widget.extract)
         self.tools.addAction(extractAction)
 
+        segmentAction = QAction('Segment Brain', self)
+        segmentAction.setShortcut('Ctrl+S')
+        segmentAction.setStatusTip('Extract Brain')
+        segmentAction.triggered.connect(self.main_widget.segment)
+        self.tools.addAction(segmentAction)
+
         unextractAction = QAction('See Full Brain', self)
         unextractAction.setShortcut('Ctrl+U')
         unextractAction.setStatusTip('See Full Brain')
