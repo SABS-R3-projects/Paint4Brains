@@ -132,7 +132,6 @@ class MainWidget(QWidget):
         The paintbrush is hardcoded to a point for now
         """
         self.label_data = x.astype(np.int8)
-        self.over_img.setLevels([0, 1])
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.view.drawing = True
 
