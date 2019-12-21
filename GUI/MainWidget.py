@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow, QAction, qApp
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow, QAction, qApp, QLabel
 import numpy as np
 import os  # Itai added
 from Slider import Slider
@@ -6,7 +6,7 @@ from PlaneSelectionButtons import PlaneSelectionButtons
 from EditingButtons import EditingButtons
 from ModViewBox import ModViewBox
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui
+from pyqtgraph.Qt import QtGui, QtCore
 from deepbrain import Extractor
 import nibabel as nb
 
@@ -39,6 +39,8 @@ class MainWidget(QWidget):
         self.label_data = np.zeros(self.data.shape)
         self.full_head = self.data.copy()
         self.maxim = np.max(self.data)
+        self.mouse_x = 0
+        self.mouse_y = 0
         self.section = 0
         self.normalized = 0
         self.extracted = False
@@ -74,9 +76,12 @@ class MainWidget(QWidget):
         self.widget_slider.slider.setValue(self.i)
         self.widget_slider.slider.valueChanged.connect(self.update_after_slider)
 
+        # Creating a label that tracks the position
+        self.position = QLabel()
+        self.position.setAlignment(QtCore.Qt.AlignRight)
+
         # Arranging the layout
         self.horizontalLayout = QHBoxLayout()
-
         self.horizontalLayout.addWidget(self.buttons)
         self.horizontalLayout.addWidget(self.win)
 
@@ -86,6 +91,25 @@ class MainWidget(QWidget):
         self.verticalLayout.addSpacerItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout.addWidget(self.widget_slider)
+        self.verticalLayout.addWidget(self.position)
+
+        self.win.scene().sigMouseMoved.connect(self.mouse_tracker)
+
+    def mouse_tracker(self, pos):
+        """ Tracks mouse and prints 3-D position to a label
+        Doesn't work great yet (the coordinates are not transferable between views)
+        NEEDS FIX.
+        """
+        self.mouse_x = int(self.img.mapFromScene(pos).x())
+        self.mouse_y = int(self.img.mapFromScene(pos).y())
+
+        if self.section == 0:
+            self.position.setText(str(self.i) + ", " + str(self.mouse_x) + ", " + str(self.mouse_y) )
+        elif self.section == 1:
+            self.position.setText(str(self.mouse_x) + ", " + str(self.i) + ", " + str(self.mouse_y))
+        elif self.section == 2:
+            self.position.setText(str(self.mouse_x) + ", " + str(self.mouse_y) + ", " + str(self.i))
+
 
     def get_data(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
