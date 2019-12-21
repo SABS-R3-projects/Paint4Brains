@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow, QAction, qApp
 import numpy as np
-import os #Itai added
+import os  # Itai added
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
 from EditingButtons import EditingButtons
@@ -55,8 +55,9 @@ class MainWidget(QWidget):
         self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
 
         # Colouring the labelled data
-        lut = np.array([[0, 0, 0, 0], [245, 2, 2, 255]])
+        lut = np.array([[0, 0, 0, 0], [20, 235, 150, 255]])
         self.over_img.setLookupTable(lut)
+        self.over_img.setLevels([0, 1])
 
         # Adding the images and setting it to drawing mode
         self.view.addItem(self.img)
@@ -146,7 +147,7 @@ class MainWidget(QWidget):
         self.label_data = np.clip(self.label_data, 0, 1)
         self.i = self.widget_slider.x
         self.img.setImage(self.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.get_label_data(self.i))
+        self.over_img.setImage(self.get_label_data(self.i), autoLevels=False)
 
     def update_section_helper(self):
         """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
@@ -162,7 +163,7 @@ class MainWidget(QWidget):
         self.widget_slider.maximum = self.data.shape[self.section] - 1
         self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
         self.img.setImage(self.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.get_label_data(self.i))
+        self.over_img.setImage(self.get_label_data(self.i), autoLevels=False)
 
     def update0(self):
         """ Sets the view along axis 0
@@ -191,7 +192,6 @@ class MainWidget(QWidget):
         self.section = 2
         self.update_section_helper()
 
-
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network
 
@@ -211,7 +211,6 @@ class MainWidget(QWidget):
         self.data = self.only_brain
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.extracted = True
-
 
     def normalize(self):
         """
@@ -242,7 +241,6 @@ class MainWidget(QWidget):
             return 0
         else:
             pass
-
 
     def full_brain(self):
         """ Returns the image to the original brain + head image
