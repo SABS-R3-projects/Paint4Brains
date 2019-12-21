@@ -19,8 +19,8 @@ class EditingButtons(QWidget):
         for i, buttons in enumerate(function_list):
             bt = QPushButton()
             bt.setIcon(QtGui.QIcon(icon_list[i]))
-            bt.setFixedSize(30, 30)
-            bt.setIconSize(QtCore.QSize(25, 25))
+            bt.setFixedSize(40, 30) #30,30
+            bt.setIconSize(QtCore.QSize(30, 25))#25,25
             self.button.append(bt)
             self.layout.addWidget(bt)
             bt.clicked.connect(buttons)

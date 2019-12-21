@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QMainWindow, QAction, qApp
 import numpy as np
+import os #Itai added
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
 from EditingButtons import EditingButtons
@@ -39,7 +40,10 @@ class MainWidget(QWidget):
         self.full_head = self.data.copy()
         self.maxim = np.max(self.data)
         self.section = 0
+        self.normalized = 0
         self.extracted = False
+        self.segmented = False
+        self.overlaid = False
         self.only_brain = []
         self.i = int(self.data.shape[self.section] / 2)
 
@@ -188,6 +192,7 @@ class MainWidget(QWidget):
         self.section = 2
         self.update_section_helper()
 
+
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network
 
@@ -207,6 +212,38 @@ class MainWidget(QWidget):
         self.data = self.only_brain
         self.img.setImage(self.get_data(self.i) / self.maxim)
         self.extracted = True
+
+
+    def normalize(self):
+        """
+        Method that returns an intensity-normalized image using the zero/mean unit stdev method
+        To be edited
+        """
+        if self.normalized:
+            return 0
+        else:
+            pass
+
+    def segment(self):
+        """
+        Method that returns a segmented brain
+        To be edited
+        """
+        if self.segmented:
+            return 0
+        else:
+            pass
+
+    def overlay(self):
+        """
+        Method that overlays a segmented mask on top of the original brain
+        To be edited
+        """
+        if self.overlaid:
+            return 0
+        else:
+            pass
+
 
     def full_brain(self):
         """ Returns the image to the original brain + head image

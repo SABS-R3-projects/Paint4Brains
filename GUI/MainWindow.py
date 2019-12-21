@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         self.edit = menu_bar.addMenu("Edit")
         self.view_menu = menu_bar.addMenu("View")
         self.tools = menu_bar.addMenu("Tools")
+        self.help = menu_bar.addMenu("Help")
 
         # Actions in file bar (This enables shortcuts too)
         # Exit:
@@ -86,6 +87,26 @@ class MainWindow(QMainWindow):
         unextractAction.setStatusTip('See Full Brain')
         unextractAction.triggered.connect(self.main_widget.full_brain)
         self.tools.addAction(unextractAction)
+
+        normalizeAction = QAction('Normalize Intensity', self)
+        normalizeAction.setShortcut('Ctrl+N')
+        normalizeAction.setStatusTip('Normalize Intensity')
+        normalizeAction.triggered.connect(self.main_widget.normalize)
+        self.tools.addAction(normalizeAction)
+
+        segmentAction = QAction('Segment Brain', self)
+        segmentAction.setShortcut('Ctrl+S')
+        segmentAction.setStatusTip('Segment Brain')
+        segmentAction.triggered.connect(self.main_widget.segment)
+        self.tools.addAction(segmentAction)
+
+        overlayAction = QAction('Brain-Segmentation Overlay', self)
+        overlayAction.setShortcut('Ctrl+O')
+        overlayAction.setStatusTip('Brain-Segmentation Overlay')
+        overlayAction.triggered.connect(self.main_widget.overlay)
+        self.tools.addAction(overlayAction)
+
+
 
     def load_initial(self):
         """ Loads the "base" brain
