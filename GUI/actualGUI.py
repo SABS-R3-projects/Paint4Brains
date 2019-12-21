@@ -2,9 +2,13 @@ import sys
 from pyqtgraph.Qt import QtCore, QtGui
 from MainWindow import MainWindow
 
-# checks if there are any extra parameters when calling python and assigns it to file_x if there is
-if len(sys.argv) > 1:
+# checks if there are any extra parameters when calling python and assigns it to file_x or file_y if there is
+file_y = None
+if len(sys.argv) == 2:
     file_x = sys.argv[1]
+elif len(sys.argv) > 2:
+    file_x = sys.argv[1]
+    file_y = sys.argv[2]
 else:
     file_x = None
 
@@ -12,7 +16,7 @@ else:
 if __name__ == '__main__':
     # Basically just runs the MainWindow class
     app = QtGui.QApplication([])
-    w = MainWindow(file_x)
+    w = MainWindow(file_x, file_y)
     w.show()
 
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):

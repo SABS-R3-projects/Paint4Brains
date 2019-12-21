@@ -9,7 +9,8 @@ class MainWindow(QMainWindow):
     """MainWindow class.
     Wraps MainWidget to allow a Menu
     """
-    def __init__(self, file, parent=None):
+
+    def __init__(self, file, label_file=None, parent=None):
         """Initialises the Main Window
         Basically calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
         Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
@@ -22,11 +23,17 @@ class MainWindow(QMainWindow):
         else:
             xim = nib.load(file)
             data = xim.get_fdata()
-        self.label_filename = ""
-        self.label_data = None
 
         self.main_widget = MainWidget(data, self)
         self.setCentralWidget(self.main_widget)
+
+        if label_file is None:
+            self.label_filename = ""
+            self.label_data = None
+        else:
+            self.label_filename = label_file
+            self.label_data = nib.load(self.label_filename)
+            self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
 
         # Making a menu
         self.statusBar()
@@ -80,25 +87,26 @@ class MainWindow(QMainWindow):
         unextractAction.triggered.connect(self.main_widget.full_brain)
         self.tools.addAction(unextractAction)
 
-
     def load_initial(self):
         """ Loads the "base" brain
         The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
         command line beforehand (this can be set in pycharm too) or through a window that appears on start (gets annoying).
         If you try to open it with nothing it complains and gives you an error message.
         """
-        self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain", "Please select full brain scan", "Nii Files (*.nii)")
+        self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain",
+                                                                  "Please select full brain scan", "Nii Files (*.nii)")
         if isinstance(self.data_filename, tuple):
             self.data_filename = self.data_filename[0]  # Qt4/5 API difference
         if self.data_filename == '':
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
             msg.setText("Can not start without initial brain")
-            msg.setInformativeText("Please load a brain image either via the command line or via the initial load window")
+            msg.setInformativeText(
+                "Please load a brain image either via the command line or via the initial load window")
             msg.setWindowTitle("Error: Failed to load")
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
-            return #self.load_initial()
+            return  # self.load_initial()
         data = nib.load(self.data_filename)
         return data.get_fdata()
 
@@ -107,7 +115,9 @@ class MainWindow(QMainWindow):
         Opens a loading window through which you can select what label data file to load. Once a file is uploaded
         it automatically sets the app to drawing mode
         """
-        self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data", "Please select the desired label data", "Nii Files (*.nii)")
+        self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data",
+                                                                   "Please select the desired label data",
+                                                                   "Nii Files (*.nii)")
         if isinstance(self.label_filename, tuple):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
@@ -122,7 +132,8 @@ class MainWindow(QMainWindow):
         """
         if self.label_filename == '':
             return
-        saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename, "Nii Files (*.nii)")
+        saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename,
+                                                               "Nii Files (*.nii)")
         if saving_filename[1] != "Nii Files (*.nii)":
             return
         elif (saving_filename[0])[-4:] != ".nii":

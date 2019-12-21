@@ -51,7 +51,7 @@ class MainWidget(QWidget):
         self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
 
         # Colouring the labelled data
-        lut = np.array([[0, 0, 0, 0], [1, 245, 240, 255]])
+        lut = np.array([[0, 0, 0, 0], [245, 2, 2, 255]])
         self.over_img.setLookupTable(lut)
 
         # Adding the images and setting it to drawing mode
@@ -128,6 +128,7 @@ class MainWidget(QWidget):
         The paintbrush is hardcoded to a point for now
         """
         self.label_data = x.astype(np.int8)
+        self.over_img.setLevels([0, 1])
         self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
         self.view.drawing = True
 
