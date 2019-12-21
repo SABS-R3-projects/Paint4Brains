@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox, QUndoStack
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
 from MainWidget import MainWidget
 import pyqtgraph as pg
 import nibabel as nib
