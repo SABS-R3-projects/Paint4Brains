@@ -20,6 +20,7 @@ dot = np.array([[1]]).astype(np.uint8)
 
 rubber = np.array([[-1]]).astype(np.uint8)
 
+
 class MainWidget(QWidget):
     def __init__(self, data, parent=None):
         super(MainWidget, self).__init__(parent=parent)
@@ -51,11 +52,11 @@ class MainWidget(QWidget):
         # Colouring the labelled data
         lut = np.array([[0, 0, 0, 0], [1, 245, 240, 255]])
         self.over_img.setLookupTable(lut)
+        self.over_img.setLevels([0, 1])
 
         # Adding the images and setting it to drawing mode
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
-
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
@@ -134,7 +135,7 @@ class MainWidget(QWidget):
         self.label_data = np.clip(self.label_data, 0, 1)
         self.i = self.widget_slider.x
         self.img.setImage(self.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.get_label_data(self.i))
+        self.over_img.setImage(self.get_label_data(self.i), autoLevels=False)
 
     def update_section_helper(self):
         """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
@@ -150,7 +151,7 @@ class MainWidget(QWidget):
         self.widget_slider.maximum = self.data.shape[self.section] - 1
         self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
         self.img.setImage(self.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.get_label_data(self.i))
+        self.over_img.setImage(self.get_label_data(self.i), autoLevels=False)
 
     def update0(self):
         """ Sets the view along axis 0
