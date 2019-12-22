@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox, QUndoStack
+from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
 from MainWidget import MainWidget
 import pyqtgraph as pg
 import nibabel as nib
@@ -26,6 +26,7 @@ class MainWindow(QMainWindow):
 
         self.main_widget = MainWidget(data, self)
         self.setCentralWidget(self.main_widget)
+        self.setWindowTitle("Paint4Brains")
 
         if label_file is None:
             self.label_filename = ""
@@ -127,8 +128,8 @@ class MainWindow(QMainWindow):
             msg.setWindowTitle("Error: Failed to load")
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
-            return  # self.load_initial()
-        data = nib.load(self.data_filename)
+            return # self.load_initial()
+        data = nib.as_closest_canonical(nib.load(self.data_filename))
         return data.get_fdata()
 
     def load(self):
@@ -143,7 +144,7 @@ class MainWindow(QMainWindow):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
             return
-        self.label_data = nib.load(self.label_filename)
+        self.label_data = nib.as_closest_canonical(nib.load(self.label_filename))
         self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
 
     def save(self):
