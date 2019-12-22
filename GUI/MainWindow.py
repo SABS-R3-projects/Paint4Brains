@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
             return #self.load_initial()
-        data = nib.load(self.data_filename)
+        data = nib.as_closest_canonical(nib.load(self.data_filename))
         return data.get_fdata()
 
     def load(self):
@@ -113,7 +113,7 @@ class MainWindow(QMainWindow):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
             return
-        self.label_data = nib.load(self.label_filename)
+        self.label_data = nib.as_closest_canonical(nib.load(self.label_filename))
         self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
 
     def save(self):
