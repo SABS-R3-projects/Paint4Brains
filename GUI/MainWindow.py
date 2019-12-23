@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
+from PyQt5.QtGui import QIcon
 from MainWidget import MainWidget
 import pyqtgraph as pg
 import nibabel as nib
@@ -106,6 +107,24 @@ class MainWindow(QMainWindow):
         overlayAction.setStatusTip('Brain-Segmentation Overlay')
         overlayAction.triggered.connect(self.main_widget.overlay)
         self.tools.addAction(overlayAction)
+
+        pen = QAction(QIcon("images/pen.jpeg"), "Pen", self)
+        pen.triggered.connect(self.main_widget.edit_button1)
+
+        rubber = QAction(QIcon("images/eraser.png"), "Rubber", self)
+        rubber.triggered.connect(self.main_widget.edit_button2)
+
+        cross = QAction(QIcon("images/cross.png"), "Cross", self)
+        cross.triggered.connect(self.main_widget.edit_button3)
+
+        self.edit_toolbar = self.addToolBar("Editting Tools")
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addAction(pen)
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addAction(rubber)
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addAction(cross)
+        self.edit_toolbar.addSeparator()
 
 
 
