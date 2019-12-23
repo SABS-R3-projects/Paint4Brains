@@ -68,9 +68,16 @@ class MainWindow(QMainWindow):
         resetViewAction.setShortcut('Ctrl+V')
         self.view_menu.addAction(resetViewAction)
 
+        viewToolbarAction = QAction("Editting Toolbar", self)
+        viewToolbarAction.setStatusTip("View Editting Toolbar")
+        viewToolbarAction.triggered.connect(self.view_edit_tools)
+
         for i in range(1, len(viewBoxActionsList)):
             ViewActions = viewBoxActionsList[i]
             self.view_menu.addAction(ViewActions)
+
+        self.view_menu.addSeparator()
+        self.view_menu.addAction(viewToolbarAction)
 
         nodrawAction = QAction('Deactivate drawing', self)
         nodrawAction.setShortcut('Ctrl+D')
@@ -108,6 +115,7 @@ class MainWindow(QMainWindow):
         overlayAction.triggered.connect(self.main_widget.overlay)
         self.tools.addAction(overlayAction)
 
+        # Editing tools as a toolbar
         pen = QAction(QIcon("images/pen.jpeg"), "Pen", self)
         pen.triggered.connect(self.main_widget.edit_button1)
 
@@ -120,9 +128,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar = self.addToolBar("Editting Tools")
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(pen)
-        self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(rubber)
-        self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(cross)
         self.edit_toolbar.addSeparator()
 
@@ -185,3 +191,7 @@ class MainWindow(QMainWindow):
         image = nib.Nifti1Image(np.flip(self.main_widget.label_data).transpose(), np.eye(4))
         print(saving_filename)
         nib.save(image, saving_filename)
+
+    def view_edit_tools(self):
+        swap = not self.edit_toolbar.isVisible()
+        self.edit_toolbar.setVisible(swap)
