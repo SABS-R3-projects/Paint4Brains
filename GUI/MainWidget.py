@@ -100,9 +100,9 @@ class MainWidget(QWidget):
         if self.section == 0:
             self.position.setText(str(self.i) + ", " + str(self.mouse_x) + ", " + str(self.mouse_y) )
         elif self.section == 1:
-            self.position.setText(str(self.mouse_x) + ", " + str(self.i) + ", " + str(self.mouse_y))
+            self.position.setText(str(self.data.shape[2] - self.mouse_x - 1) + ", " + str(self.i) + ", " + str(self.data.shape[0] - self.mouse_y - 1))
         elif self.section == 2:
-            self.position.setText(str(self.mouse_x) + ", " + str(self.mouse_y) + ", " + str(self.i))
+            self.position.setText(str(self.mouse_x) + ", " + str(self.data.shape[0] - self.mouse_y - 1) + ", " + str(self.i))
 
 
     def get_data(self, i):

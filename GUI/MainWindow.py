@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         viewBoxActionsList = self.main_widget.view.menu.actions()
 
         resetViewAction = viewBoxActionsList[0]
-        resetViewAction.setText("Reset View")
+        resetViewAction.setText("Recenter View")
         resetViewAction.setShortcut('Ctrl+V')
         self.view_menu.addAction(resetViewAction)
 
@@ -192,5 +192,5 @@ class MainWindow(QMainWindow):
         nib.save(image, saving_filename)
 
     def view_edit_tools(self):
-        swap = not self.edit_toolbar.isVisible()
-        self.edit_toolbar.setVisible(swap)
+        switch = not self.edit_toolbar.isVisible()
+        self.edit_toolbar.setVisible(switch)
