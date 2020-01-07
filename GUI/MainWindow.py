@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
         viewToolbarAction.setStatusTip("View Editting Toolbar")
         viewToolbarAction.triggered.connect(self.view_edit_tools)
 
-        for i in range(1, len(viewBoxActionsList)):
+        for i in [0]:        # range(1, len(viewBoxActionsList)):
             ViewActions = viewBoxActionsList[i]
             self.view_menu.addAction(ViewActions)
 
@@ -131,8 +131,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(rubber)
         self.edit_toolbar.addAction(cross)
         self.edit_toolbar.addSeparator()
-
-
+        self.edit_toolbar.setVisible(False)
 
     def load_initial(self):
         """ Loads the "base" brain
@@ -153,7 +152,7 @@ class MainWindow(QMainWindow):
             msg.setWindowTitle("Error: Failed to load")
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
-            return # self.load_initial()
+            return  # self.load_initial()
         data = nib.as_closest_canonical(nib.load(self.data_filename))
         return data.get_fdata()
 

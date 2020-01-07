@@ -65,11 +65,6 @@ class MainWidget(QWidget):
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
 
-        # Creating Editing Button
-        editing_icon_list = ['images/pen.jpeg', 'images/eraser.png', 'images/cross.png']
-        function_list = [self.edit_button1, self.edit_button2, self.edit_button3]
-        self.editing_buttons = EditingButtons(function_list, editing_icon_list)
-
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
         self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
@@ -86,7 +81,6 @@ class MainWidget(QWidget):
         self.horizontalLayout.addWidget(self.win)
 
         self.verticalLayout = QVBoxLayout(self)
-        self.verticalLayout.addWidget(self.editing_buttons)
         spacerItem = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.verticalLayout.addSpacerItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
