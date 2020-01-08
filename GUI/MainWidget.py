@@ -3,7 +3,6 @@ import numpy as np
 import os  # Itai added
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
-from EditingButtons import EditingButtons
 from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore

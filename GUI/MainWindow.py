@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
 from PyQt5.QtGui import QIcon
 from MainWidget import MainWidget
+
 import pyqtgraph as pg
 import nibabel as nib
 import numpy as np
