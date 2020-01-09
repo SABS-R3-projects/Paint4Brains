@@ -21,22 +21,19 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent=parent)
         self.data_filename = file
         if file is None:
-            data = self.load_initial()
-        else:
-            xim = nib.load(file)
-            data = xim.get_fdata()
+            file = self.load_initial()
 
-        self.main_widget = MainWidget(data, self)
-        self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("Paint4Brains")
+        self.main_widget = MainWidget(file, self)
 
         if label_file is None:
             self.label_filename = ""
-            self.label_data = None
         else:
             self.label_filename = label_file
-            self.label_data = nib.load(self.label_filename)
-            self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
+            self.main_widget.brain.load_label_data(label_file)
+
+        self.setCentralWidget(self.main_widget)
+        self.setWindowTitle("Paint4Brains")
+
 
         # Making a menu
         self.statusBar()

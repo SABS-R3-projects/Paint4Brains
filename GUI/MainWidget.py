@@ -3,6 +3,7 @@ import numpy as np
 import os  # Itai added
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
+from BrainData import BrainData
 from ModViewBox import ModViewBox
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
@@ -10,7 +11,6 @@ from deepbrain import Extractor
 import nibabel as nb
 
 # Here I define the different type of paint brushes with which you can edit the image.
-# For now it is constantly set to dot.
 cross = np.array([
     [0, 1, 0],
     [1, 1, 1],
@@ -23,7 +23,7 @@ rubber = np.array([[-1]]).astype(np.int8)
 
 
 class MainWidget(QWidget):
-    def __init__(self, data, parent=None):
+    def __init__(self, filename, parent=None):
         super(MainWidget, self).__init__(parent=parent)
         # Creating a central widget to take everything in
 
@@ -34,24 +34,21 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Inputting data
-        self.data = np.flip(data.transpose())
-        self.label_data = np.zeros(self.data.shape)
-        self.full_head = self.data.copy()
-        self.maxim = np.max(self.data)
-        self.mouse_x = 0
-        self.mouse_y = 0
-        self.section = 0
+        self.brain = BrainData(filename)
+
+        self.full_head = self.brain.data.copy()
+        self.maxim = np.max(self.brain.data)
         self.normalized = 0
         self.extracted = False
         self.segmented = False
         self.overlaid = False
         self.only_brain = []
-        self.i = int(self.data.shape[self.section] / 2)
+        self.i = int(self.brain.shape[self.brain.section] / 2)
 
         # Making Images out of data
-        self.over_img = pg.ImageItem(self.get_label_data(self.i), autoDownSmaple=False, opacity=0.3,
+        self.over_img = pg.ImageItem(self.brain.get_label_data(self.i), autoDownSmaple=False, opacity=0.3,
                                      compositionMode=QtGui.QPainter.CompositionMode_Plus)
-        self.img = pg.ImageItem(self.get_data(self.i) / self.maxim, autoDownsample=False,
+        self.img = pg.ImageItem(self.brain.get_data(self.i) / self.maxim, autoDownsample=False,
                                 compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
         self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
 
@@ -65,8 +62,8 @@ class MainWidget(QWidget):
         self.view.addItem(self.over_img)
 
         # Creating a slider to go through image slices
-        self.widget_slider = Slider(0, self.data.shape[self.section] - 1)
-        self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
+        self.widget_slider = Slider(0, self.brain.shape[self.brain.section] - 1)
+        self.widget_slider.slider.setMaximum(self.brain.shape[self.brain.section] - 1)
         self.widget_slider.slider.setValue(self.i)
         self.widget_slider.slider.valueChanged.connect(self.update_after_slider)
 
@@ -90,19 +87,10 @@ class MainWidget(QWidget):
 
     def mouse_tracker(self, pos):
         """ Tracks mouse and prints 3-D position to a label
-        Doesn't work great yet (the coordinates are not transferable between views)
-        NEEDS FIX.
         """
-        self.mouse_x = int(self.img.mapFromScene(pos).x())
-        self.mouse_y = int(self.img.mapFromScene(pos).y())
-
-        if self.section == 0:
-            self.position.setText(str(self.i) + ", " + str(self.mouse_x) + ", " + str(self.mouse_y) )
-        elif self.section == 1:
-            self.position.setText(str(self.data.shape[0] - self.mouse_y - 1) + ", " + str(self.i) + ", " + str(self.data.shape[2] - self.mouse_x - 1))
-        elif self.section == 2:
-            self.position.setText(str(self.data.shape[0] - self.mouse_y - 1) + ", " + str(self.mouse_x) + ", " + str(self.i))
-
+        mouse_x = int(self.img.mapFromScene(pos).x())
+        mouse_y = int(self.img.mapFromScene(pos).y())
+        self.position.setText(str(self.brain.position_as_voxel(self.i, mouse_x, mouse_y)))
 
     def get_data(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -158,13 +146,10 @@ class MainWidget(QWidget):
 
         Updates the displayed slice depending on the new value of the slider.
         It does this for both the labels and image data.
-
-        IMPORTANT: it ensures that the labelled data is binary (0 or 1) (np.clip)
         """
-        self.label_data = np.clip(self.label_data, 0, 1)
         self.i = self.widget_slider.x
-        self.img.setImage(self.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.get_label_data(self.i), autoLevels=False)
+        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
+        self.over_img.setImage(self.brain.get_label_data(self.i), autoLevels=False)
 
     def update_section_helper(self):
         """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
@@ -172,15 +157,12 @@ class MainWidget(QWidget):
         Ensures that the viewed slice exists;
         Sets the slider limits to sensible values;
         Updates the view of label and image data.
-
-        IMPORTANT: it ensures that the labelled data is binary (0 or 1) (np.clip)
         """
-        self.label_data = np.clip(self.label_data, 0, 1)
-        self.i = int(self.data.shape[self.section] / 2)
-        self.widget_slider.maximum = self.data.shape[self.section] - 1
-        self.widget_slider.slider.setMaximum(self.data.shape[self.section] - 1)
-        self.img.setImage(self.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.get_label_data(self.i), autoLevels=False)
+        self.i = int(self.brain.shape[self.section] / 2)
+        self.widget_slider.maximum = self.brain.shape[self.section] - 1
+        self.widget_slider.slider.setMaximum(self.brain.shape[self.section] - 1)
+        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
+        self.over_img.setImage(self.brain.get_label_data(self.i), autoLevels=False)
 
     def update0(self):
         """ Sets the view along axis 0
@@ -188,7 +170,7 @@ class MainWidget(QWidget):
         This affects both labels and image data.
         This function is called by the first button.
         """
-        self.section = 0
+        self.brain.section = 0
         self.update_section_helper()
 
     def update1(self):
@@ -197,7 +179,7 @@ class MainWidget(QWidget):
         This affects both labels and image data.
         This function is called by the second button.
         """
-        self.section = 1
+        self.brain.section = 1
         self.update_section_helper()
 
     def update2(self):
@@ -206,7 +188,7 @@ class MainWidget(QWidget):
         This affects both labels and image data.
         This function is called by the third button.
         """
-        self.section = 2
+        self.brain.section = 2
         self.update_section_helper()
 
     def extract(self):
@@ -225,8 +207,8 @@ class MainWidget(QWidget):
             mask2 = np.where(prob > 0.5, 1, 0)
             self.only_brain = self.data * mask2
 
-        self.data = self.only_brain
-        self.img.setImage(self.get_data(self.i) / self.maxim)
+        self.brain.data = self.only_brain
+        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
         self.extracted = True
 
     def normalize(self):
@@ -266,9 +248,9 @@ class MainWidget(QWidget):
         Stores the extracted brain.
         """
         if self.extracted:
-            self.data = self.full_head
+            self.brain.data = self.full_head
             self.extracted = False
-        self.img.setImage(self.get_data(self.i) / self.maxim)
+        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
 
     def unsetDrawKernel(self):
         """ Deactivates drawing mode
@@ -286,9 +268,9 @@ class MainWidget(QWidget):
         For all the editing buttons the matrix used to edit is defined at the top of the file
         """
         if self.view.drawing:
-            self.label_data = np.clip(self.label_data, 0, 1)
+            self.brain.label_data = np.clip(self.brain.label_data, 0, 1)
             self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
-            self.label_data = np.clip(self.label_data, 0, 1)
+            self.brain.label_data = np.clip(self.brain.label_data, 0, 1)
 
     def edit_button2(self):
         """ Sets the drawing mode to RUBBER
@@ -296,9 +278,9 @@ class MainWidget(QWidget):
         Similar to DOT but removes the label from voxels .
         """
         if self.view.drawing:
-            self.label_data = np.clip(self.label_data, 0, 1)
+            self.brain.label_data = np.clip(self.brain.label_data, 0, 1)
             self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
-            self.label_data = np.clip(self.label_data, 0, 1)
+            self.brain.label_data = np.clip(self.brain.label_data, 0, 1)
 
     def edit_button3(self):
         """ Sets the drawing mode to SQUARE
@@ -306,6 +288,6 @@ class MainWidget(QWidget):
         This sets the paintbrush to a cross of 3x3 voxels in size.
         """
         if self.view.drawing:
-            self.label_data = np.clip(self.label_data, 0, 1)
+            self.brain.label_data = np.clip(self.brain.label_data, 0, 1)
             self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
-            self.label_data = np.clip(self.label_data, 0, 1)
+            self.brain.label_data = np.clip(self.brain.label_data, 0, 1)
