@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
 from PyQt5.QtGui import QIcon
 from MainWidget import MainWidget
-
+from BrainData import BrainData
 import pyqtgraph as pg
 import nibabel as nib
 import numpy as np
@@ -12,31 +12,24 @@ class MainWindow(QMainWindow):
     Wraps MainWidget to allow a Menu
     """
 
-    def __init__(self, file, label_file=None, parent=None):
+    def __init__(self, file, label_file=None):
         """Initialises the Main Window
         Basically calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
         Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
         Another thing it does is load the nib files from a string containing the path
         """
-        super(MainWindow, self).__init__(parent=parent)
-        self.data_filename = file
+        super(MainWindow, self).__init__()
+
         if file is None:
             file = self.load_initial()
 
-        self.main_widget = MainWidget(file, self)
-
-        if label_file is None:
-            self.label_filename = ""
-        else:
-            self.label_filename = label_file
-            self.main_widget.brain.load_label_data(label_file)
+        self.brain = BrainData(file, label_file)
+        self.main_widget = MainWidget(self.brain, self)
 
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Paint4Brains")
 
-
         # Making a menu
-        self.statusBar()
         menu_bar = self.menuBar()
         self.file = menu_bar.addMenu("File")
         self.edit = menu_bar.addMenu("Edit")
@@ -70,7 +63,7 @@ class MainWindow(QMainWindow):
         viewToolbarAction.setStatusTip("View Editting Toolbar")
         viewToolbarAction.triggered.connect(self.view_edit_tools)
 
-        for i in [0]:        # range(1, len(viewBoxActionsList)):
+        for i in [0]:  # range(1, len(viewBoxActionsList)):
             ViewActions = viewBoxActionsList[i]
             self.view_menu.addAction(ViewActions)
 
@@ -80,7 +73,7 @@ class MainWindow(QMainWindow):
         nodrawAction = QAction('Deactivate drawing', self)
         nodrawAction.setShortcut('Ctrl+D')
         nodrawAction.setStatusTip('Deactivate drawing')
-        nodrawAction.triggered.connect(self.main_widget.unsetDrawKernel)
+        nodrawAction.triggered.connect(self.main_widget.disable_drawing)
         self.edit.addAction(nodrawAction)
 
         extractAction = QAction('Extract Brain', self)
@@ -151,8 +144,7 @@ class MainWindow(QMainWindow):
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
             return  # self.load_initial()
-        data = nib.as_closest_canonical(nib.load(self.data_filename))
-        return data.get_fdata()
+        return self.data_filename
 
     def load(self):
         """ Loads some labelled data
@@ -166,8 +158,8 @@ class MainWindow(QMainWindow):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
             return
-        self.label_data = nib.as_closest_canonical(nib.load(self.label_filename))
-        self.main_widget.load_label_data(np.flip(self.label_data.get_data().transpose()))
+        self.main_widget.brain.load_label_data(self.label_filename)
+        self.main_widget.enable_drawing()
 
     def save(self):
         """ Saves the edited labelled data into a new file

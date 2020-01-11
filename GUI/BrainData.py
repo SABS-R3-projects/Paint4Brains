@@ -3,15 +3,21 @@ import nibabel as nib
 
 
 class BrainData:
-    def __init__(self, filename):
+    def __init__(self, filename, label_filename = None):
         """ Initilaize class
 
         :str filename: The name and location of the file
         """
         self.filename = filename
-        self.label_filename = ""
+
         self.data = np.flip(nib.as_closest_canonical(nib.load(filename)).get_fdata().transpose())
-        self.label_data = np.zeros(self.data.shape)
+
+        if label_filename is None:
+            self.label_data = np.zeros(self.data.shape)
+        else:
+            self.label_filename = label_filename
+            self.load_label_data(label_filename)
+
         self.section = 0
         self.shape = self.data.shape
 
