@@ -9,10 +9,11 @@ class BrainData:
         :str filename: The name and location of the file
         """
         self.filename = filename
+        self.label_filename = label_filename
 
         self.data = np.flip(nib.as_closest_canonical(nib.load(filename)).get_fdata().transpose())
 
-        if label_filename is None:
+        if self.label_filename is None:
             self.label_data = np.zeros(self.data.shape)
         else:
             self.label_filename = label_filename
@@ -24,7 +25,7 @@ class BrainData:
         maxim = np.max(self.data)
         self.data = self.data/maxim
 
-    def get_data(self, i):
+    def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
 
         Depending on the desired view (self.section) it returns a different 2-D slice of the 3-D data.
@@ -39,9 +40,9 @@ class BrainData:
 
     @property
     def current_data_slice(self):
-        return self.get_data(self.i)
+        return self.get_data_slice(self.i)
 
-    def get_label_data(self, i):
+    def get_label_data_slice(self, i):
         """ Returns the 2-D slice at point i of the labelled data.
 
         Depending on the desired view (self.section) it returns 2-D slice with respect to a different axis of the 3-D data.
@@ -57,20 +58,7 @@ class BrainData:
 
     @property
     def current_label_data_slice(self):
-        return self.get_label_data(self.i)
-
-    def set_label_data(self, i, x):
-        """ Sets the data at a certain slice i to the 2-D array x.
-
-        Depending on the desired view (self.section) it sets a 2-D slice with respect to a different axis of the 3-D data
-        This function is not currently used.
-        """
-        if self.section == 0:
-            self.label_data[i] = x
-        elif self.section == 1:
-            self.label_data[:, i] = np.flip(x.transpose())
-        elif self.section == 2:
-            self.label_data[:, :, i] = np.flip(x.transpose(), axis=1)
+        return self.get_label_data_slice(self.i)
 
     def load_label_data(self, filename):
         """ Loads a given 3-D binary array (x) into the GUI.
@@ -88,7 +76,7 @@ class BrainData:
         else:
             saving_filename = saving_filename[0]
 
-        image = nib.Nifti1Image(np.flip(self.main_widget.label_data).transpose(), np.eye(4))
+        image = nib.Nifti1Image(np.flip(self.label_data).transpose(), np.eye(4))
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
 

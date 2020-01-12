@@ -1,10 +1,8 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QMessageBox
-from PyQt5.QtGui import QIcon
+import numpy as np
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
+from PyQt5.QtGui import QIcon, QFileDialog
 from MainWidget import MainWidget
 from BrainData import BrainData
-import pyqtgraph as pg
-import nibabel as nib
-import numpy as np
 
 
 class MainWindow(QMainWindow):
@@ -52,7 +50,7 @@ class MainWindow(QMainWindow):
         self.file.addAction(saveAction)
 
         # Predefined actions that usually appear when you right click. Recycling one that resets the view here.
-        viewBoxActionsList = self.main_widget.view.menu.actions()
+        viewBoxActionsList = self.main_widget.win.view.menu.actions()
 
         resetViewAction = viewBoxActionsList[0]
         resetViewAction.setText("Recenter View")
@@ -73,7 +71,7 @@ class MainWindow(QMainWindow):
         nodrawAction = QAction('Deactivate drawing', self)
         nodrawAction.setShortcut('Ctrl+D')
         nodrawAction.setStatusTip('Deactivate drawing')
-        nodrawAction.triggered.connect(self.main_widget.disable_drawing)
+        nodrawAction.triggered.connect(self.main_widget.win.disable_drawing)
         self.edit.addAction(nodrawAction)
 
         extractAction = QAction('Extract Brain', self)
@@ -108,13 +106,13 @@ class MainWindow(QMainWindow):
 
         # Editing tools as a toolbar
         pen = QAction(QIcon("images/pen.jpeg"), "Pen", self)
-        pen.triggered.connect(self.main_widget.edit_button1)
+        pen.triggered.connect(self.main_widget.win.edit_button1)
 
         rubber = QAction(QIcon("images/eraser.png"), "Rubber", self)
-        rubber.triggered.connect(self.main_widget.edit_button2)
+        rubber.triggered.connect(self.main_widget.win.edit_button2)
 
         cross = QAction(QIcon("images/cross.png"), "Cross", self)
-        cross.triggered.connect(self.main_widget.edit_button3)
+        cross.triggered.connect(self.main_widget.win.edit_button3)
 
         self.edit_toolbar = self.addToolBar("Editting Tools")
         self.edit_toolbar.addSeparator()
@@ -130,7 +128,7 @@ class MainWindow(QMainWindow):
         command line beforehand (this can be set in pycharm too) or through a window that appears on start (gets annoying).
         If you try to open it with nothing it complains and gives you an error message.
         """
-        self.data_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load extracted brain",
+        self.data_filename = QFileDialog.getOpenFileName(self, "Load extracted brain",
                                                                   "Please select full brain scan", "Nii Files (*.nii)")
         if isinstance(self.data_filename, tuple):
             self.data_filename = self.data_filename[0]  # Qt4/5 API difference
@@ -151,35 +149,29 @@ class MainWindow(QMainWindow):
         Opens a loading window through which you can select what label data file to load. Once a file is uploaded
         it automatically sets the app to drawing mode
         """
-        self.label_filename = pg.QtGui.QFileDialog.getOpenFileName(self, "Load labeled data",
+        self.label_filename = QFileDialog.getOpenFileName(self, "Load labeled data",
                                                                    "Please select the desired label data",
                                                                    "Nii Files (*.nii)")
         if isinstance(self.label_filename, tuple):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
             return
-        self.main_widget.brain.load_label_data(self.label_filename)
-        self.main_widget.enable_drawing()
+        self.brain.load_label_data(self.label_filename)
+        self.main_widget.win.enable_drawing()
+        self.main_widget.win.refresh_image()
 
     def save(self):
         """ Saves the edited labelled data into a new file
         Saves edits into a new .nii file. Opens a window in which you can type the name of the new file you are saving.
         It still does not copy the headers (something to do)
         """
-        if self.label_filename == '':
-            return
-        saving_filename = pg.QtGui.QFileDialog.getSaveFileName(self, "Save Image..", "modified_" + self.label_filename,
-                                                               "Nii Files (*.nii)")
-        if saving_filename[1] != "Nii Files (*.nii)":
-            return
-        elif (saving_filename[0])[-4:] != ".nii":
-            saving_filename = saving_filename[0] + ".nii"
+        old_name = self.brain.label_filename
+        if old_name is None:
+            old_name = "New_label_data"
         else:
-            saving_filename = saving_filename[0]
-
-        image = nib.Nifti1Image(np.flip(self.main_widget.label_data).transpose(), np.eye(4))
-        print(saving_filename)
-        nib.save(image, saving_filename)
+            old_name = "Modified_" + old_name
+        saving_filename = QFileDialog.getSaveFileName(self, "Save Image..", old_name, "Nii Files (*.nii)")
+        self.brain.save_label_data(saving_filename)
 
     def view_edit_tools(self):
         switch = not self.edit_toolbar.isVisible()
