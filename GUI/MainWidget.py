@@ -27,10 +27,8 @@ class MainWidget(QWidget):
 
         # Inputting data
         self.brain = brain
-        self.i = int(self.brain.shape[self.brain.section] / 2)
 
         # Initialising some memory used by functions
-        self.maxim = np.max(self.brain.data)
         self.full_head = self.brain.data.copy()
         self.only_brain = []
         self.normalized = 0
@@ -44,9 +42,9 @@ class MainWidget(QWidget):
         self.win.setCentralItem(self.view)
 
         # Making Images out of data
-        self.over_img = pg.ImageItem(self.brain.get_label_data(self.i), autoDownSmaple=False, opacity=0.3,
+        self.over_img = pg.ImageItem(self.brain.current_label_data_slice, autoDownSmaple=False, opacity=0.3,
                                      compositionMode=QtGui.QPainter.CompositionMode_Plus)
-        self.img = pg.ImageItem(self.brain.get_data(self.i) / self.maxim, autoDownsample=False,
+        self.img = pg.ImageItem(self.brain.current_data_slice, autoDownsample=False,
                                 compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
 
         # Colouring the labelled data
@@ -66,7 +64,7 @@ class MainWidget(QWidget):
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.brain.shape[self.brain.section] - 1)
         self.widget_slider.slider.setMaximum(self.brain.shape[self.brain.section] - 1)
-        self.widget_slider.slider.setValue(self.i)
+        self.widget_slider.slider.setValue(self.brain.i)
         self.widget_slider.slider.valueChanged.connect(self.update_after_slider)
 
         # Creating a label that tracks the position
@@ -91,7 +89,7 @@ class MainWidget(QWidget):
         """
         mouse_x = int(self.img.mapFromScene(pos).x())
         mouse_y = int(self.img.mapFromScene(pos).y())
-        self.position.setText(str(self.brain.position_as_voxel(self.i, mouse_x, mouse_y)))
+        self.position.setText(str(self.brain.position_as_voxel(mouse_x, mouse_y)))
 
     def update_after_slider(self):
         """ Updates the viewed image after moving the slider.
@@ -99,9 +97,9 @@ class MainWidget(QWidget):
         Updates the displayed slice depending on the new value of the slider.
         It does this for both the labels and image data.
         """
-        self.i = self.widget_slider.x
-        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.brain.get_label_data(self.i), autoLevels=False)
+        self.brain.i = self.widget_slider.x
+        self.img.setImage(self.brain.current_data_slice)
+        self.over_img.setImage(self.brain.current_label_data_slice, autoLevels=False)
 
     def __update_section_helper(self):
         """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
@@ -110,11 +108,11 @@ class MainWidget(QWidget):
         Sets the slider limits to sensible values;
         Updates the view of label and image data.
         """
-        self.i = int(self.brain.shape[self.brain.section] / 2)
+        self.brain.i = int(self.brain.shape[self.brain.section] / 2)
         self.widget_slider.maximum = self.brain.shape[self.brain.section] - 1
         self.widget_slider.slider.setMaximum(self.brain.shape[self.brain.section] - 1)
-        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
-        self.over_img.setImage(self.brain.get_label_data(self.i), autoLevels=False)
+        self.img.setImage(self.brain.current_data_slice)
+        self.over_img.setImage(self.brain.current_label_data_slice, autoLevels=False)
 
     def update0(self):
         """ Sets the view along axis 0
@@ -160,7 +158,7 @@ class MainWidget(QWidget):
             self.only_brain = self.brain.data * mask2
 
         self.brain.data = self.only_brain
-        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
+        self.img.setImage(self.brain.current_data_slice)
         self.extracted = True
 
     def normalize(self):
@@ -202,7 +200,7 @@ class MainWidget(QWidget):
         if self.extracted:
             self.brain.data = self.full_head
             self.extracted = False
-        self.img.setImage(self.brain.get_data(self.i) / self.maxim)
+        self.img.setImage(self.brain.current_data_slice)
 
     def enable_drawing(self):
         """ Activates drawing mode
@@ -221,6 +219,7 @@ class MainWidget(QWidget):
         if self.view.drawing:
             self.over_img.drawKernel = None
             self.view.drawing = False
+            self.view.state["mouseMode"] = 3
         else:
             self.enable_drawing()
 

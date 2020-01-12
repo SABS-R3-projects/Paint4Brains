@@ -20,6 +20,9 @@ class BrainData:
 
         self.section = 0
         self.shape = self.data.shape
+        self.i = int(self.shape[self.section] / 2)
+        maxim = np.max(self.data)
+        self.data = self.data/maxim
 
     def get_data(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -34,6 +37,10 @@ class BrainData:
         elif self.section == 2:
             return np.flip(self.data[:, :, i].transpose(), axis=1)
 
+    @property
+    def current_data_slice(self):
+        return self.get_data(self.i)
+
     def get_label_data(self, i):
         """ Returns the 2-D slice at point i of the labelled data.
 
@@ -47,6 +54,10 @@ class BrainData:
             return np.flip(self.label_data[:, i].transpose())
         elif self.section == 2:
             return np.flip(self.label_data[:, :, i].transpose(), axis=1)
+
+    @property
+    def current_label_data_slice(self):
+        return self.get_label_data(self.i)
 
     def set_label_data(self, i, x):
         """ Sets the data at a certain slice i to the 2-D array x.
@@ -81,11 +92,11 @@ class BrainData:
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
 
-    def position_as_voxel(self, i, mouse_x, mouse_y):
+    def position_as_voxel(self, mouse_x, mouse_y):
         if self.section == 0:
-            return i, mouse_x, mouse_y
+            return self.i, mouse_x, mouse_y
         elif self.section == 1:
-            return self.shape[0] - mouse_y - 1, i, self.shape[2] - mouse_x - 1
+            return self.shape[0] - mouse_y - 1, self.i, self.shape[2] - mouse_x - 1
         elif self.section == 2:
-            return self.shape[0] - mouse_y - 1, mouse_x, i
+            return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
