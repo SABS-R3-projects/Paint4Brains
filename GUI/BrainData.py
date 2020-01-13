@@ -4,7 +4,7 @@ import nibabel as nib
 
 class BrainData:
     def __init__(self, filename, label_filename = None):
-        """ Initilaize class
+        """ Initialize class
 
         :str filename: The name and location of the file
         """

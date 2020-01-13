@@ -4,7 +4,6 @@ from PyQt5 import QtCore
 from deepbrain import Extractor
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
-from BrainData import BrainData
 from ImageViewer import ImageViewer
 
 
@@ -75,10 +74,10 @@ class MainWidget(QWidget):
         Sets the slider limits to sensible values;
         Updates the view of label and image data.
         """
-        self.brain.i = int(self.brain.shape[self.brain.section] / 2)
         self.widget_slider.maximum = self.brain.shape[self.brain.section] - 1
         self.widget_slider.slider.setMaximum(self.brain.shape[self.brain.section] - 1)
         self.win.refresh_image()
+        self.win.recenter()
 
     def update0(self):
         """ Sets the view along axis 0
@@ -166,4 +165,4 @@ class MainWidget(QWidget):
         if self.extracted:
             self.brain.data = self.full_head
             self.extracted = False
-        self.img.setImage(self.brain.current_data_slice)
+        self.win.refresh_image()

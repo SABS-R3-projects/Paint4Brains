@@ -19,9 +19,9 @@ class ImageViewer(GraphicsView):
 
         # Making Images out of data
         self.over_img = ImageItem(self.brain.current_label_data_slice, autoDownSmaple=False, opacity=0.3,
-                                     compositionMode=QtGui.QPainter.CompositionMode_Plus)
+                                  compositionMode=QtGui.QPainter.CompositionMode_Plus)
         self.img = ImageItem(self.brain.current_data_slice, autoDownsample=False,
-                                compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
+                             compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
 
         # Colouring the labelled data
         lut = np.array([[0, 0, 0, 0], [20, 235, 150, 255]])
@@ -31,12 +31,17 @@ class ImageViewer(GraphicsView):
         # Adding the images to the viewing box and setting it to drawing mode (if there is labeled data)
         self.view.addItem(self.img)
         self.view.addItem(self.over_img)
+
         if self.brain.label_filename is not None:
             self.enable_drawing()
+
 
     def refresh_image(self):
         self.img.setImage(self.brain.current_data_slice)
         self.over_img.setImage(self.brain.current_label_data_slice, autoLevels=False)
+
+    def recenter(self):
+        self.view.menu.actions()[0].trigger()
 
     def enable_drawing(self):
         """ Activates drawing mode
