@@ -28,6 +28,9 @@ class BrainData:
         self.i = int(self.shape[self.section] / 2)
         maxim = np.max(self.data)
         self.data = self.data/maxim
+        self.different_labels = [0]
+        self.current_label = 1
+        self.other_labels_data = np.zeros(self.shape)
 
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -64,13 +67,36 @@ class BrainData:
     def current_label_data_slice(self):
         return self.get_label_data_slice(self.i)
 
+    def get_other_labels_data_slice(self, i):
+        """ Returns the 2-D slice at point i of the other labelled data.
+
+        Depending on the desired view (self.section) it returns 2-D slice with respect to a different axis of the 3-D data.
+        A number of transposes and flips are done to return the 2_D image with a sensible orientation
+        """
+        if self.section == 0:
+            return self.other_labels_data[i]
+        elif self.section == 1:
+            return np.flip(self.other_labels_data[:, i].transpose())
+        elif self.section == 2:
+            return np.flip(self.other_labels_data[:, :, i].transpose(), axis=1)
+
+    @property
+    def current_other_labels_data_slice(self):
+        return self.get_other_labels_data_slice(self.i)
+
     def load_label_data(self, filename):
         """ Loads a given 3-D binary array (x) into the GUI.
         """
         self.label_filename = filename
         self.__nib_label_data = nib.load(self.label_filename)
-        x = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_data().transpose())
-        self.label_data = x.astype(np.int8)
+        x = np.flip(self.__nib_label_data.as_reoriented(self.__orientation).get_data().transpose()).astype(np.int8)
+        self.other_labels_data = x
+        self.different_labels = np.unique(x)
+        number_of_labels = len(self.different_labels)
+        if number_of_labels == 2:
+            self.label_data = x
+        elif number_of_labels > 2:
+            self.label_data = np.where(x == self.different_labels[1], 1, 0)
 
     def save_label_data(self, saving_filename):
 
