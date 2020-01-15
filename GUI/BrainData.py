@@ -28,6 +28,7 @@ class BrainData:
         self.i = int(self.shape[self.section] / 2)
         maxim = np.max(self.data)
         self.data = self.data/maxim
+
         self.different_labels = [0]
         self.current_label = 1
         self.other_labels_data = np.zeros(self.shape)
