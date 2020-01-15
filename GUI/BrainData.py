@@ -15,6 +15,7 @@ class BrainData:
         self.__nib_data = nib.load(filename)
         self.__nib_label_data = None
         self.__orientation = nib.orientations.io_orientation(self.__nib_data.affine)
+        self.nii_img = self.__nib_data
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
         if self.label_filename is None:
@@ -119,4 +120,61 @@ class BrainData:
             return self.shape[0] - mouse_y - 1, self.i, self.shape[2] - mouse_x - 1
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
+
+    def __update_BrainData(self):
+        '''Updates brain.data after image analysis functions are called
+        '''
+        self.data = np.flip(self.nii_img.as_reoriented(self.__orientation).get_fdata().transpose())
+
+
+    ### Creating class methods ###
+
+    def BrainExtraction(self):
+        """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
+
+        Arguments:
+            self object with self.data {[np.array]} -- .nii image
+        """
+
+        if self.extracted:
+            return 0
+        elif len(self.only_brain) == 0:
+            ext = Extractor()
+            prob = ext.run(self.data)
+            print("EXTRACTION DONE")
+            mask2 = np.where(prob > 0.5, 1, 0)
+            self.data = self.data * mask2
+            #self.img.setImage(self.get_data(self.i) / self.maxim)
+            self.extracted = True
+
+
+    def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
+        '''Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
+
+        Arguments:
+        self object with .nii image field
+
+        zooms: int -- voxel dimensions
+        shape: int -- image resampling dimensions
+        target_axcoords: list, string -- list of target output axis orientations 
+        '''
+        self.zooms = zooms
+        self.shape = shape
+
+        # setting affine for size and dimension
+        new_affine = nib.volumeutils.shape_zoom_affine(shape, zoom, x_flip=True)
+
+        # creating new image with the new affine and shape
+        new_img = nl.image.resample_img(self.nii_img,new_affine, target_shape=shape)
+
+        #change orientation
+        orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
+        target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
+        transformation = nib.orientations.ornt_transform(orientation, orientation)
+        data = new_img.get_data()
+        new_tran = nib.orientations.apply_orientation(data,transformation)
+        transformed_image = nib.Nifti1Image(new_tran, new_affine)
+
+        self.nii_img = transformed_image
+
 
