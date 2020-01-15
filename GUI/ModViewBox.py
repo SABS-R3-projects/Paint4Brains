@@ -12,6 +12,7 @@ class ModViewBox(ViewBox):
         # By default not in drawing mode
         self.drawing = False
         self.state['mouseMode'] = 3
+        self.setAspectLocked(True)
 
     def mouseDragEvent(self, ev, axis=None):
         ## Overwritting mouseDragEvent to take drawmode into account.

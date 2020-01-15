@@ -25,8 +25,6 @@ class Slider(QWidget):
         self.slider.setMinimum(0)
         self.slider.setOrientation(Qt.Horizontal)
         self.verticalLayout.addWidget(self.slider)
-        spacerItem1 = QSpacerItem(20, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.verticalLayout.addItem(spacerItem1)
         self.horiLayout.addLayout(self.verticalLayout)
         self.resize(self.sizeHint())
 
