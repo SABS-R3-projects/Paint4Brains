@@ -3,7 +3,7 @@ import nibabel as nib
 
 
 class BrainData:
-    def __init__(self, filename, label_filename = None):
+    def __init__(self, filename, label_filename=None):
         """ Initialize class
 
         :str filename: The name and location of the file
@@ -17,6 +17,11 @@ class BrainData:
         self.__orientation = nib.orientations.io_orientation(self.__nib_data.affine)
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
+        # Default empty values
+        self.different_labels = [0]
+        self.__current_label = 1
+        self.other_labels_data = np.zeros(self.data.shape)
+
         if self.label_filename is None:
             self.label_data = np.zeros(self.data.shape)
         else:
@@ -27,11 +32,7 @@ class BrainData:
         self.shape = self.data.shape
         self.i = int(self.shape[self.section] / 2)
         maxim = np.max(self.data)
-        self.data = self.data/maxim
-
-        self.different_labels = [0]
-        self.current_label = 1
-        self.other_labels_data = np.zeros(self.shape)
+        self.data = self.data / maxim
 
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -91,13 +92,13 @@ class BrainData:
         self.label_filename = filename
         self.__nib_label_data = nib.load(self.label_filename)
         x = np.flip(self.__nib_label_data.as_reoriented(self.__orientation).get_data().transpose()).astype(np.int8)
-        self.other_labels_data = x
         self.different_labels = np.unique(x)
         number_of_labels = len(self.different_labels)
         if number_of_labels == 2:
             self.label_data = x
         elif number_of_labels > 2:
-            self.label_data = np.where(x == self.different_labels[1], 1, 0)
+            self.label_data = np.where(x == self.__current_label, 1, 0)
+            self.other_labels_data = np.where(self.label_data == 1, 0, x)
 
     def save_label_data(self, saving_filename):
 
@@ -120,4 +121,19 @@ class BrainData:
             return self.shape[0] - mouse_y - 1, self.i, self.shape[2] - mouse_x - 1
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
+
+    @property
+    def current_label(self):
+        return self.__current_label
+
+    @current_label.setter
+    def current_label(self, new_label):
+        if new_label in self.different_labels:
+            self.label_data = np.clip(self.label_data, 0, 1)
+            self.other_labels_data = np.where(self.label_data == 0,  self.other_labels_data, self.__current_label)
+            self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
+            self.__current_label = new_label
+
+    def next_label(self):
+        self.current_label = self.__current_label + 1
 

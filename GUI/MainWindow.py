@@ -77,6 +77,12 @@ class MainWindow(QMainWindow):
         self.view_menu.addSeparator()
         self.view_menu.addAction(viewToolbarAction)
 
+        nextLabelAction = QAction('Next Label', self)
+        nextLabelAction.setShortcut('Ctrl+N')
+        nextLabelAction.setStatusTip('View Next Segmented label')
+        nextLabelAction.triggered.connect(self.brain.next_label)
+        self.view_menu.addAction(nextLabelAction)
+
         nodrawAction = QAction('Deactivate drawing', self)
         nodrawAction.setShortcut('Ctrl+D')
         nodrawAction.setStatusTip('Deactivate drawing')
@@ -96,7 +102,6 @@ class MainWindow(QMainWindow):
         self.tools.addAction(unextractAction)
 
         normalizeAction = QAction('Normalize Intensity', self)
-        normalizeAction.setShortcut('Ctrl+N')
         normalizeAction.setStatusTip('Normalize Intensity')
         normalizeAction.triggered.connect(self.main_widget.normalize)
         self.tools.addAction(normalizeAction)
