@@ -8,6 +8,7 @@ setup(
     maintainer='Brennan Abanades, Pavanjit Chaggar, Itai Muzhingi, Andrei-Claudiu Roibu',
     maintainer_email='brennan.abanadeskenyon@stx.ox.ac.uk; pavanjit.chaggar@exeter.ox.ac.uk; itai.muzhingi@balliol.ox.ac.uk; andrei-claudiu.roibu@dtc.ox.ac.uk',
     install_requires=[
+        'pip>=19.0',
         'certifi==2019.9.11',
         'cycler==0.10.0',
         'kiwisolver==1.1.0',
@@ -30,5 +31,13 @@ setup(
         'tornado==6.0.3',
         'tensorflow==1.14.0',
         'deepbrain==0.1',
+        'torch',
+        'torchvision',
+        'h5py',
+        'tensorboardX',
+    ],
+    dependency_links=[
+        'https://github.com/shayansiddiqui/nn-common-modules/releases/download/v1.0/nn_common_modules-1.0-py2.py3-none-any.whl',
+        'https://github.com/abhi4ssj/squeeze_and_excitation/releases/download/v1.0/squeeze_and_excitation-1.0-py2.py3-none-any.whl',
     ],
 )
