@@ -10,8 +10,12 @@ class BrainData:
         """
         self.filename = filename
         self.label_filename = label_filename
+        self.saving_filename = None
 
-        self.data = np.flip(nib.as_closest_canonical(nib.load(filename)).get_fdata().transpose())
+        self.__nib_data = nib.load(filename)
+        self.__nib_label_data = None
+        self.__orientation = nib.orientations.io_orientation(self.__nib_data.affine)
+        self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
         if self.label_filename is None:
             self.label_data = np.zeros(self.data.shape)
@@ -64,11 +68,13 @@ class BrainData:
         """ Loads a given 3-D binary array (x) into the GUI.
         """
         self.label_filename = filename
-        x = np.flip(nib.as_closest_canonical(nib.load(self.label_filename)).get_data().transpose())
+        self.__nib_label_data = nib.load(self.label_filename)
+        x = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_data().transpose())
         self.label_data = x.astype(np.int8)
 
     def save_label_data(self, saving_filename):
 
+        self.saving_filename = saving_filename
         if saving_filename[1] != "Nii Files (*.nii)":
             return
         elif (saving_filename[0])[-4:] != ".nii":

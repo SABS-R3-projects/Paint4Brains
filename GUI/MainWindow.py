@@ -36,18 +36,27 @@ class MainWindow(QMainWindow):
         self.help = menu_bar.addMenu("Help")
 
         # Actions in file bar (This enables shortcuts too)
-        # Exit:
-        loadAction = QAction('Load Labelled Data', self)
+        newAction = QAction('New Label', self)
+        newAction.setStatusTip('Create new label')
+        newAction.triggered.connect(self.new)
+        self.file.addAction(newAction)
+
+        loadAction = QAction('Load Label', self)
         loadAction.setShortcut('Ctrl+L')
         loadAction.setStatusTip('Load Labels')
         loadAction.triggered.connect(self.load)
         self.file.addAction(loadAction)
 
-        saveAction = QAction('Save Labelled Data', self)
-        saveAction.setShortcut('Ctrl+S')
-        saveAction.setStatusTip('Load Labels')
+        saveAction = QAction('Save', self)
+        saveAction.setStatusTip('Save Labels')
         saveAction.triggered.connect(self.save)
         self.file.addAction(saveAction)
+
+        saveAsAction = QAction('Save As', self)
+        saveAsAction.setShortcut('Ctrl+S')
+        saveAsAction.setStatusTip('Save labels to selected file')
+        saveAsAction.triggered.connect(self.save_as)
+        self.file.addAction(saveAsAction)
 
         # Predefined actions that usually appear when you right click. Recycling one that resets the view here.
         viewBoxActionsList = self.main_widget.win.view.menu.actions()
@@ -129,7 +138,7 @@ class MainWindow(QMainWindow):
         If you try to open it with nothing it complains and gives you an error message.
         """
         self.data_filename = QFileDialog.getOpenFileName(self, "Load extracted brain",
-                                                                  "Please select full brain scan", "Nii Files (*.nii)")
+                                                         "Please select full brain scan", "Nii Files (*.nii *.nii.gz)")
         if isinstance(self.data_filename, tuple):
             self.data_filename = self.data_filename[0]  # Qt4/5 API difference
         if self.data_filename == '':
@@ -150,8 +159,8 @@ class MainWindow(QMainWindow):
         it automatically sets the app to drawing mode
         """
         self.label_filename = QFileDialog.getOpenFileName(self, "Load labeled data",
-                                                                   "Please select the desired label data",
-                                                                   "Nii Files (*.nii)")
+                                                          "Please select the desired label data",
+                                                          "Nii Files (*.nii *.nii.gz)")
         if isinstance(self.label_filename, tuple):
             self.label_filename = self.label_filename[0]  # Qt4/5 API difference
         if self.label_filename == '':
@@ -160,7 +169,7 @@ class MainWindow(QMainWindow):
         self.main_widget.win.enable_drawing()
         self.main_widget.win.refresh_image()
 
-    def save(self):
+    def save_as(self):
         """ Saves the edited labelled data into a new file
         Saves edits into a new .nii file. Opens a window in which you can type the name of the new file you are saving.
         It still does not copy the headers (something to do)
@@ -172,6 +181,23 @@ class MainWindow(QMainWindow):
             old_name = "Modified_" + old_name
         saving_filename = QFileDialog.getSaveFileName(self, "Save Image..", old_name, "Nii Files (*.nii)")
         self.brain.save_label_data(saving_filename)
+
+    def save(self):
+        """ Saves the edited labelled data into a previously saved into file
+        Saves edits into a new .nii file. If no file has been saved before it reverts to save_as
+        It still does not copy the headers (something to do)
+        """
+        if self.brain.saving_filename is None:
+            self.save_as()
+        else:
+            self.brain.save_label_data(self.brain.saving_filename)
+
+    def new(self):
+        if np.sum(self.brain.label_data) == 0:
+            self.main_widget.win.enable_drawing()
+        else:
+            self.save_as()
+            self.brain.label_data = np.zeros(self.brain.shape)
 
     def view_edit_tools(self):
         switch = not self.edit_toolbar.isVisible()
