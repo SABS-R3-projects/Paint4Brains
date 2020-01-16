@@ -135,5 +135,8 @@ class BrainData:
             self.__current_label = new_label
 
     def next_label(self):
-        self.current_label = self.__current_label + 1
+        if (self.__current_label + 1) in self.different_labels:
+            self.current_label = self.__current_label + 1
+        else:
+            self.current_label = 1
 

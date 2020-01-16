@@ -1,10 +1,12 @@
 import numpy as np
 from PyQt5.QtWidgets import QWidget
 from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 from pyqtgraph import ImageItem, GraphicsView
 from ModViewBox import ModViewBox
 from BrainData import BrainData
 from matplotlib import cm
+
 
 class ImageViewer(GraphicsView):
     def __init__(self, brain, parent=None):
@@ -20,7 +22,7 @@ class ImageViewer(GraphicsView):
         # Making Images out of data
         self.over_img = ImageItem(self.brain.current_label_data_slice, autoDownSmaple=False, opacity=1,
                                   compositionMode=QtGui.QPainter.CompositionMode_Plus)
-        self.mid_img = ImageItem(self.brain.current_other_labels_data_slice, autoDownSmaple=False, opacity=0.5,
+        self.mid_img = ImageItem(self.brain.current_other_labels_data_slice, autoDownSmaple=False, opacity=0.7,
                                  compositionMode=QtGui.QPainter.CompositionMode_Plus)
         self.img = ImageItem(self.brain.current_data_slice, autoDownsample=False,
                              compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
@@ -30,13 +32,23 @@ class ImageViewer(GraphicsView):
         self.over_img.setLookupTable(lut)
         self.over_img.setLevels([0, 1])
 
-        lut2 = [[0, 0, 0, 0], [140, 215, 239, 255], [38, 3, 196, 255], [68, 23, 193, 255], [119, 171, 229, 255], [73, 99, 86, 255], [92, 188, 223, 255], [69, 246, 9, 255], [27, 220, 151, 255], [161, 45, 249, 255], [118, 54, 69, 255], [212, 246, 124, 255], [87, 2, 201, 255], [116, 216, 46, 255], [17, 209, 23, 255], [109, 120, 234, 255], [66, 186, 85, 255], [248, 97, 234, 255], [16, 118, 161, 255], [167, 113, 206, 255], [82, 145, 154, 255], [23, 228, 47, 255], [29, 121, 164, 255], [84, 214, 219, 255], [85, 31, 45, 255], [53, 219, 24, 255], [100, 225, 31, 255], [250, 86, 132, 255], [18, 78, 84, 255], [80, 28, 185, 255], [215, 117, 51, 255], [61, 151, 58, 255], [40, 102, 175, 255]]
-        #for _ in self.brain.different_labels:
-        #    lut2.append([np.random.randint(0,255), np.random.randint(0,255), np.random.randint(0,255), 255])
-        #print(lut2)
+        # Maybe the visualization lecture was not that useless...
+        self.colours = [[166, 206, 227],
+                        [31, 120, 180],
+                        [178, 223, 138],
+                        [51, 160, 44],
+                        [251, 154, 153],
+                        [227, 26, 28],
+                        [253, 191, 111],
+                        [255, 127, 0],
+                        [202, 178, 214],
+                        [106, 61, 154],
+                        [255, 255, 153],
+                        [177, 89, 40]]
+        self.colours = [[0, 0, 0]] + self.colours + self.colours + self.colours
 
         # Apply the colormap
-        self.mid_img.setLookupTable(np.array(lut2))
+        self.mid_img.setLookupTable(np.array(self.colours))
 
         # Adding the images to the viewing box and setting it to drawing mode (if there is labeled data)
         self.view.addItem(self.img)
@@ -45,6 +57,8 @@ class ImageViewer(GraphicsView):
 
         if self.brain.label_filename is not None:
             self.enable_drawing()
+
+        self.select_mode = False
 
     def refresh_image(self):
         self.img.setImage(self.brain.current_data_slice)
@@ -99,6 +113,33 @@ class ImageViewer(GraphicsView):
         """
         if self.view.drawing:
             self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
+
+    def select_label(self):
+        self.over_img.drawKernel = None
+        self.select_mode = True
+
+    def next_label(self):
+        self.brain.next_label()
+        self.refresh_image()
+
+    def mouseReleaseEvent(self, ev):
+        if self.select_mode:
+            print(ev.button())
+            if ev.button() == Qt.LeftButton:
+                pos = ev.pos()
+                mouse_x = int(self.img.mapFromScene(pos).x())
+                mouse_y = int(self.img.mapFromScene(pos).y())
+                location = self.brain.position_as_voxel(mouse_x, mouse_y)
+                within = 0 < location[0] < self.brain.shape[0] and 0 < location[1] < self.brain.shape[1] and 0 < location[
+                    2] < self.brain.shape[2]
+                if within:
+                    label = self.brain.other_labels_data[location]
+                    if label > 0:
+                        self.brain.current_label = self.brain.other_labels_data[location]
+                        self.select_mode = False
+                        self.refresh_image()
+                        self.enable_drawing()
+        super(ImageViewer, self).mouseReleaseEvent(ev)
 
 
 cross = np.array([

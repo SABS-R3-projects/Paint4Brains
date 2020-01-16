@@ -79,9 +79,15 @@ class MainWindow(QMainWindow):
 
         nextLabelAction = QAction('Next Label', self)
         nextLabelAction.setShortcut('Ctrl+N')
-        nextLabelAction.setStatusTip('View Next Segmented label')
-        nextLabelAction.triggered.connect(self.brain.next_label)
-        self.view_menu.addAction(nextLabelAction)
+        nextLabelAction.setStatusTip('Edit Next Segmented label')
+        nextLabelAction.triggered.connect(self.main_widget.win.next_label)
+        self.edit.addAction(nextLabelAction)
+
+        nextLabelAction = QAction('Select Label', self)
+        nextLabelAction.setStatusTip('Select Label to be edited')
+        nextLabelAction.triggered.connect(self.main_widget.win.select_label)
+        self.edit.addAction(nextLabelAction)
+        self.edit.addSeparator()
 
         nodrawAction = QAction('Deactivate drawing', self)
         nodrawAction.setShortcut('Ctrl+D')
