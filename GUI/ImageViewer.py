@@ -22,7 +22,7 @@ class ImageViewer(GraphicsView):
         # Making Images out of data
         self.over_img = ImageItem(self.brain.current_label_data_slice, autoDownSmaple=False, opacity=1,
                                   compositionMode=QtGui.QPainter.CompositionMode_Plus)
-        self.mid_img = ImageItem(self.brain.current_other_labels_data_slice, autoDownSmaple=False, opacity=0.7,
+        self.mid_img = ImageItem(np.zeros(self.brain.current_other_labels_data_slice.shape), autoDownSmaple=False, opacity=0.7,
                                  compositionMode=QtGui.QPainter.CompositionMode_Plus)
         self.img = ImageItem(self.brain.current_data_slice, autoDownsample=False,
                              compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
@@ -59,11 +59,15 @@ class ImageViewer(GraphicsView):
             self.enable_drawing()
 
         self.select_mode = False
+        self.see_all_labels = False
 
     def refresh_image(self):
         self.img.setImage(self.brain.current_data_slice)
-        self.mid_img.setImage(self.brain.current_other_labels_data_slice, autoLevels=False)
         self.over_img.setImage(self.brain.current_label_data_slice, autoLevels=False)
+        if self.see_all_labels:
+            self.mid_img.setImage(self.brain.current_other_labels_data_slice, autoLevels=False)
+        else:
+            self.mid_img.setImage(np.zeros(self.brain.current_other_labels_data_slice.shape), autoLevels=False)
 
     def recenter(self):
         self.view.menu.actions()[0].trigger()
@@ -117,6 +121,10 @@ class ImageViewer(GraphicsView):
     def select_label(self):
         self.over_img.drawKernel = None
         self.select_mode = True
+
+    def view_back_labels(self):
+        self.see_all_labels = not self.see_all_labels
+        self.refresh_image()
 
     def next_label(self):
         self.brain.next_label()
