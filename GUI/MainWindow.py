@@ -166,6 +166,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(left)
         self.edit_toolbar.addAction(label)
         self.edit_toolbar.addAction(right)
+        self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
 
     def load_initial(self):
@@ -234,7 +235,9 @@ class MainWindow(QMainWindow):
             self.main_widget.win.enable_drawing()
         else:
             self.save_as()
+            self.brain.multiple_labels = False
             self.brain.label_data = np.zeros(self.brain.shape)
+            self.brain.other_labels_data = np.zeros(self.brain.shape)
 
     def view_edit_tools(self):
         switch = not self.edit_toolbar.isVisible()

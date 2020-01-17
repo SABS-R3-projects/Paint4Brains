@@ -24,6 +24,7 @@ class BrainData:
         self.different_labels = [0]
         self.__current_label = 1
         self.other_labels_data = np.zeros(self.data.shape)
+        self.multiple_labels = False
 
         if self.label_filename is None:
             self.label_data = np.zeros(self.data.shape)
@@ -102,8 +103,10 @@ class BrainData:
         self.different_labels = np.unique(x)
         number_of_labels = len(self.different_labels)
         if number_of_labels == 2:
+            self.multiple_labels = False
             self.label_data = x
         elif number_of_labels > 2:
+            self.multiple_labels = True
             self.label_data = np.where(x == self.__current_label, 1, 0)
             self.other_labels_data = np.where(self.label_data == 1, 0, x)
 
