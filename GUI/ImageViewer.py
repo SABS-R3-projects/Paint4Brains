@@ -22,7 +22,8 @@ class ImageViewer(GraphicsView):
         # Making Images out of data
         self.over_img = ImageItem(self.brain.current_label_data_slice, autoDownSmaple=False, opacity=1,
                                   compositionMode=QtGui.QPainter.CompositionMode_Plus)
-        self.mid_img = ImageItem(np.zeros(self.brain.current_other_labels_data_slice.shape), autoDownSmaple=False, opacity=0.7,
+        self.mid_img = ImageItem(np.zeros(self.brain.current_other_labels_data_slice.shape), autoDownSmaple=False,
+                                 opacity=0.7,
                                  compositionMode=QtGui.QPainter.CompositionMode_Plus)
         self.img = ImageItem(self.brain.current_data_slice, autoDownsample=False,
                              compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
@@ -33,7 +34,7 @@ class ImageViewer(GraphicsView):
         self.over_img.setLevels([0, 1])
 
         # Maybe the visualization lecture was not that useless...
-        self.colours = [[166, 206, 227],
+        self.colours = [[166, 206, 27],
                         [31, 120, 180],
                         [178, 223, 138],
                         [51, 160, 44],
@@ -45,10 +46,11 @@ class ImageViewer(GraphicsView):
                         [106, 61, 154],
                         [255, 255, 153],
                         [177, 89, 40]]
-        self.colours = [[0, 0, 0]] + self.colours + self.colours + self.colours
 
         # Apply the colormap
-        self.mid_img.setLookupTable(np.array(self.colours))
+        num = len(self.brain.different_labels)+1
+        self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / 12 + 1) * self.colours)[:num])
+        self.mid_img.setLevels([0, np.max(self.brain.different_labels)])
 
         # Adding the images to the viewing box and setting it to drawing mode (if there is labeled data)
         self.view.addItem(self.img)
@@ -132,14 +134,13 @@ class ImageViewer(GraphicsView):
 
     def mouseReleaseEvent(self, ev):
         if self.select_mode:
-            print(ev.button())
             if ev.button() == Qt.LeftButton:
                 pos = ev.pos()
                 mouse_x = int(self.img.mapFromScene(pos).x())
                 mouse_y = int(self.img.mapFromScene(pos).y())
                 location = self.brain.position_as_voxel(mouse_x, mouse_y)
-                within = 0 < location[0] < self.brain.shape[0] and 0 < location[1] < self.brain.shape[1] and 0 < location[
-                    2] < self.brain.shape[2]
+                within = 0 < location[0] < self.brain.shape[0] and 0 < location[1] < self.brain.shape[1] and 0 < \
+                         location[2] < self.brain.shape[2]
                 if within:
                     label = self.brain.other_labels_data[location]
                     if label > 0:
