@@ -147,12 +147,25 @@ class MainWindow(QMainWindow):
         cross = QAction(QIcon("images/cross.png"), "Cross", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
+        left = QAction(QIcon("images/left.png"), "Previous Label", self)
+        left.triggered.connect(self.main_widget.win.previous_label)
+
+        label = QAction(QIcon("images/label.jpg"), "Select Label", self)
+        label.triggered.connect(self.main_widget.win.select_label)
+
+        right = QAction(QIcon("images/right.png"), "Next Label", self)
+        right.triggered.connect(self.main_widget.win.next_label)
+
         self.edit_toolbar = self.addToolBar("Editting Tools")
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(pen)
         self.edit_toolbar.addAction(rubber)
         self.edit_toolbar.addAction(cross)
         self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addAction(left)
+        self.edit_toolbar.addAction(label)
+        self.edit_toolbar.addAction(right)
         self.edit_toolbar.setVisible(False)
 
     def load_initial(self):
