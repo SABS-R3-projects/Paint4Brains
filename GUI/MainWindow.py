@@ -90,6 +90,12 @@ class MainWindow(QMainWindow):
         nextLabelAction.triggered.connect(self.main_widget.win.next_label)
         self.edit.addAction(nextLabelAction)
 
+        prevLabelAction = QAction('Previous Label', self)
+        prevLabelAction.setShortcut('Ctrl+M')
+        prevLabelAction.setStatusTip('Edit Previous Segmented label')
+        prevLabelAction.triggered.connect(self.main_widget.win.previous_label)
+        self.edit.addAction(prevLabelAction)
+
         selectLabelAction = QAction('Select Label', self)
         selectLabelAction.setStatusTip('Select Label to be edited')
         selectLabelAction.triggered.connect(self.main_widget.win.select_label)

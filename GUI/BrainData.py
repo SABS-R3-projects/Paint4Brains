@@ -134,9 +134,3 @@ class BrainData:
             self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
             self.__current_label = new_label
 
-    def next_label(self):
-        if (self.__current_label + 1) in self.different_labels:
-            self.current_label = self.__current_label + 1
-        else:
-            self.current_label = 1
-

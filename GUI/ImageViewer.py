@@ -47,7 +47,7 @@ class ImageViewer(GraphicsView):
                         [255, 255, 153],
                         [177, 89, 40]]
 
-        # Apply the colormap
+        # Apply the colormap. Ensure it has the right number of colours
         num = len(self.brain.different_labels)+1
         self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / 12 + 1) * self.colours)[:num])
         self.mid_img.setLevels([0, np.max(self.brain.different_labels)])
@@ -129,7 +129,19 @@ class ImageViewer(GraphicsView):
         self.refresh_image()
 
     def next_label(self):
-        self.brain.next_label()
+        new_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0] + 1
+        if new_index < len(self.brain.different_labels):
+            self.brain.current_label = self.brain.different_labels[new_index]
+        else:
+            self.brain.current_label = self.brain.different_labels[1]
+        self.refresh_image()
+
+    def previous_label(self):
+        old_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0]
+        if old_index != 1:
+            self.brain.current_label = self.brain.different_labels[old_index - 1]
+        else:
+            self.brain.current_label = self.brain.different_labels[-1]
         self.refresh_image()
 
     def mouseReleaseEvent(self, ev):
