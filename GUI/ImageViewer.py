@@ -5,7 +5,6 @@ from PyQt5.QtCore import Qt
 from pyqtgraph import ImageItem, GraphicsView
 from ModViewBox import ModViewBox
 from BrainData import BrainData
-from matplotlib import cm
 
 
 class ImageViewer(GraphicsView):
@@ -46,11 +45,7 @@ class ImageViewer(GraphicsView):
                         [106, 61, 154],
                         [255, 255, 153],
                         [177, 89, 40]]
-
-        # Apply the colormap. Ensure it has the right number of colours
-        num = len(self.brain.different_labels)+1
-        self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / 12 + 1) * self.colours)[:num])
-        self.mid_img.setLevels([0, np.max(self.brain.different_labels)])
+        self.update_colormap()
 
         # Adding the images to the viewing box and setting it to drawing mode (if there is labeled data)
         self.view.addItem(self.img)
@@ -64,6 +59,10 @@ class ImageViewer(GraphicsView):
         self.see_all_labels = False
 
     def refresh_image(self):
+        """ Sets the images displayed by the Image viewer to the current data slices
+
+        It will only show all the labels if the self.see_all_labels parameters is True
+        """
         self.img.setImage(self.brain.current_data_slice)
         self.over_img.setImage(self.brain.current_label_data_slice, autoLevels=False)
         if self.see_all_labels:
@@ -72,7 +71,20 @@ class ImageViewer(GraphicsView):
             self.mid_img.setImage(np.zeros(self.brain.current_other_labels_data_slice.shape), autoLevels=False)
 
     def recenter(self):
+        """ Recenter the brain into the middle of the image viewer
+
+        The implementation may seem weird, but I am just calling an action predefined by PyQt5
+        """
         self.view.menu.actions()[0].trigger()
+
+    def update_colormap(self):
+        """ Updates the colormap to account for the current number of distinct labels.
+
+        There are only 12 distinct colours (not including the "invisible" colour)
+        """
+        num = len(self.brain.different_labels)+1
+        self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / 12 + 1) * self.colours)[:num])
+        self.mid_img.setLevels([0, np.max(self.brain.different_labels)])
 
     def enable_drawing(self):
         """ Activates drawing mode
@@ -101,50 +113,78 @@ class ImageViewer(GraphicsView):
         This is basically a square of one voxel in size with value one.
         For all the editing buttons the matrix used to edit is defined at the top of the file
         """
-        if self.view.drawing:
-            self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+        self.view.drawing = True
+        self.over_img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
     def edit_button2(self):
         """ Sets the drawing mode to RUBBER
 
         Similar to DOT but removes the label from voxels .
         """
-        if self.view.drawing:
-            self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
+        self.view.drawing = True
+        self.over_img.setDrawKernel(rubber, mask=rubber, center=(0, 0), mode='add')
 
     def edit_button3(self):
         """ Sets the drawing mode to SQUARE
 
         This sets the paintbrush to a cross of 3x3 voxels in size.
         """
-        if self.view.drawing:
-            self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
+        self.view.drawing = True
+        self.over_img.setDrawKernel(cross, mask=cross, center=(1, 1), mode='add')
 
     def select_label(self):
-        self.over_img.drawKernel = None
-        self.select_mode = True
+        """ Allows the user to select the location of the label to be edited next.
+
+        Will only have effect if there are multiple labels from which to select
+        The bulk of the implementation for this method is in the modified mouseReleasEevent method
+        """
+        if self.brain.multiple_labels:
+            self.over_img.drawKernel = None
+            self.select_mode = True
 
     def view_back_labels(self):
+        """  Switch that determines whether all segmented areas are visible or just one.
+
+        If see_all_labels was False, it makes all labels visible.
+        If it was True it makes all labels except the one the user is currently editing invisible.
+        """
         self.see_all_labels = not self.see_all_labels
         self.refresh_image()
 
     def next_label(self):
-        new_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0] + 1
-        if new_index < len(self.brain.different_labels):
-            self.brain.current_label = self.brain.different_labels[new_index]
-        else:
-            self.brain.current_label = self.brain.different_labels[1]
-        self.refresh_image()
+        """ Brings the next label in the list to be edited
+
+        Lets you iterate through all existing labels
+        """
+        if self.brain.multiple_labels:
+            new_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0] + 1
+            if new_index < len(self.brain.different_labels):
+                self.brain.current_label = self.brain.different_labels[new_index]
+            else:
+                self.brain.current_label = self.brain.different_labels[1]
+            self.refresh_image()
 
     def previous_label(self):
-        old_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0]
-        if old_index != 1:
-            self.brain.current_label = self.brain.different_labels[old_index - 1]
-        else:
-            self.brain.current_label = self.brain.different_labels[-1]
-        self.refresh_image()
+        """ Brings the previous label in the list to be edited
+
+        Lets you iterate through all existing labels
+        """
+        if self.brain.multiple_labels:
+            old_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0]
+            if old_index != 1:
+                self.brain.current_label = self.brain.different_labels[old_index - 1]
+            else:
+                self.brain.current_label = self.brain.different_labels[-1]
+            self.refresh_image()
 
     def mouseReleaseEvent(self, ev):
+        """ Adding functionality to the default mouseReleaseEvent method to take select mode into account.
+
+        If when select_mode is activated, the left button is released on a previously labeled area, then
+        the pen is set to that label. Otherwise, everything should work as normal (the default)
+
+        :param ev: signal emitted when user releases a mouse button.
+        """
         if self.select_mode:
             if ev.button() == Qt.LeftButton:
                 pos = ev.pos()

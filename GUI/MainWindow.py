@@ -231,14 +231,22 @@ class MainWindow(QMainWindow):
             self.brain.save_label_data(self.brain.saving_filename)
 
     def new(self):
-        if np.sum(self.brain.label_data) == 0:
+        """ Create new label
+
+        If there are no other labels this is equivalent to enable drawing. If there are other labels, this adds a new
+        one and sets it to be the label that is being currently edited.
+        """
+        if np.sum(self.brain.label_data) == 0 and np.sum(self.brain.other_labels_data) == 0:
             self.main_widget.win.enable_drawing()
         else:
-            self.save_as()
-            self.brain.multiple_labels = False
-            self.brain.label_data = np.zeros(self.brain.shape)
-            self.brain.other_labels_data = np.zeros(self.brain.shape)
+            self.brain.current_label = int(np.max(self.brain.different_labels)) + 1
+            self.main_widget.win.refresh_image()
+            self.main_widget.win.update_colormap()
 
     def view_edit_tools(self):
+        """ Switch the toolbar with editing buttons to visible or invisible
+
+        Makes it the opposite of what it was previously
+        """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
