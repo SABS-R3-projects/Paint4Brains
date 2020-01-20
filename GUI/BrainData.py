@@ -123,6 +123,8 @@ class BrainData:
         if number_of_labels == 2:
             self.multiple_labels = False
             self.label_data = x
+            self.other_labels_data = np.zeros(x.shape)
+            self.__current_label = 1
         elif number_of_labels > 2:
             self.multiple_labels = True
             self.label_data = np.where(x == self.__current_label, 1, 0)
