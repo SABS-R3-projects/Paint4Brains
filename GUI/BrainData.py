@@ -2,7 +2,8 @@ import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
 import nilearn as nl
-
+import os
+import pathlib
 
 class BrainData:
     def __init__(self, filename, label_filename=None):
@@ -192,8 +193,6 @@ class BrainData:
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
-        self.__update_BrainData
-
 
     def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
         """Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
@@ -224,6 +223,8 @@ class BrainData:
 
         self.nii_img = transformed_image
         self.data = data
+        filename = 'transformed.nii'
+        nib.save(self.nii_img, filename)
 
     @property
     def current_label(self):
@@ -250,3 +251,32 @@ class BrainData:
         self.__current_label = new_label
 
 
+    def brainSegmentation(self):
+        """
+        Using the outputs from brainExtraction and transformation, this function calls QuickNAT to perform brain segmentation
+        This function is re-implementation of the original QuickNAT evaluation pipeline. Details can be found here: https://github.com/ai-med/quickNAT_pytorch
+
+        Arguments:
+            self object with .nii image field
+
+        """
+
+        # First, we wish to standardize the MRI scans. This is done using the previous "transformation" function.
+
+        self.transformation()
+
+
+
+
+
+    #     if self.extracted:
+    #         return 0
+    #     else:
+    #         ext = Extractor()
+    #         prob = ext.run(self.data)
+    #         print("EXTRACTION DONE")
+    #         mask2 = np.where(prob > mask_prob, 1, 0)
+    #         self.data = self.data * mask2
+    #         #self.img.setImage(self.get_data(self.i) / self.maxim)
+    #         self.extracted = True
+    #         self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)

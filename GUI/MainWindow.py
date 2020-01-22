@@ -128,7 +128,10 @@ class MainWindow(QMainWindow):
         segmentAction = QAction('Segment Brain', self)
         segmentAction.setShortcut('Ctrl+S')
         segmentAction.setStatusTip('Segment Brain')
-        segmentAction.triggered.connect(self.main_widget.segment)
+        # segmentAction.triggered.connect(self.main_widget.segment)
+
+        segmentAction.triggered.connect(self.brain.transformation)
+
         self.tools.addAction(segmentAction)
 
         overlayAction = QAction('Brain-Segmentation Overlay', self)
