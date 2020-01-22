@@ -207,7 +207,6 @@ class BrainData:
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
-        self.__update_BrainData
 
 
     def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
