@@ -1,6 +1,7 @@
 import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
+import nilearn as nl
 
 
 class BrainData:
@@ -123,14 +124,9 @@ class BrainData:
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
-    def __update_BrainData(self):
-        '''Updates brain.data after image analysis functions are called
-        '''
-        self.data = np.flip(self.nii_img.as_reoriented(self.__orientation).get_fdata().transpose())
-
 
     ### Creating class methods ###
-    def brainExtraction(self):
+    def brainExtraction(self, mask_prob = 0.5):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
         Arguments:
@@ -143,7 +139,7 @@ class BrainData:
             ext = Extractor()
             prob = ext.run(self.data)
             print("EXTRACTION DONE")
-            mask2 = np.where(prob > 0.5, 1, 0)
+            mask2 = np.where(prob > mask_prob, 1, 0)
             self.data = self.data * mask2
             #self.img.setImage(self.get_data(self.i) / self.maxim)
             self.extracted = True
@@ -179,7 +175,7 @@ class BrainData:
         self.shape = shape
 
         # setting affine for size and dimension
-        self.affine = nib.volumeutils.shape_zoom_affine(shape, zoom, x_flip=True)
+        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms, x_flip=True)
 
         # creating new image with the new affine and shape
         new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=shape)
@@ -193,6 +189,6 @@ class BrainData:
         transformed_image = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = transformed_image
-        self.__update_BrainData
+        self.data = data
 
 
