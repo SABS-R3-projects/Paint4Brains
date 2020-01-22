@@ -64,7 +64,7 @@ class BrainData:
         """ Returns the 2-D slice at point i of the labelled data.
 
         Depending on the desired view (self.section) it returns 2-D slice with respect to a different axis of the 3-D data.
-        A number of transposes and flips are done to return the 2_D image with a sensible orientation
+        A number of transposes and flips are done to return the 2_D image with a sensible orientation.
         """
         self.label_data = np.clip(self.label_data, 0, 1)
         if self.section == 0:
