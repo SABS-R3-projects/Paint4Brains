@@ -170,7 +170,10 @@ class BrainData:
         Arguments:
             self object with self.data {[np.array]} -- .nii image
         """
-
+        # If it has already been extracted (mostly empty) don't do it again
+        if self.data.size > 2*np.count_nonzero(self.data):
+            print("INPUT BRAIN IS ALREADY EXTRACTED")
+            return 0
         if self.extracted:
             return 0
         elif len(self.only_brain) == 0:
