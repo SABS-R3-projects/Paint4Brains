@@ -76,6 +76,31 @@ class MainWindow(QMainWindow):
 
         self.view_menu.addSeparator()
         self.view_menu.addAction(viewToolbarAction)
+        self.view_menu.addSeparator()
+
+        seeAllAction = QAction('All Labels', self)
+        seeAllAction.setShortcut('Ctrl+A')
+        seeAllAction.setStatusTip('Edit Next Segmented label')
+        seeAllAction.triggered.connect(self.main_widget.win.view_back_labels)
+        self.view_menu.addAction(seeAllAction)
+
+        nextLabelAction = QAction('Next Label', self)
+        nextLabelAction.setShortcut('Ctrl+N')
+        nextLabelAction.setStatusTip('Edit Next Segmented label')
+        nextLabelAction.triggered.connect(self.main_widget.win.next_label)
+        self.edit.addAction(nextLabelAction)
+
+        prevLabelAction = QAction('Previous Label', self)
+        prevLabelAction.setShortcut('Ctrl+M')
+        prevLabelAction.setStatusTip('Edit Previous Segmented label')
+        prevLabelAction.triggered.connect(self.main_widget.win.previous_label)
+        self.edit.addAction(prevLabelAction)
+
+        selectLabelAction = QAction('Select Label', self)
+        selectLabelAction.setStatusTip('Select Label to be edited')
+        selectLabelAction.triggered.connect(self.main_widget.win.select_label)
+        self.edit.addAction(selectLabelAction)
+        self.edit.addSeparator()
 
         nodrawAction = QAction('Deactivate drawing', self)
         nodrawAction.setShortcut('Ctrl+D')
@@ -96,7 +121,6 @@ class MainWindow(QMainWindow):
         self.tools.addAction(unextractAction)
 
         normalizeAction = QAction('Normalize Intensity', self)
-        normalizeAction.setShortcut('Ctrl+N')
         normalizeAction.setStatusTip('Normalize Intensity')
         normalizeAction.triggered.connect(self.main_widget.normalize)
         self.tools.addAction(normalizeAction)
@@ -123,11 +147,25 @@ class MainWindow(QMainWindow):
         cross = QAction(QIcon("images/cross.png"), "Cross", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
+        left = QAction(QIcon("images/left.png"), "Previous Label", self)
+        left.triggered.connect(self.main_widget.win.previous_label)
+
+        label = QAction(QIcon("images/label.jpg"), "Select Label", self)
+        label.triggered.connect(self.main_widget.win.select_label)
+
+        right = QAction(QIcon("images/right.png"), "Next Label", self)
+        right.triggered.connect(self.main_widget.win.next_label)
+
         self.edit_toolbar = self.addToolBar("Editting Tools")
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(pen)
         self.edit_toolbar.addAction(rubber)
         self.edit_toolbar.addAction(cross)
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addAction(left)
+        self.edit_toolbar.addAction(label)
+        self.edit_toolbar.addAction(right)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
 
@@ -167,7 +205,9 @@ class MainWindow(QMainWindow):
             return
         self.brain.load_label_data(self.label_filename)
         self.main_widget.win.enable_drawing()
-        self.main_widget.win.refresh_image()
+        self.main_widget.win.update_colormap()
+        self.main_widget.win.view_back_labels()
+
 
     def save_as(self):
         """ Saves the edited labelled data into a new file
@@ -193,12 +233,22 @@ class MainWindow(QMainWindow):
             self.brain.save_label_data(self.brain.saving_filename)
 
     def new(self):
-        if np.sum(self.brain.label_data) == 0:
+        """ Create new label
+
+        If there are no other labels this is equivalent to enable drawing. If there are other labels, this adds a new
+        one and sets it to be the label that is being currently edited.
+        """
+        if np.sum(self.brain.label_data) == 0 and np.sum(self.brain.other_labels_data) == 0:
             self.main_widget.win.enable_drawing()
         else:
-            self.save_as()
-            self.brain.label_data = np.zeros(self.brain.shape)
+            self.brain.current_label = int(np.max(self.brain.different_labels)) + 1
+            self.main_widget.win.refresh_image()
+            self.main_widget.win.update_colormap()
 
     def view_edit_tools(self):
+        """ Switch the toolbar with editing buttons to visible or invisible
+
+        Makes it the opposite of what it was previously
+        """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
