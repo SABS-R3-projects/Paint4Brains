@@ -146,6 +146,22 @@ class BrainData:
             self.data = self.data * mask2
             #self.img.setImage(self.get_data(self.i) / self.maxim)
             self.extracted = True
+            self.nii_img = nib.Nifti1Image(self.data, self.affine)
+
+    def Reorient(self, target_axcoords = ('L','A','S')):
+        ''' Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
+
+        Arguments:
+        target_axcoords = list, string -- list of target output axis orientations
+        '''
+        orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(self.nii_img.affine))
+        target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
+        transformation = nib.orientations.ornt_transform(orientation, orientation)
+        new_tran = nib.orientations.apply_orientation(self.nii_img.get_data(),transformation)
+        reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
+
+        self.nii_img = reoriented_img
+        self.__update_BrainData
 
 
     def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
@@ -156,16 +172,16 @@ class BrainData:
 
         zooms: int -- voxel dimensions
         shape: int -- image resampling dimensions
-        target_axcoords: list, string -- list of target output axis orientations 
+        target_axcoords: list, string -- list of target output axis orientations
         '''
         self.zooms = zooms
         self.shape = shape
 
         # setting affine for size and dimension
-        new_affine = nib.volumeutils.shape_zoom_affine(shape, zoom, x_flip=True)
+        self.affine = nib.volumeutils.shape_zoom_affine(shape, zoom, x_flip=True)
 
         # creating new image with the new affine and shape
-        new_img = nl.image.resample_img(self.nii_img,new_affine, target_shape=shape)
+        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=shape)
 
         #change orientation
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
@@ -173,8 +189,9 @@ class BrainData:
         transformation = nib.orientations.ornt_transform(orientation, orientation)
         data = new_img.get_data()
         new_tran = nib.orientations.apply_orientation(data,transformation)
-        transformed_image = nib.Nifti1Image(new_tran, new_affine)
+        transformed_image = nib.Nifti1Image(new_tran, self.affine)
 
         self.nii_img = transformed_image
+        self.__update_BrainData
 
 
