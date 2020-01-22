@@ -17,14 +17,6 @@ class MainWidget(QWidget):
         # Creating viewing box to see data
         self.win = ImageViewer(self.brain)
 
-        # Initialising some memory used by functions
-        self.full_head = self.brain.data.copy()
-        self.only_brain = []
-        self.normalized = 0
-        self.extracted = False
-        self.segmented = False
-        self.overlaid = False
-
         # Adding the plane selection buttons
         self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
 
@@ -113,48 +105,29 @@ class MainWidget(QWidget):
         At the moment it is hard coded such that we keep voxels with probability larger than a half.
         If the brain has already been extracted it loads a previous version.
         """
-        if self.extracted:
-            return 0
-        elif len(self.only_brain) == 0:
-            ext = Extractor()
-            prob = ext.run(self.brain.data)
-            print("EXTRACTION DONE")
-            mask2 = np.where(prob > 0.5, 1, 0)
-            self.only_brain = self.brain.data * mask2
-
-        self.brain.data = self.only_brain
+        self.brain.brainExtraction()
         self.win.refresh_image()
-        self.extracted = True
 
     def normalize(self):
         """
         Method that returns an intensity-normalized image using the zero/mean unit stdev method
         To be edited
         """
-        if self.normalized:
-            return 0
-        else:
-            pass
+        pass
 
     def segment(self):
         """
         Method that returns a segmented brain
         To be edited
         """
-        if self.segmented:
-            return 0
-        else:
-            pass
+        pass
 
     def overlay(self):
         """
         Method that overlays a segmented mask on top of the original brain
         To be edited
         """
-        if self.overlaid:
-            return 0
-        else:
-            pass
+        pass
 
     def full_brain(self):
         """ Returns the image to the original brain + head image
@@ -162,7 +135,5 @@ class MainWidget(QWidget):
         Returns the background image to the unextracted brain.
         Stores the extracted brain.
         """
-        if self.extracted:
-            self.brain.data = self.full_head
-            self.extracted = False
+        self.brain.full_brain()
         self.win.refresh_image()

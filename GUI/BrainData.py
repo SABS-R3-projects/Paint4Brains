@@ -37,7 +37,11 @@ class BrainData:
         self.i = int(self.shape[self.section] / 2)
         maxim = np.max(self.data)
         self.data = self.data/maxim
+
         self.extracted = False
+        self.extraction_cutoff = 0.5
+        self.full_head = self.data.copy()
+        self.only_brain = []
 
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -160,24 +164,39 @@ class BrainData:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
     ### Creating class methods ###
-    def brainExtraction(self, mask_prob = 0.5):
+    def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
         Arguments:
             self object with self.data {[np.array]} -- .nii image
         """
-
+        # If it has already been extracted (mostly empty) don't do it again
+        if self.data.size > 2*np.count_nonzero(self.data):
+            print("INPUT BRAIN IS ALREADY EXTRACTED")
+            return 0
         if self.extracted:
             return 0
-        else:
+        elif len(self.only_brain) == 0:
             ext = Extractor()
             prob = ext.run(self.data)
             print("EXTRACTION DONE")
-            mask2 = np.where(prob > mask_prob, 1, 0)
-            self.data = self.data * mask2
-            #self.img.setImage(self.get_data(self.i) / self.maxim)
-            self.extracted = True
+            mask2 = np.where(prob > self.extraction_cutoff, 1, 0)
+            self.only_brain = self.data * mask2
+
+        self.data = self.only_brain
+        self.extracted = True
+        self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+
+    def full_brain(self):
+        """ Returns the image to the original brain + head image
+
+        Returns the background image to the unextracted brain.
+        """
+        if self.extracted:
+            self.data = self.full_head
+            self.extracted = False
             self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+            #self.nii_img.set_header = self.__nib_data.header
 
     def reorient(self, target_axcoords = ('L','A','S')):
         """ Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
@@ -187,12 +206,13 @@ class BrainData:
         """
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(self.nii_img.affine))
         target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
-        transformation = nib.orientations.ornt_transform(orientation, orientation)
+        transformation = nib.orientations.ornt_transform(orientation, target_orientation)
         new_tran = nib.orientations.apply_orientation(self.nii_img.get_data(),transformation)
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
-        self.__update_BrainData
+        data_array = reoriented_img.get_fdata()
+        self.data = data_array / np.max(data_array)
 
 
     def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
@@ -208,11 +228,11 @@ class BrainData:
         self.zooms = zooms
         self.shape = shape
 
-        # setting affine for size and dimension
-        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms, x_flip=True)
+        # getting and setting affine for size and dimension
+        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms)
 
         # creating new image with the new affine and shape
-        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=shape)
+        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=self.shape)
 
         #change orientation
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
