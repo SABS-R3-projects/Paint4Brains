@@ -52,11 +52,14 @@ class ImageViewer(GraphicsView):
         self.view.addItem(self.mid_img)
         self.view.addItem(self.over_img)
 
-        if self.brain.label_filename is not None:
-            self.enable_drawing()
-
         self.select_mode = False
         self.see_all_labels = False
+
+        if self.brain.label_filename is not None:
+            self.enable_drawing()
+            self.update_colormap()
+            self.refresh_image()
+
 
     def refresh_image(self):
         """ Sets the images displayed by the Image viewer to the current data slices
@@ -156,6 +159,8 @@ class ImageViewer(GraphicsView):
 
         Lets you iterate through all existing labels
         """
+        print(self.brain.multiple_labels)
+        print(self.brain.different_labels)
         if self.brain.multiple_labels:
             new_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0] + 1
             if new_index < len(self.brain.different_labels):

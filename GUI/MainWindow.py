@@ -205,8 +205,9 @@ class MainWindow(QMainWindow):
             return
         self.brain.load_label_data(self.label_filename)
         self.main_widget.win.enable_drawing()
+        self.main_widget.win.update_colormap()
         self.main_widget.win.view_back_labels()
-        self.main_widget.win.refresh_image()
+
 
     def save_as(self):
         """ Saves the edited labelled data into a new file
