@@ -160,20 +160,20 @@ class BrainData:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
     ### Creating class methods ###
-    def brainExtraction(self, mask_prob: float = 0.5):
+    def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
         Arguments:
             self object with self.data {[np.array]} -- .nii image
         """
-    
+
         if self.extracted:
             return 0
         else:
             ext = Extractor()
             prob = ext.run(self.data)
             print("EXTRACTION DONE")
-            mask2 = np.where(prob > mask_prob, 1, 0)
+            mask2 = np.where(prob > 0.5, 1, 0)
             self.data = self.data * mask2
             #self.img.setImage(self.get_data(self.i) / self.maxim)
             self.extracted = True
