@@ -144,6 +144,7 @@ class BrainData:
             #self.img.setImage(self.get_data(self.i) / self.maxim)
             self.extracted = True
             self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+            #self.nii_img.set_header = self.__nib_data.header
 
     def reorient(self, target_axcoords = ('L','A','S')):
         ''' Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
@@ -158,8 +159,8 @@ class BrainData:
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
-        self.__update_BrainData
-
+        data_array = reoriented_img.get_fdata()
+        self.data = data_array / np.max(data_array)
 
     def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
         '''Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
