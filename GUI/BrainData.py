@@ -1,5 +1,7 @@
 import numpy as np
 import nibabel as nib
+from deepbrain import Extractor
+import nilearn as nl
 
 
 class BrainData:
@@ -15,6 +17,7 @@ class BrainData:
         self.__nib_data = nib.load(filename)
         self.__nib_label_data = None
         self.__orientation = nib.orientations.io_orientation(self.__nib_data.affine)
+        self.nii_img = self.__nib_data
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
         if self.label_filename is None:
@@ -31,6 +34,7 @@ class BrainData:
         self.different_labels = [0]
         self.current_label = 1
         self.other_labels_data = np.zeros(self.shape)
+        self.extracted = False
 
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -119,4 +123,72 @@ class BrainData:
             return self.shape[0] - mouse_y - 1, self.i, self.shape[2] - mouse_x - 1
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
+
+
+    ### Creating class methods ###
+    def brainExtraction(self, mask_prob = 0.5):
+        """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
+
+        Arguments:
+            self object with self.data {[np.array]} -- .nii image
+        """
+
+        if self.extracted:
+            return 0
+        else:
+            ext = Extractor()
+            prob = ext.run(self.data)
+            print("EXTRACTION DONE")
+            mask2 = np.where(prob > mask_prob, 1, 0)
+            self.data = self.data * mask2
+            #self.img.setImage(self.get_data(self.i) / self.maxim)
+            self.extracted = True
+            self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+
+    def reorient(self, target_axcoords = ('L','A','S')):
+        ''' Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
+
+        Arguments:
+        target_axcoords = list, string -- list of target output axis orientations
+        '''
+        orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(self.nii_img.affine))
+        target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
+        transformation = nib.orientations.ornt_transform(orientation, orientation)
+        new_tran = nib.orientations.apply_orientation(self.nii_img.get_data(),transformation)
+        reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
+
+        self.nii_img = reoriented_img
+        self.__update_BrainData
+
+
+    def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
+        '''Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
+
+        Arguments:
+        self object with .nii image field
+
+        zooms: int -- voxel dimensions
+        shape: int -- image resampling dimensions
+        target_axcoords: list, string -- list of target output axis orientations
+        '''
+        self.zooms = zooms
+        self.shape = shape
+
+        # setting affine for size and dimension
+        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms, x_flip=True)
+
+        # creating new image with the new affine and shape
+        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=shape)
+
+        #change orientation
+        orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
+        target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
+        transformation = nib.orientations.ornt_transform(orientation, target_orientation)
+        data = new_img.get_data()
+        new_tran = nib.orientations.apply_orientation(data,transformation)
+        transformed_image = nib.Nifti1Image(new_tran, self.nii_img.affine)
+
+        self.nii_img = transformed_image
+        self.data = data
+
 
