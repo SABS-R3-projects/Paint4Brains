@@ -1,5 +1,6 @@
 import numpy as np
 import nibabel as nib
+from deepbrain import Extractor
 
 
 class BrainData:
@@ -32,6 +33,7 @@ class BrainData:
         self.different_labels = [0]
         self.current_label = 1
         self.other_labels_data = np.zeros(self.shape)
+        self.extracted = False
 
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -128,8 +130,7 @@ class BrainData:
 
 
     ### Creating class methods ###
-
-    def BrainExtraction(self):
+    def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
         Arguments:
@@ -138,7 +139,7 @@ class BrainData:
 
         if self.extracted:
             return 0
-        elif len(self.only_brain) == 0:
+        else:
             ext = Extractor()
             prob = ext.run(self.data)
             print("EXTRACTION DONE")
@@ -146,9 +147,9 @@ class BrainData:
             self.data = self.data * mask2
             #self.img.setImage(self.get_data(self.i) / self.maxim)
             self.extracted = True
-            self.nii_img = nib.Nifti1Image(self.data, self.affine)
+            self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
 
-    def Reorient(self, target_axcoords = ('L','A','S')):
+    def reorient(self, target_axcoords = ('L','A','S')):
         ''' Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
 
         Arguments:
@@ -186,10 +187,10 @@ class BrainData:
         #change orientation
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
         target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
-        transformation = nib.orientations.ornt_transform(orientation, orientation)
+        transformation = nib.orientations.ornt_transform(orientation, target_orientation)
         data = new_img.get_data()
         new_tran = nib.orientations.apply_orientation(data,transformation)
-        transformed_image = nib.Nifti1Image(new_tran, self.affine)
+        transformed_image = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = transformed_image
         self.__update_BrainData
