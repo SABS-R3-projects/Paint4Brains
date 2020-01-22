@@ -111,13 +111,13 @@ class MainWindow(QMainWindow):
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
-        extractAction.triggered.connect(self.main_widget.extract)
+        extractAction.triggered.connect(self.brain.brainExtraction)
         self.tools.addAction(extractAction)
 
         unextractAction = QAction('See Full Brain', self)
         unextractAction.setShortcut('Ctrl+U')
         unextractAction.setStatusTip('See Full Brain')
-        unextractAction.triggered.connect(self.main_widget.full_brain)
+        unextractAction.triggered.connect(self.brain.full_brain)
         self.tools.addAction(unextractAction)
 
         normalizeAction = QAction('Normalize Intensity', self)
