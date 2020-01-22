@@ -159,8 +159,6 @@ class ImageViewer(GraphicsView):
 
         Lets you iterate through all existing labels
         """
-        print(self.brain.multiple_labels)
-        print(self.brain.different_labels)
         if self.brain.multiple_labels:
             new_index = np.where(self.brain.different_labels == self.brain.current_label)[0][0] + 1
             if new_index < len(self.brain.different_labels):
