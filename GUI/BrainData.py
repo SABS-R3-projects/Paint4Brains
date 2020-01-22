@@ -253,4 +253,3 @@ class BrainData:
         self.__current_label = new_label
 
 
-
