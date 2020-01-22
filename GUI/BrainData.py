@@ -193,6 +193,7 @@ class BrainData:
             self.data = self.full_head
             self.extracted = False
             self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+            #self.nii_img.set_header = self.__nib_data.header
 
     def reorient(self, target_axcoords = ('L','A','S')):
         """ Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
@@ -202,11 +203,13 @@ class BrainData:
         """
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(self.nii_img.affine))
         target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
-        transformation = nib.orientations.ornt_transform(orientation, orientation)
+        transformation = nib.orientations.ornt_transform(orientation, target_orientation)
         new_tran = nib.orientations.apply_orientation(self.nii_img.get_data(),transformation)
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
+        data_array = reoriented_img.get_fdata()
+        self.data = data_array / np.max(data_array)
 
 
     def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
@@ -222,11 +225,11 @@ class BrainData:
         self.zooms = zooms
         self.shape = shape
 
-        # setting affine for size and dimension
-        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms, x_flip=True)
+        # getting and setting affine for size and dimension
+        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms)
 
         # creating new image with the new affine and shape
-        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=shape)
+        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=self.shape)
 
         #change orientation
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
