@@ -124,8 +124,9 @@ def parser_configurator():
 
         inputs.append(str(single_input))
     
+    output_directory = directory_path+"/quickNAT_pythorch/"
     
-    cfgfile = open("settings_eval.ini",'w')
+    cfgfile = open(output_directory+"settings_eval.ini",'w')
     config.add_section(section_name)
 
     for idx, key in enumerate(settings_dictionary):
@@ -134,6 +135,6 @@ def parser_configurator():
     config.write(cfgfile)
     cfgfile.close()
 
-if __name__=='__main__':
+# if __name__=='__main__':
 
-    parser_configurator()
+#     parser_configurator()
