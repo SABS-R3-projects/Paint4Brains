@@ -128,10 +128,7 @@ class MainWindow(QMainWindow):
         segmentAction = QAction('Segment Brain', self)
         segmentAction.setShortcut('Ctrl+S')
         segmentAction.setStatusTip('Segment Brain')
-        segmentAction.triggered.connect(self.main_widget.segment)
-
-        # segmentAction.triggered.connect(self.brain.brainSegmentation)
-
+        segmentAction.triggered.connect(self.segment)
         self.tools.addAction(segmentAction)
 
         overlayAction = QAction('Brain-Segmentation Overlay', self)
@@ -255,3 +252,14 @@ class MainWindow(QMainWindow):
         """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
+
+    def segment(self):
+        """
+        Method that returns a segmented brain
+        This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
+        """
+        #device = some window opening
+        # self.brain.brainSegmentation(device)
+
+
+        self.brain.brainSegmentation()
