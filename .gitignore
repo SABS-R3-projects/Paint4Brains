@@ -128,3 +128,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+quickNAT_pythorch/__pycache__/quicknat.cpython-36.pyc
+quickNAT_pythorch/__pycache__/settings.cpython-36.pyc
+quickNAT_pythorch/__pycache__/solver.cpython-36.pyc
+quickNAT_pythorch/utils/__pycache__/__init__.cpython-36.pyc
+quickNAT_pythorch/utils/__pycache__/common_utils.cpython-36.pyc
+quickNAT_pythorch/utils/__pycache__/data_utils.cpython-36.pyc
+quickNAT_pythorch/utils/__pycache__/evaluator.cpython-36.pyc
+quickNAT_pythorch/utils/__pycache__/log_utils.cpython-36.pyc
+quickNAT_pythorch/utils/__pycache__/preprocessor.cpython-36.pyc
