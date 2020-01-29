@@ -1,6 +1,6 @@
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
-from PyQt5.QtGui import QIcon, QFileDialog
+from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
 
@@ -261,5 +261,42 @@ class MainWindow(QMainWindow):
         #device = some window opening
         # self.brain.brainSegmentation(device)
 
+        
+        self.show_settings_popup()
+        print("----")
+        print(self.string)
 
-        self.brain.brainSegmentation()
+    def popup_button(self, i):
+        if i.text() == 'CPU':
+            self.string = 'CPU'
+        elif i.text() == 'GPU 0':
+            self.string = 'GPU_0'
+        elif i.text() == 'GPU 1':
+            self.string = 'GPU_1'
+        # print(i.text())
+
+        return self.string
+
+    def show_settings_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Select Hardware Type")
+        msg.setText("Select the hardware to use!")
+        msg.setInformativeText("Select CPU or GPU ID (0 or 1)")
+        msg.setIcon(QMessageBox.Question)
+        msg.setDetailedText("In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
+        
+        msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
+        msg.addButton(QPushButton('GPU 1'), QMessageBox.AcceptRole)
+        msg.addButton(QPushButton('GPU 0'), QMessageBox.AcceptRole)
+        msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
+
+
+        msg.setDefaultButton(QPushButton('CPU'))
+        
+        answer = msg.buttonClicked.connect(self.popup_button)
+
+        x = msg.exec_()
+
+        return answer
+
+        
