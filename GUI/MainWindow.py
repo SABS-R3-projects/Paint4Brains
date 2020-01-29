@@ -128,9 +128,9 @@ class MainWindow(QMainWindow):
         segmentAction = QAction('Segment Brain', self)
         segmentAction.setShortcut('Ctrl+S')
         segmentAction.setStatusTip('Segment Brain')
-        # segmentAction.triggered.connect(self.main_widget.segment)
+        segmentAction.triggered.connect(self.main_widget.segment)
 
-        segmentAction.triggered.connect(self.brain.brainSegmentation)
+        # segmentAction.triggered.connect(self.brain.brainSegmentation)
 
         self.tools.addAction(segmentAction)
 
