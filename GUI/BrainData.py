@@ -4,6 +4,8 @@ from deepbrain import Extractor
 import nilearn as nl
 import os
 import pathlib
+import configparser
+import subprocess
 
 class BrainData:
     def __init__(self, filename, label_filename=None):
@@ -212,44 +214,68 @@ class BrainData:
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
-<<<<<<< HEAD
-=======
         data_array = reoriented_img.get_fdata()
         self.data = data_array / np.max(data_array)
 
->>>>>>> master
-
-    def transformation(self, zooms: int = (1, 1, 1), shape: int = (256, 256, 256), target_axcoords = ('L','A','S')):
-        """Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
-
+    def transformation(self):
+        '''Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
         Arguments:
         self object with .nii image field
-
         zooms: int -- voxel dimensions
         shape: int -- image resampling dimensions
         target_axcoords: list, string -- list of target output axis orientations
-        """
+        '''
+
+        zooms = (1, 1, 1) 
+        shape = (256, 256, 256)
+        target_axcoords = ('L','I','A')
+
         self.zooms = zooms
         self.shape = shape
 
-        # getting and setting affine for size and dimension
-        self.affine = nib.volumeutils.shape_zoom_affine(self.shape, self.zooms)
+        # setting affine for size and dimension
+        target_affine = nib.volumeutils.shape_zoom_affine(shape, zooms, x_flip=True)
 
         # creating new image with the new affine and shape
-        new_img = nl.image.resample_img(self.nii_img,self.affine, target_shape=self.shape)
+        new_img = nl.image.resample_img(self.nii_img, target_affine, target_shape=shape)
 
-        #change orientation
+        # change orientation
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
         target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
         transformation = nib.orientations.ornt_transform(orientation, target_orientation)
-        data = new_img.get_data()
-        new_tran = nib.orientations.apply_orientation(data,transformation)
-        transformed_image = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
+        # apply transformation with new affine and orientation
+        data = new_img.get_fdata()
+        new_tran = nib.orientations.apply_orientation(data, transformation)
+        transformed_image = nib.Nifti1Image(new_tran, target_affine)
+        transformed_data = new_tran
+
+        # update self variables
+        self.affine = transformed_image.affine
         self.nii_img = transformed_image
-        self.data = data
+        # self.data = transformed_data
+
+        #### ANDREI's bit #####
+
+        # Get the current directory, and then change to the optput path
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+        dir_path2 = current_directory.rstrip("/GUI") + "/quickNAT_pythorch/data_input/"
+
+        # Save the transformed filetype as input to QuickNAT
         filename = 'transformed.nii'
-        nib.save(self.nii_img, filename)
+        nib.save(self.nii_img, dir_path2 + filename)
+
+        # Change the directory to modify the test_list input to QuickNAT
+        os.chdir(dir_path2.rstrip("data_input/"))
+
+        # Clear the content of test_list, and then write the new filename
+        open('test_list.txt','w').close()
+        test_list = open('test_list.txt','w')
+        test_list.writelines(filename)
+        test_list.close()
+
+        # Change the directory back to the original working one
+        os.chdir(current_directory)
 
     @property
     def current_label(self):
@@ -290,18 +316,100 @@ class BrainData:
 
         self.transformation()
 
+        original_directory = os.path.dirname(os.path.realpath(__file__))
+        quickNAT_director = original_directory.rstrip("/GUI") + "/quickNAT_pythorch/"
 
+        def read_original_configurator(file_path):
 
+            """
+            This  nested function reads the original configuration file and returns all the values contained within in.
+           
+            Returns:
+                setting_dictionary (dict): dictionary containing the original configuration file information
 
+            """
 
-    #     if self.extracted:
-    #         return 0
-    #     else:
-    #         ext = Extractor()
-    #         prob = ext.run(self.data)
-    #         print("EXTRACTION DONE")
-    #         mask2 = np.where(prob > mask_prob, 1, 0)
-    #         self.data = self.data * mask2
-    #         #self.img.setImage(self.get_data(self.i) / self.maxim)
-    #         self.extracted = True
-    #         self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+            config = configparser.ConfigParser()
+            config._interpolation = configparser.ExtendedInterpolation()
+            config.read(file_path+'/settings_eval_original.ini')
+            sections = config.sections()
+            settings_dictionary = {}
+            options = config.options(sections[0])
+            for option in options:
+                try:
+                    settings_dictionary[option] = config[sections[0]][option]
+                    if settings_dictionary[option] == -1:
+                        DebugPring("skip: %s" % option)
+                except:
+                    print("Exception on %s!" % option)
+                    settings_dictionary[option] = None
+
+            return sections[0], settings_dictionary
+
+        def parser_configurator(file_path):
+            """
+            This nested function prints out the current settings, asks for a user input to update the settings and creates a new settings file.
+            This function will need to be changed once the GUI settings window is created! 
+
+            """
+
+            section_name, settings_dictionary = read_original_configurator(file_path)
+
+            config = configparser.ConfigParser()
+
+            inputs = []
+
+            for key in settings_dictionary:
+                if key == 'device':
+                    print("Provide CPU or ID of GPU (0 or 1) you want to excecute your code, or press Enter to leave default")
+                    data_input = input("Your input:")
+                    if data_input == "":
+                        single_input = settings_dictionary[key]
+                    else:
+                        single_input = data_input
+                elif key == 'coronal_model_path':
+                    single_input = settings_dictionary[key]
+                elif key == 'axial_model_path':
+                    single_input = settings_dictionary[key]
+                elif key == 'data_dir':
+                    single_input = '"'+file_path+'data_input'+'"'
+                elif key == 'directory_struct':
+                    print("Valid options for data directory structure are >> FS <<  or >> Linear <<. If you input data directory is similar to FreeSurfer, i.e. data_dir/<Data_id>/mri/orig.mgz then use >> FS <<. If the entries are data_dir/<Data_id> use >> Linear <<. To leave at default, press Enter")
+                    data_input = input("Provide information about input directory structure: ")
+                    if data_input == "":
+                        single_input = settings_dictionary[key]
+                    else:
+                        single_input = data_input
+                elif key == 'volumes_txt_file':
+                    single_input = settings_dictionary[key]
+                elif key == 'batch_size':
+                    single_input = settings_dictionary[key]
+                elif key == 'save_predictions_dir':
+                    single_input = '"'+file_path+'output_file'+'"'
+                elif key == 'view_agg':
+                    single_input = settings_dictionary[key]
+                elif key == 'estimate_uncertainty':
+                    single_input = settings_dictionary[key]
+                elif key == 'mc_samples':
+                    single_input = settings_dictionary[key]
+
+                inputs.append(str(single_input))
+            
+            output_directory = file_path
+            
+            cfgfile = open(output_directory+"settings_eval.ini",'w')
+            config.add_section(section_name)
+
+            for idx, key in enumerate(settings_dictionary):
+                config.set(section_name, key ,inputs[idx])
+
+            config.write(cfgfile)
+            cfgfile.close()
+
+        parser_configurator(quickNAT_director)
+
+        os.chdir(quickNAT_director)
+
+        subprocess.run(["python","run.py","--mode=eval_bulk"])
+
+        os.chdir(original_directory)
