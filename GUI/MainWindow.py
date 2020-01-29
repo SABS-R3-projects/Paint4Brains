@@ -130,7 +130,7 @@ class MainWindow(QMainWindow):
         segmentAction.setStatusTip('Segment Brain')
         # segmentAction.triggered.connect(self.main_widget.segment)
 
-        segmentAction.triggered.connect(self.brain.transformation)
+        segmentAction.triggered.connect(self.brain.brainSegmentation)
 
         self.tools.addAction(segmentAction)
 
