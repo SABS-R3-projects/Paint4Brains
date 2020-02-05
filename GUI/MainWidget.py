@@ -118,7 +118,7 @@ class MainWidget(QWidget):
     def segment(self):
         """
         Method that returns a segmented brain
-        To be edited
+        This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
         pass
 

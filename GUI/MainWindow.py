@@ -1,8 +1,25 @@
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
-from PyQt5.QtGui import QIcon, QFileDialog
+from PyQt5.QtCore import QRunnable, QThreadPool, pyqtSlot, QThread, pyqtSignal
+from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
+
+
+class WorkerThread(QThread):
+    '''
+    Worker Thread
+    '''
+
+    def __init__(self, brain, device):
+        super(WorkerThread, self).__init__()
+        # Storing constructor arguments to re-use for processing
+        self.brain = brain
+        self.device = device
+
+    def run(self):
+
+        self.brain.brainSegmentation(self.device)
 
 
 class MainWindow(QMainWindow):
@@ -128,7 +145,7 @@ class MainWindow(QMainWindow):
         segmentAction = QAction('Segment Brain', self)
         segmentAction.setShortcut('Ctrl+S')
         segmentAction.setStatusTip('Segment Brain')
-        segmentAction.triggered.connect(self.main_widget.segment)
+        segmentAction.triggered.connect(self.segment)
         self.tools.addAction(segmentAction)
 
         overlayAction = QAction('Brain-Segmentation Overlay', self)
@@ -168,7 +185,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(right)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
-
+      
     def load_initial(self):
         """ Loads the "base" brain
         The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
@@ -252,3 +269,51 @@ class MainWindow(QMainWindow):
         """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
+
+    def segment(self):
+        """
+        Method that returns a segmented brain
+        This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
+        """
+
+        self.show_settings_popup()
+
+        # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
+    
+        self.thread = WorkerThread(self.brain, self.device)
+        self.thread.start()
+
+
+    def popup_button(self, i):
+        if i.text() == 'CPU':
+            self.device = '"CPU"'
+        elif i.text() == 'GPU 0':
+            self.device = 0
+        elif i.text() == 'GPU 1':
+            self.device = 1
+
+        return self.device
+
+    def show_settings_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Select Hardware Type")
+        msg.setText("Select the hardware to use!")
+        msg.setInformativeText("Select CPU or GPU ID (0 or 1)")
+        msg.setIcon(QMessageBox.Question)
+        msg.setDetailedText("In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
+        
+        msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
+        msg.addButton(QPushButton('GPU 1'), QMessageBox.AcceptRole)
+        msg.addButton(QPushButton('GPU 0'), QMessageBox.AcceptRole)
+        msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
+
+
+        msg.setDefaultButton(QPushButton('CPU'))
+        
+        answer = msg.buttonClicked.connect(self.popup_button)
+
+        x = msg.exec_()
+
+        return answer
+
+        
