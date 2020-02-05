@@ -309,6 +309,10 @@ class BrainData:
 
         Arguments:
             self object with .nii image field
+            file_path (string): A string containing the file path for the parser.
+
+        Returns:
+            None
 
         """
 
@@ -323,8 +327,12 @@ class BrainData:
 
             """
             This  nested function reads the original configuration file and returns all the values contained within in.
+
+            Args:
+                file_path (string): A string containing the file path for the parser.
            
             Returns:
+                sections (list): A list containing all the sections in the original configurator.
                 setting_dictionary (dict): dictionary containing the original configuration file information
 
             """
@@ -348,8 +356,14 @@ class BrainData:
 
         def parser_configurator(file_path, device):
             """
-            This nested function prints out the current settings, asks for a user input to update the settings and creates a new settings file.
-            This function will need to be changed once the GUI settings window is created! 
+            This nested function updates the settings and creates a new settings file for the segmentation function.
+
+            Args:
+                file_path (string): A string containing the file path for the parser.
+                device: A parameter, either a string or an int, containing the device type to be passsed to the parser.
+
+            Returns:
+                None
 
             """
 
