@@ -47,7 +47,7 @@ class BrainData:
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
 
         Depending on the desired view (self.section) it returns a different 2-D slice of the 3-D data.
-        A number of transposes and flips are done to return the 2_D image with a sensible orientation
+        A number of transposes and flips are done to return the 2_D image with a sensible orientation.
         """
         if self.section == 0:
             return self.data[i]
