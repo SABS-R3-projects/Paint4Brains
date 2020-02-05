@@ -1,8 +1,25 @@
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
+from PyQt5.QtCore import QRunnable, QThreadPool, pyqtSlot, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
+
+
+class WorkerThread(QThread):
+    '''
+    Worker Thread
+    '''
+
+    def __init__(self, brain, device):
+        super(WorkerThread, self).__init__()
+        # Storing constructor arguments to re-use for processing
+        self.brain = brain
+        self.device = device
+
+    def run(self):
+
+        self.brain.brainSegmentation(self.device)
 
 
 class MainWindow(QMainWindow):
@@ -168,7 +185,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(right)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
-
+      
     def load_initial(self):
         """ Loads the "base" brain
         The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
@@ -258,10 +275,14 @@ class MainWindow(QMainWindow):
         Method that returns a segmented brain
         This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
-        
+
         self.show_settings_popup()
 
-        self.brain.brainSegmentation(self.device)
+        # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
+    
+        self.thread = WorkerThread(self.brain, self.device)
+        self.thread.start()
+
 
     def popup_button(self, i):
         if i.text() == 'CPU':
