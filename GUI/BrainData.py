@@ -302,7 +302,7 @@ class BrainData:
         self.__current_label = new_label
 
 
-    def brainSegmentation(self):
+    def brainSegmentation(self, device):
         """
         Using the outputs from brainExtraction and transformation, this function calls QuickNAT to perform brain segmentation
         This function is re-implementation of the original QuickNAT evaluation pipeline. Details can be found here: https://github.com/ai-med/quickNAT_pytorch
@@ -346,7 +346,7 @@ class BrainData:
 
             return sections[0], settings_dictionary
 
-        def parser_configurator(file_path):
+        def parser_configurator(file_path, device):
             """
             This nested function prints out the current settings, asks for a user input to update the settings and creates a new settings file.
             This function will need to be changed once the GUI settings window is created! 
@@ -361,12 +361,7 @@ class BrainData:
 
             for key in settings_dictionary:
                 if key == 'device':
-                    print("Provide CPU or ID of GPU (0 or 1) you want to excecute your code, or press Enter to leave default")
-                    data_input = input("Your input:")
-                    if data_input == "":
-                        single_input = settings_dictionary[key]
-                    else:
-                        single_input = data_input
+                    single_input = device
                 elif key == 'coronal_model_path':
                     single_input = settings_dictionary[key]
                 elif key == 'axial_model_path':
@@ -374,12 +369,7 @@ class BrainData:
                 elif key == 'data_dir':
                     single_input = '"'+file_path+'data_input'+'"'
                 elif key == 'directory_struct':
-                    print("Valid options for data directory structure are >> FS <<  or >> Linear <<. If you input data directory is similar to FreeSurfer, i.e. data_dir/<Data_id>/mri/orig.mgz then use >> FS <<. If the entries are data_dir/<Data_id> use >> Linear <<. To leave at default, press Enter")
-                    data_input = input("Provide information about input directory structure: ")
-                    if data_input == "":
-                        single_input = settings_dictionary[key]
-                    else:
-                        single_input = data_input
+                    single_input = settings_dictionary[key]
                 elif key == 'volumes_txt_file':
                     single_input = settings_dictionary[key]
                 elif key == 'batch_size':
@@ -406,7 +396,7 @@ class BrainData:
             config.write(cfgfile)
             cfgfile.close()
 
-        parser_configurator(quickNAT_director)
+        parser_configurator(quickNAT_director, device)
 
         os.chdir(quickNAT_director)
 

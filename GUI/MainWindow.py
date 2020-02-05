@@ -258,24 +258,20 @@ class MainWindow(QMainWindow):
         Method that returns a segmented brain
         This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
-        #device = some window opening
-        # self.brain.brainSegmentation(device)
-
         
         self.show_settings_popup()
-        print("----")
-        print(self.string)
+
+        self.brain.brainSegmentation(self.device)
 
     def popup_button(self, i):
         if i.text() == 'CPU':
-            self.string = 'CPU'
+            self.device = '"CPU"'
         elif i.text() == 'GPU 0':
-            self.string = 'GPU_0'
+            self.device = 0
         elif i.text() == 'GPU 1':
-            self.string = 'GPU_1'
-        # print(i.text())
+            self.device = 1
 
-        return self.string
+        return self.device
 
     def show_settings_popup(self):
         msg = QMessageBox()
