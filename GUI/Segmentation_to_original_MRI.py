@@ -5,8 +5,8 @@ import nilearn as nl
 
 #Trying to resample the segmentation to the original image that has not been preprocessed
 os.chdir('/home/sabs-r3/Desktop')
-mask = nib.load('77yearConf.nii.nii.gz')
-original = nib.load('77year.nii')
+mask = nib.load('segmented.nii.nii.gz')
+original = nib.load('MCI_M_77.nii')
 dimensions = original.header['dim']
 shape = [dimensions[1], dimensions[2], dimensions[3]]
 pixel_size = original.header['pixdim']

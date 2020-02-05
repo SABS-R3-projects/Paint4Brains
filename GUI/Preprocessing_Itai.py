@@ -3,6 +3,9 @@ import nibabel as nib
 import nilearn as nl
 import numpy as np
 from deepbrain import Extractor
+from dltk.io.preprocessing import whitening
+from skimage import exposure
+
 
 # Changing directory to the Desktop where nii files are located
 os.chdir('/home/sabs-r3/Desktop') 
@@ -51,6 +54,10 @@ def transform(image):
     data = new_img.get_fdata()
     data = np.rint(data/np.max(data)*255)
     data = data.astype(np.uint8)
+
+    data = exposure.adjust_log(data, 1.3)
+    #data = whitening(data)
+    
     new_tran = nib.orientations.apply_orientation(data, transformation)
     transformed_image = nib.Nifti1Image(new_tran, new_affine)
     return transformed_image

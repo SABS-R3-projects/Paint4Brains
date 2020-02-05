@@ -3,7 +3,7 @@ import os
 import numpy as np
 os.chdir('/home/sabs-r3/Desktop')
 #Takes in the segmented mask from QuickNat to reorient it so that it can be overlaid with the original preprocessed mri image
-orig_image = nib.load('output_file/ADNI_4_.nii.nii.gz')
+orig_image = nib.load('MCI_M_77_ItaiPipe.nii.nii.gz')
 orig_image = orig_image.get_fdata()
 data = np.rint(orig_image / np.max(orig_image) * 255)
 data = data.astype(np.uint8)
