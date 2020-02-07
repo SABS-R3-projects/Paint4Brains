@@ -1,7 +1,8 @@
 import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
-import nilearn as nl
+from nilearn.image import resample_img
+from quickNAT_pythorch.utils.evaluator import evaluate2view
 import os
 import pathlib
 import configparser
@@ -237,7 +238,7 @@ class BrainData:
         target_affine = nib.volumeutils.shape_zoom_affine(shape, zooms, x_flip=True)
 
         # creating new image with the new affine and shape
-        new_img = nl.image.resample_img(self.nii_img, target_affine, target_shape=shape)
+        new_img = resample_img(self.nii_img, target_affine, target_shape=shape)
 
         # change orientation
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(new_img.affine))
