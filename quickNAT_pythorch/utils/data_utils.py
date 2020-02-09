@@ -93,7 +93,7 @@ def load_and_preprocess(file_path, orientation, remap_config, reduce_slices=Fals
 
 
 def load_and_preprocess_eval(file_path, orientation, notlabel=True):
-    volume_nifty = nb.load(file_path[0])
+    volume_nifty = nb.load(file_path)
     header = volume_nifty.header
     volume = volume_nifty.get_fdata()
     if notlabel:

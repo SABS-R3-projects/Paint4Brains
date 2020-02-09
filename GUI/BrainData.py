@@ -2,11 +2,11 @@ import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
 from nilearn.image import resample_img
-from quickNAT_pythorch.utils.evaluator import evaluate2view
 import os
 import pathlib
 import configparser
 import subprocess
+
 
 class BrainData:
     def __init__(self, filename, label_filename=None):
@@ -25,7 +25,7 @@ class BrainData:
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
         # Default empty values
-        self.different_labels = np.zeros(1, dtype= int)
+        self.different_labels = np.zeros(1, dtype=int)
         self.__current_label = 1
         self.other_labels_data = np.zeros(self.data.shape)
         self.multiple_labels = False
@@ -40,7 +40,7 @@ class BrainData:
         self.shape = self.data.shape
         self.i = int(self.shape[self.section] / 2)
         maxim = np.max(self.data)
-        self.data = self.data/maxim
+        self.data = self.data / maxim
 
         self.extracted = False
         self.extraction_cutoff = 0.5
@@ -175,7 +175,7 @@ class BrainData:
             self object with self.data {[np.array]} -- .nii image
         """
         # If it has already been extracted (mostly empty) don't do it again
-        if self.data.size > 2*np.count_nonzero(self.data):
+        if self.data.size > 2 * np.count_nonzero(self.data):
             print("INPUT BRAIN IS ALREADY EXTRACTED")
             return 0
         if self.extracted:
@@ -200,9 +200,9 @@ class BrainData:
             self.data = self.full_head
             self.extracted = False
             self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
-            #self.nii_img.set_header = self.__nib_data.header
+            # self.nii_img.set_header = self.__nib_data.header
 
-    def reorient(self, target_axcoords = ('L','A','S')):
+    def reorient(self, target_axcoords=('L', 'A', 'S')):
         """ Function to perform reorientation of image axis in the coronoal, saggital and axial planes.
 
         Arguments:
@@ -211,7 +211,7 @@ class BrainData:
         orientation = nib.orientations.axcodes2ornt(nib.orientations.aff2axcodes(self.nii_img.affine))
         target_orientation = nib.orientations.axcodes2ornt(target_axcoords)
         transformation = nib.orientations.ornt_transform(orientation, target_orientation)
-        new_tran = nib.orientations.apply_orientation(self.nii_img.get_data(),transformation)
+        new_tran = nib.orientations.apply_orientation(self.nii_img.get_data(), transformation)
         reoriented_img = nib.Nifti1Image(new_tran, self.nii_img.affine)
 
         self.nii_img = reoriented_img
@@ -219,17 +219,17 @@ class BrainData:
         self.data = data_array / np.max(data_array)
 
     def transformation(self):
-        '''Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
+        """Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
         Arguments:
         self object with .nii image field
         zooms: int -- voxel dimensions
         shape: int -- image resampling dimensions
         target_axcoords: list, string -- list of target output axis orientations
-        '''
+        """
 
-        zooms = (1, 1, 1) 
+        zooms = (1, 1, 1)
         shape = (256, 256, 256)
-        target_axcoords = ('L','I','A')
+        target_axcoords = ('L', 'I', 'A')
 
         self.zooms = zooms
         self.shape = shape
@@ -270,8 +270,8 @@ class BrainData:
         os.chdir(dir_path2.rstrip("data_input/"))
 
         # Clear the content of test_list, and then write the new filename
-        open('test_list.txt','w').close()
-        test_list = open('test_list.txt','w')
+        open('test_list.txt', 'w').close()
+        test_list = open('test_list.txt', 'w')
         test_list.writelines(filename)
         test_list.close()
 
@@ -298,10 +298,9 @@ class BrainData:
             self.multiple_labels = True
             self.different_labels = np.append(self.different_labels, new_label)
         self.label_data = np.clip(self.label_data, 0, 1)
-        self.other_labels_data = np.where(self.label_data == 0,  self.other_labels_data, self.__current_label)
+        self.other_labels_data = np.where(self.label_data == 0, self.other_labels_data, self.__current_label)
         self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
         self.__current_label = new_label
-
 
     def brainSegmentation(self, device):
         """
@@ -340,7 +339,7 @@ class BrainData:
 
             config = configparser.ConfigParser()
             config._interpolation = configparser.ExtendedInterpolation()
-            config.read(file_path+'/settings_eval_original.ini')
+            config.read(file_path + '/settings_eval_original.ini')
             sections = config.sections()
             settings_dictionary = {}
             options = config.options(sections[0])
@@ -382,7 +381,7 @@ class BrainData:
                 elif key == 'axial_model_path':
                     single_input = settings_dictionary[key]
                 elif key == 'data_dir':
-                    single_input = '"'+file_path+'data_input'+'"'
+                    single_input = '"' + file_path + 'data_input' + '"'
                 elif key == 'directory_struct':
                     single_input = settings_dictionary[key]
                 elif key == 'volumes_txt_file':
@@ -390,7 +389,7 @@ class BrainData:
                 elif key == 'batch_size':
                     single_input = settings_dictionary[key]
                 elif key == 'save_predictions_dir':
-                    single_input = '"'+file_path+'output_file'+'"'
+                    single_input = '"' + file_path + 'output_file' + '"'
                 elif key == 'view_agg':
                     single_input = settings_dictionary[key]
                 elif key == 'estimate_uncertainty':
@@ -399,14 +398,14 @@ class BrainData:
                     single_input = settings_dictionary[key]
 
                 inputs.append(str(single_input))
-            
+
             output_directory = file_path
-            
-            cfgfile = open(output_directory+"settings_eval.ini",'w')
+
+            cfgfile = open(output_directory + "settings_eval.ini", 'w')
             config.add_section(section_name)
 
             for idx, key in enumerate(settings_dictionary):
-                config.set(section_name, key ,inputs[idx])
+                config.set(section_name, key, inputs[idx])
 
             config.write(cfgfile)
             cfgfile.close()
@@ -415,6 +414,6 @@ class BrainData:
 
         os.chdir(quickNAT_director)
 
-        subprocess.run(["python","run.py","--mode=eval_bulk"])
+        subprocess.run(["python", "run.py", "--mode=eval_bulk"])
 
         os.chdir(original_directory)

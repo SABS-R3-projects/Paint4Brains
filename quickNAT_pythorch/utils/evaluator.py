@@ -303,14 +303,14 @@ def evaluate(coronal_model_path, volumes_txt_file, data_dir, device, prediction_
 
 
 def evaluate2view(coronal_model_path, axial_model_path, volumes_txt_file, data_dir, device, prediction_path, batch_size,
-                  label_names, dir_struct, need_unc=False, mc_samples=0, brain_filename = None):
+                  label_names, dir_struct, need_unc=False, mc_samples=0, brain_file_path=None):
     print("**Starting evaluation**")
-    if brain_filename is None:
+    if brain_file_path is None:
         with open(volumes_txt_file) as file_handle:
             volumes_to_use = file_handle.read().splitlines()
+        file_paths = [os.path.join(data_dir, vol) for vol in volumes_to_use]
     else:
-        volumes_to_use = [brain_filename]
-
+        file_paths = [brain_file_path]
     model1 = torch.load(coronal_model_path, map_location=torch.device('cpu'))
 
     model2 = torch.load(axial_model_path, map_location=torch.device('cpu'))
@@ -326,8 +326,6 @@ def evaluate2view(coronal_model_path, axial_model_path, volumes_txt_file, data_d
 
     common_utils.create_if_not(prediction_path)
     print("Evaluating now...")
-
-    file_paths = du.load_file_paths_eval(data_dir, volumes_txt_file, dir_struct)
 
     with torch.no_grad():
         volume_dict_list = []
