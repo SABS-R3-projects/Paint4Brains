@@ -6,7 +6,6 @@ import torch
 import csv
 from skimage import exposure
 
-original = 0
 
 def segment_default(brain_file_path, device="CPU"):
     coronal_model_path = "saved_models/finetuned_alldata_coronal.pth.tar"
@@ -50,10 +49,10 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
         volume_dict_list = []
         for vol_idx, file_path in enumerate(file_paths):
             try:
-                volume_prediction_cor, _, header = _segment_vol(file_path, model1, "COR", batch_size,
+                volume_prediction_cor, _, header, original = _segment_vol(file_path, model1, "COR", batch_size,
                                                                 cuda_available,
                                                                 device)
-                volume_prediction_axi, _, header = _segment_vol(file_path, model2, "AXI", batch_size,
+                volume_prediction_axi, _, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
                                                                 cuda_available,
                                                                 device)
                 _, volume_prediction = torch.max(volume_prediction_axi + volume_prediction_cor, dim=1)
@@ -63,8 +62,9 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
                 print("Processed: " + volumes_to_use[vol_idx] + " " + str(vol_idx + 1) + " out of " + str(
                     len(file_paths)))
                 # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
-                to_save = undo_transform(nifti_img)
-                nib.save(to_save, os.path.join(prediction_path, volumes_to_use[vol_idx] + str('.nii.gz')))
+                to_save = undo_transform(nifti_img, original)
+                # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                nib.save(to_save, os.path.join(prediction_path, volumes_to_use[vol_idx][:-4] + str('_segmented.nii.gz')))
 
                 per_volume_dict = compute_volume(volume_prediction, label_names, volumes_to_use[vol_idx])
                 volume_dict_list.append(per_volume_dict)
@@ -94,7 +94,7 @@ def _write_csv_table(name, prediction_path, dict_list, label_names):
 
 
 def _segment_vol(file_path, model, orientation, batch_size, cuda_available, device):
-    volume, header = load_and_preprocess(file_path, orientation=orientation)
+    volume, header, original = load_and_preprocess(file_path, orientation=orientation)
 
     volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
     volume = torch.tensor(volume).type(torch.FloatTensor)
@@ -120,14 +120,14 @@ def _segment_vol(file_path, model, orientation, batch_size, cuda_available, devi
         volume_prediction = volume_prediction.transpose((2, 0, 1))
         volume_pred = volume_pred.permute((3, 1, 0, 2))
 
-    return volume_pred, volume_prediction, header
+    return volume_pred, volume_prediction, header, original
 
 
 def load_and_preprocess(file_path, orientation):
-    global original
     original = nib.load(file_path)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~ HERE WE CAN DO PREPROCESSING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     volume_nifty = transform(original)
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     header = volume_nifty.header
     volume = volume_nifty.get_fdata()
     volume = (volume - np.min(volume)) / (np.max(volume) - np.min(volume))
@@ -135,7 +135,7 @@ def load_and_preprocess(file_path, orientation):
         volume = volume.transpose((2, 0, 1))
     elif orientation == "AXI":
         volume = volume.transpose((1, 2, 0))
-    return volume, header
+    return volume, header, original
 
 
 def create_if_not(path):
@@ -155,10 +155,10 @@ def transform(image):
     and 1 mm^3 voxel size just like Freesurfer's mri_conform function"""
     shape = (256, 256, 256)
     # This is the affine that we get from FreeSurfer
-    new_affine = np.array([[-1.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.24474785e+02],
-                           [0.00000000e+00, 1.26437587e-29, 1.00000012e+00, -1.04062988e+02],
-                           [-6.46234854e-27, -1.00000012e+00, 0.00000000e+00, 1.44437317e+02],
-                           [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.00000000e+00]])
+    new_affine = np.array([[-1, 0., 0, 128],
+                           [0., 0., 1, -128],
+                           [0., -1, 0, 128],
+                           [0., 0., 0, 1]])
 
     # creating new image with the new affine and shape
     new_img = nl.image.resample_img(image, new_affine, target_shape=shape)
@@ -177,10 +177,12 @@ def transform(image):
     return transformed_image
 
 
-def undo_transform(mask):
+def undo_transform(mask, original):
     shape = original.get_data().shape
     new_mask = nl.image.resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
+    # Adds a description to the nifti image
+    new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
     return new_mask
 
 
-segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
+#segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
