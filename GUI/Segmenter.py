@@ -11,7 +11,7 @@ def segment_default(brain_file_path, device="CPU"):
     coronal_model_path = "saved_models/finetuned_alldata_coronal.pth.tar"
     axial_model_path = "saved_models/finetuned_alldata_axial.pth.tar"
     batch_size = 1
-    save_predictions_dir = "output_file"
+    save_predictions_dir = "outputs"
     label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral ventricle", "Left Inf LatVentricle",
                    "Left Cerebellum WM", "Left Cerebellum Cortex", "Left Thalamus", "Left Caudate", "Left Putamen",
                    "Left Pallidum", "3rd Ventricle", "4th Ventricle", "Brain Stem", "Left Hippocampus", "Left Amygdala",
@@ -19,8 +19,9 @@ def segment_default(brain_file_path, device="CPU"):
                    "Right Lateral Ventricle", "Right Inf LatVentricle", "Right Cerebellum WM",
                    "Right Cerebellum Cortex", "Right Thalamus", "Right Caudate", "Right Putamen", "Right Pallidum",
                    "Right Hippocampus", "Right Amygdala", "Right Accumbens", "Right Ventral DC"]
-    evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device, batch_size,
-                  label_names)
+    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,
+                         batch_size,
+                         label_names)
 
 
 def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size,
@@ -28,16 +29,33 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
     print("**Starting evaluation**")
 
     file_paths = [brain_file_path]
-
-    model1 = torch.load(coronal_model_path, map_location=torch.device('cpu'))
-
-    model2 = torch.load(axial_model_path, map_location=torch.device('cpu'))
-
     cuda_available = torch.cuda.is_available()
-    if cuda_available:
-        torch.cuda.empty_cache()
-        model1.cuda(device)
-        model2.cuda(device)
+
+    if type(device) == int:
+        # if CUDA available, follow through, else warn and fallback to CPU
+        if cuda_available:
+            model1 = torch.load(coronal_model_path)
+            model2 = torch.load(axial_model_path)
+
+            torch.cuda.empty_cache()
+            model1.cuda(device)
+            model2.cuda(device)
+        else:
+            log.warning(
+                'CUDA is not available, trying with CPU.' + \
+                'This can take much longer (> 1 hour). Cancel and ' + \
+                'investigate if this behavior is not desired.'
+            )
+
+    if (type(device) == str) or not cuda_available:
+        model1 = torch.load(
+            coronal_model_path,
+            map_location=torch.device(device)
+        )
+        model2 = torch.load(
+            axial_model_path,
+            map_location=torch.device(device)
+        )
 
     model1.eval()
     model2.eval()
@@ -50,11 +68,11 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
         for vol_idx, file_path in enumerate(file_paths):
             try:
                 volume_prediction_cor, _, header, original = _segment_vol(file_path, model1, "COR", batch_size,
-                                                                cuda_available,
-                                                                device)
+                                                                          cuda_available,
+                                                                          device)
                 volume_prediction_axi, _, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
-                                                                cuda_available,
-                                                                device)
+                                                                          cuda_available,
+                                                                          device)
                 _, volume_prediction = torch.max(volume_prediction_axi + volume_prediction_cor, dim=1)
                 volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
                 volume_prediction = np.squeeze(volume_prediction)
@@ -64,7 +82,8 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
                 # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
                 to_save = undo_transform(nifti_img, original)
                 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                nib.save(to_save, os.path.join(prediction_path, volumes_to_use[vol_idx][:-4] + str('_segmented.nii.gz')))
+                filename = os.path.join(prediction_path, volumes_to_use[vol_idx][:-4] + str('_segmented.nii.gz'))
+                nib.save(to_save, filename)
 
                 per_volume_dict = compute_volume(volume_prediction, label_names, volumes_to_use[vol_idx])
                 volume_dict_list.append(per_volume_dict)
@@ -79,6 +98,7 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
         _write_csv_table('volume_estimates.csv', prediction_path, volume_dict_list, label_names)
 
     print("DONE")
+    return filename
 
 
 def _write_csv_table(name, prediction_path, dict_list, label_names):
@@ -184,5 +204,4 @@ def undo_transform(mask, original):
     new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
     return new_mask
 
-
-segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
+#segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
