@@ -150,6 +150,17 @@ def create_if_not(path):
         os.makedirs(path)
 
 
+def compute_volume(prediction_map, label_map, ID):
+    num_cls = len(label_map) - 1
+    volume_dict = {}
+    volume_dict['vol_ID'] = ID
+    for i in range(num_cls):
+        binarized_pred = (prediction_map == i).astype(float)
+        volume_dict[label_map[i + 1]] = np.sum(binarized_pred)
+
+    return volume_dict
+
+
 def transform(image):
     """Takes brain extracted image and conforms it to [256, 256, 256]
     and 1 mm^3 voxel size just like Freesurfer's mri_conform function"""
