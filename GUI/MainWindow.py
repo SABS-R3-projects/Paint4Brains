@@ -4,6 +4,7 @@ from PyQt5.QtCore import QRunnable, QThreadPool, pyqtSlot, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
+import os
 
 
 class WorkerThread(QThread):
@@ -154,22 +155,24 @@ class MainWindow(QMainWindow):
         self.tools.addAction(overlayAction)
 
         # Editing tools as a toolbar
-        pen = QAction(QIcon("images/pen.jpeg"), "Pen", self)
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+
+        pen = QAction(QIcon(current_directory + "/images/pen.jpeg"), "Pen", self)
         pen.triggered.connect(self.main_widget.win.edit_button1)
 
-        rubber = QAction(QIcon("images/eraser.png"), "Rubber", self)
+        rubber = QAction(QIcon(current_directory + "/images/eraser.png"), "Rubber", self)
         rubber.triggered.connect(self.main_widget.win.edit_button2)
 
-        cross = QAction(QIcon("images/cross.png"), "Cross", self)
+        cross = QAction(QIcon(current_directory + "/images/cross.png"), "Cross", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
-        left = QAction(QIcon("images/left.png"), "Previous Label", self)
+        left = QAction(QIcon(current_directory + "/images/left.png"), "Previous Label", self)
         left.triggered.connect(self.main_widget.win.previous_label)
 
-        label = QAction(QIcon("images/label.jpg"), "Select Label", self)
+        label = QAction(QIcon(current_directory + "/images/label.jpg"), "Select Label", self)
         label.triggered.connect(self.main_widget.win.select_label)
 
-        right = QAction(QIcon("images/right.png"), "Next Label", self)
+        right = QAction(QIcon(current_directory + "/images/right.png"), "Next Label", self)
         right.triggered.connect(self.main_widget.win.next_label)
 
         self.edit_toolbar = self.addToolBar("Editting Tools")
