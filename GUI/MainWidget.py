@@ -108,27 +108,6 @@ class MainWidget(QWidget):
         self.brain.brainExtraction()
         self.win.refresh_image()
 
-    def normalize(self):
-        """
-        Method that returns an intensity-normalized image using the zero/mean unit stdev method
-        To be edited
-        """
-        pass
-
-    def segment(self):
-        """
-        Method that returns a segmented brain
-        This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
-        """
-        pass
-
-    def overlay(self):
-        """
-        Method that overlays a segmented mask on top of the original brain
-        To be edited
-        """
-        pass
-
     def full_brain(self):
         """ Returns the image to the original brain + head image
 

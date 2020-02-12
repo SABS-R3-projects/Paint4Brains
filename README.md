@@ -62,7 +62,7 @@ There are several menues currently incorporated within the GUI, as follows:
     * Deactivate Drawing
         * Deactivates the edditng tools functionality. This can be reactivated later.
 * View
-    * Recent View
+    * Recenter View
     * Edditing Toolbar
         * This opens the edditing toolbar, allowing the user to manually edit previously generated segmented maps.
         * The user can choose between a pen and a cross as edditing tools, and a rubber for undo-ing made changes.
@@ -76,15 +76,11 @@ There are several menues currently incorporated within the GUI, as follows:
         * This tool performs brain extraction
     * See Full Brain
         * This tool allows the user to see the full brain again, after extraction
-    * Normalize Intensity
-        * (_currently has no functionality, but this will be added later_ )
     * Segment Brain
         * This tool takes the provided brain input and runs it through our software's segmentation pipeline.
         * The brain is first conformed using Nilearn and Nibabel.
         * Then, segmentation is performed using QuickNAT (referenced bellow). Depending on the type of hardware used (CPU or GPU), this might take anywhere between 20-30 seconds up to 1 hour. This process, however, is threaded, meaning that the GUI can still be used in the meantime.
         * This process completes by a segmented mask file being generated and saved.
-    * Brain Segmentation Overlay
-        * Allows the user to select the saved segmentation mask and overlay it with the brain under consideration.
 * Help (_currently has no functionality_) 
 
 

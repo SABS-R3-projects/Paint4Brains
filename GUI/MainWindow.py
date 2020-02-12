@@ -137,22 +137,11 @@ class MainWindow(QMainWindow):
         unextractAction.triggered.connect(self.main_widget.full_brain)
         self.tools.addAction(unextractAction)
 
-        normalizeAction = QAction('Normalize Intensity', self)
-        normalizeAction.setStatusTip('Normalize Intensity')
-        normalizeAction.triggered.connect(self.main_widget.normalize)
-        self.tools.addAction(normalizeAction)
-
         segmentAction = QAction('Segment Brain', self)
-        segmentAction.setShortcut('Ctrl+S')
+        segmentAction.setShortcut('Ctrl+W')
         segmentAction.setStatusTip('Segment Brain')
         segmentAction.triggered.connect(self.segment)
         self.tools.addAction(segmentAction)
-
-        overlayAction = QAction('Brain-Segmentation Overlay', self)
-        overlayAction.setShortcut('Ctrl+O')
-        overlayAction.setStatusTip('Brain-Segmentation Overlay')
-        overlayAction.triggered.connect(self.main_widget.overlay)
-        self.tools.addAction(overlayAction)
 
         # Editing tools as a toolbar
         current_directory = os.path.dirname(os.path.realpath(__file__))
