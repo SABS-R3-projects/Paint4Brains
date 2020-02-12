@@ -4,93 +4,97 @@ import nilearn as nl
 import numpy as np
 import torch
 import csv
-from skimage import exposure
+
+label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral ventricle", "Left Inf LatVentricle",
+               "Left Cerebellum WM", "Left Cerebellum Cortex", "Left Thalamus", "Left Caudate", "Left Putamen",
+               "Left Pallidum", "3rd Ventricle", "4th Ventricle", "Brain Stem", "Left Hippocampus", "Left Amygdala",
+               "CSF (Cranial)", "Left Accumbens", "Left Ventral DC", "Right WM", "Right Cortex",
+               "Right Lateral Ventricle", "Right Inf LatVentricle", "Right Cerebellum WM",
+               "Right Cerebellum Cortex", "Right Thalamus", "Right Caudate", "Right Putamen", "Right Pallidum",
+               "Right Hippocampus", "Right Amygdala", "Right Accumbens", "Right Ventral DC"]
+
+# This is the affine that we get from FreeSurfer
+new_affine = np.array([[-1, 0., 0, 128],
+                       [0., 0., 1, -128],
+                       [0., -1, 0, 128],
+                       [0., 0., 0, 1]])
 
 
-def segment_default(brain_file_path, device="CPU"):
+def segment_default(brain_file_path, device="cpu"):
     coronal_model_path = "saved_models/finetuned_alldata_coronal.pth.tar"
     axial_model_path = "saved_models/finetuned_alldata_axial.pth.tar"
     batch_size = 1
-    save_predictions_dir = "output_file"
-    label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral ventricle", "Left Inf LatVentricle",
-                   "Left Cerebellum WM", "Left Cerebellum Cortex", "Left Thalamus", "Left Caudate", "Left Putamen",
-                   "Left Pallidum", "3rd Ventricle", "4th Ventricle", "Brain Stem", "Left Hippocampus", "Left Amygdala",
-                   "CSF (Cranial)", "Left Accumbens", "Left Ventral DC", "Right WM", "Right Cortex",
-                   "Right Lateral Ventricle", "Right Inf LatVentricle", "Right Cerebellum WM",
-                   "Right Cerebellum Cortex", "Right Thalamus", "Right Caudate", "Right Putamen", "Right Pallidum",
-                   "Right Hippocampus", "Right Amygdala", "Right Accumbens", "Right Ventral DC"]
-    evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device, batch_size,
-                  label_names)
+    save_predictions_dir = "outputs"
+    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,
+                         batch_size)
 
 
-def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size,
-                  label_names):
+def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size):
     print("**Starting evaluation**")
 
-    file_paths = [brain_file_path]
-
-    model1 = torch.load(coronal_model_path, map_location=torch.device('cpu'))
-
-    model2 = torch.load(axial_model_path, map_location=torch.device('cpu'))
-
+    file_path = brain_file_path
     cuda_available = torch.cuda.is_available()
-    if cuda_available:
-        torch.cuda.empty_cache()
-        model1.cuda(device)
-        model2.cuda(device)
+
+    if type(device) == int:
+        # if CUDA available, follow through, else warn and fallback to CPU
+        if cuda_available:
+            model1 = torch.load(coronal_model_path)
+            model2 = torch.load(axial_model_path)
+
+            torch.cuda.empty_cache()
+            model1.cuda(device)
+            model2.cuda(device)
+        else:
+            log.warning(
+                'CUDA is not available, trying with CPU.' + \
+                'This can take much longer (> 1 hour). Cancel and ' + \
+                'investigate if this behavior is not desired.'
+            )
+
+    if (type(device) == str) or not cuda_available:
+        model1 = torch.load(
+            coronal_model_path,
+            map_location=torch.device(device)
+        )
+        model2 = torch.load(
+            axial_model_path,
+            map_location=torch.device(device)
+        )
 
     model1.eval()
     model2.eval()
 
-    create_if_not(prediction_path)
-    print("Evaluating now...")
-
     with torch.no_grad():
-        volume_dict_list = []
-        for vol_idx, file_path in enumerate(file_paths):
-            try:
-                volume_prediction_cor, _, header, original = _segment_vol(file_path, model1, "COR", batch_size,
-                                                                cuda_available,
-                                                                device)
-                volume_prediction_axi, _, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
-                                                                cuda_available,
-                                                                device)
-                _, volume_prediction = torch.max(volume_prediction_axi + volume_prediction_cor, dim=1)
-                volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
-                volume_prediction = np.squeeze(volume_prediction)
-                nifti_img = nib.Nifti1Image(volume_prediction, np.eye(4), header=header)
-                print("Processed: " + volumes_to_use[vol_idx] + " " + str(vol_idx + 1) + " out of " + str(
-                    len(file_paths)))
-                # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
-                to_save = undo_transform(nifti_img, original)
-                # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                nib.save(to_save, os.path.join(prediction_path, volumes_to_use[vol_idx][:-4] + str('_segmented.nii.gz')))
+        try:
+            volume_prediction_cor, _, header, original = _segment_vol(file_path, model1, "COR", batch_size,
+                                                                      cuda_available,
+                                                                      device)
+            volume_prediction_axi, _, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
+                                                                      cuda_available,
+                                                                      device)
+            _, volume_prediction = torch.max(volume_prediction_axi + volume_prediction_cor, dim=1)
+            volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
+            volume_prediction = np.squeeze(volume_prediction)
+            
+            # volume_prediction, header, original = load_and_preprocess(file_path, "AXI")    # For debugging
+            # volume_prediction = np.transpose(volume_prediction, (2, 0, 1))   # For debugging
 
-                per_volume_dict = compute_volume(volume_prediction, label_names, volumes_to_use[vol_idx])
-                volume_dict_list.append(per_volume_dict)
+            nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
+            # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
+            to_save = undo_transform(nifti_img, original)
+            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            filename = file_path[:-4] + str('_segmented.nii.gz')
+            nib.save(to_save, filename)
 
-            except FileNotFoundError:
-                print("Error in reading the file ...")
-            except Exception as exp:
-                import logging
-                logging.getLogger(__name__).exception(exp)
-                # print("Other kind o error!")
+            print("**Finished evaluation**")
+            return filename
 
-        _write_csv_table('volume_estimates.csv', prediction_path, volume_dict_list, label_names)
-
-    print("DONE")
-
-
-def _write_csv_table(name, prediction_path, dict_list, label_names):
-    file_name = name
-    file_path = os.path.join(prediction_path, file_name)
-    # Save volume_dict as csv file in the prediction_path
-    with open(file_path, 'w') as f:
-        writer = csv.DictWriter(f, fieldnames=label_names)
-        writer.writeheader()
-
-        for data in dict_list:
-            writer.writerow(data)
+        except FileNotFoundError:
+            print("Error in reading the file ...")
+        except Exception as exp:
+            import logging
+            logging.getLogger(__name__).exception(exp)
+            # print("Other kind o error!")
 
 
 def _segment_vol(file_path, model, orientation, batch_size, cuda_available, device):
@@ -138,39 +142,10 @@ def load_and_preprocess(file_path, orientation):
     return volume, header, original
 
 
-def create_if_not(path):
-    """
-    Creates a folder at the given path if one doesnt exist before
-    ===
-
-    :param path: destination to check for existense
-    :return: None
-    """
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-
-def compute_volume(prediction_map, label_map, ID):
-    num_cls = len(label_map) - 1
-    volume_dict = {}
-    volume_dict['vol_ID'] = ID
-    for i in range(num_cls):
-        binarized_pred = (prediction_map == i).astype(float)
-        volume_dict[label_map[i + 1]] = np.sum(binarized_pred)
-
-    return volume_dict
-
-
 def transform(image):
     """Takes brain extracted image and conforms it to [256, 256, 256]
     and 1 mm^3 voxel size just like Freesurfer's mri_conform function"""
     shape = (256, 256, 256)
-    # This is the affine that we get from FreeSurfer
-    new_affine = np.array([[-1, 0., 0, 128],
-                           [0., 0., 1, -128],
-                           [0., -1, 0, 128],
-                           [0., 0., 0, 1]])
-
     # creating new image with the new affine and shape
     new_img = nl.image.resample_img(image, new_affine, target_shape=shape)
     # change orientation
@@ -180,8 +155,6 @@ def transform(image):
     data = new_img.get_fdata()
     data = np.rint(data / np.max(data) * 255)
     data = data.astype(np.uint8)
-
-    data = exposure.adjust_log(data, 1.3)
 
     new_tran = nib.orientations.apply_orientation(data, transformation)
     transformed_image = nib.Nifti1Image(new_tran, new_affine)
@@ -195,5 +168,4 @@ def undo_transform(mask, original):
     new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
     return new_mask
 
-
-segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
+# segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
