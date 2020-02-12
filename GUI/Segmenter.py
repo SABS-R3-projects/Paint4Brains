@@ -21,8 +21,9 @@ new_affine = np.array([[-1, 0., 0, 128],
 
 
 def segment_default(brain_file_path, device="cpu"):
-    coronal_model_path = "saved_models/finetuned_alldata_coronal.pth.tar"
-    axial_model_path = "saved_models/finetuned_alldata_axial.pth.tar"
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
+    axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
     batch_size = 1
     save_predictions_dir = "outputs"
     return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,
