@@ -8,7 +8,7 @@ from BrainData import BrainData
 
 class WorkerThread(QThread):
     '''
-    Worker Thread
+    Worker Thread.
     '''
 
     def __init__(self, brain, device):
