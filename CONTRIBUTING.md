@@ -1,4 +1,4 @@
-# Contributing to Atom
+# Contributing to Paint4Brains
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
