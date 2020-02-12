@@ -8,7 +8,7 @@ from BrainData import BrainData
 
 class WorkerThread(QThread):
     '''
-    Worker Thread
+    Worker Thread.
     '''
 
     def __init__(self, brain, device):
@@ -18,8 +18,7 @@ class WorkerThread(QThread):
         self.device = device
 
     def run(self):
-
-        self.brain.brainSegmentation(self.device)
+        self.brain.segment(self.device)
 
 
 class MainWindow(QMainWindow):
@@ -286,7 +285,7 @@ class MainWindow(QMainWindow):
 
     def popup_button(self, i):
         if i.text() == 'CPU':
-            self.device = '"CPU"'
+            self.device = 'cpu'
         elif i.text() == 'GPU 0':
             self.device = 0
         elif i.text() == 'GPU 1':

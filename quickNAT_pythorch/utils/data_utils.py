@@ -93,7 +93,7 @@ def load_and_preprocess(file_path, orientation, remap_config, reduce_slices=Fals
 
 
 def load_and_preprocess_eval(file_path, orientation, notlabel=True):
-    volume_nifty = nb.load(file_path[0])
+    volume_nifty = nb.load(file_path)
     header = volume_nifty.header
     volume = volume_nifty.get_fdata()
     if notlabel:
@@ -157,7 +157,7 @@ def preprocess(volume, labelmap, remap_config, reduce_slices=False, remove_black
 #     return file_paths
 
 
-def load_file_paths(data_dir, label_dir, data_id, volumes_txt_file=None):
+def load_file_paths(data_dir, label_dir, data_id, volumes_txt_file=None, volumes_to_use=None):
     """
     This function returns the file paths combined as a list where each element is a 2 element tuple, 0th being data and 1st being label.
     It should be modified to suit the need of the project
@@ -165,14 +165,16 @@ def load_file_paths(data_dir, label_dir, data_id, volumes_txt_file=None):
     :param label_dir: Directory which contains the label files
     :param data_id: A flag indicates the name of Dataset for proper file reading
     :param volumes_txt_file: (Optional) Path to the a csv file, when provided only these data points will be read
+    :param volumes_to_use: (Optional) Filename to segment
     :return: list of file paths as string
     """
 
-    if volumes_txt_file:
-        with open(volumes_txt_file) as file_handle:
-            volumes_to_use = file_handle.read().splitlines()
-    else:
-        volumes_to_use = [name for name in os.listdir(data_dir)]
+    if volumes_to_use is None:
+        if volumes_txt_file:
+            with open(volumes_txt_file) as file_handle:
+                volumes_to_use = file_handle.read().splitlines()
+        else:
+            volumes_to_use = [name for name in os.listdir(data_dir)]
 
     if data_id == "MALC":
         file_paths = [
