@@ -6,13 +6,15 @@ Accurate anatomical segmentation of structure of interest is critical in the neu
 This open source software was created at the _EPSRC CDT in Sustainable Approached to Biomedical Sciences: Responsible and Reproducible Research - SABS R3_.
 
 ## Installation
-There are several ways to install the packages. Currently, our team are working on creating an installer files for Linux, Windows and iOS. However, to run this code, you need to git clone this repository using:
+There are several ways to install the packages. Currently, our team are working on creating installer files for Linux and Windows. The latest version of these are available at [Oxfile](https://oxfile.ox.ac.uk/oxfile/work/extBox?id=83945705F72EA8199D).
+
+Alternatively, to download and run this code as python files, you can clone this repository using git:
 
 ```bash
 git clone <link to repo>
 ```
 
-In order to install the packaged, the user will require the presence of Python3 and the [pip3](https://pip.pypa.io/en/stable/) installer. 
+In order to install the required packages, the user will need the presence of Python3 and the [pip3](https://pip.pypa.io/en/stable/) installer. 
 
 For installation on Linux or OSX, use the following commands. This will create a virtual environment and automatically install all the requirements, as well as create the required metadata
 
