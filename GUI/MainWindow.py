@@ -187,8 +187,8 @@ class MainWindow(QMainWindow):
         command line beforehand (this can be set in pycharm too) or through a window that appears on start (gets annoying).
         If you try to open it with nothing it complains and gives you an error message.
         """
-        self.data_filename = QFileDialog.getOpenFileName(self, "Load extracted brain",
-                                                         "Please select full brain scan", "Nii Files (*.nii *.nii.gz)")
+        self.data_filename = QFileDialog.getOpenFileName(self, "Load brain MRI",
+                                                         "Please select full MRI scan", "Nii Files (*.nii *.nii.gz)")
         if isinstance(self.data_filename, tuple):
             self.data_filename = self.data_filename[0]  # Qt4/5 API difference
         if self.data_filename == '':
@@ -231,7 +231,7 @@ class MainWindow(QMainWindow):
             old_name = "New_label_data"
         else:
             old_name = "Modified_" + old_name
-        saving_filename = QFileDialog.getSaveFileName(self, "Save Image..", old_name, "Nii Files (*.nii)")
+        saving_filename = QFileDialog.getSaveFileName(self, "Save Image", old_name, "Nii Files (*.nii)")
         self.brain.save_label_data(saving_filename)
 
     def save(self):
@@ -268,7 +268,7 @@ class MainWindow(QMainWindow):
     def segment(self):
         """
         Method that returns a segmented brain
-        This funtion calls the brainSegmentation funciton in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
+        This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
 
         self.show_settings_popup()
