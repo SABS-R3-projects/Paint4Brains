@@ -12,14 +12,18 @@ class WorkerThread(QThread):
     Worker Thread.
     '''
 
-    def __init__(self, brain, device):
+    def __init__(self, window, device):
         super(WorkerThread, self).__init__()
         # Storing constructor arguments to re-use for processing
-        self.brain = brain
         self.device = device
+        self.window = window
+        self.brain = self.window.brain
 
     def run(self):
         self.brain.segment(self.device)
+        self.window.enable_drawing()
+        self.window.update_colormap()
+        self.window.view_back_labels()
 
 
 class MainWindow(QMainWindow):
@@ -271,7 +275,7 @@ class MainWindow(QMainWindow):
 
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
     
-        self.thread = WorkerThread(self.brain, self.device)
+        self.thread = WorkerThread(self.main_widget.win, self.device)
         self.thread.start()
 
 
