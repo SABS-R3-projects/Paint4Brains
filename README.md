@@ -22,6 +22,13 @@ For installation on Linux or OSX, use the following commands. This will create a
 ./setup.sh
 ```
 
+In order to run the code, activate the previously installed virtual environment, and run the GUI from this environment:
+
+```bash
+~/(Paint4Brains Locations)$ source env/bin/activate
+~/(Paint4Brains Locations)$ python GUI/actualGUI.py 
+```
+
 ## Usage
 In order to run the GUI, first you need to activate the previously created environment, if you have not done so already. This can be done by typing the following in the home file (the file where you _git pulled_ this repo):
 
