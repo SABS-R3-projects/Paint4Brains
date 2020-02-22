@@ -3,10 +3,6 @@ import nibabel as nib
 from deepbrain import Extractor
 from Segmenter import segment_default
 from nilearn.image import resample_img
-import os
-import pathlib
-import configparser
-import subprocess
 
 
 class BrainData:

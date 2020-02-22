@@ -104,6 +104,9 @@ class MainWidget(QWidget):
         This extraction produces a probability mask.
         At the moment it is hard coded such that we keep voxels with probability larger than a half.
         If the brain has already been extracted it loads a previous version.
+
+        Functionality for this method is defined in the BrainData class.
+        This wrapper has been kept here to ensure the displayed image is updated.
         """
         self.brain.brainExtraction()
         self.win.refresh_image()
@@ -113,6 +116,18 @@ class MainWidget(QWidget):
 
         Returns the background image to the unextracted brain.
         Stores the extracted brain.
+
+        Functionality for this method is defined in the BrainData class.
+        This wrapper has been kept here to ensure the displayed image is updated.
         """
         self.brain.full_brain()
         self.win.refresh_image()
+
+    def wheelEvent(self, a0):
+        """ Edits the behaviour of the mouse wheel.
+
+        Functionality for this method is defined in the ImageViewer class.
+        This wrapper has been kept here to ensure the slider position is updated.
+        """
+        self.widget_slider.slider.setValue(self.brain.i)
+        super(MainWidget, self).wheelEvent(a0)

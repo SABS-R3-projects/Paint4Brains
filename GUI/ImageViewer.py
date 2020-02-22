@@ -1,7 +1,7 @@
 import numpy as np
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QShortcut
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from pyqtgraph import ImageItem, GraphicsView
 from ModViewBox import ModViewBox
 from BrainData import BrainData
@@ -204,6 +204,27 @@ class ImageViewer(GraphicsView):
                         self.refresh_image()
                         self.enable_drawing()
         super(ImageViewer, self).mouseReleaseEvent(ev)
+
+    def wheelEvent(self, ev):
+        """ Overwriting the wheel functionality.
+
+        If you scroll it will move along slices.
+        If you scroll while holding the Ctrl button, it will zoom in and out
+
+        :param ev: signal emitted when user releases scrolls the wheel.
+        """
+
+        if ev.modifiers() == Qt.ControlModifier:
+            super(ImageViewer, self).wheelEvent(ev)
+        else:
+            if ev.angleDelta().y() > 0 and self.brain.i < self.brain.shape[self.brain.section]-1:
+                self.brain.i = self.brain.i + 1
+                self.refresh_image()
+            elif ev.angleDelta().y() < 0 < self.brain.i:
+                self.brain.i = self.brain.i - 1
+                self.refresh_image()
+
+
 
 
 cross = np.array([
