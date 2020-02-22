@@ -316,5 +316,3 @@ class MainWindow(QMainWindow):
         x = msg.exec_()
 
         return answer
-
-        
