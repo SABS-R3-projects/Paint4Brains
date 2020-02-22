@@ -1,6 +1,6 @@
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
-from PyQt5.QtCore import QRunnable, QThreadPool, pyqtSlot, QThread, pyqtSignal
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
