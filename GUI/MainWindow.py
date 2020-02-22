@@ -289,9 +289,9 @@ class MainWindow(QMainWindow):
         if i.text() == 'CPU':
             self.device = 'cpu'
         elif i.text() == 'GPU 0':
-            self.device = int(0)
+            self.device = "cuda"
         elif i.text() == 'GPU 1':
-            self.device = int(1)
+            self.device = "cuda"
 
         return self.device
 
