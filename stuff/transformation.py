@@ -1,8 +1,3 @@
-'''
-Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
-
-'''
-
 import nilearn as nl
 import nibabel as nb
 from dipy.align.reslice import reslice
@@ -10,6 +5,8 @@ from dipy.data import get_fnames
 import numpy as np
 
 def transform(image):
+    '''Transform Nifti images to FreeSurfer standard with 1x1x1 voxel dimension
+    '''
     # setting voxel size and image dimensions
     new_zooms = (1,1,1)
     shape = (256,256,256)
