@@ -129,6 +129,12 @@ class MainWindow(QMainWindow):
         nodrawAction.triggered.connect(self.main_widget.win.disable_drawing)
         self.edit.addAction(nodrawAction)
 
+        undoAction = QAction('Undo', self)
+        undoAction.setShortcut('Ctrl+Z')
+        undoAction.setStatusTip('Undo previous edit')
+        undoAction.triggered.connect(self.main_widget.win.undo_previous_edit)
+        self.edit.addAction(undoAction)
+
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')

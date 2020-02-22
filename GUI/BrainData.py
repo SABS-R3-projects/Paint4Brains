@@ -44,6 +44,8 @@ class BrainData:
         self.full_head = self.data.copy()
         self.only_brain = []
 
+        self.edit_history = [[self.label_data.copy(), self.other_labels_data.copy()]]
+
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
 

@@ -180,6 +180,14 @@ class ImageViewer(GraphicsView):
                 self.brain.current_label = self.brain.different_labels[-1]
             self.refresh_image()
 
+    def undo_previous_edit(self):
+        current = len(self.brain.edit_history)
+        if current > 1:
+            self.brain.label_data = self.brain.edit_history[current - 2][0]
+            self.brain.other_labels_data = self.brain.edit_history[current - 2][1]
+            self.brain.edit_history = self.brain.edit_history[:-1]
+            self.refresh_image()
+
     def mouseReleaseEvent(self, ev):
         """ Adding functionality to the default mouseReleaseEvent method to take select mode into account.
 
@@ -204,6 +212,8 @@ class ImageViewer(GraphicsView):
                         self.refresh_image()
                         self.enable_drawing()
         super(ImageViewer, self).mouseReleaseEvent(ev)
+        if self.view.drawing:
+            self.brain.edit_history.append([self.brain.label_data.copy(), self.brain.other_labels_data.copy()])
 
     def wheelEvent(self, ev):
         """ Overwriting the wheel functionality.
