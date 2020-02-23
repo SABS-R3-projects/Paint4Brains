@@ -13,7 +13,6 @@ label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral v
                "Right Cerebellum Cortex", "Right Thalamus", "Right Caudate", "Right Putamen", "Right Pallidum",
                "Right Hippocampus", "Right Amygdala", "Right Accumbens", "Right Ventral DC"]
 
-
 new_affine = np.array([[-1, 0., 0, 128],
                        [0., 0., 1, -128],
                        [0., -1, 0, 128],
@@ -155,6 +154,14 @@ def transform(image):
     transformation = nib.orientations.ornt_transform(orientation, target_orientation)
     data = new_img.get_fdata()
     data = np.rint(data / np.max(data) * 255)
+    # Putting log correction back in. But estimating the magic number by fitting to some conformed brains.
+    # These values are therefore empirical (potentially need to improve them, but better than hardcoded)
+    var = np.var(data)
+    magic_number = 0.15 + 0.0002874 * var + 7.9317 / var - 2.986 / np.mean(data)
+    scale = (np.max(new) - np.min(new))
+    data = np.log2(1 + new.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+    data = np.rint(np.clip(data, 0, 255))   # Ensure values do not go over 255
+    # Continues as before from here
     data = data.astype(np.uint8)
 
     new_tran = nib.orientations.apply_orientation(data, transformation)
