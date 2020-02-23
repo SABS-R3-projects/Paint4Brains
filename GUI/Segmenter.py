@@ -83,7 +83,7 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
             # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
             to_save = undo_transform(nifti_img, original)
             # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            if file_path[:-7] == ".nii.gz":
+            if ".gz" in file_path:
                 filename = file_path[:-7] + str('_segmented.nii.gz')
             else:
                 filename = file_path[:-4] + str('_segmented.nii.gz')
