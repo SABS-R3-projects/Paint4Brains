@@ -158,8 +158,8 @@ def transform(image):
     # These values are therefore empirical (potentially need to improve them, but better than hardcoded)
     var = np.var(data)
     magic_number = 0.15 + 0.0002874 * var + 7.9317 / var - 2.986 / np.mean(data)
-    scale = (np.max(new) - np.min(new))
-    data = np.log2(1 + new.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+    scale = (np.max(data) - np.min(data))
+    data = np.log2(1 + data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
     data = np.rint(np.clip(data, 0, 255))   # Ensure values do not go over 255
     # Continues as before from here
     data = data.astype(np.uint8)
