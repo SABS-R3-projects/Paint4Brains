@@ -188,6 +188,14 @@ class ImageViewer(GraphicsView):
             self.brain.current_edit = self.brain.current_edit - 1
             self.refresh_image()
 
+    def redo_previous_edit(self):
+        current = self.brain.current_edit
+        if current < len(self.brain.edit_history):
+            self.brain.label_data = self.brain.edit_history[current][0]
+            self.brain.other_labels_data = self.brain.edit_history[current][1]
+            self.brain.current_edit = self.brain.current_edit + 1
+            self.refresh_image()
+
     def mouseReleaseEvent(self, ev):
         """ Adding functionality to the default mouseReleaseEvent method to take select mode into account.
 
@@ -212,13 +220,12 @@ class ImageViewer(GraphicsView):
                         self.refresh_image()
                         self.enable_drawing()
         super(ImageViewer, self).mouseReleaseEvent(ev)
-        if self.view.drawing and not self.select_mode:
+        if self.view.drawing and ev.button() == Qt.LeftButton:
             if self.brain.edits_recorded < len(self.brain.edit_history):
                 self.brain.edit_history = self.brain.edit_history[1:]
-                print("reached max")
             if self.brain.current_edit < len(self.brain.edit_history):
-                self.brain.edit_history = self.brain.edit_history[:-(len(self.brain.edit_history)-self.brain.current_edit)]
-                print("THIS SHOULD NOT HAPPEN")
+                self.brain.edit_history = self.brain.edit_history[:(self.brain.current_edit - len(self.brain.edit_history))]
+
             self.brain.edit_history.append([self.brain.label_data.copy(), self.brain.other_labels_data.copy()])
             self.brain.current_edit = len(self.brain.edit_history)
 

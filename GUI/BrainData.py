@@ -45,7 +45,7 @@ class BrainData:
         self.only_brain = []
 
         self.edit_history = [[self.label_data.copy(), self.other_labels_data.copy()]]
-        self.edits_recorded = 3 # change
+        self.edits_recorded = 20
         self.current_edit = 1
 
     def get_data_slice(self, i):

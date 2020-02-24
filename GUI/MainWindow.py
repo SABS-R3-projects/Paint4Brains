@@ -135,6 +135,12 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.undo_previous_edit)
         self.edit.addAction(undoAction)
 
+        undoAction = QAction('Redo', self)
+        undoAction.setShortcut('Ctrl+Shift+Z')
+        undoAction.setStatusTip('Revert to previous edit')
+        undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
+        self.edit.addAction(undoAction)
+
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
