@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from pyqtgraph import ImageItem, GraphicsView
 from ModViewBox import ModViewBox
 from BrainData import BrainData
+from SelectLabel import SelectLabel
 
 
 class ImageViewer(GraphicsView):
@@ -60,6 +61,7 @@ class ImageViewer(GraphicsView):
             self.update_colormap()
             self.refresh_image()
 
+        self.dropbox = SelectLabel(self)
 
     def refresh_image(self):
         """ Sets the images displayed by the Image viewer to the current data slices
@@ -85,7 +87,7 @@ class ImageViewer(GraphicsView):
 
         There are only 12 distinct colours (not including the "invisible" colour)
         """
-        num = len(self.brain.different_labels)+1
+        num = len(self.brain.different_labels) + 1
         self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / 12 + 1) * self.colours)[:num])
         self.mid_img.setLevels([0, np.max(self.brain.different_labels)])
 
@@ -166,6 +168,7 @@ class ImageViewer(GraphicsView):
             else:
                 self.brain.current_label = self.brain.different_labels[1]
             self.refresh_image()
+            self.dropbox.update_box()
 
     def previous_label(self):
         """ Brings the previous label in the list to be edited
@@ -179,6 +182,7 @@ class ImageViewer(GraphicsView):
             else:
                 self.brain.current_label = self.brain.different_labels[-1]
             self.refresh_image()
+            self.dropbox.update_box()
 
     def undo_previous_edit(self):
         current = self.brain.current_edit
@@ -219,12 +223,14 @@ class ImageViewer(GraphicsView):
                         self.select_mode = False
                         self.refresh_image()
                         self.enable_drawing()
+                        self.dropbox.update_box()
         super(ImageViewer, self).mouseReleaseEvent(ev)
         if self.view.drawing and ev.button() == Qt.LeftButton:
             if self.brain.edits_recorded < len(self.brain.edit_history):
                 self.brain.edit_history = self.brain.edit_history[1:]
             if self.brain.current_edit < len(self.brain.edit_history):
-                self.brain.edit_history = self.brain.edit_history[:(self.brain.current_edit - len(self.brain.edit_history))]
+                self.brain.edit_history = self.brain.edit_history[
+                                          :(self.brain.current_edit - len(self.brain.edit_history))]
 
             self.brain.edit_history.append([self.brain.label_data.copy(), self.brain.other_labels_data.copy()])
             self.brain.current_edit = len(self.brain.edit_history)
@@ -241,14 +247,12 @@ class ImageViewer(GraphicsView):
         if ev.modifiers() == Qt.ControlModifier:
             super(ImageViewer, self).wheelEvent(ev)
         else:
-            if ev.angleDelta().y() > 0 and self.brain.i < self.brain.shape[self.brain.section]-1:
+            if ev.angleDelta().y() > 0 and self.brain.i < self.brain.shape[self.brain.section] - 1:
                 self.brain.i = self.brain.i + 1
                 self.refresh_image()
             elif ev.angleDelta().y() < 0 < self.brain.i:
                 self.brain.i = self.brain.i - 1
                 self.refresh_image()
-
-
 
 
 cross = np.array([
