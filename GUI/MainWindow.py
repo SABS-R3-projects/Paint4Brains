@@ -4,26 +4,9 @@ from PyQt5.QtCore import QRunnable, QThreadPool, QThread
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
+from SegmentThread import SegmentThread
+import torch
 import os
-
-
-class WorkerThread(QThread):
-    '''
-    Worker Thread.
-    '''
-
-    def __init__(self, window, device):
-        super(WorkerThread, self).__init__()
-        # Storing constructor arguments to re-use for processing
-        self.device = device
-        self.window = window
-        self.brain = self.window.brain
-
-    def run(self):
-        self.brain.segment(self.device)
-        self.window.enable_drawing()
-        self.window.update_colormap()
-        self.window.view_back_labels()
 
 
 class MainWindow(QMainWindow):
@@ -192,7 +175,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(right)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
-      
+
     def load_initial(self):
         """ Loads the "base" brain
         The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
@@ -231,7 +214,6 @@ class MainWindow(QMainWindow):
         self.main_widget.win.enable_drawing()
         self.main_widget.win.update_colormap()
         self.main_widget.win.view_back_labels()
-
 
     def save_as(self):
         """ Saves the edited labelled data into a new file
@@ -286,20 +268,18 @@ class MainWindow(QMainWindow):
         self.show_settings_popup()
 
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
-    
-        self.thread = WorkerThread(self.main_widget.win, self.device)
-        self.thread.start()
-
+        cuda_available = torch.cuda.is_available()
+        if self.device != "None" and (cuda_available or self.device != "cuda"):
+            self.thread = SegmentThread(self.main_widget.win, self.device)
+            self.thread.start()
 
     def popup_button(self, i):
         if i.text() == 'CPU':
             self.device = 'cpu'
-        elif i.text() == 'GPU 0':
+        elif i.text() == 'GPU':
             self.device = "cuda"
-        elif i.text() == 'GPU 1':
-            self.device = "cuda"
-
-        return self.device
+        else:
+            self.device = "None"
 
     def show_settings_popup(self):
         msg = QMessageBox()
@@ -307,16 +287,15 @@ class MainWindow(QMainWindow):
         msg.setText("Select the hardware to use!")
         msg.setInformativeText("Select CPU or GPU ID (0 or 1)")
         msg.setIcon(QMessageBox.Question)
-        msg.setDetailedText("In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
-        
+        msg.setDetailedText(
+            "In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
+
         msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
-        msg.addButton(QPushButton('GPU 1'), QMessageBox.AcceptRole)
-        msg.addButton(QPushButton('GPU 0'), QMessageBox.AcceptRole)
+        msg.addButton(QPushButton('GPU'), QMessageBox.AcceptRole)
         msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
 
-
         msg.setDefaultButton(QPushButton('CPU'))
-        
+
         answer = msg.buttonClicked.connect(self.popup_button)
 
         x = msg.exec_()
