@@ -1,0 +1,2 @@
+Can't be bothered downloading any more but there are loads here:
+https://openneuro.org/datasets/ds002572/versions/1.1.0/file-display/sub-101:anat:sub-101_T1w.nii.gz

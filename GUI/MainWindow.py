@@ -1,6 +1,6 @@
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
-from PyQt5.QtCore import QRunnable, QThreadPool, pyqtSlot, QThread, pyqtSignal
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
@@ -128,6 +128,12 @@ class MainWindow(QMainWindow):
         nodrawAction.setStatusTip('Deactivate drawing')
         nodrawAction.triggered.connect(self.main_widget.win.disable_drawing)
         self.edit.addAction(nodrawAction)
+
+        undoAction = QAction('Undo', self)
+        undoAction.setShortcut('Ctrl+Z')
+        undoAction.setStatusTip('Undo previous edit')
+        undoAction.triggered.connect(self.main_widget.win.undo_previous_edit)
+        self.edit.addAction(undoAction)
 
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
@@ -283,9 +289,9 @@ class MainWindow(QMainWindow):
         if i.text() == 'CPU':
             self.device = 'cpu'
         elif i.text() == 'GPU 0':
-            self.device = int(0)
+            self.device = "cuda"
         elif i.text() == 'GPU 1':
-            self.device = int(1)
+            self.device = "cuda"
 
         return self.device
 
@@ -310,5 +316,3 @@ class MainWindow(QMainWindow):
         x = msg.exec_()
 
         return answer
-
-        

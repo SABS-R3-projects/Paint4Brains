@@ -3,10 +3,6 @@ import nibabel as nib
 from deepbrain import Extractor
 from Segmenter import segment_default
 from nilearn.image import resample_img
-import os
-import pathlib
-import configparser
-import subprocess
 
 
 class BrainData:
@@ -47,6 +43,8 @@ class BrainData:
         self.extraction_cutoff = 0.5
         self.full_head = self.data.copy()
         self.only_brain = []
+
+        self.edit_history = [[self.label_data.copy(), self.other_labels_data.copy()]]
 
     def get_data_slice(self, i):
         """ Returns the 2-D slice at point i of the full MRI data (not labels).
@@ -217,6 +215,11 @@ class BrainData:
         self.data = data_array / np.max(data_array)
 
     def segment(self, device):
+        """ Segments the brain.
+
+        The logic behind this function is writen in the Segmenter file
+        :param device: Device to run the neural network on, can be "cpu or "cuda"
+        """
         self.label_filename = segment_default(self.filename, device)
         self.load_label_data(self.label_filename)
 
@@ -240,7 +243,8 @@ class BrainData:
             self.multiple_labels = True
             self.different_labels = np.append(self.different_labels, new_label)
         self.label_data = np.clip(self.label_data, 0, 1)
-        self.other_labels_data = np.where(self.label_data == 0, self.other_labels_data, self.__current_label)
+        other_minus_current = np.where(self.other_labels_data == self.__current_label, 0, self.other_labels_data)
+        self.other_labels_data = np.where(self.label_data == 0, other_minus_current, self.__current_label)
         self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
         self.__current_label = new_label
 
