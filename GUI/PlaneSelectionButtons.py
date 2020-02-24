@@ -17,6 +17,7 @@ class PlaneSelectionButtons(QWidget):
         and I have fixed the size.
         """
         self.layout = QVBoxLayout(self)
+        self.btn1 = QPushButton()
         p1 = app.get_resource('images/one.png')
         self.btn1.setIcon(QtGui.QIcon(p1))
         self.btn1.setIconSize(QtCore.QSize(100, 100))
