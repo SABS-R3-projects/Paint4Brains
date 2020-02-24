@@ -243,7 +243,8 @@ class BrainData:
             self.multiple_labels = True
             self.different_labels = np.append(self.different_labels, new_label)
         self.label_data = np.clip(self.label_data, 0, 1)
-        self.other_labels_data = np.where(self.label_data == 0, self.other_labels_data, self.__current_label)
+        other_minus_current = np.where(self.other_labels_data == self.__current_label, 0, self.other_labels_data)
+        self.other_labels_data = np.where(self.label_data == 0, other_minus_current, self.__current_label)
         self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
         self.__current_label = new_label
 
