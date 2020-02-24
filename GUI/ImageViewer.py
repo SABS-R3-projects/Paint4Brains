@@ -181,11 +181,11 @@ class ImageViewer(GraphicsView):
             self.refresh_image()
 
     def undo_previous_edit(self):
-        current = len(self.brain.edit_history)
+        current = self.brain.current_edit
         if current > 1:
             self.brain.label_data = self.brain.edit_history[current - 2][0]
             self.brain.other_labels_data = self.brain.edit_history[current - 2][1]
-            self.brain.edit_history = self.brain.edit_history[:-1]
+            self.brain.current_edit = self.brain.current_edit - 1
             self.refresh_image()
 
     def mouseReleaseEvent(self, ev):
@@ -212,8 +212,15 @@ class ImageViewer(GraphicsView):
                         self.refresh_image()
                         self.enable_drawing()
         super(ImageViewer, self).mouseReleaseEvent(ev)
-        if self.view.drawing:
+        if self.view.drawing and not self.select_mode:
+            if self.brain.edits_recorded < len(self.brain.edit_history):
+                self.brain.edit_history = self.brain.edit_history[1:]
+                print("reached max")
+            if self.brain.current_edit < len(self.brain.edit_history):
+                self.brain.edit_history = self.brain.edit_history[:-(len(self.brain.edit_history)-self.brain.current_edit)]
+                print("THIS SHOULD NOT HAPPEN")
             self.brain.edit_history.append([self.brain.label_data.copy(), self.brain.other_labels_data.copy()])
+            self.brain.current_edit = len(self.brain.edit_history)
 
     def wheelEvent(self, ev):
         """ Overwriting the wheel functionality.
