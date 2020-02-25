@@ -5,7 +5,7 @@ from deepbrain import Extractor
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
-
+from skimage.transform import resize
 
 class MainWidget(QWidget):
     def __init__(self, brain, parent=None):
@@ -97,6 +97,12 @@ class MainWidget(QWidget):
         """
         self.brain.section = 2
         self.__update_section_helper()
+
+    def normalize_intensity(self):
+
+        self.brain.intensityNormalization()
+        self.win.refresh_image()
+
 
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network

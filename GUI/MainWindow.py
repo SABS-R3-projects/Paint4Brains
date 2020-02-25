@@ -1,9 +1,10 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
+from Normalize_Widget import NormalizationWidget
 import os
 
 
@@ -135,6 +136,13 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.undo_previous_edit)
         self.edit.addAction(undoAction)
 
+        normalizeAction = QAction('Adjust Intensity', self)
+        normalizeAction.setShortcut('Ctrl+I')
+        normalizeAction.setStatusTip('Normalize Image Intensity')
+        normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
+        self.tools.addAction(normalizeAction)
+
+
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
@@ -186,6 +194,14 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(right)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
+
+        self.normwidget = NormalizationWidget()
+        self.intensity_toolbar = QToolBar()
+        self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
+        self.intensity_toolbar.addWidget(self.normwidget)
+        #self.intensity_toolbar.setOrientation(Qt.Horizontal)
+        self.intensity_toolbar.setVisible(True)
+
       
     def load_initial(self):
         """ Loads the "base" brain

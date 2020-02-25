@@ -35,12 +35,12 @@ class BrainData:
 
         self.section = 0
         self.shape = self.data.shape
-        self.i = int(self.shape[self.section] / 2)
+        self.i = int(self.shape[self.section] / 2)  # What is i? Location of the slice on slider
         maxim = np.max(self.data)
         self.data = self.data / maxim
 
         self.extracted = False
-        self.extraction_cutoff = 0.5
+        self.extraction_cutoff = 0.5  # Might be nice to add user defined functionality to GUI for changing this
         self.full_head = self.data.copy()
         self.only_brain = []
 
@@ -166,7 +166,14 @@ class BrainData:
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
-    ### Creating class methods ###
+    # Creating class methods #
+    def intensityNormalization(self, magic_number):
+
+        scale = (np.max(self.data) - np.min(self.data))
+        data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+        self.data = data
+        self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
@@ -247,4 +254,3 @@ class BrainData:
         self.other_labels_data = np.where(self.label_data == 0, other_minus_current, self.__current_label)
         self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
         self.__current_label = new_label
-
