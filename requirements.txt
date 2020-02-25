@@ -1,4 +1,4 @@
-pip>=19.0
+pip>=20.0.2
 certifi>=2019.9.11
 cycler>=0.10.0
 kiwisolver>=1.1.0
