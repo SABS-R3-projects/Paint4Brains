@@ -70,6 +70,10 @@ There are several menues currently incorporated within the GUI, as follows:
         * Allows the user to manually select a label, by clicking on it, rather than cycling through all labels.
     * Deactivate Drawing
         * Deactivates the edditng tools functionality. This can be reactivated later.
+    * Undo (Ctrl+Z)
+        * Reverts to previous edit
+    * Redo (Ctrl+Shift+Z)
+        * Reverts previous undo
 * View
     * Recenter View
     * Edditing Toolbar
@@ -77,6 +81,7 @@ There are several menues currently incorporated within the GUI, as follows:
         * The user can choose between a pen and a cross as edditing tools, and a rubber for undo-ing made changes.
         * The user can also cycle between the various generated labels. 
         * **When selecting a label** this label will highlight in red. The user can eddit that label, by using the edditing instruments. When moving on to another label, the changes are saved automatically. **Please do not forget** to also save the final new mask once you have finished edditing. 
+        * On the left there is a dropdown box indicating which label is currently selected and allowing the user to select which part of the brain to edit by name.
     * All Labels
         * Clicking on this once, will allow the user to either see one label at a time, and cycle then through all labels
         * Clicking on this a second time will revert the user to seeing all labels at the same time.
