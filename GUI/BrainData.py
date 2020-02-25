@@ -123,7 +123,7 @@ class BrainData:
         """
         self.label_filename = filename
         self.__nib_label_data = nib.load(self.label_filename)
-        x = np.flip(self.__nib_label_data.as_reoriented(self.__orientation).get_data().transpose()).astype(np.int8)
+        x = np.flip(self.__nib_label_data.as_reoriented(self.__orientation).get_fdata().transpose()).astype(np.int8)
         self.different_labels = np.unique(x)
         number_of_labels = len(self.different_labels)
         if number_of_labels == 2:
@@ -143,14 +143,13 @@ class BrainData:
         :param saving_filename: Name of the file to be saved as
         """
         self.saving_filename = saving_filename
-        if saving_filename[1] != "Nii Files (*.nii)":
-            return
-        elif (saving_filename[0])[-4:] != ".nii":
+        print(saving_filename)
+        if (saving_filename[0])[-4:] != ".nii":
             saving_filename = saving_filename[0] + ".nii"
         else:
             saving_filename = saving_filename[0]
 
-        image = nib.Nifti1Image(np.flip(self.label_data).transpose(), np.eye(4))
+        image = nib.Nifti1Image(np.flip(self.label_data, axis=(0, 1)).transpose(), self.__nib_data.affine)
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
 
@@ -261,8 +260,7 @@ class BrainData:
             self.edit_history = self.edit_history[1:]
         if self.current_edit < len(self.edit_history):
             self.edit_history = self.edit_history[
-                                      :(self.current_edit - len(self.edit_history))]
+                                :(self.current_edit - len(self.edit_history))]
 
         self.edit_history.append([self.label_data.copy(), self.other_labels_data.copy()])
         self.current_edit = len(self.edit_history)
-
