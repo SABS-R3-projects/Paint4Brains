@@ -1,5 +1,5 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
@@ -174,6 +174,8 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(label)
         self.edit_toolbar.addAction(right)
         self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addSeparator()
+        self.edit_toolbar.addWidget(self.main_widget.win.dropbox)
         self.edit_toolbar.setVisible(False)
 
     def load_initial(self):
@@ -264,7 +266,6 @@ class MainWindow(QMainWindow):
         Method that returns a segmented brain
         This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
-
         self.show_settings_popup()
 
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
