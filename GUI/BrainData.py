@@ -224,6 +224,7 @@ class BrainData:
         """
         self.label_filename = segment_default(self.filename, device)
         self.load_label_data(self.label_filename)
+        self.store_edit()
 
     @property
     def current_label(self):
@@ -249,4 +250,19 @@ class BrainData:
         self.other_labels_data = np.where(self.label_data == 0, other_minus_current, self.__current_label)
         self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
         self.__current_label = new_label
+
+    def store_edit(self):
+        """ Function that stores previous edits.
+
+        This list of edits are then used by the undo and redo functions.
+        """
+
+        if self.edits_recorded < len(self.edit_history):
+            self.edit_history = self.edit_history[1:]
+        if self.current_edit < len(self.edit_history):
+            self.edit_history = self.edit_history[
+                                      :(self.current_edit - len(self.edit_history))]
+
+        self.edit_history.append([self.label_data.copy(), self.other_labels_data.copy()])
+        self.current_edit = len(self.edit_history)
 
