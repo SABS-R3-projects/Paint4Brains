@@ -1,3 +1,7 @@
+# **NEVER PULL THIS INTO MASTER**
+
+## This branch is used to easily update the installer
+
 # Paint4Brains: MRI Brain Segmentation Optimized for Elderly Brains for Use in Neurodegenerative Disease
 
 ## Motivation
@@ -138,5 +142,3 @@ This project is being done in collaboration and with support from [GE Healthcare
  
 ## Build status
 Paint4Brains is currently still in active development. Tests are currently in development. Please check this page regularly for updates. 
-
-

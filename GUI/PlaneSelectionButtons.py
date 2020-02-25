@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QPushButton
 from pyqtgraph.Qt import QtCore, QtGui
-import os
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
+
+app = ApplicationContext()
 
 class PlaneSelectionButtons(QWidget):
     """
@@ -14,17 +16,20 @@ class PlaneSelectionButtons(QWidget):
         functions to be executed when pressing the buttons are given as input. The buttons are decorated with images
         and I have fixed the size.
         """
-        current_directory = os.path.dirname(os.path.realpath(__file__))
         self.layout = QVBoxLayout(self)
         self.btn1 = QPushButton()
-        self.btn1.setIcon(QtGui.QIcon(current_directory+'/images/one.png'))
+        p1 = app.get_resource('images/one.png')
+        self.btn1.setIcon(QtGui.QIcon(p1))
         self.btn1.setIconSize(QtCore.QSize(100, 100))
         self.btn2 = QPushButton()
-        self.btn2.setIcon(QtGui.QIcon(current_directory+'/images/two.png'))
+        p2 = app.get_resource('images/two.png')
+        self.btn2.setIcon(QtGui.QIcon(p2))
         self.btn2.setIconSize(QtCore.QSize(100, 100))
         self.btn3 = QPushButton()
-        self.btn3.setIcon(QtGui.QIcon(current_directory+'/images/three.png'))
+        p3 = app.get_resource('images/three.png')
+        self.btn3.setIcon(QtGui.QIcon(p3))
         self.btn3.setIconSize(QtCore.QSize(100, 100))
+
 
         self.btn1.setFixedSize(120, 120)
         self.btn2.setFixedSize(120, 120)

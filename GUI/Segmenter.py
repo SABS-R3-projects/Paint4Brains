@@ -4,6 +4,12 @@ import nilearn as nl
 import numpy as np
 import torch
 import csv
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
+
+app = ApplicationContext()
+coronal_model_path = app.get_resource("saved_models/finetuned_alldata_coronal.pth.tar")
+axial_model_path = app.get_resource("saved_models/finetuned_alldata_axial.pth.tar")
+
 
 label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral ventricle", "Left Inf LatVentricle",
                "Left Cerebellum WM", "Left Cerebellum Cortex", "Left Thalamus", "Left Caudate", "Left Putamen",
@@ -20,9 +26,6 @@ new_affine = np.array([[-1, 0., 0, 128],
 
 
 def segment_default(brain_file_path, device="cpu"):
-    current_directory = os.path.dirname(os.path.realpath(__file__))
-    coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
-    axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
     batch_size = 1
     save_predictions_dir = "outputs"
     return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,

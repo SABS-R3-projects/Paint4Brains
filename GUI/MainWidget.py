@@ -1,7 +1,7 @@
 import numpy as np
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtCore
-from deepbrain import Extractor
+from Extractor import Extractor
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
