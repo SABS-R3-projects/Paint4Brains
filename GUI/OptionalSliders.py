@@ -29,7 +29,7 @@ class OptionalSliders(QWidget):
 
         self.second_slider = QSlider()
         self.second_slider.setOrientation(Qt.Horizontal)
-        self.second_slider.setMinimum(2)
+        self.second_slider.setMinimum(0)
         self.second_slider.setMaximum(98)
         self.second_slider.setValue(50)
         self.second_slider.valueChanged.connect(self.extraction_probability)
@@ -37,9 +37,11 @@ class OptionalSliders(QWidget):
 
     def transparency_set(self):
         self.win.mid_img.setOpacity(self.first_slider.value()/100)
+        self.win.see_all_labels = True
+        self.win.refresh_image()
 
     def extraction_probability(self):
-        self.brain.extraction_cutoff = self.second_slider.value()/100
+        self.brain.extraction_cutoff = (self.second_slider.value()**2-1)/10000
         if len(self.brain.only_brain) == 0:
             self.brain.brainExtraction()
         self.brain.data = np.where(self.brain.probability_mask > self.brain.extraction_cutoff, 1, 0)*self.brain.full_head
