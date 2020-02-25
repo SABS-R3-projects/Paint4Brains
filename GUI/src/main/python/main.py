@@ -5,7 +5,6 @@ import os
 os.environ['KMP_WARNINGS'] = 'off'
 from MainWindow import MainWindow
 
-# This is actualGUI.
 # checks if there are any extra parameters when calling python and assigns it to file_x or file_y if there is
 file_y = None
 if len(sys.argv) == 2:

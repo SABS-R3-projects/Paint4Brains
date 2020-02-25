@@ -123,7 +123,7 @@ class BrainData:
         """
         self.label_filename = filename
         self.__nib_label_data = nib.load(self.label_filename)
-        x = np.flip(self.__nib_label_data.as_reoriented(self.__orientation).get_data().transpose()).astype(np.int8)
+        x = np.flip(self.__nib_label_data.as_reoriented(self.__orientation).get_fdata().transpose()).astype(np.int8)
         self.different_labels = np.unique(x)
         number_of_labels = len(self.different_labels)
         if number_of_labels == 2:
@@ -143,14 +143,13 @@ class BrainData:
         :param saving_filename: Name of the file to be saved as
         """
         self.saving_filename = saving_filename
-        if saving_filename[1] != "Nii Files (*.nii)":
-            return
-        elif (saving_filename[0])[-4:] != ".nii":
+        print(saving_filename)
+        if (saving_filename[0])[-4:] != ".nii":
             saving_filename = saving_filename[0] + ".nii"
         else:
             saving_filename = saving_filename[0]
 
-        image = nib.Nifti1Image(np.flip(self.label_data).transpose(), np.eye(4))
+        image = nib.Nifti1Image(np.flip(self.label_data, axis=(0, 1)).transpose(), self.__nib_data.affine)
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
 
@@ -168,7 +167,6 @@ class BrainData:
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
-    ### Creating class methods ###
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
@@ -224,6 +222,7 @@ class BrainData:
         """
         self.label_filename = segment_default(self.filename, device)
         self.load_label_data(self.label_filename)
+        self.store_edit()
 
     @property
     def current_label(self):
@@ -250,3 +249,17 @@ class BrainData:
         self.label_data = np.where(self.other_labels_data == new_label, 1, 0)
         self.__current_label = new_label
 
+    def store_edit(self):
+        """ Function that stores previous edits.
+
+        This list of edits are then used by the undo and redo functions.
+        """
+
+        if self.edits_recorded < len(self.edit_history):
+            self.edit_history = self.edit_history[1:]
+        if self.current_edit < len(self.edit_history):
+            self.edit_history = self.edit_history[
+                                :(self.current_edit - len(self.edit_history))]
+
+        self.edit_history.append([self.label_data.copy(), self.other_labels_data.copy()])
+        self.current_edit = len(self.edit_history)
