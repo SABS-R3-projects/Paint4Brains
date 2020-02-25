@@ -4,7 +4,7 @@ from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
-from Normalize_Widget import NormalizationWidget
+from NormalizationWidget import NormalizationWidget
 import os
 
 
@@ -139,6 +139,7 @@ class MainWindow(QMainWindow):
         normalizeAction = QAction('Adjust Intensity', self)
         normalizeAction.setShortcut('Ctrl+I')
         normalizeAction.setStatusTip('Normalize Image Intensity')
+        normalizeAction.triggered.connect(self.view_intensity)
         normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(normalizeAction)
 
@@ -200,7 +201,7 @@ class MainWindow(QMainWindow):
         self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
         self.intensity_toolbar.addWidget(self.normwidget)
         #self.intensity_toolbar.setOrientation(Qt.Horizontal)
-        self.intensity_toolbar.setVisible(True)
+        self.intensity_toolbar.setVisible(False)
 
       
     def load_initial(self):
@@ -286,6 +287,11 @@ class MainWindow(QMainWindow):
         """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
+
+
+    def view_intensity(self):
+        switch = not self.intensity_toolbar.isVisible()
+        self.intensity_toolbar.setVisible(switch)
 
     def segment(self):
         """

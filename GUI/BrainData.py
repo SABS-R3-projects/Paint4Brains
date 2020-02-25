@@ -3,6 +3,8 @@ import nibabel as nib
 from deepbrain import Extractor
 from Segmenter import segment_default
 from nilearn.image import resample_img
+from NormalizationWidget import NormalizationWidget
+
 
 
 class BrainData:
@@ -38,6 +40,8 @@ class BrainData:
         self.i = int(self.shape[self.section] / 2)  # What is i? Location of the slice on slider
         maxim = np.max(self.data)
         self.data = self.data / maxim
+
+        self.intensity = 0.8
 
         self.extracted = False
         self.extraction_cutoff = 0.5  # Might be nice to add user defined functionality to GUI for changing this
@@ -167,12 +171,16 @@ class BrainData:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
     # Creating class methods #
-    def intensityNormalization(self, magic_number):
 
-        scale = (np.max(self.data) - np.min(self.data))
-        data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
-        self.data = data
-        self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+    def intensityNormalization(self):
+         pass
+
+
+         #magic_number = self.intensity
+         # scale = (np.max(self.data) - np.min(self.data))
+         # data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+         # self.data = data
+         # self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
 
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.

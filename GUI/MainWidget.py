@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 from PyQt5 import QtCore
 from deepbrain import Extractor
 from Slider import Slider
+from NormalizationWidget import NormalizationWidget
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
 from skimage.transform import resize
@@ -42,6 +43,18 @@ class MainWidget(QWidget):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout.addWidget(self.widget_slider)
         self.verticalLayout.addWidget(self.position)
+
+        self.normalization_widget = NormalizationWidget(0, 1.5)
+        #self.normalization_widget.horizontalSlider_2.setValue(self.brain.intensity)
+        self.normalization_widget.horizontalSlider_2.setMaximum(1.5)
+        self.normalization_widget.horizontalSlider_2.setValue(self.brain.intensity)
+        self.normalization_widget.horizontalSlider_2.valueChanged.connect(self.update_brain_intensity)
+
+    def update_brain_intensity(self):
+        self.brain.intensity = self.normalization_widget.intensity
+        self.win.refresh_image()
+
+
 
     def mouse_tracker(self, pos):
         """ Tracks mouse and prints 3-D position to a label
