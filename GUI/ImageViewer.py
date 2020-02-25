@@ -206,6 +206,8 @@ class ImageViewer(GraphicsView):
         If when select_mode is activated, the left button is released on a previously labeled area, then
         the pen is set to that label. Otherwise, everything should work as normal (the default)
 
+        Now when you release the left button it assumes an edit has been made and stores it into the BrainData.
+
         :param ev: signal emitted when user releases a mouse button.
         """
         if self.select_mode:
@@ -226,14 +228,7 @@ class ImageViewer(GraphicsView):
                         self.dropbox.update_box()
         super(ImageViewer, self).mouseReleaseEvent(ev)
         if self.view.drawing and ev.button() == Qt.LeftButton:
-            if self.brain.edits_recorded < len(self.brain.edit_history):
-                self.brain.edit_history = self.brain.edit_history[1:]
-            if self.brain.current_edit < len(self.brain.edit_history):
-                self.brain.edit_history = self.brain.edit_history[
-                                          :(self.brain.current_edit - len(self.brain.edit_history))]
-
-            self.brain.edit_history.append([self.brain.label_data.copy(), self.brain.other_labels_data.copy()])
-            self.brain.current_edit = len(self.brain.edit_history)
+            self.brain.store_edit()
 
     def wheelEvent(self, ev):
         """ Overwriting the wheel functionality.
