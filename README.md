@@ -58,9 +58,9 @@ There are several menues currently incorporated within the GUI, as follows:
     * Load Label
         * Allows the user to load a labeled file
     * Save
-        * Saves the current files as .nii
+        * Saves the label currently being editted as .nii file. The second time it is selected it overwrites the previous save
     * Save As
-        * Saves the current current files, allowing the user to decide the output format.
+        * Saves the label currently being editted into a new .nii file. Each time it is selected it asks the user for a file name.
 * Edit
     * Next Label
         * Allows the user to cycle forward through the labels
