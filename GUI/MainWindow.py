@@ -287,6 +287,7 @@ class MainWindow(QMainWindow):
         Method that returns a segmented brain
         This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
+        self.device = "None"
         self.show_settings_popup()
 
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
