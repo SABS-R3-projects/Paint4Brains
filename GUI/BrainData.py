@@ -41,6 +41,7 @@ class BrainData:
 
         self.extracted = False
         self.extraction_cutoff = 0.5
+        self.probability_mask = np.zeros(self.shape)
         self.full_head = self.data.copy()
         self.only_brain = []
 
@@ -178,9 +179,9 @@ class BrainData:
             return 0
         elif len(self.only_brain) == 0:
             ext = Extractor()
-            prob = ext.run(self.data)
+            self.probability_mask = ext.run(self.data)
             print("EXTRACTION DONE")
-            mask2 = np.where(prob > self.extraction_cutoff, 1, 0)
+            mask2 = np.where(self.probability_mask > self.extraction_cutoff, 1, 0)
             self.only_brain = self.data * mask2
 
         self.data = self.only_brain
