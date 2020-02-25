@@ -167,7 +167,6 @@ class BrainData:
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
-    ### Creating class methods ###
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
