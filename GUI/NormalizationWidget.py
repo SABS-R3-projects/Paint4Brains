@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
-#from BrainData import BrainData
 
 class NormalizationWidget(QWidget):
     def __init__(self, minimum=0, maximum=1.5):
