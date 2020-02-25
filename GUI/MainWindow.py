@@ -1,10 +1,11 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
 from SegmentThread import SegmentThread
+from OptionalSliders import OptionalSliders
 import torch
 import os
 
@@ -80,6 +81,12 @@ class MainWindow(QMainWindow):
 
         self.view_menu.addSeparator()
         self.view_menu.addAction(viewToolbarAction)
+
+        viewVisualizationAction = QAction("Visualization Toolbar", self)
+        viewVisualizationAction.setStatusTip("View Visualization Toolbar")
+        viewVisualizationAction.triggered.connect(self.view_visualization_tools)
+        self.view_menu.addAction(viewVisualizationAction)
+
         self.view_menu.addSeparator()
 
         seeAllAction = QAction('All Labels', self)
@@ -178,6 +185,12 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addWidget(self.main_widget.win.dropbox)
         self.edit_toolbar.setVisible(False)
 
+        self.optional_sliders = QToolBar()
+        self.addToolBar(Qt.RightToolBarArea, self.optional_sliders)
+        self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
+        self.optional_sliders.setVisible(False)
+
+
     def load_initial(self):
         """ Loads the "base" brain
         The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
@@ -260,6 +273,14 @@ class MainWindow(QMainWindow):
         """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
+
+    def view_visualization_tools(self):
+        """ Switch the toolbar with editing buttons to visible or invisible
+
+        Makes it the opposite of what it was previously
+        """
+        switch = not self.optional_sliders.isVisible()
+        self.optional_sliders.setVisible(switch)
 
     def segment(self):
         """
