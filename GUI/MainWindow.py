@@ -1,5 +1,5 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
@@ -7,6 +7,7 @@ from BrainData import BrainData
 from SegmentThread import SegmentThread
 from OptionalSliders import OptionalSliders
 import torch
+from NormalizationWidget import NormalizationWidget
 import os
 
 
@@ -131,6 +132,13 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
+        normalizeAction = QAction('Adjust Intensity', self)
+        normalizeAction.setShortcut('Ctrl+I')
+        normalizeAction.setStatusTip('Normalize Image Intensity')
+        normalizeAction.triggered.connect(self.view_intensity)
+        normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
+        self.tools.addAction(normalizeAction)
+
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
@@ -190,6 +198,13 @@ class MainWindow(QMainWindow):
         self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
         self.optional_sliders.setVisible(False)
 
+
+
+        self.norm_widget = NormalizationWidget(self.main_widget.win)
+        self.intensity_toolbar = QToolBar()
+        self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
+        self.intensity_toolbar.addWidget(self.norm_widget)
+        self.intensity_toolbar.setVisible(False)
 
     def load_initial(self):
         """ Loads the "base" brain
@@ -282,6 +297,14 @@ class MainWindow(QMainWindow):
         switch = not self.optional_sliders.isVisible()
         self.optional_sliders.setVisible(switch)
 
+    def view_intensity(self):
+        """
+        Method that makes the intensity adjustment widget visible after the
+        Adjust Intensity button under Tools has been clicked
+        """
+        switch = not self.intensity_toolbar.isVisible()
+        self.intensity_toolbar.setVisible(switch)
+
     def segment(self):
         """
         Method that returns a segmented brain
@@ -318,7 +341,7 @@ class MainWindow(QMainWindow):
         msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
 
         msg.setDefaultButton(QPushButton('CPU'))
-
+        
         answer = msg.buttonClicked.connect(self.popup_button)
 
         x = msg.exec_()

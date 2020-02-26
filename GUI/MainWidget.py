@@ -3,8 +3,10 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 from PyQt5 import QtCore
 from deepbrain import Extractor
 from Slider import Slider
+from NormalizationWidget import NormalizationWidget
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
+from skimage.transform import resize
 
 
 class MainWidget(QWidget):
@@ -97,6 +99,10 @@ class MainWidget(QWidget):
         """
         self.brain.section = 2
         self.__update_section_helper()
+
+    def normalize_intensity(self):
+        self.brain.intensity_normalization()
+        self.win.refresh_image()
 
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network
