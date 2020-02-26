@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "/Volumes/Extreme SSD/Brain_Imaging_Software_Project/Paint4Brains/env/bin/python3",
+    "python.testing.promptToConfigure": false,
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false
+}

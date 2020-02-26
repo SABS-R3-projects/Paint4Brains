@@ -7,7 +7,7 @@ setup(
     license='BSD 3-clause license',
     maintainer='Brennan Abanades, Pavanjit Chaggar, Itai Muzhingi, Andrei-Claudiu Roibu',
     maintainer_email='brennan.abanadeskenyon@stx.ox.ac.uk; pavanjit.chaggar@exeter.ox.ac.uk; itai.muzhingi@balliol.ox.ac.uk; andrei-claudiu.roibu@dtc.ox.ac.uk',
-    packages = find_packages(include=('Paint4Brains', 'Paint4Brains.*' ))
+    packages = find_packages(include=('Paint4Brains', 'Paint4Brains.*')),
     install_requires=[
         'pip>=20.0.2',
         'certifi>=2019.9.11',
@@ -39,7 +39,6 @@ setup(
         'configparser',
         'nilearn==0.5.2',
         'nn_common_modules @ https://github.com/shayansiddiqui/nn-common-modules/releases/download/v1.0/nn_common_modules-1.0-py2.py3-none-any.whl',
-        'squeeze_and_excitation @ https://github.com/abhi4ssj/squeeze_and_excitation/releases/download/v1.0/squeeze_and_excitation-1.0-py2.py3-none-any.whl'
+        'squeeze_and_excitation @ https://github.com/abhi4ssj/squeeze_and_excitation/releases/download/v1.0/squeeze_and_excitation-1.0-py2.py3-none-any.whl',
         ],
-
 )
