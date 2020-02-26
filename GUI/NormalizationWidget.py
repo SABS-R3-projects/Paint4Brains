@@ -2,7 +2,10 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
 
 class NormalizationWidget(QWidget):
-    def __init__(self, minimum=0, maximum=1.5):
+    def __init__(self, viewer, minimum=0, maximum=1.5):
+        self.win = viewer
+        self.brain = viewer.brain
+
         _translate = QtCore.QCoreApplication.translate
         super(NormalizationWidget, self).__init__()
         self.layout = QtWidgets.QVBoxLayout(self)
@@ -30,14 +33,19 @@ class NormalizationWidget(QWidget):
         self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider_2.setObjectName("horizontalSlider_2")
         self.horizontalSlider_2.setMinimum(0)
+        self.horizontalSlider_2.setValue(20)
         self.tab_layout.addWidget(self.horizontalSlider_2)
         self.horizontalSlider_2.valueChanged.connect(self.update_intensity)
-        self.update_intensity(self.horizontalSlider_2.value())
 
-    def update_intensity(self, value):
-        self.intensity = (self.minimum + (
+    def update_intensity(self):
+        # Take input from controller
+        value = self.horizontalSlider_2.value()
+        self.brain.intensity = (self.minimum + (
                     float(value) / (self.horizontalSlider_2.maximum() - self.horizontalSlider_2.minimum())) * (
                                   self.maximum - self.minimum))
-        self.label.setText("Intensity Level: {0:.1f}".format(self.intensity))
-        #BrainData.intensity = 5
+        # Edit the Brain Data Using function defined in BrainData class
+        self.brain.intensityNormalization()
+        # Update what you are displaying
+        self.label.setText("Intensity Level: {0:.1f}".format(self.brain.intensity))
+        self.win.refresh_image()
 

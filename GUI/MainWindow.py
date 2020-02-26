@@ -196,13 +196,11 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
 
-        self.normwidget = NormalizationWidget()
+        self.normwidget = NormalizationWidget(self.main_widget.win)
         self.intensity_toolbar = QToolBar()
         self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
         self.intensity_toolbar.addWidget(self.normwidget)
-        #self.intensity_toolbar.setOrientation(Qt.Horizontal)
         self.intensity_toolbar.setVisible(False)
-
       
     def load_initial(self):
         """ Loads the "base" brain

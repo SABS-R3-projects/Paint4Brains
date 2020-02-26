@@ -7,6 +7,7 @@ from NormalizationWidget import NormalizationWidget
 
 
 
+
 class BrainData:
     def __init__(self, filename, label_filename=None):
         """ Initialize class
@@ -41,8 +42,7 @@ class BrainData:
         maxim = np.max(self.data)
         self.data = self.data / maxim
 
-        self.intensity = 0.8
-
+        self.intensity = 0
         self.extracted = False
         self.extraction_cutoff = 0.5  # Might be nice to add user defined functionality to GUI for changing this
         self.full_head = self.data.copy()
@@ -173,14 +173,12 @@ class BrainData:
     # Creating class methods #
 
     def intensityNormalization(self):
-         pass
 
-
-         #magic_number = self.intensity
-         # scale = (np.max(self.data) - np.min(self.data))
-         # data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
-         # self.data = data
-         # self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+         magic_number = self.intensity
+         scale = (np.max(self.data) - np.min(self.data))
+         data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+         self.data = data
+         self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
 
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
