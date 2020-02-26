@@ -10,7 +10,7 @@ class BrainData:
     def __init__(self, filename, label_filename=None):
         """ Initialize class
 
-        :str filename: The name and location of the file.
+        :str filename: The name and location of the file
         """
         self.filename = filename
         self.label_filename = label_filename
