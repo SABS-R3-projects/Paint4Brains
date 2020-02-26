@@ -1,6 +1,6 @@
 from pyqtgraph import ImageItem, GraphicsView
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from ModViewBox import ModViewBox
 
 
@@ -30,4 +30,5 @@ class MultipleViews(QWidget):
 
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         print(self.sizeHint())
+        self.setFixedSize(250, 250)
         self.layout.addWidget(self.win1)
