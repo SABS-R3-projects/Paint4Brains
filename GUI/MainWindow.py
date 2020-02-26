@@ -307,11 +307,11 @@ class MainWindow(QMainWindow):
     def show_settings_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Select Hardware Type")
-        msg.setText("Select the hardware to use!")
-        msg.setInformativeText("Select CPU or GPU ID (0 or 1)")
+        msg.setText("What type of processor would you like to use?")
+        msg.setInformativeText("Running segmentation on a CPU takes around 2 hours. Running it on a GPU will take around 30 seconds.")
         msg.setIcon(QMessageBox.Question)
         msg.setDetailedText(
-            "In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
+            "To perform the segmentation, Paint4Brain uses a convolutional neural network. This performs a lot faster on GPUs.\nIf you do not own a GPU, segmentation can also be run on a Google Colab GPU using the following link:\nhttps://tinyurl.com/Paint4Brains")
 
         msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
         msg.addButton(QPushButton('GPU'), QMessageBox.AcceptRole)
