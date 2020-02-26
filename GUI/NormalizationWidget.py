@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
 
 
 class NormalizationWidget(QWidget):
-    def __init__(self, viewer, minimum=0, maximum=1.5):
+    def __init__(self, viewer, minimum=0.5, maximum=2.5):
         self.win = viewer
         self.brain = viewer.brain
 
@@ -34,7 +34,7 @@ class NormalizationWidget(QWidget):
         self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider_2.setObjectName("horizontalSlider_2")
         self.horizontalSlider_2.setMinimum(0)
-        self.horizontalSlider_2.setValue(0)
+        self.horizontalSlider_2.setValue(1)
         self.tab_layout.addWidget(self.horizontalSlider_2)
         self.horizontalSlider_2.valueChanged.connect(self.update_intensity)
 

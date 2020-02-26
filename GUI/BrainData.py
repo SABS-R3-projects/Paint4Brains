@@ -6,8 +6,6 @@ from nilearn.image import resample_img
 from NormalizationWidget import NormalizationWidget
 
 
-
-
 class BrainData:
     def __init__(self, filename, label_filename=None):
         """ Initialize class
@@ -25,6 +23,7 @@ class BrainData:
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
         self.data_unchanged = self.data.copy()
+        #self.data_unchanged.flags.writeable = False
 
         # Default empty values
         self.different_labels = np.zeros(1, dtype=int)
@@ -44,7 +43,7 @@ class BrainData:
         maxim = np.max(self.data)
         self.data = self.data / maxim
 
-        self.intensity = 0
+        self.intensity = 1.0
         self.extracted = False
         self.extraction_cutoff = 0.5  # Might be nice to add user defined functionality to GUI for changing this
         self.full_head = self.data.copy()
@@ -175,12 +174,17 @@ class BrainData:
     # Creating class methods #
 
     def intensity_normalization(self):
+        #self.reset_data()
+        self.data = self.data_unchanged
+        gain = self.intensity#np.clip(self.intensity, 0.9, 1.6)
+        print(gain)
+        scale = (np.max(self.data) - np.min(self.data))
+        new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / scale) * scale * gain,0,scale)
+        self.data = new_brain_data
+        #self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
 
-         gain = self.intensity
-         scale = (np.max(self.data) - np.min(self.data))
-         new_brain_data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(gain, 0.9, 1.6)
-         self.data = new_brain_data
-         self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
+    #def reset_data(self):
+        #self.data = self.data_unchanged
 
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
