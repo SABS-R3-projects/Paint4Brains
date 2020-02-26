@@ -8,6 +8,7 @@ from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
 from skimage.transform import resize
 
+
 class MainWidget(QWidget):
     def __init__(self, brain, parent=None):
         super(MainWidget, self).__init__(parent=parent)
@@ -43,7 +44,6 @@ class MainWidget(QWidget):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.verticalLayout.addWidget(self.widget_slider)
         self.verticalLayout.addWidget(self.position)
-
 
     def mouse_tracker(self, pos):
         """ Tracks mouse and prints 3-D position to a label
@@ -101,10 +101,8 @@ class MainWidget(QWidget):
         self.__update_section_helper()
 
     def normalize_intensity(self):
-
-        self.brain.intensityNormalization()
+        self.brain.intensity_normalization()
         self.win.refresh_image()
-
 
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network

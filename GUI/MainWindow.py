@@ -143,7 +143,6 @@ class MainWindow(QMainWindow):
         normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(normalizeAction)
 
-
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
@@ -196,12 +195,12 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.setVisible(False)
 
-        self.normwidget = NormalizationWidget(self.main_widget.win)
+        self.norm_widget = NormalizationWidget(self.main_widget.win)
         self.intensity_toolbar = QToolBar()
         self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
-        self.intensity_toolbar.addWidget(self.normwidget)
+        self.intensity_toolbar.addWidget(self.norm_widget)
         self.intensity_toolbar.setVisible(False)
-      
+
     def load_initial(self):
         """ Loads the "base" brain
         The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
@@ -240,7 +239,6 @@ class MainWindow(QMainWindow):
         self.main_widget.win.enable_drawing()
         self.main_widget.win.update_colormap()
         self.main_widget.win.view_back_labels()
-
 
     def save_as(self):
         """ Saves the edited labelled data into a new file
@@ -286,8 +284,11 @@ class MainWindow(QMainWindow):
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
 
-
     def view_intensity(self):
+        """
+        Method that makes the intensity adjustment widget visible after the
+        Adjust Intensity button under Tools has been clicked
+        """
         switch = not self.intensity_toolbar.isVisible()
         self.intensity_toolbar.setVisible(switch)
 
@@ -300,10 +301,9 @@ class MainWindow(QMainWindow):
         self.show_settings_popup()
 
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
-    
+
         self.thread = WorkerThread(self.main_widget.win, self.device)
         self.thread.start()
-
 
     def popup_button(self, i):
         if i.text() == 'CPU':
@@ -321,16 +321,16 @@ class MainWindow(QMainWindow):
         msg.setText("Select the hardware to use!")
         msg.setInformativeText("Select CPU or GPU ID (0 or 1)")
         msg.setIcon(QMessageBox.Question)
-        msg.setDetailedText("In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
-        
+        msg.setDetailedText(
+            "In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
+
         msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
         msg.addButton(QPushButton('GPU 1'), QMessageBox.AcceptRole)
         msg.addButton(QPushButton('GPU 0'), QMessageBox.AcceptRole)
         msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
 
-
         msg.setDefaultButton(QPushButton('CPU'))
-        
+
         answer = msg.buttonClicked.connect(self.popup_button)
 
         x = msg.exec_()

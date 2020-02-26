@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
 
+
 class NormalizationWidget(QWidget):
     def __init__(self, viewer, minimum=0, maximum=1.5):
         self.win = viewer
@@ -26,26 +27,29 @@ class NormalizationWidget(QWidget):
 
         self.label = QtWidgets.QLabel(self.tab)
         self.label.setObjectName("Log")
-        # self.label.setText(_translate("MainWindow", "Adjust Intensity"))
+        self.label.setText(_translate("MainWindow", "Adjust Intensity"))
         self.tab_layout.addWidget(self.label)
 
         self.horizontalSlider_2 = QtWidgets.QSlider(self.tab)
         self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider_2.setObjectName("horizontalSlider_2")
         self.horizontalSlider_2.setMinimum(0)
-        self.horizontalSlider_2.setValue(20)
+        self.horizontalSlider_2.setValue(0)
         self.tab_layout.addWidget(self.horizontalSlider_2)
         self.horizontalSlider_2.valueChanged.connect(self.update_intensity)
 
     def update_intensity(self):
+        """
+        A Method that keeps track of the intensity values displayed on the Logarithmic Intensity Widget
+        It updates the appearance of the brain on the viewer as intensity is changed
+        """
         # Take input from controller
         value = self.horizontalSlider_2.value()
         self.brain.intensity = (self.minimum + (
-                    float(value) / (self.horizontalSlider_2.maximum() - self.horizontalSlider_2.minimum())) * (
-                                  self.maximum - self.minimum))
+                float(value) / (self.horizontalSlider_2.maximum() - self.horizontalSlider_2.minimum())) * (
+                                        self.maximum - self.minimum))
         # Edit the Brain Data Using function defined in BrainData class
-        self.brain.intensityNormalization()
+        self.brain.intensity_normalization()
         # Update what you are displaying
         self.label.setText("Intensity Level: {0:.1f}".format(self.brain.intensity))
         self.win.refresh_image()
-

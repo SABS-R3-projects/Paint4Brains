@@ -24,6 +24,8 @@ class BrainData:
         self.nii_img = self.__nib_data
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
+        self.data_unchanged = self.data.copy()
+
         # Default empty values
         self.different_labels = np.zeros(1, dtype=int)
         self.__current_label = 1
@@ -172,12 +174,12 @@ class BrainData:
 
     # Creating class methods #
 
-    def intensityNormalization(self):
+    def intensity_normalization(self):
 
-         magic_number = self.intensity
+         gain = self.intensity
          scale = (np.max(self.data) - np.min(self.data))
-         data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
-         self.data = data
+         new_brain_data = np.log2(1 + self.data.astype(float) / scale) * scale * np.clip(gain, 0.9, 1.6)
+         self.data = new_brain_data
          self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
 
     def brainExtraction(self):
