@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         """Initialises the Main Window
         Basically calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
         Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
-        Another thing it does is load the nib files from a string containing the path
+        Another thing it does is load the nib files from a string containing the path.
         """
         super(MainWindow, self).__init__()
 
