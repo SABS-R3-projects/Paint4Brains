@@ -6,6 +6,7 @@ from MainWidget import MainWidget
 from BrainData import BrainData
 from SegmentThread import SegmentThread
 from OptionalSliders import OptionalSliders
+from MultipleViews import MultipleViews
 import torch
 import os
 
@@ -187,7 +188,7 @@ class MainWindow(QMainWindow):
 
         self.optional_sliders = QToolBar()
         self.addToolBar(Qt.RightToolBarArea, self.optional_sliders)
-        self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
+        self.optional_sliders.addWidget(MultipleViews(self.main_widget.win))
         self.optional_sliders.setVisible(False)
 
 

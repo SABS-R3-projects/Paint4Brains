@@ -28,4 +28,6 @@ class MultipleViews(QWidget):
         self.view1.addItem(self.brain_img1)
         self.view1.addItem(self.label_img1)
 
+        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        print(self.sizeHint())
         self.layout.addWidget(self.win1)
