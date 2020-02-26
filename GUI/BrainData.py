@@ -190,7 +190,7 @@ class BrainData:
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
         Arguments:
-            self object with self.data {[np.array]} -- .nii image
+            self object with self.data {[np.array]} -- .nii image.
         """
         # If it has already been extracted (mostly empty) don't do it again
         if self.extracted:
