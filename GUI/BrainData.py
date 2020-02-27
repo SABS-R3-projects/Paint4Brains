@@ -2,7 +2,6 @@ import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
 from Segmenter import segment_default
-from nilearn.image import resample_img
 
 
 class BrainData:
