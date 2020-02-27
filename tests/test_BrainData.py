@@ -97,8 +97,3 @@ class TestBrainData(unittest.TestCase):
         #delete test_brain
         del test_brain
 
-class TestDummyTest(unittest.TestCase):
-    a = 2
-
-    def test_value_of_a(self):
-        assert  self.a == 2
