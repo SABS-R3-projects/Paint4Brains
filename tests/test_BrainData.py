@@ -14,15 +14,22 @@ class TestBrainData(unittest.TestCase):
 
 
     def test_load_BrainData(self):
+        """testing initialisation of BrainData object
+        to be completed
+        """
         #test filename points to the correct directory
         assert  self.filename == self.brain.filename
 
     def test_current_data_slice(self):
+        """testing current_data_slice function
+        """
         #test current_brain_slice returns the correct shape
         assert  len(self.brain.current_data_slice.shape) == 2
         assert  self.brain.current_data_slice.shape == self.brain.get_data_slice(self.brain.i).shape
 
     def test_get_data_slice(self):
+        """testing get_data_slice function
+        """
         #test get_data_slice returns a 2d array from the 3d data object
         dimensions = len(self.brain.data.shape)
         for j in range(dimensions):
@@ -30,11 +37,15 @@ class TestBrainData(unittest.TestCase):
             assert  len(self.brain.get_data_slice(self.brain.i).shape) == 2
 
     def test_current_data_slice_label(self):
+        """testing current_label_data_slice function
+        """
         #test current_brain_slice returns the correct shape
         assert  len(self.brain.current_label_data_slice.shape) == 2
         assert  self.brain.current_label_data_slice.shape == self.brain.get_label_data_slice(self.brain.i).shape
 
     def test_get_data_slice_label(self):
+        """testing get_label_data_slice function
+        """
         #test get_data_slice returns a 2d array from the 3d data object
         dimensions = len(self.brain.data.shape)
         for j in range(dimensions):
@@ -46,7 +57,10 @@ class TestBrainData(unittest.TestCase):
             assert self.brain.get_label_data_slice(self.brain.i).shape == self.brain.get_data_slice(self.brain.i).shape
 
     def test_log_normalistion(self):
-        #skull stripping has not been performed so brain.data should equal brain.full_head
+        """testing log_normalisation function
+        """
+
+        #not working
         #assert  self.brain.data == self.brain.full_head
 
         #test log scaling factor is not greater than max value in brain.data
@@ -58,9 +72,12 @@ class TestBrainData(unittest.TestCase):
 
         assert  np.var(self.brain.data) <= np.var(test_brain.data)
 
+        #delete test_brain
         del test_brain
 
     def test_brain_Extraction(self):
+        """testing brainExtraction and full_brain functions
+        """
         test_brain = BrainData(self.filename)
         test_brain.brainExtraction()
 
@@ -73,7 +90,13 @@ class TestBrainData(unittest.TestCase):
         #test data shape does not change
         assert self.brain.data.shape == test_brain.data.shape
 
-    def test
+        #test full_brain to undo extraction
+        test_brain.full_brain()
+        assert  np.count_nonzero(self.brain.data==0) == np.count_nonzero(test_brain.data==0)
+
+        #delete test_brain
+        del test_brain
+
 class TestDummyTest(unittest.TestCase):
     a = 2
 
