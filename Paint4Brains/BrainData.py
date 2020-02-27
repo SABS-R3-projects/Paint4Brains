@@ -1,12 +1,8 @@
 import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
-<<<<<<< HEAD:Paint4Brains/BrainData.py
 from Paint4Brains.Segmenter import segment_default
 from nilearn.image import resample_img
-=======
-from Segmenter import segment_default
->>>>>>> master:GUI/BrainData.py
 
 
 class BrainData:
@@ -176,16 +172,6 @@ class BrainData:
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
-    def voxel_as_position(self, i, j, k):
-        """ Returns the 2_D position of the mouse from the 3_D position of the Brain
-        """
-        if self.section == 0:
-            return j, k
-        elif self.section == 1:
-            return self.shape[2] - k - 1, self.shape[0] - i - 1
-        elif self.section == 2:
-            return j, self.shape[0] - i - 1
-
     # Creating class methods #
 
     def log_normalization(self):
@@ -196,7 +182,7 @@ class BrainData:
             self.data = self.only_brain
         else:
             self.data = self.full_head
-            
+
         self.scale = (np.max(self.data) - np.min(self.data))
         new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
         self.data = new_brain_data

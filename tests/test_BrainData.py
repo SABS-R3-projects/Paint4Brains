@@ -45,6 +45,11 @@ class TestBrainData(unittest.TestCase):
             #test data and labels are the same size
             assert self.brain.get_label_data_slice(self.brain.i).shape == self.brain.get_data_slice(self.brain.i).shape
 
+    def test_log_normalistion(self):
+        assert  self.brain.scale == np.max(self.brain.data)
+
+
+
 class TestDummyTest(unittest.TestCase):
     a = 2
 
