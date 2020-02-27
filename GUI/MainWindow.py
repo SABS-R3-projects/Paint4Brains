@@ -1,11 +1,12 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
 from SegmentThread import SegmentThread
 from OptionalSliders import OptionalSliders
+from MultipleViews import MultipleViews
 import torch
 from NormalizationWidget import NormalizationWidget
 import os
@@ -341,7 +342,7 @@ class MainWindow(QMainWindow):
         msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
 
         msg.setDefaultButton(QPushButton('CPU'))
-        
+
         answer = msg.buttonClicked.connect(self.popup_button)
 
         x = msg.exec_()
