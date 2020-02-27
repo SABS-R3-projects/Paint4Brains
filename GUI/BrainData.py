@@ -175,11 +175,14 @@ class BrainData:
 
     # Creating class methods #
 
-    def intensity_normalization(self):
+    def log_normalization(self):
         """
         A Method that performs a logarithmic normalization on the brain
         """
-        self.data = self.data_unchanged
+        if self.extracted:
+            self.data = self.only_brain
+        else:
+            self.data = self.full_head
         gain = self.intensity
         scale = (np.max(self.data) - np.min(self.data))
         new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / scale) * scale * gain,0,scale)
