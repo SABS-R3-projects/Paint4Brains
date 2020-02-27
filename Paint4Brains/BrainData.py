@@ -1,8 +1,12 @@
 import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
+<<<<<<< HEAD:Paint4Brains/BrainData.py
 from Paint4Brains.Segmenter import segment_default
 from nilearn.image import resample_img
+=======
+from Segmenter import segment_default
+>>>>>>> master:GUI/BrainData.py
 
 
 class BrainData:
@@ -42,6 +46,7 @@ class BrainData:
         self.data = self.data / maxim
 
         self.intensity = 1.0
+        self.scale = 1.0
         self.extracted = False
         self.extraction_cutoff = 0.5
         self.probability_mask = np.zeros(self.shape)
@@ -181,9 +186,9 @@ class BrainData:
             self.data = self.only_brain
         else:
             self.data = self.full_head
-        gain = self.intensity
-        scale = (np.max(self.data) - np.min(self.data))
-        new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / scale) * scale * gain,0,scale)
+            
+        self.scale = (np.max(self.data) - np.min(self.data))
+        new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
         self.data = new_brain_data
 
     def brainExtraction(self):
