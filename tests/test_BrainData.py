@@ -14,20 +14,20 @@ class TestBrainData(unittest.TestCase):
 
 
     def test_load_BrainData(self):
-
+        #test filename points to the correct directory
         assert  self.filename == self.brain.filename
 
     def test_current_data_slice(self):
+        #test current_brain_slice returns the correct shape
+        assert  len(self.brain.current_data_slice.shape) == 2
         assert  self.brain.current_data_slice.shape == self.brain.get_data_slice(self.brain.i).shape
 
     def test_get_data_slice(self):
-
+        #test get_data_slice returns a 2d array from the 3d data object
         dimensions = len(self.brain.data.shape)
-        for i in range(dimensions):
-            brain.section = i
-            random_slices = np.random.randint(low=0, high=min(self.brain.data.shape), size = 10)
-            for j in random_slices:
-                assert  len(self.brain.get_data_slice(j).shape) == 2
+        for j in range(dimensions):
+            brain.section = j
+            assert  len(self.brain.get_data_slice(brain.i).shape) == 2
 
 
 
