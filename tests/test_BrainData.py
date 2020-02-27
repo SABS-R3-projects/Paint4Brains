@@ -46,7 +46,7 @@ class TestBrainData(unittest.TestCase):
             assert self.brain.get_label_data_slice(self.brain.i).shape == self.brain.get_data_slice(self.brain.i).shape
 
     def test_log_normalistion(self):
-        assert  self.brain.scale == np.max(self.brain.data)
+        assert  self.brain.scale <= np.max(self.brain.data)
 
 
 
