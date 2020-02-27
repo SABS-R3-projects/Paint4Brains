@@ -40,7 +40,10 @@ class TestBrainData(unittest.TestCase):
         for j in range(dimensions):
             self.brain.section = j
             assert  len(self.brain.get_label_data_slice(self.brain.i).shape) == 2
-
+            #test data and labels have the same dimensions
+            assert  len(self.brain.get_data_slice(self.brain.i).shape) == len(self.brain.get_label_data_slice(self.brain.i).shape)
+            #test data and labels are the same size
+            assert self.brain.get_label_data_slice(self.brain.i).shape == self.brain.get_data_slice(self.brain.i).shape
 
 class TestDummyTest(unittest.TestCase):
     a = 2
