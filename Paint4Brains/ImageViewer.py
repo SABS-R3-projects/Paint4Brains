@@ -88,7 +88,7 @@ class ImageViewer(GraphicsView):
         There are only 12 distinct colours (not including the "invisible" colour)
         """
         num = len(self.brain.different_labels) + 1
-        self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / 12 + 1) * self.colours)[:num])
+        self.mid_img.setLookupTable(np.array([[0, 0, 0]] + int(num / len(self.colours) + 1) * self.colours)[:num])
         self.mid_img.setLevels([0, np.max(self.brain.different_labels)])
 
     def enable_drawing(self):

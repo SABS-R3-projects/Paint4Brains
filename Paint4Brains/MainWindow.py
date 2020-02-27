@@ -1,11 +1,13 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
 from SegmentThread import SegmentThread
+from OptionalSliders import OptionalSliders
 import torch
+from NormalizationWidget import NormalizationWidget
 import os
 
 
@@ -18,7 +20,7 @@ class MainWindow(QMainWindow):
         """Initialises the Main Window
         Basically calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
         Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
-        Another thing it does is load the nib files from a string containing the path
+        Another thing it does is load the nib files from a string containing the path.
         """
         super(MainWindow, self).__init__()
 
@@ -80,6 +82,12 @@ class MainWindow(QMainWindow):
 
         self.view_menu.addSeparator()
         self.view_menu.addAction(viewToolbarAction)
+
+        viewVisualizationAction = QAction("Visualization Toolbar", self)
+        viewVisualizationAction.setStatusTip("View Visualization Toolbar")
+        viewVisualizationAction.triggered.connect(self.view_visualization_tools)
+        self.view_menu.addAction(viewVisualizationAction)
+
         self.view_menu.addSeparator()
 
         seeAllAction = QAction('All Labels', self)
@@ -123,6 +131,14 @@ class MainWindow(QMainWindow):
         undoAction.setStatusTip('Revert to previous edit')
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
+
+        # Creating the Ajust Intensity option under Tools and connecting it to the Intensity Adjustment widget
+        normalizeAction = QAction('Adjust Intensity', self)
+        normalizeAction.setShortcut('Ctrl+I')
+        normalizeAction.setStatusTip('Normalize Image Intensity')
+        normalizeAction.triggered.connect(self.view_intensity)
+        normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
+        self.tools.addAction(normalizeAction)
 
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
@@ -177,6 +193,18 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addWidget(self.main_widget.win.dropbox)
         self.edit_toolbar.setVisible(False)
+
+        self.optional_sliders = QToolBar()
+        self.addToolBar(Qt.RightToolBarArea, self.optional_sliders)
+        self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
+        self.optional_sliders.setVisible(False)
+
+        # Making the Intensity Normalization Tab invisible as long as Adjust Intensity has not yet been clicked
+        self.norm_widget = NormalizationWidget(self.main_widget.win)
+        self.intensity_toolbar = QToolBar()
+        self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
+        self.intensity_toolbar.addWidget(self.norm_widget)
+        self.intensity_toolbar.setVisible(False)
 
     def load_initial(self):
         """ Loads the "base" brain
@@ -261,11 +289,28 @@ class MainWindow(QMainWindow):
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
 
+    def view_visualization_tools(self):
+        """ Switch the toolbar with editing buttons to visible or invisible
+
+        Makes it the opposite of what it was previously
+        """
+        switch = not self.optional_sliders.isVisible()
+        self.optional_sliders.setVisible(switch)
+
+    def view_intensity(self):
+        """
+        Method that makes the intensity adjustment widget visible after the
+        Adjust Intensity button under Tools has been clicked
+        """
+        switch = not self.intensity_toolbar.isVisible()
+        self.intensity_toolbar.setVisible(switch)
+
     def segment(self):
         """
         Method that returns a segmented brain
         This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
+        self.device = "None"
         self.show_settings_popup()
 
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
@@ -285,18 +330,18 @@ class MainWindow(QMainWindow):
     def show_settings_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Select Hardware Type")
-        msg.setText("Select the hardware to use!")
-        msg.setInformativeText("Select CPU or GPU ID (0 or 1)")
+        msg.setText("What type of processor would you like to use?")
+        msg.setInformativeText("Running segmentation on a CPU takes around 2 hours. Running it on a GPU will take around 30 seconds.")
         msg.setIcon(QMessageBox.Question)
         msg.setDetailedText(
-            "In order to QuickNAT, which performs the segmentation, to know what type of hardware your machine is running, please select one of the indicated options. The DEFAULT option is CPU.")
+            "To perform the segmentation, Paint4Brain uses a convolutional neural network. This performs a lot faster on GPUs.\nIf you do not own a GPU, segmentation can also be run on a Google Colab GPU using the following link:\nhttps://tinyurl.com/Paint4Brains")
 
         msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
         msg.addButton(QPushButton('GPU'), QMessageBox.AcceptRole)
         msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
 
         msg.setDefaultButton(QPushButton('CPU'))
-
+        
         answer = msg.buttonClicked.connect(self.popup_button)
 
         x = msg.exec_()
