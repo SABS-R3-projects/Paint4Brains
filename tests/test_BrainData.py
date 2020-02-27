@@ -69,9 +69,11 @@ class TestBrainData(unittest.TestCase):
 
         #test number of zero values increases afte brain exrtraction
         assert  np.count_nonzero(self.brain.data==0) <= np.count_nonzero(test_brain.data==0)
-        
 
+        #test data shape does not change
+        assert self.brain.data.shape == test_brain.data.shape
 
+    def test
 class TestDummyTest(unittest.TestCase):
     a = 2
 
