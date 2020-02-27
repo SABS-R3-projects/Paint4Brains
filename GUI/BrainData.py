@@ -3,7 +3,6 @@ import nibabel as nib
 from deepbrain import Extractor
 from Segmenter import segment_default
 from nilearn.image import resample_img
-from NormalizationWidget import NormalizationWidget
 
 
 class BrainData:
@@ -23,7 +22,6 @@ class BrainData:
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
 
         self.data_unchanged = self.data.copy()
-        #self.data_unchanged.flags.writeable = False
 
         # Default empty values
         self.different_labels = np.zeros(1, dtype=int)

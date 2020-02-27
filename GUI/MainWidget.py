@@ -101,6 +101,9 @@ class MainWidget(QWidget):
         self.__update_section_helper()
 
     def normalize_intensity(self):
+        """
+        A Method that calls the log_normalization method on the brain
+        """
         self.brain.log_normalization()
         self.win.refresh_image()
 
