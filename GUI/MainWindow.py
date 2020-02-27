@@ -132,6 +132,7 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
+        # Creating the Ajust Intensity option under Tools and connecting it to the Intensity Adjustment widget
         normalizeAction = QAction('Adjust Intensity', self)
         normalizeAction.setShortcut('Ctrl+I')
         normalizeAction.setStatusTip('Normalize Image Intensity')
@@ -197,8 +198,6 @@ class MainWindow(QMainWindow):
         self.addToolBar(Qt.RightToolBarArea, self.optional_sliders)
         self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
         self.optional_sliders.setVisible(False)
-
-
 
         self.norm_widget = NormalizationWidget(self.main_widget.win)
         self.intensity_toolbar = QToolBar()
