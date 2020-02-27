@@ -73,6 +73,10 @@ class MainWindow(QMainWindow):
         resetViewAction.setShortcut('Ctrl+V')
         self.view_menu.addAction(resetViewAction)
 
+        oldButtonsAction = QAction('Single View Mode', self)
+        oldButtonsAction.setStatusTip('Sets layout to single window mode')
+        oldButtonsAction.triggered.connect(self.main_widget.revert_to_old_buttons)
+
         viewToolbarAction = QAction("Editting Toolbar", self)
         viewToolbarAction.setStatusTip("View Editting Toolbar")
         viewToolbarAction.triggered.connect(self.view_edit_tools)
@@ -81,6 +85,8 @@ class MainWindow(QMainWindow):
             ViewActions = viewBoxActionsList[i]
             self.view_menu.addAction(ViewActions)
 
+        self.view_menu.addSeparator()
+        self.view_menu.addAction(oldButtonsAction)
         self.view_menu.addSeparator()
         self.view_menu.addAction(viewToolbarAction)
 

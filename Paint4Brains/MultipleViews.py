@@ -17,11 +17,14 @@ class MultipleViews(QWidget):
         self.win2 = SideView(2, parent = self)
 
         self.setFixedWidth(250)
-        self.setMinimumHeight(500)
-        space = QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.setMinimumHeight(540)
+        space = QSpacerItem(0, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        space2 = QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.layout.addSpacerItem(space2)
         self.layout.addWidget(self.win1)
         self.layout.addSpacerItem(space)
         self.layout.addWidget(self.win2)
+        self.layout.addSpacerItem(space2)
 
     def set_views(self, position):
         eachdim = [0< position[i] < self.brain.shape[i] for i in range(3)]

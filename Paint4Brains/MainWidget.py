@@ -20,9 +20,9 @@ class MainWidget(QWidget):
         # Creating viewing box to see data
         self.win = ImageViewer(self.brain)
 
-        # Adding the plane selection buttons
-        #self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
+        # Adding the additional viewing boxes
         self.buttons = MultipleViews(self)
+        self.static = False
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.brain.shape[self.brain.section] - 1)
@@ -54,9 +54,8 @@ class MainWidget(QWidget):
         mouse_y = int(self.win.img.mapFromScene(pos).y())
         self.position.setText(str(self.brain.position_as_voxel(mouse_x, mouse_y)))
 
-        #New Code:
-
-        self.buttons.set_views(self.brain.position_as_voxel(mouse_x, mouse_y))
+        if not self.static:
+            self.buttons.set_views(self.brain.position_as_voxel(mouse_x, mouse_y))
 
     def update_after_slider(self):
         """ Updates the viewed image after moving the slider.
@@ -137,6 +136,25 @@ class MainWidget(QWidget):
         """
         self.brain.full_brain()
         self.win.refresh_image()
+
+    def revert_to_old_buttons(self):
+        if not self.static:
+            self.horizontalLayout.removeWidget(self.buttons)
+            self.buttons.setVisible(False)
+            self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
+            self.buttons.setVisible(True)
+            self.horizontalLayout.insertWidget(0, self.buttons)
+            self.static = True
+
+        elif self.static:
+            self.horizontalLayout.removeWidget(self.buttons)
+            self.buttons.setVisible(False)
+            self.buttons = MultipleViews(self)
+            self.buttons.setVisible(True)
+            self.horizontalLayout.insertWidget(0, self.buttons)
+            self.static = False
+
+
 
     def wheelEvent(self, a0):
         """ Edits the behaviour of the mouse wheel.
