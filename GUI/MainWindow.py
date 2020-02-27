@@ -1,5 +1,5 @@
 import numpy as np
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
@@ -188,7 +188,7 @@ class MainWindow(QMainWindow):
 
         self.optional_sliders = QToolBar()
         self.addToolBar(Qt.RightToolBarArea, self.optional_sliders)
-        self.optional_sliders.addWidget(MultipleViews(self.main_widget.win))
+        self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
         self.optional_sliders.setVisible(False)
 
 

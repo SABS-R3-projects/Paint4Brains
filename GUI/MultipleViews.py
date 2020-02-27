@@ -1,34 +1,33 @@
-from pyqtgraph import ImageItem, GraphicsView
+from pyqtgraph import ImageItem, GraphicsView, ViewBox
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtGui, QtCore
-from ModViewBox import ModViewBox
+from SideView import SideView
 
 
 class MultipleViews(QWidget):
-    def __init__(self, mainviewer, parent=None):
+    def __init__(self, main_widget, parent=None):
         super(MultipleViews, self).__init__(parent=parent)
+        self.main_widget = main_widget
+        self.mainview = main_widget.win
+        self.brain = self.mainview.brain
 
-        self.mainview = mainviewer
-        self.brain = mainviewer.brain
+        self.layout = QVBoxLayout(self)
 
-        self.layout = QHBoxLayout(self)
+        self.win1 = SideView(1, parent = self)
+        self.win2 = SideView(2, parent = self)
 
-        self.win1 = GraphicsView()
-        self.view1 = ModViewBox()
-        self.win1.setCentralItem(self.view1)
-
-        # Making Images out of data
-        self.brain.section = (self.brain.section - 1) % 3
-        self.brain_img1 = ImageItem(self.brain.current_data_slice, autoDownsample=False,
-                                    compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
-        self.label_img1 = ImageItem(self.brain.current_label_data_slice, autoDownSmaple=False, opacity=1,
-                                    compositionMode=QtGui.QPainter.CompositionMode_Plus)
-        self.brain.section = (self.brain.section + 1) % 3
-
-        self.view1.addItem(self.brain_img1)
-        self.view1.addItem(self.label_img1)
-
-        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        print(self.sizeHint())
-        self.setFixedSize(250, 250)
+        self.setFixedWidth(250)
+        self.setMinimumHeight(500)
+        space = QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.layout.addWidget(self.win1)
+        self.layout.addSpacerItem(space)
+        self.layout.addWidget(self.win2)
+
+    def set_views(self, position):
+        eachdim = [0< position[i] < self.brain.shape[i] for i in range(3)]
+        out_of_box = not (eachdim[0] and eachdim[1] and eachdim[2])
+        self.win1.set_i(position, out_of_box)
+        self.win1.refresh_image()
+        self.win2.set_i(position, out_of_box)
+        self.win2.refresh_image()
+

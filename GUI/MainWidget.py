@@ -5,6 +5,7 @@ from deepbrain import Extractor
 from Slider import Slider
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
+from MultipleViews import MultipleViews
 
 
 class MainWidget(QWidget):
@@ -18,7 +19,8 @@ class MainWidget(QWidget):
         self.win = ImageViewer(self.brain)
 
         # Adding the plane selection buttons
-        self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
+        #self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
+        self.buttons = MultipleViews(self)
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.brain.shape[self.brain.section] - 1)
@@ -50,6 +52,10 @@ class MainWidget(QWidget):
         mouse_y = int(self.win.img.mapFromScene(pos).y())
         self.position.setText(str(self.brain.position_as_voxel(mouse_x, mouse_y)))
 
+        #New Code:
+
+        self.buttons.set_views(self.brain.position_as_voxel(mouse_x, mouse_y))
+
     def update_after_slider(self):
         """ Updates the viewed image after moving the slider.
 
@@ -59,7 +65,7 @@ class MainWidget(QWidget):
         self.brain.i = self.widget_slider.x
         self.win.refresh_image()
 
-    def __update_section_helper(self):
+    def _update_section_helper(self):
         """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
 
         Ensures that the viewed slice exists;
@@ -78,7 +84,7 @@ class MainWidget(QWidget):
         This function is called by the first button.
         """
         self.brain.section = 0
-        self.__update_section_helper()
+        self._update_section_helper()
 
     def update1(self):
         """ Sets the view along axis 1
@@ -87,7 +93,7 @@ class MainWidget(QWidget):
         This function is called by the second button.
         """
         self.brain.section = 1
-        self.__update_section_helper()
+        self._update_section_helper()
 
     def update2(self):
         """ Sets the view along axis 2
@@ -96,7 +102,7 @@ class MainWidget(QWidget):
         This function is called by the third button.
         """
         self.brain.section = 2
-        self.__update_section_helper()
+        self._update_section_helper()
 
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network
