@@ -46,8 +46,30 @@ class TestBrainData(unittest.TestCase):
             assert self.brain.get_label_data_slice(self.brain.i).shape == self.brain.get_data_slice(self.brain.i).shape
 
     def test_log_normalistion(self):
+        #skull stripping has not been performed so brain.data should equal brain.full_head
+        #assert  self.brain.data == self.brain.full_head
+
+        #test log scaling factor is not greater than max value in brain.data
         assert  self.brain.scale <= np.max(self.brain.data)
 
+        #test variance of data array. Expect higher variance after log normalising (more contrast).
+        test_brain = BrainData(self.filename)
+        test_brain.log_normalization()
+
+        assert  np.var(self.brain.data) <= np.var(test_brain.data)
+
+        del test_brain
+
+    def test_brain_Extraction(self):
+        test_brain = BrainData(self.filename)
+        test_brain.brainExtraction()
+
+        #check data and probability mask are the same shape
+        assert  self.brain.data.shape == test_brain.probability_mask.shape
+
+        #test number of zero values increases afte brain exrtraction
+        assert  np.count_nonzero(self.brain.data==0) <= np.count_nonzero(test_brain.data==0)
+        
 
 
 class TestDummyTest(unittest.TestCase):
