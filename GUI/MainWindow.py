@@ -199,6 +199,7 @@ class MainWindow(QMainWindow):
         self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
         self.optional_sliders.setVisible(False)
 
+        # Making the Intensity Normalization Tab invisible as long as Adjust Intensity has not yet been clicked
         self.norm_widget = NormalizationWidget(self.main_widget.win)
         self.intensity_toolbar = QToolBar()
         self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
