@@ -176,17 +176,14 @@ class BrainData:
     # Creating class methods #
 
     def intensity_normalization(self):
-        #self.reset_data()
+        """
+        A Method that performs a logarithmic normalization on the brain
+        """
         self.data = self.data_unchanged
-        gain = self.intensity#np.clip(self.intensity, 0.9, 1.6)
-        print(gain)
+        gain = self.intensity
         scale = (np.max(self.data) - np.min(self.data))
         new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / scale) * scale * gain,0,scale)
         self.data = new_brain_data
-        #self.nii_img = nib.Nifti1Image(self.data, self.nii_img.affine)
-
-    #def reset_data(self):
-        #self.data = self.data_unchanged
 
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
