@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
 
 class NormalizationWidget(QWidget):
     """
-    A class that creates the Intensity Normalization widget that appears when Adjust Intensity
+    A class that creates the Intensity Normalization widget that appears when Adjust Intensity option
     under the Tools menu bar is clicked
     """
     def __init__(self, viewer, minimum=0.5, maximum=1.6):
