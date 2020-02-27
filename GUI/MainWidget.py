@@ -3,8 +3,11 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 from PyQt5 import QtCore
 from Extractor import Extractor
 from Slider import Slider
+from NormalizationWidget import NormalizationWidget
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
+from skimage.transform import resize
+from MultipleViews import MultipleViews
 
 
 class MainWidget(QWidget):
@@ -17,8 +20,9 @@ class MainWidget(QWidget):
         # Creating viewing box to see data
         self.win = ImageViewer(self.brain)
 
-        # Adding the plane selection buttons
-        self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
+        # Adding the additional viewing boxes
+        self.buttons = MultipleViews(self)
+        self.static = False
 
         # Creating a slider to go through image slices
         self.widget_slider = Slider(0, self.brain.shape[self.brain.section] - 1)
@@ -50,6 +54,9 @@ class MainWidget(QWidget):
         mouse_y = int(self.win.img.mapFromScene(pos).y())
         self.position.setText(str(self.brain.position_as_voxel(mouse_x, mouse_y)))
 
+        if not self.static:
+            self.buttons.set_views(self.brain.position_as_voxel(mouse_x, mouse_y))
+
     def update_after_slider(self):
         """ Updates the viewed image after moving the slider.
 
@@ -59,7 +66,7 @@ class MainWidget(QWidget):
         self.brain.i = self.widget_slider.x
         self.win.refresh_image()
 
-    def __update_section_helper(self):
+    def _update_section_helper(self):
         """ Helper function used to ensure that everything runs smoothly after the view axis is changed.
 
         Ensures that the viewed slice exists;
@@ -78,7 +85,7 @@ class MainWidget(QWidget):
         This function is called by the first button.
         """
         self.brain.section = 0
-        self.__update_section_helper()
+        self._update_section_helper()
 
     def update1(self):
         """ Sets the view along axis 1
@@ -87,7 +94,7 @@ class MainWidget(QWidget):
         This function is called by the second button.
         """
         self.brain.section = 1
-        self.__update_section_helper()
+        self._update_section_helper()
 
     def update2(self):
         """ Sets the view along axis 2
@@ -96,7 +103,14 @@ class MainWidget(QWidget):
         This function is called by the third button.
         """
         self.brain.section = 2
-        self.__update_section_helper()
+        self._update_section_helper()
+
+    def normalize_intensity(self):
+        """
+        A Method that calls the log_normalization method on the brain
+        """
+        self.brain.log_normalization()
+        self.win.refresh_image()
 
     def extract(self):
         """ Performs brain extraction using the DeepBrain neural network
@@ -122,6 +136,25 @@ class MainWidget(QWidget):
         """
         self.brain.full_brain()
         self.win.refresh_image()
+
+    def revert_to_old_buttons(self):
+        if not self.static:
+            self.horizontalLayout.removeWidget(self.buttons)
+            self.buttons.setVisible(False)
+            self.buttons = PlaneSelectionButtons(self.update0, self.update1, self.update2)
+            self.buttons.setVisible(True)
+            self.horizontalLayout.insertWidget(0, self.buttons)
+            self.static = True
+
+        elif self.static:
+            self.horizontalLayout.removeWidget(self.buttons)
+            self.buttons.setVisible(False)
+            self.buttons = MultipleViews(self)
+            self.buttons.setVisible(True)
+            self.horizontalLayout.insertWidget(0, self.buttons)
+            self.static = False
+
+
 
     def wheelEvent(self, a0):
         """ Edits the behaviour of the mouse wheel.
