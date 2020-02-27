@@ -26,10 +26,20 @@ class TestBrainData(unittest.TestCase):
         #test get_data_slice returns a 2d array from the 3d data object
         dimensions = len(self.brain.data.shape)
         for j in range(dimensions):
-            brain.section = j
-            assert  len(self.brain.get_data_slice(brain.i).shape) == 2
+            self.brain.section = j
+            assert  len(self.brain.get_data_slice(self.brain.i).shape) == 2
 
+    def test_current_data_slice_label(self):
+        #test current_brain_slice returns the correct shape
+        assert  len(self.brain.current_label_data_slice.shape) == 2
+        assert  self.brain.current_label_data_slice.shape == self.brain.get_label_data_slice(self.brain.i).shape
 
+    def test_get_data_slice_label(self):
+        #test get_data_slice returns a 2d array from the 3d data object
+        dimensions = len(self.brain.data.shape)
+        for j in range(dimensions):
+            self.brain.section = j
+            assert  len(self.brain.get_label_data_slice(self.brain.i).shape) == 2
 
 
 class TestDummyTest(unittest.TestCase):
