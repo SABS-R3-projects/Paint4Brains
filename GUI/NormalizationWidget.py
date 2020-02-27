@@ -3,7 +3,11 @@ from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
 
 
 class NormalizationWidget(QWidget):
-    def __init__(self, viewer, minimum=0.5, maximum=2.5):
+    """
+    A class that creates the Intensity Normalization widget that appears when Adjust Intensity
+    under the Tools menu bar is clicked
+    """
+    def __init__(self, viewer, minimum=0.5, maximum=1.6):
         self.win = viewer
         self.brain = viewer.brain
 
@@ -30,13 +34,13 @@ class NormalizationWidget(QWidget):
         self.label.setText(_translate("MainWindow", "Adjust Intensity"))
         self.tab_layout.addWidget(self.label)
 
-        self.horizontalSlider_2 = QtWidgets.QSlider(self.tab)
-        self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider_2.setObjectName("horizontalSlider_2")
-        self.horizontalSlider_2.setMinimum(0)
-        self.horizontalSlider_2.setValue(1)
-        self.tab_layout.addWidget(self.horizontalSlider_2)
-        self.horizontalSlider_2.valueChanged.connect(self.update_intensity)
+        self.log_intensity_slider = QtWidgets.QSlider(self.tab)
+        self.log_intensity_slider.setOrientation(QtCore.Qt.Horizontal)
+        self.log_intensity_slider.setObjectName("log_intensity_slider")
+        self.log_intensity_slider.setMinimum(0)
+        self.log_intensity_slider.setValue(1)
+        self.tab_layout.addWidget(self.log_intensity_slider)
+        self.log_intensity_slider.valueChanged.connect(self.update_intensity)
 
     def update_intensity(self):
         """
@@ -44,9 +48,9 @@ class NormalizationWidget(QWidget):
         It updates the appearance of the brain on the viewer as intensity is changed
         """
         # Take input from controller
-        value = self.horizontalSlider_2.value()
+        value = self.log_intensity_slider.value()
         self.brain.intensity = (self.minimum + (
-                float(value) / (self.horizontalSlider_2.maximum() - self.horizontalSlider_2.minimum())) * (
+                float(value) / (self.log_intensity_slider.maximum() - self.log_intensity_slider.minimum())) * (
                                         self.maximum - self.minimum))
         # Edit the Brain Data Using function defined in BrainData class
         self.brain.log_normalization()
