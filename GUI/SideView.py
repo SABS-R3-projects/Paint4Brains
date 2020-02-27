@@ -27,6 +27,7 @@ class SideView(GraphicsView):
 
         self.view1.setFixedHeight(250)
         self.view1.setFixedWidth(250)
+        self.setMinimumHeight(250)
 
         self.vLine = InfiniteLine(angle=90, movable=False)
         self.hLine = InfiniteLine(angle=0, movable=False)

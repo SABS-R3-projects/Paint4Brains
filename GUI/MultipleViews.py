@@ -17,8 +17,8 @@ class MultipleViews(QWidget):
         self.win2 = SideView(2, parent = self)
 
         self.setFixedWidth(250)
-        self.setMinimumHeight(500)
-        space = QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.setMinimumHeight(540)
+        space = QSpacerItem(0, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.layout.addWidget(self.win1)
         self.layout.addSpacerItem(space)
         self.layout.addWidget(self.win2)
