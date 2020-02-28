@@ -1,7 +1,7 @@
 import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
-from Segmenter import segment_default
+from Paint4Brains.Segmenter import segment_default
 
 
 class BrainData:
