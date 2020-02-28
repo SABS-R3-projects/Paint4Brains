@@ -1,6 +1,8 @@
 import sys
 from pyqtgraph.Qt import QtCore, QtGui
 import os
+import qtmodern.styles
+import qtmodern.windows
 os.environ['KMP_WARNINGS'] = 'off'
 from MainWindow import MainWindow
 
@@ -18,7 +20,9 @@ if __name__ == '__main__':
     # Basically just runs the MainWindow class
     app = QtGui.QApplication([])
     w = MainWindow(file_x, file_y)
-    w.show()
+    qtmodern.styles.dark(app)
+    mw = qtmodern.windows.ModernWindow(w)
+    mw.show()
 
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QtGui.QApplication.instance().exec_()
