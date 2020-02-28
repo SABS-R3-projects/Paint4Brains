@@ -174,7 +174,7 @@ class MainWindow(QMainWindow):
         rubber = QAction(QIcon(current_directory + "/images/eraser.png"), "Eraser: Remove Drawn Pixels", self)
         rubber.triggered.connect(self.main_widget.win.edit_button2)
 
-        cross = QAction(QIcon(current_directory + "/images/cross.svg"), "Brush: Draw Multiple Pixels", self)
+        cross = QAction(QIcon(current_directory + "/images/cross.png"), "Brush: Draw Multiple Pixels", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
         left = QAction(QIcon(current_directory + "/images/left.png"), "Previous Label: Go To Previously Selected Label", self)

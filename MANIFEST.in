@@ -1,4 +1,5 @@
 include Paint4Brains/saved_models/*.tar
 include Paint4Brains/GUI/images/*.png
 include Paint4Brains/GUI/images/*.jpg
-include Paint4Brains/GUI/images/*.jpeg
+include Paint4Brains/GUI/images/*.jpeg#
+include Paint4Brains/GUI/*.qss

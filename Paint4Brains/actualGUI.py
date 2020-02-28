@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     app.setStyle("Breeze")
     app.setPalette(darkPalette)
-    app.setStyleSheet(open("style2.qss", "r").read())
+    app.setStyleSheet(open("GUI/style2.qss", "r").read())
 
     w = MainWindow(file_x, file_y)
     w.show()
