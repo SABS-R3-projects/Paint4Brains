@@ -64,6 +64,8 @@ def compute_volume (brain_file_path):
         writer.writeheader()
         writer.writerow(volume_dict)
 
+    print("**Finished computing volume estimates**")
+
 def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size):
     print("**Starting evaluation**")
 
