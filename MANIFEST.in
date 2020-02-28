@@ -1,1 +1,4 @@
 include Paint4Brains/saved_models/*.tar
+include Paint4Brains/images/*.png
+include Paint4Brains/images/*.jpg
+include Paint4Brains/images/*.jpeg
