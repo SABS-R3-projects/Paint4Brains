@@ -2,14 +2,13 @@ import numpy as np
 import nibabel as nib
 from Extractor import Extractor
 from Segmenter import segment_default
-from nilearn.image import resample_img
 
 
 class BrainData:
     def __init__(self, filename, label_filename=None):
         """ Initialize class
 
-        :str filename: The name and location of the file.
+        :str filename: The name and location of the file
         """
         self.filename = filename
         self.label_filename = label_filename
@@ -20,6 +19,8 @@ class BrainData:
         self.__orientation = nib.orientations.io_orientation(self.__nib_data.affine)
         self.nii_img = self.__nib_data
         self.data = np.flip(self.__nib_data.as_reoriented(self.__orientation).get_fdata().transpose())
+
+        self.data_unchanged = self.data.copy()
 
         # Default empty values
         self.different_labels = np.zeros(1, dtype=int)
@@ -39,8 +40,11 @@ class BrainData:
         maxim = np.max(self.data)
         self.data = self.data / maxim
 
+        self.intensity = 1.0
+        self.scale = 1.0
         self.extracted = False
         self.extraction_cutoff = 0.5
+        self.probability_mask = np.zeros(self.shape)
         self.full_head = self.data.copy()
         self.only_brain = []
 
@@ -167,20 +171,44 @@ class BrainData:
         elif self.section == 2:
             return self.shape[0] - mouse_y - 1, mouse_x, self.i
 
+    def voxel_as_position(self, i, j, k):
+        """ Returns the 2_D position of the mouse from the 3_D position of the Brain
+        """
+        if self.section == 0:
+            return j, k
+        elif self.section == 1:
+            return self.shape[2] - k - 1, self.shape[0] - i - 1
+        elif self.section == 2:
+            return j, self.shape[0] - i - 1
+
+    # Creating class methods #
+
+    def log_normalization(self):
+        """
+        A Method that performs a logarithmic normalization on the brain
+        """
+        if self.extracted:
+            self.data = self.only_brain
+        else:
+            self.data = self.full_head
+        self.scale = (np.max(self.data) - np.min(self.data))
+        new_brain_data = np.clip(np.log2(1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
+        self.data = new_brain_data
+
     def brainExtraction(self):
         """Performs brain extraction/skull stripping on nifti images. Preparation for segmentation.
 
         Arguments:
-            self object with self.data {[np.array]} -- .nii image
+            self object with self.data {[np.array]} -- .nii image.
         """
         # If it has already been extracted (mostly empty) don't do it again
         if self.extracted:
             return 0
         elif len(self.only_brain) == 0:
             ext = Extractor()
-            prob = ext.run(self.data)
+            self.probability_mask = ext.run(self.data)
             print("EXTRACTION DONE")
-            mask2 = np.where(prob > self.extraction_cutoff, 1, 0)
+            mask2 = np.where(self.probability_mask > self.extraction_cutoff, 1, 0)
             self.only_brain = self.data * mask2
 
         self.data = self.only_brain
