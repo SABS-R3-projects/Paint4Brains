@@ -1,6 +1,6 @@
 import numpy as np
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
+from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
 from BrainData import BrainData
@@ -168,29 +168,30 @@ class MainWindow(QMainWindow):
         # Editing tools as a toolbar
         current_directory = os.path.dirname(os.path.realpath(__file__))
 
-        pen = QAction(QIcon(current_directory + "/images/pen.jpeg"), "Pen", self)
+        pen = QAction(QIcon(current_directory + "/images/pen.jpeg"), "Pencil: Draw Pixels", self)
         pen.triggered.connect(self.main_widget.win.edit_button1)
 
-        rubber = QAction(QIcon(current_directory + "/images/eraser.png"), "Rubber", self)
+        rubber = QAction(QIcon(current_directory + "/images/eraser.png"), "Eraser: Remove Drawn Pixels", self)
         rubber.triggered.connect(self.main_widget.win.edit_button2)
 
-        cross = QAction(QIcon(current_directory + "/images/cross.png"), "Cross", self)
+        cross = QAction(QIcon(current_directory + "/images/cross.svg"), "Brush: Draw Multiple Pixels", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
-        left = QAction(QIcon(current_directory + "/images/left.png"), "Previous Label", self)
+        left = QAction(QIcon(current_directory + "/images/left.png"), "Previous Label: Go To Previously Selected Label", self)
         left.triggered.connect(self.main_widget.win.previous_label)
 
-        label = QAction(QIcon(current_directory + "/images/label.jpg"), "Select Label", self)
+        label = QAction(QIcon(current_directory + "/images/label.jpg"), "Select Label: Select Individual Label", self)
         label.triggered.connect(self.main_widget.win.select_label)
 
-        right = QAction(QIcon(current_directory + "/images/right.png"), "Next Label", self)
+        right = QAction(QIcon(current_directory + "/images/right.png"), "Next Label: Go To The Next Label", self)
         right.triggered.connect(self.main_widget.win.next_label)
 
         self.edit_toolbar = self.addToolBar("Editting Tools")
+        self.edit_toolbar.setIconSize(QSize(40, 40))
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(pen)
-        self.edit_toolbar.addAction(rubber)
         self.edit_toolbar.addAction(cross)
+        self.edit_toolbar.addAction(rubber)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(left)
