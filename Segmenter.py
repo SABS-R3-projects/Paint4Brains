@@ -48,6 +48,10 @@ def compute_volume (brain_file_path):
     volume_nifty = nib.load(brain_file_path)
     header = volume_nifty.header
     volume = volume_nifty.get_fdata()
+    sizes = header.get_zooms()[:3]
+
+    size_correction = np.prod(sizes)
+
     volume_prediction = np.round(volume)
 
     num_cls = len(label_names) - 1
@@ -55,7 +59,7 @@ def compute_volume (brain_file_path):
 
     for i in range(num_cls):
         binarized_pred = (volume_prediction == i).astype(float)
-        volume_dict[label_names[i + 1]] = np.sum(binarized_pred)
+        volume_dict[label_names[i + 1]] = np.sum(binarized_pred) * size_correction
 
     csv_file_name = 'volume_estimates.csv'
 
@@ -218,6 +222,3 @@ def undo_transform(mask, original):
 
 # segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
 
-if __name__ == '__main__':
-    filename = 'sub-101_anat_sub-101_T1w_segmented.nii.gz'
-    compute_vol(filename)
