@@ -1,15 +1,15 @@
 import numpy as np
+import torch
+import os
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from MainWidget import MainWidget
-from BrainData import BrainData
-from SegmentThread import SegmentThread
-from OptionalSliders import OptionalSliders
-from MultipleViews import MultipleViews
-import torch
-from NormalizationWidget import NormalizationWidget
-import os
+from Paint4Brains.BrainData import BrainData
+from Paint4Brains.SegmentThread import SegmentThread
+from Paint4Brains.OptionalSliders import OptionalSliders
+from Paint4Brains.MultipleViews import MultipleViews
+from Paint4Brains.NormalizationWidget import NormalizationWidget
 
 
 class MainWindow(QMainWindow):
