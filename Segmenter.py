@@ -28,6 +28,41 @@ def segment_default(brain_file_path, device="cpu"):
     return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,
                          batch_size)
 
+def compute_volume (brain_file_path):
+    save_predictions_dir = "outputs"
+    prediction_dir = save_predictions_dir
+    label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral ventricle", "Left Inf LatVentricle",
+                   "Left Cerebellum WM", "Left Cerebellum Cortex", "Left Thalamus", "Left Caudate", "Left Putamen",
+                   "Left Pallidum", "3rd Ventricle", "4th Ventricle", "Brain Stem", "Left Hippocampus", "Left Amygdala",
+                   "CSF (Cranial)", "Left Accumbens", "Left Ventral DC", "Right WM", "Right Cortex",
+                   "Right Lateral Ventricle", "Right Inf LatVentricle", "Right Cerebellum WM",
+                   "Right Cerebellum Cortex", "Right Thalamus", "Right Caudate", "Right Putamen", "Right Pallidum",
+                   "Right Hippocampus", "Right Amygdala", "Right Accumbens", "Right Ventral DC"]
+    volumes_txt_file = brain_file_path
+    dir_struct = "Linear"
+
+    print("**Computing volume estimates**")
+
+    volume_dict_list = []
+
+    volume_nifty = nib.load(brain_file_path)
+    header = volume_nifty.header
+    volume = volume_nifty.get_fdata()
+    volume_prediction = np.round(volume)
+
+    num_cls = len(label_names) - 1
+    volume_dict = {}
+
+    for i in range(num_cls):
+        binarized_pred = (volume_prediction == i).astype(float)
+        volume_dict[label_names[i + 1]] = np.sum(binarized_pred)
+
+    csv_file_name = 'volume_estimates.csv'
+
+    with open(csv_file_name, 'w') as f:
+        writer = csv.DictWriter(f, fieldnames=label_names)
+        writer.writeheader()
+        writer.writerow(volume_dict)
 
 def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size):
     print("**Starting evaluation**")
@@ -180,3 +215,7 @@ def undo_transform(mask, original):
     return new_mask
 
 # segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
+
+if __name__ == '__main__':
+    filename = 'sub-101_anat_sub-101_T1w_segmented.nii.gz'
+    compute_vol(filename)
