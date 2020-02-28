@@ -7,6 +7,7 @@ setup(
     license='BSD 3-clause license',
     maintainer='Brennan Abanades, Pavanjit Chaggar, Itai Muzhingi, Andrei-Claudiu Roibu',
     maintainer_email='brennan.abanadeskenyon@stx.ox.ac.uk; pavanjit.chaggar@exeter.ox.ac.uk; itai.muzhingi@balliol.ox.ac.uk; andrei-claudiu.roibu@dtc.ox.ac.uk',
+    include_package_data=True,
     packages = find_packages(include=('Paint4Brains', 'Paint4Brains.*')),
     install_requires=[
         'pip>=20.0.2',
