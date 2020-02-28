@@ -2,12 +2,13 @@ import numpy as np
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtCore
 from deepbrain import Extractor
-from Slider import Slider
 from skimage.transform import resize
-from Paint4Brains.NormalizationWidget import NormalizationWidget
-from Paint4Brains.PlaneSelectionButtons import PlaneSelectionButtons
-from Paint4Brains.ImageViewer import ImageViewer
-from Paint4Brains.MultipleViews import MultipleViews
+from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
+from Paint4Brains.GUI.PlaneSelectionButtons import PlaneSelectionButtons
+from Paint4Brains.GUI.ImageViewer import ImageViewer
+from Paint4Brains.GUI.MultipleViews import MultipleViews
+from Paint4Brains.GUI.Slider import Slider
+
 
 
 class MainWidget(QWidget):

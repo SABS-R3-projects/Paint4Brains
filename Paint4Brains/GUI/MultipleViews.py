@@ -1,7 +1,7 @@
 from pyqtgraph import ImageItem, GraphicsView, ViewBox
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtGui, QtCore
-from Paint4Brains.SideView import SideView
+from Paint4Brains.GUI.SideView import SideView
 
 
 class MultipleViews(QWidget):
