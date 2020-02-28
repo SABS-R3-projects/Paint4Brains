@@ -13,8 +13,8 @@ class MultipleViews(QWidget):
 
         self.layout = QVBoxLayout(self)
 
-        self.win1 = SideView(1, parent = self)
-        self.win2 = SideView(2, parent = self)
+        self.win1 = SideView(1, parent=self)
+        self.win2 = SideView(2, parent=self)
 
         self.setFixedWidth(250)
         self.setMinimumHeight(540)
@@ -27,10 +27,9 @@ class MultipleViews(QWidget):
         self.layout.addSpacerItem(space2)
 
     def set_views(self, position):
-        eachdim = [0< position[i] < self.brain.shape[i] for i in range(3)]
+        eachdim = [0 < position[i] < self.brain.shape[i] for i in range(3)]
         out_of_box = not (eachdim[0] and eachdim[1] and eachdim[2])
         self.win1.set_i(position, out_of_box)
         self.win1.refresh_image()
         self.win2.set_i(position, out_of_box)
         self.win2.refresh_image()
-
