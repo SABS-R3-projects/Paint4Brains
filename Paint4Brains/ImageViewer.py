@@ -3,9 +3,9 @@ from PyQt5.QtWidgets import QWidget, QShortcut
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, pyqtSignal
 from pyqtgraph import ImageItem, GraphicsView
-from ModViewBox import ModViewBox
-from BrainData import BrainData
-from SelectLabel import SelectLabel
+from Paint4Brains.ModViewBox import ModViewBox
+from Paint4Brains.BrainData import BrainData
+from Paint4brains.SelectLabel import SelectLabel
 
 
 class ImageViewer(GraphicsView):

@@ -3,11 +3,11 @@ from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpa
 from PyQt5 import QtCore
 from deepbrain import Extractor
 from Slider import Slider
-from NormalizationWidget import NormalizationWidget
-from PlaneSelectionButtons import PlaneSelectionButtons
-from ImageViewer import ImageViewer
 from skimage.transform import resize
-from MultipleViews import MultipleViews
+from Paint4Brains.NormalizationWidget import NormalizationWidget
+from Paint4Brains.PlaneSelectionButtons import PlaneSelectionButtons
+from Paint4Brains.ImageViewer import ImageViewer
+from Paint4Brains.MultipleViews import MultipleViews
 
 
 class MainWidget(QWidget):

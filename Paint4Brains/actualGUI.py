@@ -2,7 +2,7 @@ import sys
 from pyqtgraph.Qt import QtCore, QtGui
 import os
 os.environ['KMP_WARNINGS'] = 'off'
-from MainWindow import MainWindow
+from Paint4Brains.MainWindow import MainWindow
 
 # checks if there are any extra parameters when calling python and assigns it to file_x or file_y if there is
 file_y = None
