@@ -55,7 +55,8 @@ if __name__ == '__main__':
 
     app.setStyle("Breeze")
     app.setPalette(darkPalette)
-    app.setStyleSheet(open("GUI/style2.qss", "r").read())
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    app.setStyleSheet(open(current_directory + "/GUI/style2.qss", "r").read())
 
     w = MainWindow(file_x, file_y)
     w.show()
