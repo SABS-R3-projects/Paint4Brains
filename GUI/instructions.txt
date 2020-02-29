@@ -1,3 +1,0 @@
-Replace all python files in src/main/python with the updated versions after pulling from master.
-then run fbs run, fbs freeze (--debug if it fails) and fbs installer.
-python 3.6 is recomended.

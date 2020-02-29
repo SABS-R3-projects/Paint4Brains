@@ -4,12 +4,12 @@ import os
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
-from Paint4Brains.BrainData import BrainData
-from Paint4Brains.GUI.MainWidget import MainWidget
-from Paint4Brains.GUI.SegmentThread import SegmentThread
-from Paint4Brains.GUI.OptionalSliders import OptionalSliders
-from Paint4Brains.GUI.MultipleViews import MultipleViews
-from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
+from BrainData import BrainData
+from MainWidget import MainWidget
+from SegmentThread import SegmentThread
+from OptionalSliders import OptionalSliders
+from MultipleViews import MultipleViews
+from NormalizationWidget import NormalizationWidget
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 app = ApplicationContext()

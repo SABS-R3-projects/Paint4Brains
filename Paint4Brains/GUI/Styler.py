@@ -1,6 +1,8 @@
 from PyQt5.QtGui import QPalette, QColor
 import os
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
+app = ApplicationContext()
 
 def palette():
     darkPalette = QPalette()
@@ -41,6 +43,6 @@ def palette():
 
 
 def style():
-    current_directory = os.path.dirname(os.path.realpath(__file__))
-    stylesheet = open(current_directory + "/StyleSheet.qss", "r").read()
+    p1 = app.get_resource('StyleSheet.qss')
+    stylesheet = open(p1, "r").read()
     return stylesheet

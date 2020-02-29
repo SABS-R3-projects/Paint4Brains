@@ -1,5 +1,5 @@
-from Paint4Brains import Segmenter
-from Paint4Brains.BrainData import BrainData
+import Segmenter
+from BrainData import BrainData
 from PyQt5.QtWidgets import QComboBox, QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
 
 
