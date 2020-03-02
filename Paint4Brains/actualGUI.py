@@ -18,7 +18,7 @@ else:
 if __name__ == '__main__':
     # Basically just runs the MainWindow class
     app = QtGui.QApplication([])
-    app.setStyle("Breeze")
+    app.setStyle("Fusion")
     app.setPalette(palette())
     app.setStyleSheet(style())
 
