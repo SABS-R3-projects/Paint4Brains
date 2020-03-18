@@ -10,7 +10,7 @@ class SegmentThread(QThread):
     '''
     start_signal = pyqtSignal()
     end_signal = pyqtSignal()
-    error_signal = pyqtSignal()
+    error_signal = pyqtSignal(str)
 
     def __init__(self, window, device):
         super(SegmentThread, self).__init__()
@@ -24,8 +24,9 @@ class SegmentThread(QThread):
         try:
             self.brain.segment(self.device)
             self.end_signal.emit()
-        except:
-            self.error_signal.emit()
+        except Exception as e:
+            text = str(e)
+            self.error_signal.emit(text)
 
 
 class SegmentManager(QObject):
@@ -75,8 +76,8 @@ class SegmentManager(QObject):
         self.parent.main_widget.win.update_colormap()
         self.parent.main_widget.win.view_back_labels()
 
-    @pyqtSlot()
-    def error_message(self):
+    @pyqtSlot(str)
+    def error_message(self, error):
         self.start_msg.done(0)
         msg = QErrorMessage()
         text = "Error while running segmentation."
@@ -84,7 +85,7 @@ class SegmentManager(QObject):
             text = text + "\nAre you sure you have a CUDA enabled GPU?"
         if self.device == "cpu":
             text = text + "\nPlease report this error."
-        msg.showMessage(text)
+        msg.showMessage(text + "\nERROR:\n" + error)
         msg.exec()
 
     def show_initial_message(self):
