@@ -1,6 +1,6 @@
 import os
 import nibabel as nib
-import nilearn as nl
+from nilearn.image import resample_img
 import numpy as np
 import torch
 import csv
@@ -153,7 +153,7 @@ def transform(image):
     and 1 mm^3 voxel size just like Freesurfer's mri_conform function"""
     shape = (256, 256, 256)
     # creating new image with the new affine and shape
-    new_img = nl.image.resample_img(image, new_affine, target_shape=shape)
+    new_img = resample_img(image, new_affine, target_shape=shape)
     # change orientation
     orientation = nib.orientations.axcodes2ornt(nib.aff2axcodes(new_img.affine))
     target_orientation = np.array([[0., -1.], [2., -1.], [1., 1.]])
@@ -177,7 +177,7 @@ def transform(image):
 
 def undo_transform(mask, original):
     shape = original.get_data().shape
-    new_mask = nl.image.resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
+    new_mask = resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
     # Adds a description to the nifti image
     new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
     return new_mask
