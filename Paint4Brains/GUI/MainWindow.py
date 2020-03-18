@@ -168,7 +168,7 @@ class MainWindow(QMainWindow):
         # Editing tools as a toolbar
         current_directory = os.path.dirname(os.path.realpath(__file__))
 
-        pen = QAction(QIcon(current_directory + "/images/pen.jpeg"), "Pencil: Draw Pixels", self)
+        pen = QAction(QIcon(current_directory + "/images/pen.png"), "Pencil: Draw Pixels", self)
         pen.triggered.connect(self.main_widget.win.edit_button1)
 
         rubber = QAction(QIcon(current_directory + "/images/eraser.png"), "Eraser: Remove Drawn Pixels", self)
@@ -180,7 +180,7 @@ class MainWindow(QMainWindow):
         left = QAction(QIcon(current_directory + "/images/left.png"), "Previous Label: Go To Previously Selected Label", self)
         left.triggered.connect(self.main_widget.win.previous_label)
 
-        label = QAction(QIcon(current_directory + "/images/label.jpg"), "Select Label: Select Individual Label", self)
+        label = QAction(QIcon(current_directory + "/images/label.png"), "Select Label: Select Individual Label", self)
         label.triggered.connect(self.main_widget.win.select_label)
 
         right = QAction(QIcon(current_directory + "/images/right.png"), "Next Label: Go To The Next Label", self)
