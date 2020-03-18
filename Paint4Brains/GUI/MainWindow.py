@@ -6,7 +6,7 @@ from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from Paint4Brains.BrainData import BrainData
 from Paint4Brains.GUI.MainWidget import MainWidget
-from Paint4Brains.GUI.SegmentThread import SegmentThread
+from Paint4Brains.GUI.SegmentThread import SegmentThread, SegmentMessageBox
 from Paint4Brains.GUI.OptionalSliders import OptionalSliders
 from Paint4Brains.GUI.MultipleViews import MultipleViews
 from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
@@ -318,40 +318,5 @@ class MainWindow(QMainWindow):
         Method that returns a segmented brain
         This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
-        self.device = "None"
-        self.show_settings_popup()
-
-        # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
-        cuda_available = torch.cuda.is_available()
-        if self.device != "None" and (cuda_available or self.device != "cuda"):
-            self.thread = SegmentThread(self.main_widget.win, self.device)
-            self.thread.start()
-
-    def popup_button(self, i):
-        if i.text() == 'CPU':
-            self.device = 'cpu'
-        elif i.text() == 'GPU':
-            self.device = "cuda"
-        else:
-            self.device = "None"
-
-    def show_settings_popup(self):
-        msg = QMessageBox()
-        msg.setWindowTitle("Select Hardware Type")
-        msg.setText("What type of processor would you like to use?")
-        msg.setInformativeText("Running segmentation on a CPU takes around 2 hours. Running it on a GPU will take around 30 seconds.")
-        msg.setIcon(QMessageBox.Question)
-        msg.setDetailedText(
-            "To perform the segmentation, Paint4Brain uses a convolutional neural network. This performs a lot faster on GPUs.\nIf you do not own a GPU, segmentation can also be run on a Google Colab GPU using the following link:\nhttps://tinyurl.com/Paint4Brains")
-
-        msg.addButton(QPushButton('CANCEL'), QMessageBox.RejectRole)
-        msg.addButton(QPushButton('GPU'), QMessageBox.AcceptRole)
-        msg.addButton(QPushButton('CPU'), QMessageBox.AcceptRole)
-
-        msg.setDefaultButton(QPushButton('CPU'))
-
-        answer = msg.buttonClicked.connect(self.popup_button)
-
-        x = msg.exec_()
-
-        return answer
+        msg = SegmentMessageBox(self)
+        msg.exec()
