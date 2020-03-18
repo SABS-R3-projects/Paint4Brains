@@ -28,12 +28,12 @@ class SegmentThread(QThread):
             self.error_signal.emit()
 
 
-
 class SegmentManager(QObject):
     def __init__(self, parent):
         super(SegmentManager, self).__init__(parent=parent)
         self.device = "None"
         self.parent = parent
+        self.start_msg = QMessageBox()
         self.show_initial_message()
 
     def popup_button(self, i):
@@ -58,14 +58,18 @@ class SegmentManager(QObject):
 
     @pyqtSlot()
     def started_message(self):
-        self.start_msg = QMessageBox()
-        self.start_msg.setText("Segmentation is running")
+        text = "Segmentation is now running.\n"
+        if self.device == "cpu":
+            text = text + "This may take up to 3 hours."
+        elif self.device == "cuda":
+            text = text + "This should be done in 20 seconds."
+        self.start_msg.setText(text)
         self.start_msg.exec()
 
     @pyqtSlot()
     def finished_message(self):
         msg = QMessageBox()
-        msg.setText("Segmentation has finished successfully")
+        msg.setText("Segmentation has finished successfully.")
         msg.exec()
         self.parent.main_widget.win.enable_drawing()
         self.parent.main_widget.win.update_colormap()
