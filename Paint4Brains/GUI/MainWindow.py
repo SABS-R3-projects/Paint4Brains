@@ -169,7 +169,7 @@ class MainWindow(QMainWindow):
         self.tools.addAction(segmentAction)
 
         # Editing tools as a toolbar
-        pen = QAction(QIcon(app.get_resource("images/pen.jpeg")), "Pen", self)
+        pen = QAction(QIcon(app.get_resource("images/pen.png")), "Pen", self)
         pen.triggered.connect(self.main_widget.win.edit_button1)
 
         rubber = QAction(QIcon(app.get_resource("images/eraser.png")), "Rubber", self)
