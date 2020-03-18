@@ -109,7 +109,7 @@ def _segment_vol(file_path, model, orientation, batch_size, cuda_available, devi
     volume_pred = []
     for i in range(0, len(volume), batch_size):
         batch_x = volume[i: i + batch_size]
-        if cuda_available:
+        if cuda_available and device == "cuda":
             batch_x = batch_x.cuda(device)
         out = model(batch_x)
         # _, batch_output = torch.max(out, dim=1)
