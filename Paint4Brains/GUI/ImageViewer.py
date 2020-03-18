@@ -45,7 +45,33 @@ class ImageViewer(GraphicsView):
                         [202, 178, 214],
                         [106, 61, 154],
                         [255, 255, 153],
-                        [177, 89, 40]]
+                        [177, 89, 40]
+                        #[0, 255, 0],  # Gree
+                        #[255, 0, 0],  # Red
+                        #[0, 0, 255],  #Blue
+                        #[230, 138, 0]  #Orange
+
+
+                        ]
+        # self.colours = [[255, 0, 0],  #Red
+        #                 [0, 0, 255],  #Blue
+        #                 [230, 138, 0],  #Orange
+        #                 [0, 255, 0],  #Green
+        #                 [153, 51, 153],  #Purple
+        #                 [179, 179, 0], #Yellow
+        #                 [0, 204, 204],  # Cyan
+        #                 [255, 102, 153], #Pink
+        #                 [117, 36, 36], #Brown
+        #                 [251, 154, 153],
+        #                 [227, 26, 28],
+        #                 [253, 191, 111],
+        #                  [255, 127, 0],
+        #                  [202, 178, 214],
+        #                  [106, 61, 154],
+        #                 [255, 255, 153],
+        #                 [177, 89, 40]]
+
+
         self.update_colormap()
 
         # Adding the images to the viewing box and setting it to drawing mode (if there is labeled data)
