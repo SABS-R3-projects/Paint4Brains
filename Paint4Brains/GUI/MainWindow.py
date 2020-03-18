@@ -6,7 +6,7 @@ from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
 from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
 from Paint4Brains.BrainData import BrainData
 from Paint4Brains.GUI.MainWidget import MainWidget
-from Paint4Brains.GUI.SegmentThread import SegmentThread, SegmentMessageBox
+from Paint4Brains.GUI.SegmentManager import SegmentThread, SegmentManager
 from Paint4Brains.GUI.OptionalSliders import OptionalSliders
 from Paint4Brains.GUI.MultipleViews import MultipleViews
 from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
@@ -318,5 +318,4 @@ class MainWindow(QMainWindow):
         Method that returns a segmented brain
         This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
-        msg = SegmentMessageBox(self)
-        msg.exec()
+        SegmentManager(self)
