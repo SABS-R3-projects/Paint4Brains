@@ -62,7 +62,7 @@ class SegmentManager(QObject):
         if self.device == "cpu":
             text = text + "This may take up to 3 hours."
         elif self.device == "cuda":
-            text = text + "This should be done in 20 seconds."
+            text = text + "This should be done in 30 seconds."
         self.start_msg.setText(text)
         self.start_msg.exec()
 
@@ -92,7 +92,7 @@ class SegmentManager(QObject):
         initial_message.setWindowTitle("Select Hardware Type")
         initial_message.setText("What type of processor would you like to use?")
         initial_message.setInformativeText(
-            "Running segmentation on a CPU takes around 2 hours. Running it on a GPU will take around 30 seconds.")
+            "Running segmentation on a CPU takes around 3 hours. Running it on a GPU will take around 30 seconds.")
         initial_message.setIcon(QMessageBox.Question)
         initial_message.setDetailedText(
             "To perform the segmentation, Paint4Brain uses a convolutional neural network. This performs a lot faster on GPUs.\nIf you do not own a GPU, segmentation can also be run on a Google Colab GPU using the following link:\nhttps://tinyurl.com/Paint4Brains")
