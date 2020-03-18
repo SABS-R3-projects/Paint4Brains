@@ -26,7 +26,7 @@ In order to run the code, activate the previously installed virtual environment,
 
 ```bash
 ~/(Paint4Brains Locations)$ source env/bin/activate
-~/(Paint4Brains Locations)$ python GUI/actualGUI.py 
+~/(Paint4Brains Locations)$ python Paint4Brains/actualGUI.py 
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ source env/bin/activate
 If the environment is created and activated, to run the GUI, please use the following command:
 
 ```bash
-python GUI/actualGUI.py
+python Paint4Brains/actualGUI.py
 ```
 
 The above command can also be run from the GUI folder, but without the _GUI/_ part of the command.
