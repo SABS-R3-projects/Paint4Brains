@@ -92,12 +92,9 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
             print("**Finished evaluation**")
             return filename
 
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             print("Error in reading the file ...")
-        except Exception as exp:
-            import logging
-            logging.getLogger(__name__).exception(exp)
-            # print("Other kind o error!")
+            raise e
 
 
 def _segment_vol(file_path, model, orientation, batch_size, cuda_available, device):

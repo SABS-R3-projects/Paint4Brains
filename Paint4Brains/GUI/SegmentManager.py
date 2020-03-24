@@ -23,10 +23,11 @@ class SegmentThread(QThread):
         self.start_signal.emit()
         try:
             self.brain.segment(self.device)
-            self.end_signal.emit()
         except Exception as e:
             text = str(e)
             self.error_signal.emit(text)
+        else:
+            self.end_signal.emit()
 
 
 class SegmentManager(QObject):
@@ -81,11 +82,8 @@ class SegmentManager(QObject):
         self.start_msg.done(0)
         msg = QErrorMessage()
         text = "Error while running segmentation."
-        if self.device == "cuda":
-            text = text + "\nAre you sure you have a CUDA enabled GPU?"
-        if self.device == "cpu":
-            text = text + "\nPlease report this error."
-        msg.showMessage(text + "\nERROR:\n" + error)
+        msg.setWindowTitle(text)
+        msg.showMessage("ERROR:\n" + error)
         msg.exec()
 
     def show_initial_message(self):
