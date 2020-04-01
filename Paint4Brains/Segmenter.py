@@ -103,7 +103,6 @@ def _segment_vol(file_path, model, orientation, cuda_available, device):
 
     volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
     volume = torch.tensor(volume).type(torch.FloatTensor)
-    print(volume.numpy().shape)
     volume_pred = torch.ones((256, 33, 256, 256), dtype=torch.half)
     for i in range(0, len(volume)):
         print(i)

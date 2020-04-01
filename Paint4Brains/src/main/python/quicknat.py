@@ -48,17 +48,25 @@ class QuickNat(nn.Module):
         """
         e1, out1, ind1 = self.encode1.forward(input)
         e2, out2, ind2 = self.encode2.forward(e1)
+        del e1
         e3, out3, ind3 = self.encode3.forward(e2)
+        del e2
         e4, out4, ind4 = self.encode4.forward(e3)
+        del e3
 
         bn = self.bottleneck.forward(e4)
+        del e4
 
         d4 = self.decode4.forward(bn, out4, ind4)
+        del bn, out4, ind4
         d3 = self.decode1.forward(d4, out3, ind3)
+        del d4, out3, ind3
         d2 = self.decode2.forward(d3, out2, ind2)
+        del d3, out2, ind2
         d1 = self.decode3.forward(d2, out1, ind1)
+        del d2, out1, ind1
         prob = self.classifier.forward(d1)
-
+        del d1
         return prob
 
     def enable_test_dropout(self):
@@ -99,21 +107,22 @@ class QuickNat(nn.Module):
         self.eval()
 
         if type(X) is np.ndarray:
-            X = torch.tensor(X, requires_grad=False).type(torch.FloatTensor).cuda(device, non_blocking=True)
+            X = torch.tensor(X, requires_grad=False).type(torch.HalfTensor).cuda(device, non_blocking=True)
         elif type(X) is torch.Tensor and not X.is_cuda:
-            X = X.type(torch.FloatTensor).cuda(device, non_blocking=True)
+            X = X.type(torch.HalfTensor).cuda(device, non_blocking=True)
 
         if enable_dropout:
             self.enable_test_dropout()
 
         with torch.no_grad():
             out = self.forward(X)
-
+        del X
         if out_prob:
             return out
         else:
             max_val, idx = torch.max(out, 1)
+            del max_val, out
             idx = idx.data.cpu().numpy()
             prediction = np.squeeze(idx)
-            del X, out, idx, max_val
+            del idx
             return prediction
