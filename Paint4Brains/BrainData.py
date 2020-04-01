@@ -248,9 +248,13 @@ class BrainData:
         The logic behind this function is writen in the Segmenter file
         :param device: Device to run the neural network on, can be "cpu or "cuda"
         """
-        self.label_filename = segment_default(self.filename, device)
-        self.load_label_data(self.label_filename)
-        self.store_edit()
+        try:
+            self.label_filename = segment_default(self.filename, device)
+        except Exception as e:
+            raise e
+        else:
+            self.load_label_data(self.label_filename)
+            self.store_edit()
 
     @property
     def current_label(self):

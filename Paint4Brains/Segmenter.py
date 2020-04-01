@@ -1,6 +1,6 @@
 import os
 import nibabel as nib
-import nilearn as nl
+from nilearn.image import resample_img
 import numpy as np
 import torch
 import csv
@@ -26,13 +26,11 @@ new_affine = np.array([[-1, 0., 0, 128],
 
 
 def segment_default(brain_file_path, device="cpu"):
-    batch_size = 1
     save_predictions_dir = "outputs"
-    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,
-                         batch_size)
+    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device)
 
 
-def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size):
+def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device):
     print("**Starting evaluation**")
 
     file_path = brain_file_path
@@ -69,14 +67,14 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
 
     with torch.no_grad():
         try:
-            volume_prediction_cor, _, header, original = _segment_vol(file_path, model1, "COR", batch_size,
-                                                                      cuda_available,
-                                                                      device)
-            volume_prediction_axi, _, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
-                                                                      cuda_available,
-                                                                      device)
-            _, volume_prediction = torch.max(volume_prediction_axi + volume_prediction_cor, dim=1)
-            volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
+            volume_prediction_cor, header, original = _segment_vol(file_path, model1, "COR",
+                                                                   cuda_available,
+                                                                   device)
+            volume_prediction_axi, header, original = _segment_vol(file_path, model2, "AXI",
+                                                                   cuda_available,
+                                                                   device)
+            volume_prediction = np.argmax(volume_prediction_axi.cpu().numpy() + volume_prediction_cor.cpu().numpy(),
+                                          axis=1)
             volume_prediction = np.squeeze(volume_prediction)
 
             # volume_prediction, header, original = load_and_preprocess(file_path, "AXI")    # For debugging
@@ -95,42 +93,34 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
             print("**Finished evaluation**")
             return filename
 
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             print("Error in reading the file ...")
-        except Exception as exp:
-            import logging
-            logging.getLogger(__name__).exception(exp)
-            # print("Other kind o error!")
+            raise e
 
 
-def _segment_vol(file_path, model, orientation, batch_size, cuda_available, device):
+def _segment_vol(file_path, model, orientation, cuda_available, device):
     volume, header, original = load_and_preprocess(file_path, orientation=orientation)
 
     volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
     volume = torch.tensor(volume).type(torch.FloatTensor)
-
-    volume_pred = []
-    for i in range(0, len(volume), batch_size):
-        batch_x = volume[i: i + batch_size]
-        if cuda_available:
+    print(volume.numpy().shape)
+    volume_pred = torch.ones((256, 33, 256, 256), dtype=torch.half)
+    for i in range(0, len(volume)):
+        print(i)
+        batch_x = volume[i:i + 1]
+        if cuda_available and device == "cuda":
             batch_x = batch_x.cuda(device)
-        out = model(batch_x)
         # _, batch_output = torch.max(out, dim=1)
-        volume_pred.append(out)
+        volume_pred[i] = model(batch_x)
 
-    volume_pred = torch.cat(volume_pred)
-    _, volume_prediction = torch.max(volume_pred, dim=1)
-
-    volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
-    volume_prediction = np.squeeze(volume_prediction)
+    # with torch.no_grad():
+    # volume_pred = torch.cat(volume_pred)
     if orientation == "COR":
-        volume_prediction = volume_prediction.transpose((1, 2, 0))
         volume_pred = volume_pred.permute((2, 1, 3, 0))
     elif orientation == "AXI":
-        volume_prediction = volume_prediction.transpose((2, 0, 1))
         volume_pred = volume_pred.permute((3, 1, 0, 2))
 
-    return volume_pred, volume_prediction, header, original
+    return volume_pred, header, original
 
 
 def load_and_preprocess(file_path, orientation):
@@ -153,7 +143,7 @@ def transform(image):
     and 1 mm^3 voxel size just like Freesurfer's mri_conform function"""
     shape = (256, 256, 256)
     # creating new image with the new affine and shape
-    new_img = nl.image.resample_img(image, new_affine, target_shape=shape)
+    new_img = resample_img(image, new_affine, target_shape=shape)
     # change orientation
     orientation = nib.orientations.axcodes2ornt(nib.aff2axcodes(new_img.affine))
     target_orientation = np.array([[0., -1.], [2., -1.], [1., 1.]])
@@ -166,7 +156,7 @@ def transform(image):
     magic_number = 0.15 + 0.0002874 * var + 7.9317 / var - 2.986 / np.mean(data)
     scale = (np.max(data) - np.min(data))
     data = np.log2(1 + data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
-    data = np.rint(np.clip(data, 0, 255))   # Ensure values do not go over 255
+    data = np.rint(np.clip(data, 0, 255))  # Ensure values do not go over 255
     # Continues as before from here
     data = data.astype(np.uint8)
 
@@ -177,9 +167,7 @@ def transform(image):
 
 def undo_transform(mask, original):
     shape = original.get_data().shape
-    new_mask = nl.image.resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
+    new_mask = resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
     # Adds a description to the nifti image
     new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
     return new_mask
-
-# segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
