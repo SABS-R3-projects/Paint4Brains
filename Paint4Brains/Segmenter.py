@@ -19,103 +19,106 @@ new_affine = np.array([[-1, 0., 0, 128],
                        [0., 0., 0, 1]])
 
 
-def segment_default(brain_file_path, device="cpu"):
-    current_directory = os.path.dirname(os.path.realpath(__file__))
-    coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
-    axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
-    save_predictions_dir = "outputs"
-    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device)
+class Segmenter:
+    def __init__(self):
+        self.state = "Not running"
+        self.completion = 0
 
+    def segment_default(self, brain_file_path, device="cpu"):
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+        coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
+        axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
+        return self.evaluate2view(coronal_model_path, axial_model_path, brain_file_path, device)
 
-def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device):
-    print("**Starting evaluation**")
+    def evaluate2view(self, coronal_model_path, axial_model_path, brain_file_path, device):
+        self.state = "Starting evaluation"
 
-    file_path = brain_file_path
-    cuda_available = torch.cuda.is_available()
+        file_path = brain_file_path
+        cuda_available = torch.cuda.is_available()
 
-    if type(device) == int:
-        # if CUDA available, follow through, else warn and fallback to CPU
-        if cuda_available:
-            model1 = torch.load(coronal_model_path)
-            model2 = torch.load(axial_model_path)
+        if type(device) == int:
+            # if CUDA available, follow through, else warn and fallback to CPU
+            if cuda_available:
+                model1 = torch.load(coronal_model_path)
+                model2 = torch.load(axial_model_path)
 
-            torch.cuda.empty_cache()
-            model1.cuda(device)
-            model2.cuda(device)
-        else:
-            log.warning(
-                'CUDA is not available, trying with CPU.' + \
-                'This can take much longer (> 1 hour). Cancel and ' + \
-                'investigate if this behavior is not desired.'
+                torch.cuda.empty_cache()
+                model1.cuda(device)
+                model2.cuda(device)
+
+        if (type(device) == str) or not cuda_available:
+            model1 = torch.load(
+                coronal_model_path,
+                map_location=torch.device(device)
+            )
+            model2 = torch.load(
+                axial_model_path,
+                map_location=torch.device(device)
             )
 
-    if (type(device) == str) or not cuda_available:
-        model1 = torch.load(
-            coronal_model_path,
-            map_location=torch.device(device)
-        )
-        model2 = torch.load(
-            axial_model_path,
-            map_location=torch.device(device)
-        )
+        model1.eval()
+        model2.eval()
 
-    model1.eval()
-    model2.eval()
+        with torch.no_grad():
+            try:
+                volume_prediction_cor = self._segment_vol(file_path, model1, "COR",
+                                                     cuda_available,
+                                                     device)
+                volume_prediction_axi = self._segment_vol(file_path, model2, "AXI",
+                                                      cuda_available,
+                                                      device)
+                volume_prediction = np.argmax(volume_prediction_axi + volume_prediction_cor,
+                                              axis=1)
+                volume_prediction = np.squeeze(volume_prediction)
 
-    with torch.no_grad():
-        try:
-            volume_prediction_cor, header, original = _segment_vol(file_path, model1, "COR",
-                                                                   cuda_available,
-                                                                   device)
-            volume_prediction_axi, header, original = _segment_vol(file_path, model2, "AXI",
-                                                                   cuda_available,
-                                                                   device)
-            volume_prediction = np.argmax(volume_prediction_axi + volume_prediction_cor,
-                                          axis=1)
-            volume_prediction = np.squeeze(volume_prediction)
+                # volume_prediction, header, original = load_and_preprocess(file_path, "AXI")    # For debugging
+                # volume_prediction = np.transpose(volume_prediction, (2, 0, 1))   # For debugging
 
-            # volume_prediction, header, original = load_and_preprocess(file_path, "AXI")    # For debugging
-            # volume_prediction = np.transpose(volume_prediction, (2, 0, 1))   # For debugging
+                nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
+                # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
+                to_save = undo_transform(nifti_img, self.original)
+                # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                if ".gz" in file_path:
+                    filename = file_path[:-7] + str('_segmented.nii.gz')
+                else:
+                    filename = file_path[:-4] + str('_segmented.nii.gz')
+                nib.save(to_save, filename)
 
-            nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
-            # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
-            to_save = undo_transform(nifti_img, original)
-            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            if ".gz" in file_path:
-                filename = file_path[:-7] + str('_segmented.nii.gz')
-            else:
-                filename = file_path[:-4] + str('_segmented.nii.gz')
-            nib.save(to_save, filename)
+                self.state = "Finished evaluation"
+                return filename
 
-            print("**Finished evaluation**")
-            return filename
+            except FileNotFoundError as e:
+                print("Error in reading the file ...")
+                raise e
 
-        except FileNotFoundError as e:
-            print("Error in reading the file ...")
-            raise (e)
+    def _segment_vol(self, file_path, model, orientation, cuda_available, device):
+        volume, self.original = load_and_preprocess(file_path, orientation=orientation)
 
+        volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
+        volume = torch.tensor(volume).type(torch.FloatTensor)
 
-def _segment_vol(file_path, model, orientation, cuda_available, device):
-    volume, header, original = load_and_preprocess(file_path, orientation=orientation)
+        if orientation == "COR":
+            self.state = "Segmenting slices along the coronal axis"
+        elif orientation == "AXI":
+            self.state = "Segmenting slices along the axial axis"
 
-    volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
-    volume = torch.tensor(volume).type(torch.FloatTensor)
+        volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
+        for i in range(0, len(volume)):
+            self.completion = i / 256
+            batch_x = volume[i:i + 1]
+            if cuda_available and device == "cuda":
+                batch_x = batch_x.cuda(device)
+            # _, batch_output = torch.max(out, dim=1)
+            volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
 
-    volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
-    for i in range(0, len(volume)):
-        print(i)
-        batch_x = volume[i:i + 1]
-        if cuda_available and device == "cuda":
-            batch_x = batch_x.cuda(device)
-        # _, batch_output = torch.max(out, dim=1)
-        volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
+        if orientation == "COR":
+            volume_pred = volume_pred.transpose((2, 1, 3, 0))
+            self.state = "Finished segmentation along the coronal axis"
+        elif orientation == "AXI":
+            volume_pred = volume_pred.transpose((3, 1, 0, 2))
+            self.state = "Finished segmentation along the axial axis"
 
-    if orientation == "COR":
-        volume_pred = volume_pred.transpose((2, 1, 3, 0))
-    elif orientation == "AXI":
-        volume_pred = volume_pred.transpose((3, 1, 0, 2))
-
-    return volume_pred, header, original
+        return volume_pred
 
 
 def load_and_preprocess(file_path, orientation):
@@ -123,14 +126,13 @@ def load_and_preprocess(file_path, orientation):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~ HERE WE CAN DO PREPROCESSING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     volume_nifty = transform(original)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    header = volume_nifty.header
     volume = volume_nifty.get_fdata()
     volume = (volume - np.min(volume)) / (np.max(volume) - np.min(volume))
     if orientation == "COR":
         volume = volume.transpose((2, 0, 1))
     elif orientation == "AXI":
         volume = volume.transpose((1, 2, 0))
-    return volume, header, original
+    return volume, original
 
 
 def transform(image):
