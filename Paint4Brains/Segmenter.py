@@ -70,7 +70,7 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
             volume_prediction_axi, header, original = _segment_vol(file_path, model2, "AXI",
                                                                    cuda_available,
                                                                    device)
-            volume_prediction = np.argmax(volume_prediction_axi.cpu().numpy() + volume_prediction_cor.cpu().numpy(),
+            volume_prediction = np.argmax(volume_prediction_axi + volume_prediction_cor,
                                           axis=1)
             volume_prediction = np.squeeze(volume_prediction)
 
@@ -100,22 +100,20 @@ def _segment_vol(file_path, model, orientation, cuda_available, device):
 
     volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
     volume = torch.tensor(volume).type(torch.FloatTensor)
-    print(volume.numpy().shape)
-    volume_pred = torch.ones((256, 33, 256, 256), dtype=torch.half)
+
+    volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
     for i in range(0, len(volume)):
         print(i)
         batch_x = volume[i:i + 1]
         if cuda_available and device == "cuda":
             batch_x = batch_x.cuda(device)
         # _, batch_output = torch.max(out, dim=1)
-        volume_pred[i] = model(batch_x)
+        volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
 
-    # with torch.no_grad():
-    # volume_pred = torch.cat(volume_pred)
     if orientation == "COR":
-        volume_pred = volume_pred.permute((2, 1, 3, 0))
+        volume_pred = volume_pred.transpose((2, 1, 3, 0))
     elif orientation == "AXI":
-        volume_pred = volume_pred.permute((3, 1, 0, 2))
+        volume_pred = volume_pred.transpose((3, 1, 0, 2))
 
     return volume_pred, header, original
 
