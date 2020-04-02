@@ -2,6 +2,7 @@ import numpy as np
 from PyQt5.QtWidgets import QMessageBox, QErrorMessage
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtGui import QIcon, QPushButton
+from Paint4Brains.GUI.ProgressBar import ProgressBar
 
 
 class SegmentThread(QThread):
@@ -35,7 +36,7 @@ class SegmentManager(QObject):
         super(SegmentManager, self).__init__(parent=parent)
         self.device = "None"
         self.parent = parent
-        self.start_msg = QMessageBox()
+        self.start_msg = ProgressBar(self.parent.brain.segmenter)
         self.show_initial_message()
 
     def popup_button(self, i):
@@ -65,8 +66,8 @@ class SegmentManager(QObject):
             text = text + "This may take up to 3 hours."
         elif self.device == "cuda":
             text = text + "This should be done in 30 seconds."
-        self.start_msg.setText(text)
-        self.start_msg.exec()
+        self.start_msg.label.setText(text)
+        self.start_msg.setVisible(True)
 
     @pyqtSlot()
     def finished_message(self):
@@ -79,7 +80,9 @@ class SegmentManager(QObject):
 
     @pyqtSlot(str)
     def error_message(self, error):
-        self.start_msg.done(0)
+        self.start_msg.thread.quit()
+        self.start_msg.thread.wait()
+        self.start_msg.setVisible(False)
         msg = QErrorMessage()
         text = "Error while running segmentation."
         msg.setWindowTitle(text)

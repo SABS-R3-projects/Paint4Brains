@@ -104,7 +104,7 @@ class Segmenter:
 
         volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
         for i in range(0, len(volume)):
-            self.completion = i / 256
+            self.completion = self.completion + 50/256
             batch_x = volume[i:i + 1]
             if cuda_available and device == "cuda":
                 batch_x = batch_x.cuda(device)
