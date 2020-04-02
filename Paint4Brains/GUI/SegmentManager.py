@@ -61,11 +61,7 @@ class SegmentManager(QObject):
 
     @pyqtSlot()
     def started_message(self):
-        text = "Segmentation is now running.\n"
-        if self.device == "cpu":
-            text = text + "This may take up to 3 hours."
-        elif self.device == "cuda":
-            text = text + "This should be done in 30 seconds."
+        text = "Segmentation is now running."
         self.start_msg.label.setText(text)
         self.start_msg.setVisible(True)
 
@@ -77,6 +73,7 @@ class SegmentManager(QObject):
         self.parent.main_widget.win.enable_drawing()
         self.parent.main_widget.win.update_colormap()
         self.parent.main_widget.win.view_back_labels()
+        self.start_msg.thread.terminate()
 
     @pyqtSlot(str)
     def error_message(self, error):

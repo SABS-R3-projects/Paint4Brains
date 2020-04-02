@@ -1,9 +1,9 @@
 import numpy as np
 import torch
 import os
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, QPushButton
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
-from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
+from PyQt5.QtGui import QIcon
 from Paint4Brains.BrainData import BrainData
 from Paint4Brains.GUI.MainWidget import MainWidget
 from Paint4Brains.GUI.SegmentManager import SegmentThread, SegmentManager

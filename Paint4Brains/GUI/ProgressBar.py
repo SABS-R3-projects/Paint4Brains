@@ -18,7 +18,6 @@ class ProgressBarThread(QThread):
             time.sleep(3)
 
 
-
 class ProgressBar(QWidget):
     def __init__(self, segmenter):
         super(ProgressBar, self).__init__()
