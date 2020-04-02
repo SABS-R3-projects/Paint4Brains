@@ -80,8 +80,7 @@ class SegmentManager(QObject):
 
     @pyqtSlot(str)
     def error_message(self, error):
-        self.start_msg.thread.quit()
-        self.start_msg.thread.wait()
+        self.start_msg.thread.terminate()
         self.start_msg.setVisible(False)
         msg = QErrorMessage()
         text = "Error while running segmentation."
