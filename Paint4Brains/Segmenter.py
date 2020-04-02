@@ -1,3 +1,19 @@
+"""Paint4Brains Segmented
+
+This file contains the relevant functions for producing the segmented labeled brains, a core function of the Paint4Brains Software.
+The functions and methods in this file were extracted from the several files associated with the original QuickNAT implementation.
+
+Attributes:
+    label_name (list): List of all labels correponding to the different regions that QuickNAT is able to segment.
+    new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmneted files.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.Segmenter import function_name
+        segmented_filename = function_name(parameters)
+"""
+
 import os
 import nibabel as nib
 from nilearn.image import resample_img
@@ -20,14 +36,43 @@ new_affine = np.array([[-1, 0., 0, 128],
 
 
 def segment_default(brain_file_path, device="cpu"):
+    """Function setting up the segmentation operation
+
+    This function loads the current directory, loads the relevant models for the coronal and axial paths, defines the directory for saving the ouput volume and then calls the segmentation function.
+
+    Args:
+        brain_file_path (str): Path to the desired input brain file
+        device (int/str): Device type used for training (int - GPU id, str- CPU)
+
+    Returns:
+        str: filename of the ouputed segmented volume
+    """
+
     current_directory = os.path.dirname(os.path.realpath(__file__))
-    coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
-    axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
+    coronal_model_path = current_directory + \
+        "/saved_models/finetuned_alldata_coronal.pth.tar"
+    axial_model_path = current_directory + \
+        "/saved_models/finetuned_alldata_axial.pth.tar"
     save_predictions_dir = "outputs"
     return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device)
 
 
 def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device):
+    """Run Segmentation operation
+
+    This function runs the segmentation operation.
+    This saves the segmentation files at nifti files in the destination folder.
+
+    Args:
+        coronal_model_path (str): Path to the pre-trained coronal QuickNAT model
+        axial_model_path (str): Path to the pre-trained axial QuickNAT model
+        brain_file_path (str): Path to the desired input brain file
+        prediction_path (str): Path to the desired output segmented file
+        device (int/str): Device type used for training (int - GPU id, str- CPU)
+
+    Returns:
+        str: filename of the ouputed segmented volume
+    """
     print("**Starting evaluation**")
 
     file_path = brain_file_path
@@ -44,8 +89,8 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
             model2.cuda(device)
         else:
             log.warning(
-                'CUDA is not available, trying with CPU.' + \
-                'This can take much longer (> 1 hour). Cancel and ' + \
+                'CUDA is not available, trying with CPU.' +
+                'This can take much longer (> 1 hour). Cancel and ' +
                 'investigate if this behavior is not desired.'
             )
 
@@ -96,7 +141,25 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
 
 
 def _segment_vol(file_path, model, orientation, cuda_available, device):
-    volume, header, original = load_and_preprocess(file_path, orientation=orientation)
+    """Forward Segmentation Pass
+
+    This function loads a volume for segmentation, preprocesses it and then performs a forward pass through the model.
+
+    Args:
+        file_path (str): Path to the desired input brain file
+        model (class): QuickNAT model class
+        orientation (str): String indicating the input orientation of the file
+        cuda_available (bool): Flag indicating if a cuda-enabled GPU is available
+        device (int/str): Device type used for training (int - GPU id, str- CPU)
+
+    Returns:
+        volume_pred (np.array): Array containing the predicted labelled data volume
+        header (class): 'nibabel.nifti1.Nifti1Header' class object, containing volume metadata
+        original (class): 'nibabel.nifti1.Nifti1Image' class object, containing the original input volume
+    """
+
+    volume, header, original = load_and_preprocess(
+        file_path, orientation=orientation)
 
     volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
     volume = torch.tensor(volume).type(torch.FloatTensor)
@@ -119,6 +182,21 @@ def _segment_vol(file_path, model, orientation, cuda_available, device):
 
 
 def load_and_preprocess(file_path, orientation):
+    """Load & Preprocess
+
+    This function is composed of two other function calls: one that calls a function loading the data, and another which preprocesses the data to the required format.
+    # TODO: Need to check if any more proprocessing would be required besides summing the tracts!
+
+    Args:
+        file_paths (list): List containing the input data and target labelled output data
+        orientation (str): String detailing the current view (COR, SAG, AXL)
+
+    Returns:
+        volume (np.array): Array of training image data of data type dtype.
+        header (class): 'nibabel.nifti1.Nifti1Header' class object, containing image metadata
+        original (class): 'nibabel.nifti1.Nifti1Image' class object, containing the original input volume
+    """
+
     original = nib.load(file_path)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~ HERE WE CAN DO PREPROCESSING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     volume_nifty = transform(original)
@@ -134,23 +212,36 @@ def load_and_preprocess(file_path, orientation):
 
 
 def transform(image):
-    """Takes brain extracted image and conforms it to [256, 256, 256]
-    and 1 mm^3 voxel size just like Freesurfer's mri_conform function"""
+    """Conformation Function
+
+    This function takes a brain extracted image and conforms it to [256, 256, 256] and 1 mm^3 voxel size just like Freesurfer's mri_conform function
+
+    Args:
+        image (Nifti1Image): Input image to be conformed.
+
+    Returns:
+        transformed_image (Nifti1Image): Conformed image. 
+
+    """
     shape = (256, 256, 256)
     # creating new image with the new affine and shape
     new_img = resample_img(image, new_affine, target_shape=shape)
     # change orientation
-    orientation = nib.orientations.axcodes2ornt(nib.aff2axcodes(new_img.affine))
+    orientation = nib.orientations.axcodes2ornt(
+        nib.aff2axcodes(new_img.affine))
     target_orientation = np.array([[0., -1.], [2., -1.], [1., 1.]])
-    transformation = nib.orientations.ornt_transform(orientation, target_orientation)
+    transformation = nib.orientations.ornt_transform(
+        orientation, target_orientation)
     data = new_img.get_fdata()
     data = np.rint(data / np.max(data) * 255)
     # Putting log correction back in. But estimating the magic number by fitting to some conformed brains.
     # These values are therefore empirical (potentially need to improve them, but better than hardcoded)
     var = np.var(data)
-    magic_number = 0.15 + 0.0002874 * var + 7.9317 / var - 2.986 / np.mean(data)
+    magic_number = 0.15 + 0.0002874 * var + \
+        7.9317 / var - 2.986 / np.mean(data)
     scale = (np.max(data) - np.min(data))
-    data = np.log2(1 + data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+    data = np.log2(1 + data.astype(float) / scale) * \
+        scale * np.clip(magic_number, 0.9, 1.6)
     data = np.rint(np.clip(data, 0, 255))  # Ensure values do not go over 255
     # Continues as before from here
     data = data.astype(np.uint8)
@@ -161,8 +252,22 @@ def transform(image):
 
 
 def undo_transform(mask, original):
+    """Undo transforation
+
+    Function which reverts a previously performed transformation.
+
+    Args:
+        mask (Nifti1Image): Image to be reverted to a previous state
+        original (Nifti1Image): The original model which serves as a reference
+
+    Returns:
+        new_mask (Nifti1Image): The reverted image
+
+    """
     shape = original.get_data().shape
-    new_mask = resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
+    new_mask = resample_img(mask, original.affine,
+                            target_shape=shape, interpolation='nearest')
     # Adds a description to the nifti image
-    new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
+    new_mask.header["descrip"] = np.array(
+        "Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
     return new_mask

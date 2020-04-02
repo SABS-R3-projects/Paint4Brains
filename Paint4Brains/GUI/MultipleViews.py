@@ -1,3 +1,15 @@
+"""Multi Views Module
+
+This file contains a class requried for creating additional viewing boxes.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.GUI.MultipleViews import MultipleViews
+        buttons = MultipleViews()
+
+"""
+
 from pyqtgraph import ImageItem, GraphicsView, ViewBox
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtGui, QtCore
@@ -5,6 +17,15 @@ from Paint4Brains.GUI.SideView import SideView
 
 
 class MultipleViews(QWidget):
+    """MultipleViews class for Paint4Brains.
+
+    This class is requried for creating additional viewing boxes.
+
+    Args:
+        main_widget (class): MainWidget class
+        parent (class): Base or parent class
+    """
+
     def __init__(self, main_widget, parent=None):
         super(MultipleViews, self).__init__(parent=parent)
         self.main_widget = main_widget
@@ -27,6 +48,13 @@ class MultipleViews(QWidget):
         self.layout.addSpacerItem(space2)
 
     def set_views(self, position):
+        """Function setting views
+
+        This function sets the position for the different views
+
+        Args:
+            position (tuple): Tuple containing the required coordinates.
+        """
         eachdim = [0 < position[i] < self.brain.shape[i] for i in range(3)]
         out_of_box = not (eachdim[0] and eachdim[1] and eachdim[2])
         self.win1.set_i(position, out_of_box)
