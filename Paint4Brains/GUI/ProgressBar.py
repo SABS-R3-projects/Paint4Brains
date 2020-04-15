@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QProgressBar, QLabel, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QProgressBar, QLabel, QWidget, QVBoxLayout, QPushButton
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 import time
 
@@ -19,18 +19,21 @@ class ProgressBarThread(QThread):
 
 
 class ProgressBar(QWidget):
-    def __init__(self, segmenter):
+    def __init__(self, parent):
         super(ProgressBar, self).__init__()
-
-        self.segmenter = segmenter
+        self.parent = parent
+        self.segmenter = parent.brain.segmenter
 
         self.setWindowTitle("Segmentation in Progress")
         self.label = QLabel("Segmentation Started")
+        self.button = QPushButton("Kill")
+        self.button.clicked.connect(self.close)
         self.progress = QProgressBar()
 
         self.layout = QVBoxLayout(self)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.progress)
+        self.layout.addWidget(self.button)
 
         self.thread = ProgressBarThread()
         self.thread.update_values_signal.connect(self.update_bar)
@@ -40,3 +43,10 @@ class ProgressBar(QWidget):
     def update_bar(self):
         self.progress.setValue(self.segmenter.completion)
         self.label.setText(self.segmenter.state)
+
+    def closeEvent(self, a0):
+        self.label.setText("Stopping Segmentation")
+        super(ProgressBar, self).closeEvent(a0)
+        self.segmenter.run = False
+        self.parent.thread.quit()
+        self.parent.thread.wait()

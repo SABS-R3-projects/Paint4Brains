@@ -24,6 +24,8 @@ class Segmenter:
         # Defining Values to be read by GUI:
         self.state = "Not running"
         self.completion = 0
+        self.run = True
+
         self.cuda_available = torch.cuda.is_available()
         # Take input;
         self.device = device
@@ -60,6 +62,11 @@ class Segmenter:
 
         volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
         for i in range(len(volume)):
+            if not self.run:
+                self.state = "Not running"
+                self.completion = 0
+                raise(Exception("Segmentation has been killed"))
+                break
             self.completion = self.completion + 50 / 256
             batch_x = volume[i:i + 1]
             if self.cuda_available and self.device == "cuda":

@@ -251,6 +251,7 @@ class BrainData:
         """
         try:
             self.segmenter.device = device
+            self.segmenter.run = True
             self.label_filename = self.segmenter.segment(self.filename)
         except Exception as e:
             raise e

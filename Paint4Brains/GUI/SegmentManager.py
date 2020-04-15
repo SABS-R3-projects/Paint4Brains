@@ -13,12 +13,11 @@ class SegmentThread(QThread):
     end_signal = pyqtSignal()
     error_signal = pyqtSignal(str)
 
-    def __init__(self, window, device):
+    def __init__(self, brain, device):
         super(SegmentThread, self).__init__()
         # Storing constructor arguments to re-use for processing
         self.device = device
-        self.window = window
-        self.brain = self.window.brain
+        self.brain = brain
 
     def run(self):
         self.start_signal.emit()
@@ -36,7 +35,9 @@ class SegmentManager(QObject):
         super(SegmentManager, self).__init__(parent=parent)
         self.device = "None"
         self.parent = parent
-        self.start_msg = ProgressBar(self.parent.brain.segmenter)
+        self.brain = self.parent.brain
+        self.start_msg = ProgressBar(self)
+        self.thread = SegmentThread(self.brain, self.device)
         self.show_initial_message()
 
     def popup_button(self, i):
@@ -53,10 +54,10 @@ class SegmentManager(QObject):
             device = self.device
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
         if device != "None":
-            self.thread = SegmentThread(self.parent.main_widget.win, device)
             self.thread.start_signal.connect(self.started_message)
             self.thread.end_signal.connect(self.finished_message)
             self.thread.error_signal.connect(self.error_message)
+            self.thread.device = device
             self.thread.start()
 
     @pyqtSlot()
