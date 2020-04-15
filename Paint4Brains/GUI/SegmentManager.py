@@ -2,6 +2,7 @@ import numpy as np
 from PyQt5.QtWidgets import QMessageBox, QErrorMessage
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
 from PyQt5.QtGui import QIcon, QPushButton
+from Paint4Brains.GUI.ProgressBar import ProgressBar
 
 
 class SegmentThread(QThread):
@@ -12,12 +13,11 @@ class SegmentThread(QThread):
     end_signal = pyqtSignal()
     error_signal = pyqtSignal(str)
 
-    def __init__(self, window, device):
+    def __init__(self, brain, device):
         super(SegmentThread, self).__init__()
         # Storing constructor arguments to re-use for processing
         self.device = device
-        self.window = window
-        self.brain = self.window.brain
+        self.brain = brain
 
     def run(self):
         self.start_signal.emit()
@@ -35,7 +35,9 @@ class SegmentManager(QObject):
         super(SegmentManager, self).__init__(parent=parent)
         self.device = "None"
         self.parent = parent
-        self.start_msg = QMessageBox()
+        self.brain = self.parent.brain
+        self.start_msg = ProgressBar(self)
+        self.thread = SegmentThread(self.brain, self.device)
         self.show_initial_message()
 
     def popup_button(self, i):
@@ -52,21 +54,17 @@ class SegmentManager(QObject):
             device = self.device
         # Running segmentation in a separate thread, to prevent the GUI from crashing/freezing
         if device != "None":
-            self.thread = SegmentThread(self.parent.main_widget.win, device)
             self.thread.start_signal.connect(self.started_message)
             self.thread.end_signal.connect(self.finished_message)
             self.thread.error_signal.connect(self.error_message)
+            self.thread.device = device
             self.thread.start()
 
     @pyqtSlot()
     def started_message(self):
-        text = "Segmentation is now running.\n"
-        if self.device == "cpu":
-            text = text + "This may take up to 3 hours."
-        elif self.device == "cuda":
-            text = text + "This should be done in 30 seconds."
-        self.start_msg.setText(text)
-        self.start_msg.exec()
+        text = "Segmentation is now running."
+        self.start_msg.label.setText(text)
+        self.start_msg.setVisible(True)
 
     @pyqtSlot()
     def finished_message(self):
@@ -76,10 +74,12 @@ class SegmentManager(QObject):
         self.parent.main_widget.win.enable_drawing()
         self.parent.main_widget.win.update_colormap()
         self.parent.main_widget.win.view_back_labels()
+        self.start_msg.thread.terminate()
 
     @pyqtSlot(str)
     def error_message(self, error):
-        self.start_msg.done(0)
+        self.start_msg.thread.terminate()
+        self.start_msg.close()
         msg = QErrorMessage()
         text = "Error while running segmentation."
         msg.setWindowTitle(text)

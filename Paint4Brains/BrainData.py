@@ -1,7 +1,7 @@
 import numpy as np
 import nibabel as nib
 from Extractor import Extractor
-from Segmenter import segment_default
+from Segmenter import Segmenter
 
 
 class BrainData:
@@ -47,6 +47,7 @@ class BrainData:
         self.probability_mask = np.zeros(self.shape)
         self.full_head = self.data.copy()
         self.only_brain = []
+        self.segmenter = Segmenter()
 
         self.edit_history = [[self.label_data.copy(), self.other_labels_data.copy()]]
         self.edits_recorded = 10
@@ -249,7 +250,9 @@ class BrainData:
         :param device: Device to run the neural network on, can be "cpu or "cuda"
         """
         try:
-            self.label_filename = segment_default(self.filename, device)
+            self.segmenter.device = device
+            self.segmenter.run = True
+            self.label_filename = self.segmenter.segment(self.filename)
         except Exception as e:
             raise e
         else:
