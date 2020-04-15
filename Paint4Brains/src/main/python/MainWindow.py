@@ -1,12 +1,12 @@
 import numpy as np
 import torch
 import os
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, QPushButton
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
-from PyQt5.QtGui import QIcon, QFileDialog, QPushButton
+from PyQt5.QtGui import QIcon
 from BrainData import BrainData
 from MainWidget import MainWidget
-from SegmentManager import SegmentManager
+from SegmentManager import SegmentManager, SegmentThread
 from OptionalSliders import OptionalSliders
 from MultipleViews import MultipleViews
 from NormalizationWidget import NormalizationWidget
@@ -169,22 +169,22 @@ class MainWindow(QMainWindow):
         self.tools.addAction(segmentAction)
 
         # Editing tools as a toolbar
-        pen = QAction(QIcon(app.get_resource("images/pen.png")), "Pen", self)
+        pen = QAction(QIcon(app.get_resource("images/pen.png")), "Pencil: Draw Pixels", self)
         pen.triggered.connect(self.main_widget.win.edit_button1)
 
-        rubber = QAction(QIcon(app.get_resource("images/eraser.png")), "Rubber", self)
+        rubber = QAction(QIcon(app.get_resource("images/eraser.png")), "Eraser: Remove Drawn Pixels", self)
         rubber.triggered.connect(self.main_widget.win.edit_button2)
 
-        cross = QAction(QIcon(app.get_resource("images/cross.png")), "Cross", self)
+        cross = QAction(QIcon(app.get_resource("images/cross.png")), "Brush: Draw Multiple Pixels", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
-        left = QAction(QIcon(app.get_resource("images/left.png")), "Previous Label", self)
+        left = QAction(QIcon(app.get_resource("images/left.png")), "Previous Label: Go To Previously Selected Label", self)
         left.triggered.connect(self.main_widget.win.previous_label)
 
-        label = QAction(QIcon(app.get_resource("images/label.png")), "Select Label", self)
+        label = QAction(QIcon(app.get_resource("images/label.png")), "Select Label: Select Individual Label", self)
         label.triggered.connect(self.main_widget.win.select_label)
 
-        right = QAction(QIcon(app.get_resource("images/right.png")), "Next Label", self)
+        right = QAction(QIcon(app.get_resource("images/right.png")), "Next Label: Go To The Next Label", self)
         right.triggered.connect(self.main_widget.win.next_label)
 
         self.edit_toolbar = self.addToolBar("Editting Tools")

@@ -1,7 +1,7 @@
 import numpy as np
 import nibabel as nib
 from Extractor import Extractor
-from Segmenter import segment_default
+from Segmenter import Segmenter
 
 
 class BrainData:
@@ -47,9 +47,10 @@ class BrainData:
         self.probability_mask = np.zeros(self.shape)
         self.full_head = self.data.copy()
         self.only_brain = []
+        self.segmenter = Segmenter()
 
         self.edit_history = [[self.label_data.copy(), self.other_labels_data.copy()]]
-        self.edits_recorded = 20
+        self.edits_recorded = 10
         self.current_edit = 1
 
     def get_data_slice(self, i):
@@ -248,9 +249,15 @@ class BrainData:
         The logic behind this function is writen in the Segmenter file
         :param device: Device to run the neural network on, can be "cpu or "cuda"
         """
-        self.label_filename = segment_default(self.filename, device)
-        self.load_label_data(self.label_filename)
-        self.store_edit()
+        try:
+            self.segmenter.device = device
+            self.segmenter.run = True
+            self.label_filename = self.segmenter.segment(self.filename)
+        except Exception as e:
+            raise e
+        else:
+            self.load_label_data(self.label_filename)
+            self.store_edit()
 
     @property
     def current_label(self):

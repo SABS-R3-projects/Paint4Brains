@@ -3,5 +3,5 @@
     "author": "Brennan; Pavan; Itai; Andrei",
     "main_module": "src/main/python/main.py",
     "hidden_imports": ["sklearn", "sklearn.neighbors.typedefs","sklearn.utils._cython_blas"],
-    "version": "0.0.3"
+    "version": "0.0.4"
 }
