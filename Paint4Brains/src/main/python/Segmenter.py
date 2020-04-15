@@ -76,7 +76,7 @@ class Segmenter:
             self.completion = self.completion + 50 / 256
             batch_x = volume[i:i + 1]
             if self.cuda_available and self.device == "cuda":
-                batch_x = batch_x.cuda(device)
+                batch_x = batch_x.cuda(self.device)
             volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
 
         if orientation == "COR":
