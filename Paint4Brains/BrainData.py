@@ -250,7 +250,8 @@ class BrainData:
         :param device: Device to run the neural network on, can be "cpu or "cuda"
         """
         try:
-            self.label_filename = self.segmenter.segment_default(self.filename, device)
+            self.segmenter.device = device
+            self.label_filename = self.segmenter.segment(self.filename)
         except Exception as e:
             raise e
         else:
