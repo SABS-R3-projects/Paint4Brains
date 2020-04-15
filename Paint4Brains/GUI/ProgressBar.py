@@ -45,8 +45,7 @@ class ProgressBar(QWidget):
         self.label.setText(self.segmenter.state)
 
     def closeEvent(self, a0):
-        self.label.setText("Stopping Segmentation")
-        super(ProgressBar, self).closeEvent(a0)
         self.segmenter.run = False
         self.parent.thread.quit()
         self.parent.thread.wait()
+        super(ProgressBar, self).closeEvent(a0)
