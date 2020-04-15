@@ -74,7 +74,7 @@ class SegmentManager(QObject):
         self.parent.main_widget.win.enable_drawing()
         self.parent.main_widget.win.update_colormap()
         self.parent.main_widget.win.view_back_labels()
-        self.start_msg.thread.terminate()
+        self.start_msg.close()
 
     @pyqtSlot(str)
     def error_message(self, error):
