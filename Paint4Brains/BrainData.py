@@ -15,7 +15,7 @@ Usage:
 import numpy as np
 import nibabel as nib
 from deepbrain import Extractor
-from Paint4Brains.Segmenter import segment_default
+from Paint4Brains.Segmenter import Segmenter
 
 
 class BrainData:
@@ -70,6 +70,7 @@ class BrainData:
         self.probability_mask = np.zeros(self.shape)
         self.full_head = self.data.copy()
         self.only_brain = []
+        self.segmenter = Segmenter()
 
         self.edit_history = [
             [self.label_data.copy(), self.other_labels_data.copy()]]
@@ -332,7 +333,9 @@ class BrainData:
             device (str/int): Device to run the neural network on, can be "cpu" (str) or cuda-enabled GPU, either integrated (int - 0) or external (int - 1)
         """
         try:
-            self.label_filename = segment_default(self.filename, device)
+            self.segmenter.device = device
+            self.segmenter.run = True
+            self.label_filename = self.segmenter.segment(self.filename)
         except Exception as e:
             raise e
         else:

@@ -63,18 +63,18 @@ class Segmenter:
         # We assume required files are in a fixed directory with respect to this file
         current_directory = os.path.dirname(os.path.realpath(__file__))
         if coronal_model_path is None:
-            self.coronal_model_path = current_directory + \
-                "/saved_models/finetuned_alldata_coronal.pth.tar"
+
+            self.coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
         else:
             self.coronal_model_path = coronal_model_path
         if axial_model_path is None:
-            self.axial_model_path = current_directory + \
-                "/saved_models/finetuned_alldata_axial.pth.tar"
+            self.axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
         else:
             self.axial_model_path = axial_model_path
         self.original = None
 
     def _segment_over_one_axis(self, file_path, orientation):
+
         """Forward Segmentation Pass
 
         This function segments given volume along one orientation.
@@ -94,16 +94,19 @@ class Segmenter:
         volume = load_and_preprocess(file_path, orientation=orientation)
         volume = volume if len(
             volume.shape) == 4 else volume[:, np.newaxis, :, :]
+
         volume = torch.tensor(volume).type(torch.FloatTensor)
 
         if orientation == "COR":
             self.state = "Segmenting slices along the coronal axis"
+
             model = torch.load(self.coronal_model_path,
                                map_location=torch.device(self.device))
         elif orientation == "AXI":
             self.state = "Segmenting slices along the axial axis"
             model = torch.load(self.axial_model_path,
                                map_location=torch.device(self.device))
+
         model.eval()
 
         volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
@@ -205,6 +208,7 @@ def transform(image):
         transformed_image (Nifti1Image): Conformed image. 
 
     """
+    
     shape = (256, 256, 256)
     # creating new image with the new affine and shape
     new_img = resample_img(image, new_affine, target_shape=shape)
@@ -250,6 +254,8 @@ def undo_transform(mask, original):
     new_mask = resample_img(mask, original.affine,
                             target_shape=shape, interpolation='nearest')
     # Adds a description to the nifti image
+
     new_mask.header["descrip"] = np.array(
         "Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
+
     return new_mask
