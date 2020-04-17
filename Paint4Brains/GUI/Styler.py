@@ -1,8 +1,25 @@
+"""Styler module
+
+This file contains a collection of functions which help set the stype of the GUI.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.GUI.Styler import palette, style
+        app.setPalette(palette())
+        app.setStyleSheet(style())
+
+"""
+
 from PyQt5.QtGui import QPalette, QColor
 import os
 
 
 def palette():
+    """Colour pallete
+
+    Function setting the colour pallete for the GUI
+    """
     darkPalette = QPalette()
 
     # base
@@ -41,6 +58,10 @@ def palette():
 
 
 def style():
+    """GUI Style
+
+    Function setting the style for the GUI, by reading the dedicated stylesheet.
+    """
     current_directory = os.path.dirname(os.path.realpath(__file__))
     stylesheet = open(current_directory + "/StyleSheet.qss", "r").read()
     return stylesheet
