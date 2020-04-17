@@ -1,17 +1,18 @@
-"""Paint4Brains Segmented
+"""Paint4Brains Segmenter
 
 This file contains the relevant functions for producing the segmented labeled brains, a core function of the Paint4Brains Software.
 The functions and methods in this file were extracted from the several files associated with the original QuickNAT implementation.
 
 Attributes:
-    label_name (list): List of all labels correponding to the different regions that QuickNAT is able to segment.
+    label_names (list): List of all labels correponding to the different regions that QuickNAT is able to segment.
     new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmneted files.
 
 Usage:
     To use this module, import it and instantiate is as you wish:
 
-        from Paint4Brains.Segmenter import function_name
-        segmented_filename = function_name(parameters)
+        from Paint4Brains.Segmenter import Segmenter
+        segmentation_operation = Segmenter(parameters)
+        segmentation_operation.segment(file_path)
 """
 
 import os
@@ -35,150 +36,134 @@ new_affine = np.array([[-1, 0., 0, 128],
                        [0., 0., 0, 1]])
 
 
-def segment_default(brain_file_path, device="cpu"):
-    """Function setting up the segmentation operation
+class Segmenter:
+    """Segmenter class for Paint4Brains.
 
-    This function loads the current directory, loads the relevant models for the coronal and axial paths, defines the directory for saving the ouput volume and then calls the segmentation function.
-
-    Args:
-        brain_file_path (str): Path to the desired input brain file
-        device (int/str): Device type used for training (int - GPU id, str- CPU)
-
-    Returns:
-        str: filename of the ouputed segmented volume
-    """
-
-    current_directory = os.path.dirname(os.path.realpath(__file__))
-    coronal_model_path = current_directory + \
-        "/saved_models/finetuned_alldata_coronal.pth.tar"
-    axial_model_path = current_directory + \
-        "/saved_models/finetuned_alldata_axial.pth.tar"
-    save_predictions_dir = "outputs"
-    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device)
-
-
-def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device):
-    """Run Segmentation operation
-
-    This function runs the segmentation operation.
-    This saves the segmentation files at nifti files in the destination folder.
+    This class contains the main segmentation functions required for performing the segmentation operation.
 
     Args:
         coronal_model_path (str): Path to the pre-trained coronal QuickNAT model
         axial_model_path (str): Path to the pre-trained axial QuickNAT model
-        brain_file_path (str): Path to the desired input brain file
-        prediction_path (str): Path to the desired output segmented file
         device (int/str): Device type used for training (int - GPU id, str- CPU)
 
     Returns:
-        str: filename of the ouputed segmented volume
+        filename (str): The file name of the outputed segmentation file.
+
     """
-    print("**Starting evaluation**")
 
-    file_path = brain_file_path
-    cuda_available = torch.cuda.is_available()
+    def __init__(self, device="cpu", coronal_model_path=None, axial_model_path=None):
+        # Defining Values to be read by GUI:
+        self.state = "Not running"
+        self.completion = 0
+        self.run = True
 
-    if type(device) == int:
-        # if CUDA available, follow through, else warn and fallback to CPU
-        if cuda_available:
-            model1 = torch.load(coronal_model_path)
-            model2 = torch.load(axial_model_path)
-
-            torch.cuda.empty_cache()
-            model1.cuda(device)
-            model2.cuda(device)
+        self.cuda_available = torch.cuda.is_available()
+        # Take input;
+        self.device = device
+        # We assume required files are in a fixed directory with respect to this file
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+        if coronal_model_path is None:
+            self.coronal_model_path = current_directory + \
+                "/saved_models/finetuned_alldata_coronal.pth.tar"
         else:
-            log.warning(
-                'CUDA is not available, trying with CPU.' +
-                'This can take much longer (> 1 hour). Cancel and ' +
-                'investigate if this behavior is not desired.'
-            )
+            self.coronal_model_path = coronal_model_path
+        if axial_model_path is None:
+            self.axial_model_path = current_directory + \
+                "/saved_models/finetuned_alldata_axial.pth.tar"
+        else:
+            self.axial_model_path = axial_model_path
+        self.original = None
 
-    if (type(device) == str) or not cuda_available:
-        model1 = torch.load(
-            coronal_model_path,
-            map_location=torch.device(device)
-        )
-        model2 = torch.load(
-            axial_model_path,
-            map_location=torch.device(device)
-        )
+    def _segment_over_one_axis(self, file_path, orientation):
+        """Forward Segmentation Pass
 
-    model1.eval()
-    model2.eval()
+        This function segments given volume along one orientation.
 
-    with torch.no_grad():
-        try:
-            volume_prediction_cor, header, original = _segment_vol(file_path, model1, "COR",
-                                                                   cuda_available,
-                                                                   device)
-            volume_prediction_axi, header, original = _segment_vol(file_path, model2, "AXI",
-                                                                   cuda_available,
-                                                                   device)
-            volume_prediction = np.argmax(volume_prediction_axi + volume_prediction_cor,
-                                          axis=1)
+        Given the file_path and orientation it returns the probability of each voxel being in one of the 33 possible classes.
+
+        This function loads a volume for segmentation, preprocesses it and then performs a forward pass through the model.
+
+        Args:
+            file_path (str): Path to the desired input brain file
+            orientation (str): String indicating the input orientation of the file
+
+        Returns:
+            volume_pred (np.array): Array containing the predicted labelled data volume
+        """
+
+        volume = load_and_preprocess(file_path, orientation=orientation)
+        volume = volume if len(
+            volume.shape) == 4 else volume[:, np.newaxis, :, :]
+        volume = torch.tensor(volume).type(torch.FloatTensor)
+
+        if orientation == "COR":
+            self.state = "Segmenting slices along the coronal axis"
+            model = torch.load(self.coronal_model_path,
+                               map_location=torch.device(self.device))
+        elif orientation == "AXI":
+            self.state = "Segmenting slices along the axial axis"
+            model = torch.load(self.axial_model_path,
+                               map_location=torch.device(self.device))
+        model.eval()
+
+        volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
+        for i in range(len(volume)):
+            if not self.run:
+                self.state = "Not running"
+                self.completion = 0
+                raise(Exception("Segmentation has been killed"))
+                break
+            self.completion = self.completion + 50 / 256
+            batch_x = volume[i:i + 1]
+            if self.cuda_available and self.device == "cuda":
+                batch_x = batch_x.cuda(self.device)
+            volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
+
+        if orientation == "COR":
+            volume_pred = volume_pred.transpose((2, 1, 3, 0))
+            self.state = "Finished segmentation along the coronal axis"
+        elif orientation == "AXI":
+            volume_pred = volume_pred.transpose((3, 1, 0, 2))
+            self.state = "Finished segmentation along the axial axis"
+
+        return volume_pred
+
+    def segment(self, file_path):
+        """Main Segmentation Operation
+
+        This function combines the segmentation from both axis to obtain the final result
+
+        Args:
+            file_path (str): Path to the desired input brain file
+
+        Returns:
+            filename (str): The file name of the outputed segmentation file.
+        """
+
+        self.state = "Starting evaluation"
+        self.original = nib.load(file_path)
+
+        with torch.no_grad():
+            volume_prediction_cor = self._segment_over_one_axis(
+                file_path, orientation="COR")
+            volume_prediction_axi = self._segment_over_one_axis(
+                file_path, orientation="AXI")
+            # Add the probabilities from both segmentations and take the maximum
+            volume_prediction = np.argmax(
+                volume_prediction_axi + volume_prediction_cor, axis=1)
             volume_prediction = np.squeeze(volume_prediction)
 
-            # volume_prediction, header, original = load_and_preprocess(file_path, "AXI")    # For debugging
-            # volume_prediction = np.transpose(volume_prediction, (2, 0, 1))   # For debugging
-
             nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
-            # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
-            to_save = undo_transform(nifti_img, original)
-            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            to_save = undo_transform(nifti_img, self.original)
+
             if ".gz" in file_path:
                 filename = file_path[:-7] + str('_segmented.nii.gz')
             else:
                 filename = file_path[:-4] + str('_segmented.nii.gz')
             nib.save(to_save, filename)
 
-            print("**Finished evaluation**")
+            self.state = "Finished evaluation"
             return filename
-
-        except FileNotFoundError as e:
-            print("Error in reading the file ...")
-            raise (e)
-
-
-def _segment_vol(file_path, model, orientation, cuda_available, device):
-    """Forward Segmentation Pass
-
-    This function loads a volume for segmentation, preprocesses it and then performs a forward pass through the model.
-
-    Args:
-        file_path (str): Path to the desired input brain file
-        model (class): QuickNAT model class
-        orientation (str): String indicating the input orientation of the file
-        cuda_available (bool): Flag indicating if a cuda-enabled GPU is available
-        device (int/str): Device type used for training (int - GPU id, str- CPU)
-
-    Returns:
-        volume_pred (np.array): Array containing the predicted labelled data volume
-        header (class): 'nibabel.nifti1.Nifti1Header' class object, containing volume metadata
-        original (class): 'nibabel.nifti1.Nifti1Image' class object, containing the original input volume
-    """
-
-    volume, header, original = load_and_preprocess(
-        file_path, orientation=orientation)
-
-    volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
-    volume = torch.tensor(volume).type(torch.FloatTensor)
-
-    volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
-    for i in range(0, len(volume)):
-        print(i)
-        batch_x = volume[i:i + 1]
-        if cuda_available and device == "cuda":
-            batch_x = batch_x.cuda(device)
-        # _, batch_output = torch.max(out, dim=1)
-        volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
-
-    if orientation == "COR":
-        volume_pred = volume_pred.transpose((2, 1, 3, 0))
-    elif orientation == "AXI":
-        volume_pred = volume_pred.transpose((3, 1, 0, 2))
-
-    return volume_pred, header, original
 
 
 def load_and_preprocess(file_path, orientation):
@@ -198,17 +183,14 @@ def load_and_preprocess(file_path, orientation):
     """
 
     original = nib.load(file_path)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~ HERE WE CAN DO PREPROCESSING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     volume_nifty = transform(original)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    header = volume_nifty.header
     volume = volume_nifty.get_fdata()
     volume = (volume - np.min(volume)) / (np.max(volume) - np.min(volume))
     if orientation == "COR":
         volume = volume.transpose((2, 0, 1))
     elif orientation == "AXI":
         volume = volume.transpose((1, 2, 0))
-    return volume, header, original
+    return volume
 
 
 def transform(image):
