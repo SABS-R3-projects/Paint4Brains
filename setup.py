@@ -32,7 +32,6 @@ setup(
         'statsmodels>=0.10.1',
         'tornado>=6.0.3',
         'tensorflow==1.15.2',
-        'deepbrain==0.1',
         'torch==1.2.0',
         'torchvision==0.4.0',
         'h5py>=2.8.0',
