@@ -219,7 +219,7 @@ class ImageViewer(GraphicsView):
 
     def new_brush(self):
         self.enable_drawing()
-        cent = int(len(self.bonus.pen)/2)
+        cent = len(self.bonus.pen)//2
         self.over_img.setDrawKernel(
             self.bonus.pen, mask=self.bonus.pen, center=(cent, cent), mode='add')
 

@@ -6,8 +6,6 @@ import pyqtgraph as pg
 import sys
 
 dot = np.array([[1]]).astype(np.int8)
-rubber = np.array([[-1]]).astype(np.int8)
-
 
 class BonusBrush(QWidget):
     def __init__(self):
@@ -15,12 +13,13 @@ class BonusBrush(QWidget):
         self.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Minimum)
         self.layout = QVBoxLayout(self)
 
+        self.kernel = dot
         self.g_item = pg.GraphicsView()
         self.vbox = pg.ViewBox()
         self.pen = np.zeros((10, 10)).astype(np.int8)
         self.img = pg.ImageItem(self.pen, autoDownSmaple=False)
         self.img.setLevels([-1, 1])
-        self.img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
+        self.img.setDrawKernel(self.kernel, mask=self.kernel, center=(0, 0), mode='add')
 
         self.vbox.addItem(self.img)
         self.vbox.setMouseEnabled(x=False, y=False)
@@ -48,16 +47,20 @@ class BonusBrush(QWidget):
     def new_matrix_size(self):
         txt = self.pen_size.text()
         val = 1 if (len(txt) == 0) or (int(txt) == 0) else int(txt)
-        self.pen.resize((val, val), refcheck= False)
+        self.pen.resize((val, val), refcheck=False)
         self.img.setImage(self.pen)
         self.img.setLevels([-1, 1])
 
     def disappear(self):
         self.setVisible(False)
         self.pen = np.clip(self.pen, -1, 1)
+        self.img.setImage(self.pen)
+        self.img.setLevels([-1, 1])
 
-    def appear(self):
-        self.setVisible(True)
+    def change_kernel(self, new_kernel):
+        self.kernel = new_kernel
+        center = len(self.kernel)//2
+        self.img.setDrawKernel(self.kernel, mask=self.kernel, center=(center, center), mode='add')
 
 
 
