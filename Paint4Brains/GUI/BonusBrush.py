@@ -9,17 +9,17 @@ dot = np.array([[1]]).astype(np.int8)
 rubber = np.array([[-1]]).astype(np.int8)
 
 
-class PickBrush(QWidget):
+class BonusBrush(QWidget):
     def __init__(self):
-        super(PickBrush, self).__init__()
+        super(BonusBrush, self).__init__()
         self.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Minimum)
         self.layout = QVBoxLayout(self)
 
         self.g_item = pg.GraphicsView()
         self.vbox = pg.ViewBox()
-        self.pen = np.zeros((20, 20))
+        self.pen = np.zeros((10, 10)).astype(np.int8)
         self.img = pg.ImageItem(self.pen, autoDownSmaple=False)
-        self.img.setLevels([0, 2])
+        self.img.setLevels([-1, 1])
         self.img.setDrawKernel(dot, mask=dot, center=(0, 0), mode='add')
 
         self.vbox.addItem(self.img)
@@ -50,10 +50,11 @@ class PickBrush(QWidget):
         val = 1 if (len(txt) == 0) or (int(txt) == 0) else int(txt)
         self.pen.resize((val, val), refcheck= False)
         self.img.setImage(self.pen)
-        self.img.setLevels([0, 2])
+        self.img.setLevels([-1, 1])
 
     def disappear(self):
         self.setVisible(False)
+        self.pen = np.clip(self.pen, -1, 1)
 
     def appear(self):
         self.setVisible(True)
@@ -65,6 +66,6 @@ class PickBrush(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = PickBrush()
+    window = BonusBrush()
     window.show()
     app.exec()

@@ -17,6 +17,7 @@ Usage:
 
 from Paint4Brains.GUI.SelectLabel import SelectLabel
 from Paint4Brains.GUI.ModViewBox import ModViewBox
+from Paint4Brains.GUI.BonusBrush import BonusBrush
 from Paint4Brains.BrainData import BrainData
 from pyqtgraph import ImageItem, GraphicsView
 from PyQt5.QtCore import Qt, pyqtSignal
@@ -124,6 +125,8 @@ class ImageViewer(GraphicsView):
             self.refresh_image()
 
         self.dropbox = SelectLabel(self)
+        self.bonus = BonusBrush()
+        self.bonus.buttn.clicked.connect(self.new_brush)
 
     def refresh_image(self):
         """Image Refresher
@@ -209,6 +212,16 @@ class ImageViewer(GraphicsView):
         self.view.drawing = True
         self.over_img.setDrawKernel(
             cross, mask=cross, center=(1, 1), mode='add')
+
+    def bonus_brush(self):
+        self.enable_drawing()
+        self.bonus.setVisible(True)
+
+    def new_brush(self):
+        self.enable_drawing()
+        cent = int(len(self.bonus.pen)/2)
+        self.over_img.setDrawKernel(
+            self.bonus.pen, mask=self.bonus.pen, center=(cent, cent), mode='add')
 
     def select_label(self):
         """Select label of interest

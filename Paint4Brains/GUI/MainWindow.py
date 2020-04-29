@@ -199,6 +199,10 @@ class MainWindow(QMainWindow):
                         "Brush: Draw Multiple Pixels", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
+        bonus = QAction(QIcon(current_directory + "/images/cross.png"),
+                        "Brush: Draw Multiple Pixels", self)
+        bonus.triggered.connect(self.main_widget.win.bonus_brush)
+
         left = QAction(QIcon(current_directory + "/images/left.png"),
                        "Previous Label: Go To Previously Selected Label", self)
         left.triggered.connect(self.main_widget.win.previous_label)
@@ -217,6 +221,7 @@ class MainWindow(QMainWindow):
         self.edit_toolbar.addAction(pen)
         self.edit_toolbar.addAction(cross)
         self.edit_toolbar.addAction(rubber)
+        self.edit_toolbar.addAction(bonus)
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(left)
