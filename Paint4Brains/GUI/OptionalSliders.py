@@ -13,7 +13,7 @@ class OptionalSliders(QWidget):
         # Building the layout:
         self.layout = QVBoxLayout(self)
 
-        self.label1 = QLabel("Background Label Transparency")
+        self.label1 = QLabel("Label Transparency")
         self.layout.addWidget(self.label1)
 
         self.first_slider = QSlider()
@@ -37,7 +37,7 @@ class OptionalSliders(QWidget):
 
     def transparency_set(self):
         self.win.mid_img.setOpacity(self.first_slider.value()/100)
-        self.win.see_all_labels = True
+        self.win.over_img.setOpacity(self.first_slider.value() / 100)
         self.win.refresh_image()
 
     def extraction_probability(self):
