@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
 import numpy as np
 import pyqtgraph as pg
 import sys
@@ -31,22 +32,31 @@ class PickBrush(QWidget):
         self.label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.hlayout.addWidget(self.label)
         self.pen_size = QLineEdit("20")
+        int_ensurer = QtGui.QIntValidator(1, 500)
+        self.pen_size.setValidator(int_ensurer)
         self.pen_size.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.pen_size.textChanged.connect(self.new_matrix_size)
         self.hlayout.addWidget(self.pen_size)
 
         self.buttn = QPushButton("DONE")
-        self.buttn.clicked.connect(self.close)
+        self.buttn.clicked.connect(self.disappear)
         self.buttn.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
         self.hlayout.addWidget(self.buttn)
 
         self.layout.addLayout(self.hlayout)
 
     def new_matrix_size(self):
-        val = int(self.pen_size.text())
-        self.pen = np.zeros((val, val))
+        txt = self.pen_size.text()
+        val = 1 if (len(txt) == 0) or (int(txt) == 0) else int(txt)
+        self.pen.resize((val, val), refcheck= False)
         self.img.setImage(self.pen)
         self.img.setLevels([0, 2])
+
+    def disappear(self):
+        self.setVisible(False)
+
+    def appear(self):
+        self.setVisible(True)
 
 
 
