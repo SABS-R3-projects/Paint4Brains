@@ -1,3 +1,15 @@
+"""GUI Main Window
+
+This file contains all the relevant functions for defining and operating Paint4Brains' main window.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.GUI.MainWindow import MainWindow
+        window = MainWindow(parameters)
+
+"""
+
 import numpy as np
 import torch
 import os
@@ -13,16 +25,21 @@ from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
 
 
 class MainWindow(QMainWindow):
-    """MainWindow class.
-    Wraps MainWidget to allow a Menu
+    """MainWindow class for Paint4Brains.
+
+    This class contains the implementation of a series of functions required for the Main Windows of the Paint4Brains GUI.
+    Wraps MainWidget to allow a Menu.
+    To operate, the constructor class calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
+    Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
+    Another thing it does is load the nib files from a string containing the path.
+
+    Args:
+        file (str): Path leading to the location of the brain data file.
+        label_file (str): Path to the location of the labeled data file.
     """
 
     def __init__(self, file, label_file=None):
-        """Initialises the Main Window
-        Basically calls the MainWidget class which contains the bulk of the gui and enables the use of menus.
-        Because of this most of this class is dedicated to defining menu entries and actions to be added to these entries
-        Another thing it does is load the nib files from a string containing the path.
-        """
+
         super(MainWindow, self).__init__()
 
         if file is None:
@@ -75,7 +92,8 @@ class MainWindow(QMainWindow):
 
         oldButtonsAction = QAction('Single View Mode', self)
         oldButtonsAction.setStatusTip('Sets layout to single window mode')
-        oldButtonsAction.triggered.connect(self.main_widget.revert_to_old_buttons)
+        oldButtonsAction.triggered.connect(
+            self.main_widget.revert_to_old_buttons)
 
         viewToolbarAction = QAction("Editting Toolbar", self)
         viewToolbarAction.setStatusTip("View Editting Toolbar")
@@ -92,7 +110,8 @@ class MainWindow(QMainWindow):
 
         viewVisualizationAction = QAction("Visualization Toolbar", self)
         viewVisualizationAction.setStatusTip("View Visualization Toolbar")
-        viewVisualizationAction.triggered.connect(self.view_visualization_tools)
+        viewVisualizationAction.triggered.connect(
+            self.view_visualization_tools)
         self.view_menu.addAction(viewVisualizationAction)
 
         self.view_menu.addSeparator()
@@ -168,22 +187,28 @@ class MainWindow(QMainWindow):
         # Editing tools as a toolbar
         current_directory = os.path.dirname(os.path.realpath(__file__))
 
-        pen = QAction(QIcon(current_directory + "/images/pen.png"), "Pencil: Draw Pixels", self)
+        pen = QAction(QIcon(current_directory + "/images/pen.png"),
+                      "Pencil: Draw Pixels", self)
         pen.triggered.connect(self.main_widget.win.edit_button1)
 
-        rubber = QAction(QIcon(current_directory + "/images/eraser.png"), "Eraser: Remove Drawn Pixels", self)
+        rubber = QAction(QIcon(current_directory + "/images/eraser.png"),
+                         "Eraser: Remove Drawn Pixels", self)
         rubber.triggered.connect(self.main_widget.win.edit_button2)
 
-        cross = QAction(QIcon(current_directory + "/images/cross.png"), "Brush: Draw Multiple Pixels", self)
+        cross = QAction(QIcon(current_directory + "/images/cross.png"),
+                        "Brush: Draw Multiple Pixels", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
-        left = QAction(QIcon(current_directory + "/images/left.png"), "Previous Label: Go To Previously Selected Label", self)
+        left = QAction(QIcon(current_directory + "/images/left.png"),
+                       "Previous Label: Go To Previously Selected Label", self)
         left.triggered.connect(self.main_widget.win.previous_label)
 
-        label = QAction(QIcon(current_directory + "/images/label.png"), "Select Label: Select Individual Label", self)
+        label = QAction(QIcon(current_directory + "/images/label.png"),
+                        "Select Label: Select Individual Label", self)
         label.triggered.connect(self.main_widget.win.select_label)
 
-        right = QAction(QIcon(current_directory + "/images/right.png"), "Next Label: Go To The Next Label", self)
+        right = QAction(QIcon(current_directory + "/images/right.png"),
+                        "Next Label: Go To The Next Label", self)
         right.triggered.connect(self.main_widget.win.next_label)
 
         self.edit_toolbar = self.addToolBar("Editting Tools")
@@ -215,10 +240,15 @@ class MainWindow(QMainWindow):
         self.intensity_toolbar.setVisible(False)
 
     def load_initial(self):
-        """ Loads the "base" brain
-        The pre-segmentation scan has to be uploaded before the gui is initialised. This can be done either through the
-        command line beforehand (this can be set in pycharm too) or through a window that appears on start (gets annoying).
+        """Original brain loader 
+
+        Loads the "base" brain.
+        The pre-segmentation scan has to be uploaded before the gui is initialised!
+        This can be done either through the command line beforehand (this can be set in pycharm too) or through a window that appears on start (gets annoying).
         If you try to open it with nothing it complains and gives you an error message.
+
+        Raises:
+            Error: Failed to load!
         """
         self.data_filename = QFileDialog.getOpenFileName(self, "Load brain MRI",
                                                          "Please select full MRI scan", "Nii Files (*.nii *.nii.gz)")
@@ -237,15 +267,18 @@ class MainWindow(QMainWindow):
         return self.data_filename
 
     def load(self):
-        """ Loads some labelled data
-        Opens a loading window through which you can select what label data file to load. Once a file is uploaded
-        it automatically sets the app to drawing mode
+        """Labelled data loader.
+
+        This function loads labelled data.
+        Opens a loading window through which you can select what label data file to load. 
+        Once a file is uploaded it automatically sets the app to drawing mode
         """
         self.label_filename = QFileDialog.getOpenFileName(self, "Load labeled data",
                                                           "Please select the desired label data",
                                                           "Nii Files (*.nii *.nii.gz)")
         if isinstance(self.label_filename, tuple):
-            self.label_filename = self.label_filename[0]  # Qt4/5 API difference
+            # Qt4/5 API difference
+            self.label_filename = self.label_filename[0]
         if self.label_filename == '':
             return
         self.brain.load_label_data(self.label_filename)
@@ -254,7 +287,9 @@ class MainWindow(QMainWindow):
         self.main_widget.win.view_back_labels()
 
     def save_as(self):
-        """ Saves the edited labelled data into a new file
+        """Labelled data saver with a new name
+
+        This function saves the edited labelled data into a new file
         Saves edits into a new .nii file. Opens a window in which you can type the name of the new file you are saving.
         It still does not copy the headers (something to do)
         """
@@ -263,11 +298,14 @@ class MainWindow(QMainWindow):
             old_name = "New_label_data"
         else:
             old_name = "Modified_" + old_name
-        saving_filename = QFileDialog.getSaveFileName(self, "Save Image", old_name, "Nii Files (*.nii)")
+        saving_filename = QFileDialog.getSaveFileName(
+            self, "Save Image", old_name, "Nii Files (*.nii)")
         self.brain.save_label_data(saving_filename)
 
     def save(self):
-        """ Saves the edited labelled data into a previously saved into file
+        """Labelled data saver
+
+        Saves the edited labelled data into a previously saved file
         Saves edits into a new .nii file. If no file has been saved before it reverts to save_as
         It still does not copy the headers (something to do)
         """
@@ -277,36 +315,40 @@ class MainWindow(QMainWindow):
             self.brain.save_label_data(self.brain.saving_filename)
 
     def new(self):
-        """ Create new label
+        """Create new label
 
-        If there are no other labels this is equivalent to enable drawing. If there are other labels, this adds a new
-        one and sets it to be the label that is being currently edited.
+        If there are no other labels this is equivalent to enable drawing. 
+        If there are other labels, this adds a new one and sets it to be the label that is being currently edited.
         """
         if np.sum(self.brain.label_data) == 0 and np.sum(self.brain.other_labels_data) == 0:
             self.main_widget.win.enable_drawing()
         else:
-            self.brain.current_label = int(np.max(self.brain.different_labels)) + 1
+            self.brain.current_label = int(
+                np.max(self.brain.different_labels)) + 1
             self.main_widget.win.refresh_image()
             self.main_widget.win.update_colormap()
 
     def view_edit_tools(self):
-        """ Switch the toolbar with editing buttons to visible or invisible
+        """Toggle editing toolbar
 
+        Switch the toolbar with editing buttons to visible or invisible
         Makes it the opposite of what it was previously
         """
         switch = not self.edit_toolbar.isVisible()
         self.edit_toolbar.setVisible(switch)
 
     def view_visualization_tools(self):
-        """ Switch the toolbar with editing buttons to visible or invisible
+        """Toggle visualization toolbar
 
+        Switch the toolbar with editing buttons to visible or invisible
         Makes it the opposite of what it was previously
         """
         switch = not self.optional_sliders.isVisible()
         self.optional_sliders.setVisible(switch)
 
     def view_intensity(self):
-        """
+        """Toggle intensity widget
+
         Method that makes the intensity adjustment widget visible after the
         Adjust Intensity button under Tools has been clicked
         """
@@ -314,7 +356,8 @@ class MainWindow(QMainWindow):
         self.intensity_toolbar.setVisible(switch)
 
     def segment(self):
-        """
+        """Call the segmentation function
+
         Method that returns a segmented brain
         This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
