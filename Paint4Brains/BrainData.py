@@ -14,7 +14,7 @@ Usage:
 
 import numpy as np
 import nibabel as nib
-from deepbrain import Extractor
+from Paint4Brains.Extractor import Extractor
 from Paint4Brains.Segmenter import Segmenter
 
 
