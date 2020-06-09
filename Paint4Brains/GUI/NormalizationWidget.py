@@ -67,32 +67,6 @@ class NormalizationWidget(QWidget):
         self.tab_layout.addWidget(self.log_intensity_slider)
         self.log_intensity_slider.valueChanged.connect(self.update_intensity)
 
-#######################
-        # self.setFixedWidth(300)
-        # self.setMinimumHeight(800)
-        #
-        # #self.layout.addSpacerItem(space)
-        # space = QSpacerItem(200, 700, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        # self.graphWidget = pg.PlotWidget(title = 'Histogram')
-        # brain = nib.load("77year_Pipe.nii")
-        # brain_data = brain.get_fdata()
-        # y, x = np.histogram(brain_data, bins=255, range=(1, 255), density=False)
-        # y = y/100000.0
-        # self.graphWidget.plot(x[:-1], y, pen=2)
-        # self.graphWidget.setLabel('left', 'Intensity (x10 000)', color='red', size=30)
-        # self.graphWidget.setLabel('bottom', 'Pixels', color='red', size=30)
-        # #self.layout.addSpacerItem(space)
-        # #dockWidget = QDockWidget('Histogram', self)
-        # #dockWidget.setWidget(self.graphWidget)
-        # self.layout.addWidget(self.graphWidget)
-        #
-        # self.layout.addSpacerItem(space)
-
-
-
-###################
-
-
     def update_intensity(self):
         """Intensity Update
 
