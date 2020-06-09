@@ -1,6 +1,6 @@
 """Viewing Box Module
 
-This file contains a class requried for creating a viewing box enabling the user to view the data.
+This file contains a class required for creating a viewing box enabling the user to view the data.
 
 Usage:
     To use this module, import it and instantiate is as you wish:

@@ -271,6 +271,7 @@ class BrainData:
             1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
         self.data = new_brain_data
 
+
     def brainExtraction(self):
         """Brain Extraction
 

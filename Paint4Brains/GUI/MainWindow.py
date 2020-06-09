@@ -13,7 +13,7 @@ Usage:
 import numpy as np
 import torch
 import os
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, QPushButton, QDockWidget
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
 from PyQt5.QtGui import QIcon
 from Paint4Brains.BrainData import BrainData
@@ -22,7 +22,11 @@ from Paint4Brains.GUI.SegmentManager import SegmentThread, SegmentManager
 from Paint4Brains.GUI.OptionalSliders import OptionalSliders
 from Paint4Brains.GUI.MultipleViews import MultipleViews
 from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
-
+from Paint4Brains.GUI.HistogramWidget import HistogramWidget
+######################
+from pyqtgraph.dockarea import *
+import pyqtgraph as pg
+######################
 
 class MainWindow(QMainWindow):
     """MainWindow class for Paint4Brains.
@@ -47,9 +51,16 @@ class MainWindow(QMainWindow):
 
         self.brain = BrainData(file, label_file)
         self.main_widget = MainWidget(self.brain, self)
-
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Paint4Brains")
+        ######################
+        # w4 = pg.PlotWidget(title="Dock 4 plot")
+        # w4.plot(np.random.normal(size=100))
+        # dockWidget = QDockWidget('Dock', self)
+        # dockWidget.setWidget(w4)
+        # self.addDockWidget(Qt.RightDockWidgetArea, dockWidget)
+        #####################
+
 
         # Making a menu
         menu_bar = self.menuBar()
@@ -166,6 +177,16 @@ class MainWindow(QMainWindow):
         normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(normalizeAction)
 
+        #######################################################################
+        #Itai Working Adding Histogram
+        histogramAction = QAction('Intensity Histogram', self)
+        histogramAction.setShortcut('Ctrl+H')
+        histogramAction.setStatusTip('View Intensity Histogram')
+        histogramAction.triggered.connect(self.view_histogram)
+        histogramAction.triggered.connect(self.main_widget.normalize_intensity)
+        self.tools.addAction(histogramAction)
+
+        #############################################################################
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
@@ -243,6 +264,15 @@ class MainWindow(QMainWindow):
         self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
         self.intensity_toolbar.addWidget(self.norm_widget)
         self.intensity_toolbar.setVisible(False)
+    #####################################################################
+        # Making the Histogram Tab invisible as long as Intensity Histogram has not yet been clicked
+        self.hist_widget = HistogramWidget(self.main_widget.win)
+        self.histogram_toolbar = QToolBar()
+        self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
+        self.histogram_toolbar.addWidget(self.hist_widget)
+        self.histogram_toolbar.setVisible(False)
+
+    ##############################################################
 
     def load_initial(self):
         """Original brain loader 
@@ -359,6 +389,12 @@ class MainWindow(QMainWindow):
         """
         switch = not self.intensity_toolbar.isVisible()
         self.intensity_toolbar.setVisible(switch)
+
+    ###############################################################
+    def view_histogram(self):
+        switch = not self.histogram_toolbar.isVisible()
+        self.histogram_toolbar.setVisible(switch)
+    ##############################################################
 
     def segment(self):
         """Call the segmentation function

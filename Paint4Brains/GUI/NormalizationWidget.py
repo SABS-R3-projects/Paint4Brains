@@ -11,8 +11,11 @@ Usage:
 """
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout
-
+from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout, QDockWidget
+import nibabel as nib
+import numpy as np
+import pyqtgraph as pg
+from PyQt5.QtCore import Qt
 
 class NormalizationWidget(QWidget):
     """NormalizationWidget class
@@ -28,9 +31,14 @@ class NormalizationWidget(QWidget):
     def __init__(self, viewer, minimum=0.5, maximum=1.6):
         self.win = viewer
         self.brain = viewer.brain
+        self.histogram_below = False
 
         _translate = QtCore.QCoreApplication.translate
         super(NormalizationWidget, self).__init__()
+
+        self.setMinimumWidth(200)
+        self.setMaximumHeight(100)
+
         self.layout = QtWidgets.QVBoxLayout(self)
         self.tabWidget = QtWidgets.QTabWidget()
         self.tabWidget.setObjectName("tabWidget")
@@ -39,9 +47,7 @@ class NormalizationWidget(QWidget):
         self.maximum = maximum
         self.intensity = None
         self.verticalLayout = QVBoxLayout()
-        spacerItem = QSpacerItem(
-            30, 550, QSizePolicy.Preferred, QSizePolicy.Preferred)
-        self.layout.addItem(spacerItem)
+
 
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
@@ -60,6 +66,32 @@ class NormalizationWidget(QWidget):
         self.log_intensity_slider.setValue(1)
         self.tab_layout.addWidget(self.log_intensity_slider)
         self.log_intensity_slider.valueChanged.connect(self.update_intensity)
+
+#######################
+        # self.setFixedWidth(300)
+        # self.setMinimumHeight(800)
+        #
+        # #self.layout.addSpacerItem(space)
+        # space = QSpacerItem(200, 700, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        # self.graphWidget = pg.PlotWidget(title = 'Histogram')
+        # brain = nib.load("77year_Pipe.nii")
+        # brain_data = brain.get_fdata()
+        # y, x = np.histogram(brain_data, bins=255, range=(1, 255), density=False)
+        # y = y/100000.0
+        # self.graphWidget.plot(x[:-1], y, pen=2)
+        # self.graphWidget.setLabel('left', 'Intensity (x10 000)', color='red', size=30)
+        # self.graphWidget.setLabel('bottom', 'Pixels', color='red', size=30)
+        # #self.layout.addSpacerItem(space)
+        # #dockWidget = QDockWidget('Histogram', self)
+        # #dockWidget.setWidget(self.graphWidget)
+        # self.layout.addWidget(self.graphWidget)
+        #
+        # self.layout.addSpacerItem(space)
+
+
+
+###################
+
 
     def update_intensity(self):
         """Intensity Update

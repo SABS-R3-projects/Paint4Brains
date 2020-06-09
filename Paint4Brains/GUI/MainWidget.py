@@ -1,6 +1,6 @@
 """GUI Main Widget
 
-This file contains a collection of functions relevant to defining the maing widget properties of the GUI.
+This file contains a collection of functions relevant to defining the main widget properties of the GUI.
 
 Usage:
     To use this module, import it and instantiate is as you wish:
