@@ -264,15 +264,13 @@ class MainWindow(QMainWindow):
         self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
         self.intensity_toolbar.addWidget(self.norm_widget)
         self.intensity_toolbar.setVisible(False)
-    #####################################################################
+
         # Making the Histogram Tab invisible as long as Intensity Histogram has not yet been clicked
         self.hist_widget = HistogramWidget(self.main_widget.win)
-        self.histogram_toolbar = QToolBar()
-        self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
-        self.histogram_toolbar.addWidget(self.hist_widget)
-        self.histogram_toolbar.setVisible(False)
-
-    ##############################################################
+        #self.histogram_toolbar = QToolBar()
+        #self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
+        #self.histogram_toolbar.addWidget(self.hist_widget)
+        self.hist_widget.setVisible(False)
 
     def load_initial(self):
         """Original brain loader 
@@ -392,8 +390,8 @@ class MainWindow(QMainWindow):
 
     ###############################################################
     def view_histogram(self):
-        switch = not self.histogram_toolbar.isVisible()
-        self.histogram_toolbar.setVisible(switch)
+        switch = not self.hist_widget.isVisible()
+        self.hist_widget.setVisible(switch)
     ##############################################################
 
     def segment(self):
