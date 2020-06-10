@@ -204,7 +204,7 @@ class ImageViewer(GraphicsView):
             rubber, mask=rubber, center=(0, 0), mode='add')
 
     def edit_button3(self):
-        """Sets the drawing mode to BRUSH (or square)
+        """Sets the drawing mode to BRUSH (or cross)
 
         This sets the paintbrush to a cross of 3x3 voxels in size.
         For all the editing buttons the matrix used to edit is defined at the top of the file
@@ -214,10 +214,18 @@ class ImageViewer(GraphicsView):
             cross, mask=cross, center=(1, 1), mode='add')
 
     def bonus_brush(self):
+        """Allows the user to design their own brush
+
+        This opens a window in which the user can design a brush by using the pen and rubber.
+        """
         self.enable_drawing()
         self.bonus.setVisible(True)
 
     def new_brush(self):
+        """Sets the drawing mode to the user designed BRUSH (or bonus_brush)
+
+        This sets the paintbrush to a user defined brush.
+        """
         self.enable_drawing()
         cent = len(self.bonus.pen)//2
         self.over_img.setDrawKernel(
