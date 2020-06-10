@@ -15,8 +15,8 @@ class HistogramWidget(QWidget):
         self.layout = QtWidgets.QVBoxLayout(self)
         self.setWindowTitle("Intensity Correction Histogram")
         self.graphWidget = pg.PlotWidget()
-        y, x = np.histogram(self.brain.data, bins=255, range=(0., 1.), density=True)
-        self.graphWidget.plot(x, y, range=(0., 1.), density=True, stepMode=True)
+        y, x = np.histogram(self.brain.data, bins=32, range=(1./256, 1.), density=True)
+        self.graphWidget.plot(x, y, range=(1./256, 1.), density=True, stepMode=True)
         self.graphWidget.setLabel('left', 'Voxel Density', size=30)
         self.graphWidget.setLabel('bottom', 'Voxel Intensity', size=30)
         self.layout.addWidget(self.graphWidget)
@@ -54,10 +54,11 @@ class HistogramWidget(QWidget):
         self.brain.intensity = float(value) * self.step_size
         # Edit the Brain Data Using function defined in BrainData class
         self.brain.log_normalization()
-        y, x = np.histogram(self.brain.data, bins=255, range=(0., 1.), density=True)
+        y, x = np.histogram(self.brain.data.flatten(), bins=32, range=(1./256, 1.), density=True)
         # Update what you are displaying on histogram window
         self.graphWidget.clear()
-        self.graphWidget.plot(x, y, range=(0., 1.), density=True, stepMode=True)
+
+        self.graphWidget.plot(x, y, range=(1./256, 1.), stepMode=True, density=True)
         self.label.setText(
             "Intensity Level: {0:.1f}".format(self.brain.intensity))
         # Update what you are displaying on brain image
