@@ -199,8 +199,8 @@ class MainWindow(QMainWindow):
                         "Brush: Draw Multiple Pixels", self)
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
-        bonus = QAction(QIcon(current_directory + "/images/cross.png"),
-                        "Brush: Draw Multiple Pixels", self)
+        bonus = QAction(QIcon(current_directory + "/images/star.png"),
+                        "Custom: Make Your Own Brush", self)
         bonus.triggered.connect(self.main_widget.win.bonus_brush)
 
         left = QAction(QIcon(current_directory + "/images/left.png"),
