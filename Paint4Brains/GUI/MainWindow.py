@@ -170,12 +170,12 @@ class MainWindow(QMainWindow):
         self.edit.addAction(undoAction)
 
         # Creating the Ajust Intensity option under Tools and connecting it to the Intensity Adjustment widget
-        normalizeAction = QAction('Adjust Intensity', self)
-        normalizeAction.setShortcut('Ctrl+I')
-        normalizeAction.setStatusTip('Normalize Image Intensity')
-        normalizeAction.triggered.connect(self.view_intensity)
-        normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
-        self.tools.addAction(normalizeAction)
+        #normalizeAction = QAction('Adjust Intensity', self)
+        #normalizeAction.setShortcut('Ctrl+I')
+        #normalizeAction.setStatusTip('Normalize Image Intensity')
+        #normalizeAction.triggered.connect(self.view_intensity)
+        #normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
+        #self.tools.addAction(normalizeAction)
 
         #######################################################################
         #Itai Working Adding Histogram
