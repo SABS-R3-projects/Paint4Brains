@@ -1,9 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem
+from PyQt5.QtWidgets import QWidget
 import pyqtgraph as pg
 import numpy as np
-import nibabel as nib
-import os
 
 
 class HistogramWidget(QWidget):
