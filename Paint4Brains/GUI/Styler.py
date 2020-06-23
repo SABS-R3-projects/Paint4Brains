@@ -1,3 +1,16 @@
+"""Styler module
+
+This file contains a collection of functions which help set the stype of the GUI.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.GUI.Styler import palette, style
+        app.setPalette(palette())
+        app.setStyleSheet(style())
+
+"""
+
 from PyQt5.QtGui import QPalette, QColor
 import os
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
@@ -5,6 +18,10 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 app = ApplicationContext()
 
 def palette():
+    """Colour pallete
+
+    Function setting the colour pallete for the GUI
+    """
     darkPalette = QPalette()
 
     # base

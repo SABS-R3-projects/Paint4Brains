@@ -1,14 +1,38 @@
+"""Plane Selection Buttons Module
+
+This file contains a class required for creating the buttons with which the user can pick the brain view orientation.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.GUI.PlaneSelectionButtons import PlaneSelectionButtons
+        buttons = PlaneSelectionButtons(parameters)
+
+"""
+
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QPushButton
 from pyqtgraph.Qt import QtCore, QtGui
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 app = ApplicationContext()
 
+
 class PlaneSelectionButtons(QWidget):
+    """PlaneSelectionButtons class
+
+    This is the plane selection Buttons class which implements the buttons with which you can pick the brain view orientation.
+    The 3 buttons are initialized on the left side.
+    Basically a number of QT buttons arranged in a vertical layout.
+    When the class is initialised the three functions to be executed when pressing the buttons are given as input.
+    The buttons are decorated with fixed sized images
+
+    Args:
+        button1 (function): Function that sets the view along the 0 axis
+        button2 (function): Function that sets the view along the 1 axis
+        button3 (function): Function that sets the view along the 2 axis
+        parent (class): Base or parent class
     """
-    Plane selection Buttons class.
-    Implements the buttons with which you can pick the brain view orientation
-    """
+
     def __init__(self, button1, button2, button3, parent=None):
         super(PlaneSelectionButtons, self).__init__(parent=parent)
         """ Initialises the 3 buttons on the left side 
