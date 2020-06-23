@@ -271,7 +271,8 @@ class BrainData:
             self.data = self.full_head
         self.scale = (np.max(self.data) - np.min(self.data))
         allowed_intensities = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
-        self.new_brain_data_05 = np.clip(np.log2(1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[0], 0, self.scale)
+        self.new_brain_data_05 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[0], 0, self.scale)
         self.new_brain_data_06 = np.clip(np.log2(
             1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[1], 0, self.scale)
         self.new_brain_data_07 = np.clip(np.log2(
