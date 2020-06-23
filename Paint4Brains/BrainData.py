@@ -76,6 +76,8 @@ class BrainData:
             [self.label_data.copy(), self.other_labels_data.copy()]]
         self.edits_recorded = 10
         self.current_edit = 1
+        #############################
+        self.automatic_log_normalization()
 
     def get_data_slice(self, i):
         """Function returning the 2D MRI slice for a given point
@@ -255,21 +257,64 @@ class BrainData:
         elif self.section == 2:
             return j, self.shape[0] - i - 1
 
-    # Creating class methods #
 
-    def log_normalization(self):
-        """Logaritmic Normalization
+    def automatic_log_normalization(self):
+        """ Automatic Logarithmic Normalization
 
-        A Method that performs a logarithmic normalization on the brain
+        A method that creates several class instances to store all possible
+        logarithmic adjustments as soon as a brain file is imported in the application.
+        :return: Logarithmically adjusted brain files
         """
         if self.extracted:
             self.data = self.only_brain
         else:
             self.data = self.full_head
         self.scale = (np.max(self.data) - np.min(self.data))
-        new_brain_data = np.clip(np.log2(1 + self.data.astype(float)) * self.intensity, 0, self.scale)
-        self.data = new_brain_data
+        allowed_intensities = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
+        self.new_brain_data_05 = np.clip(np.log2(1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[0], 0, self.scale)
+        self.new_brain_data_06 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[1], 0, self.scale)
+        self.new_brain_data_07 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[2], 0, self.scale)
+        self.new_brain_data_08 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[3], 0, self.scale)
+        self.new_brain_data_09 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[4], 0, self.scale)
+        self.new_brain_data_1 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[5], 0, self.scale)
+        self.new_brain_data_11 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[6], 0, self.scale)
+        self.new_brain_data_12 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[7], 0, self.scale)
+        self.new_brain_data_13 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[8], 0, self.scale)
+        self.new_brain_data_14 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[9], 0, self.scale)
+        self.new_brain_data_15 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[10], 0, self.scale)
+        self.new_brain_data_16 = np.clip(np.log2(
+            1 + self.data.astype(float) / self.scale) * self.scale * allowed_intensities[11], 0, self.scale)
 
+
+    def log_normalization(self):
+        """Logarithmic Normalization
+
+        A Method that performs a logarithmic normalization on the brain
+        """
+        # if self.extracted:
+        #     self.data = self.only_brain
+        # else:
+        #     self.data = self.full_head
+        # self.scale = (np.max(self.data) - np.min(self.data))
+        # new_brain_data = np.clip(np.log2(
+        #     1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
+        # self.data = new_brain_data
+        allowed_intensities = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6]
+        normalized_data = [self.new_brain_data_05,self.new_brain_data_06,self.new_brain_data_07
+                           ,self.new_brain_data_08,self.new_brain_data_09,self.new_brain_data_1
+                           ,self.new_brain_data_11,self.new_brain_data_12,self.new_brain_data_13
+                           ,self.new_brain_data_14,self.new_brain_data_15,self.new_brain_data_16]
+        self.data = normalized_data[allowed_intensities.index(round(self.intensity, 1))]
 
     def brainExtraction(self):
         """Brain Extraction
