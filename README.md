@@ -6,7 +6,7 @@ Accurate anatomical segmentation of structure of interest is critical in the neu
 This open source software was created at the _EPSRC CDT in Sustainable Approached to Biomedical Sciences: Responsible and Reproducible Research - SABS R3_.
 
 ## Installation
-There are several ways to install the packages. Currently, our team are working on creating installer files for Linux and Windows. The latest version of these are available at [Oxfile](https://oxfile.ox.ac.uk/oxfile/work/extBox?id=83945705F72EA8199D).
+There are several ways to install the packages. Currently, our team are working on creating installer files for Linux and Windows. The latest versions of these are available as [releases](https://github.com/SABS-R3-projects/Paint4Brains/releases).
 
 Alternatively, to download and run this code as python files, you can clone this repository using git:
 
