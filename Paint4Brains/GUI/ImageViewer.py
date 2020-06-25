@@ -23,6 +23,7 @@ from pyqtgraph import ImageItem, GraphicsView
 from BrainData import BrainData
 from ModViewBox import ModViewBox
 from SelectLabel import SelectLabel
+from BonusBrush import BonusBrush
 
 cross = np.array([
     [0, 1, 0],

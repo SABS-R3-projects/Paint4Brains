@@ -208,7 +208,7 @@ class MainWindow(QMainWindow):
         cross.triggered.connect(self.main_widget.win.edit_button3)
 
 
-        bonus = QAction(QIcon(app.get_resource("images/cross.png")),
+        bonus = QAction(QIcon(app.get_resource("images/star.png")),
                         "Custom: Make Your Own Brush", self)
         bonus.triggered.connect(self.main_widget.win.bonus_brush)
 

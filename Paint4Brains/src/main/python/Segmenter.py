@@ -1,3 +1,20 @@
+"""Paint4Brains Segmenter
+
+This file contains the relevant functions for producing the segmented labeled brains, a core function of the Paint4Brains Software.
+The functions and methods in this file were extracted from the several files associated with the original QuickNAT implementation.
+
+Attributes:
+    label_names (list): List of all labels correponding to the different regions that QuickNAT is able to segment.
+    new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmneted files.
+
+Usage:
+    To use this module, import it and instantiate is as you wish:
+
+        from Paint4Brains.Segmenter import Segmenter
+        segmentation_operation = Segmenter(parameters)
+        segmentation_operation.segment(file_path)
+"""
+
 import os
 import nibabel as nib
 from nilearn.image import resample_img
@@ -26,6 +43,20 @@ new_affine = np.array([[-1, 0., 0, 128],
 
 
 class Segmenter:
+    """Segmenter class for Paint4Brains.
+
+    This class contains the main segmentation functions required for performing the segmentation operation.
+
+    Args:
+        coronal_model_path (str): Path to the pre-trained coronal QuickNAT model
+        axial_model_path (str): Path to the pre-trained axial QuickNAT model
+        device (int/str): Device type used for training (int - GPU id, str- CPU)
+
+    Returns:
+        filename (str): The file name of the outputed segmentation file.
+
+    """
+
     def __init__(self, device="cpu", coronal_model_path=coronal_model_path, axial_model_path=axial_model_path):
         # Defining Values to be read by GUI:
         self.state = "Not running"
@@ -48,22 +79,39 @@ class Segmenter:
         self.original = None
 
     def _segment_over_one_axis(self, file_path, orientation):
-        """Segments given volume along one orientation
 
-        Given the file_path and orientation it returns the probability of each voxel being in one of the
-        33 possible classes.
+        """Forward Segmentation Pass
+
+        This function segments given volume along one orientation.
+
+        Given the file_path and orientation it returns the probability of each voxel being in one of the 33 possible classes.
+
+        This function loads a volume for segmentation, preprocesses it and then performs a forward pass through the model.
+
+        Args:
+            file_path (str): Path to the desired input brain file
+            orientation (str): String indicating the input orientation of the file
+
+        Returns:
+            volume_pred (np.array): Array containing the predicted labelled data volume
         """
 
         volume = load_and_preprocess(file_path, orientation=orientation)
-        volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
+        volume = volume if len(
+            volume.shape) == 4 else volume[:, np.newaxis, :, :]
+
         volume = torch.tensor(volume).type(torch.FloatTensor)
 
         if orientation == "COR":
             self.state = "Segmenting slices along the coronal axis"
-            model = torch.load(self.coronal_model_path, map_location=torch.device(self.device))
+
+            model = torch.load(self.coronal_model_path,
+                               map_location=torch.device(self.device))
         elif orientation == "AXI":
             self.state = "Segmenting slices along the axial axis"
-            model = torch.load(self.axial_model_path, map_location=torch.device(self.device))
+            model = torch.load(self.axial_model_path,
+                               map_location=torch.device(self.device))
+
         model.eval()
 
         volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
@@ -89,16 +137,28 @@ class Segmenter:
         return volume_pred
 
     def segment(self, file_path):
-        """Combines the segmentation from both axis to obtain the final result"""
+        """Main Segmentation Operation
+
+        This function combines the segmentation from both axis to obtain the final result
+
+        Args:
+            file_path (str): Path to the desired input brain file
+
+        Returns:
+            filename (str): The file name of the outputed segmentation file.
+        """
 
         self.state = "Starting evaluation"
         self.original = nib.load(file_path)
 
         with torch.no_grad():
-            volume_prediction_cor = self._segment_over_one_axis(file_path, orientation="COR")
-            volume_prediction_axi = self._segment_over_one_axis(file_path, orientation="AXI")
+            volume_prediction_cor = self._segment_over_one_axis(
+                file_path, orientation="COR")
+            volume_prediction_axi = self._segment_over_one_axis(
+                file_path, orientation="AXI")
             # Add the probabilities from both segmentations and take the maximum
-            volume_prediction = np.argmax(volume_prediction_axi + volume_prediction_cor, axis=1)
+            volume_prediction = np.argmax(
+                volume_prediction_axi + volume_prediction_cor, axis=1)
             volume_prediction = np.squeeze(volume_prediction)
 
             nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
@@ -115,6 +175,21 @@ class Segmenter:
 
 
 def load_and_preprocess(file_path, orientation):
+    """Load & Preprocess
+
+    This function is composed of two other function calls: one that calls a function loading the data, and another which preprocesses the data to the required format.
+    # TODO: Need to check if any more proprocessing would be required besides summing the tracts!
+
+    Args:
+        file_paths (list): List containing the input data and target labelled output data
+        orientation (str): String detailing the current view (COR, SAG, AXL)
+
+    Returns:
+        volume (np.array): Array of training image data of data type dtype.
+        header (class): 'nibabel.nifti1.Nifti1Header' class object, containing image metadata
+        original (class): 'nibabel.nifti1.Nifti1Image' class object, containing the original input volume
+    """
+
     original = nib.load(file_path)
     volume_nifty = transform(original)
     volume = volume_nifty.get_fdata()
@@ -127,23 +202,37 @@ def load_and_preprocess(file_path, orientation):
 
 
 def transform(image):
-    """Takes brain image and conforms it to [256, 256, 256]
-    and 1 mm^3 voxel after doing some intensity normalization"""
+    """Conformation Function
+
+    This function takes a brain extracted image and conforms it to [256, 256, 256] and 1 mm^3 voxel size just like Freesurfer's mri_conform function
+
+    Args:
+        image (Nifti1Image): Input image to be conformed.
+
+    Returns:
+        transformed_image (Nifti1Image): Conformed image.
+
+    """
+
     shape = (256, 256, 256)
     # creating new image with the new affine and shape
     new_img = resample_img(image, new_affine, target_shape=shape)
     # change orientation
-    orientation = nib.orientations.axcodes2ornt(nib.aff2axcodes(new_img.affine))
+    orientation = nib.orientations.axcodes2ornt(
+        nib.aff2axcodes(new_img.affine))
     target_orientation = np.array([[0., -1.], [2., -1.], [1., 1.]])
-    transformation = nib.orientations.ornt_transform(orientation, target_orientation)
+    transformation = nib.orientations.ornt_transform(
+        orientation, target_orientation)
     data = new_img.get_fdata()
     data = np.rint(data / np.max(data) * 255)
     # Putting log correction back in. But estimating the magic number by fitting to some conformed brains.
     # These values are therefore empirical (potentially need to improve them, but better than hardcoded)
     var = np.var(data)
-    magic_number = 0.15 + 0.0002874 * var + 7.9317 / var - 2.986 / np.mean(data)
+    magic_number = 0.15 + 0.0002874 * var + \
+        7.9317 / var - 2.986 / np.mean(data)
     scale = (np.max(data) - np.min(data))
-    data = np.log2(1 + data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
+    data = np.log2(1 + data.astype(float) / scale) * \
+        scale * np.clip(magic_number, 0.9, 1.6)
     data = np.rint(np.clip(data, 0, 255))  # Ensure values do not go over 255
     # Continues as before from here
     data = data.astype(np.uint8)
@@ -154,8 +243,24 @@ def transform(image):
 
 
 def undo_transform(mask, original):
+    """Undo transforation
+
+    Function which reverts a previously performed transformation.
+
+    Args:
+        mask (Nifti1Image): Image to be reverted to a previous state
+        original (Nifti1Image): The original model which serves as a reference
+
+    Returns:
+        new_mask (Nifti1Image): The reverted image
+
+    """
     shape = original.get_data().shape
-    new_mask = resample_img(mask, original.affine, target_shape=shape, interpolation='nearest')
+    new_mask = resample_img(mask, original.affine,
+                            target_shape=shape, interpolation='nearest')
     # Adds a description to the nifti image
-    new_mask.header["descrip"] = np.array("Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
+
+    new_mask.header["descrip"] = np.array(
+        "Segmentation of " + str(original.header["db_name"])[2:-1], dtype='|S80')
+
     return new_mask
