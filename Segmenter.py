@@ -18,59 +18,49 @@ new_affine = np.array([[-1, 0., 0, 128],
                        [0., -1, 0, 128],
                        [0., 0., 0, 1]])
 
+def segment_all_in_directory(directory, device = "cpu", volume_estimates = True):
+    """device should be "cuda" if you want to run on GPU"""
+    brain_files = [x for x in os.listdir(directory) if (x[-4:] == ".nii" or x[-7:] == ".nii.gz") and "segmented" not in x]
+
+    for file in brain_files:
+        print("Segmenting " + file)
+        result = segment_default(file, device)
+        if volume_estimates:
+            compute_volume(result)
+
+
+
+
 
 def segment_default(brain_file_path, device="cpu"):
     current_directory = os.path.dirname(os.path.realpath(__file__))
     coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
     axial_model_path = current_directory + "/saved_models/finetuned_alldata_axial.pth.tar"
     batch_size = 1
-    save_predictions_dir = "outputs"
-    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, save_predictions_dir, device,
-                         batch_size)
+    return evaluate2view(coronal_model_path, axial_model_path, brain_file_path, device, batch_size)
 
-def compute_volume (brain_file_path):
-    save_predictions_dir = "outputs"
-    prediction_dir = save_predictions_dir
-    label_names = ["vol_ID", "Background", "Left WM", "Left Cortex", "Left Lateral ventricle", "Left Inf LatVentricle",
-                   "Left Cerebellum WM", "Left Cerebellum Cortex", "Left Thalamus", "Left Caudate", "Left Putamen",
-                   "Left Pallidum", "3rd Ventricle", "4th Ventricle", "Brain Stem", "Left Hippocampus", "Left Amygdala",
-                   "CSF (Cranial)", "Left Accumbens", "Left Ventral DC", "Right WM", "Right Cortex",
-                   "Right Lateral Ventricle", "Right Inf LatVentricle", "Right Cerebellum WM",
-                   "Right Cerebellum Cortex", "Right Thalamus", "Right Caudate", "Right Putamen", "Right Pallidum",
-                   "Right Hippocampus", "Right Amygdala", "Right Accumbens", "Right Ventral DC"]
-    volumes_txt_file = brain_file_path
-    dir_struct = "Linear"
 
-    print("**Computing volume estimates**")
-
-    volume_dict_list = []
+def compute_volume(brain_file_path):
 
     volume_nifty = nib.load(brain_file_path)
     header = volume_nifty.header
-    volume = volume_nifty.get_fdata()
+    volume = volume_nifty.get_data()
     sizes = header.get_zooms()[:3]
 
     size_correction = np.prod(sizes)
-
-    volume_prediction = np.round(volume)
-
-    num_cls = len(label_names) - 1
-    volume_dict = {}
-
-    for i in range(num_cls):
-        binarized_pred = (volume_prediction == i).astype(float)
-        volume_dict[label_names[i + 1]] = np.sum(binarized_pred) * size_correction
-
+    labels, number_of_pixels = np.unique(volume, return_counts = True)
+    volume_dict = {label_names[i+1]: size_correction*number_of_pixels[i] for i in labels}
+    volume_dict[label_names[0]] = os.path.basename(brain_file_path)
     csv_file_name = 'volume_estimates.csv'
-
-    with open(csv_file_name, 'w') as f:
+    with open(csv_file_name, 'a+') as f:
         writer = csv.DictWriter(f, fieldnames=label_names)
-        writer.writeheader()
+        if os.stat(csv_file_name).st_size == 0:
+            writer.writeheader()
         writer.writerow(volume_dict)
 
-    print("**Finished computing volume estimates**")
 
-def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, prediction_path, device, batch_size):
+
+def evaluate2view(coronal_model_path, axial_model_path, brain_file_path,device, batch_size):
     print("**Starting evaluation**")
 
     file_path = brain_file_path
@@ -107,18 +97,14 @@ def evaluate2view(coronal_model_path, axial_model_path, brain_file_path, predict
 
     with torch.no_grad():
         try:
-            volume_prediction_cor, _, header, original = _segment_vol(file_path, model1, "COR", batch_size,
+            volume_prediction_cor, header, original = _segment_vol(file_path, model1, "COR", batch_size,
                                                                       cuda_available,
                                                                       device)
-            volume_prediction_axi, _, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
+            volume_prediction_axi, header, original = _segment_vol(file_path, model2, "AXI", batch_size,
                                                                       cuda_available,
                                                                       device)
-            _, volume_prediction = torch.max(volume_prediction_axi + volume_prediction_cor, dim=1)
-            volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
+            volume_prediction = np.argmax(volume_prediction_axi + volume_prediction_cor, axis=1)
             volume_prediction = np.squeeze(volume_prediction)
-
-            # volume_prediction, header, original = load_and_preprocess(file_path, "AXI")    # For debugging
-            # volume_prediction = np.transpose(volume_prediction, (2, 0, 1))   # For debugging
 
             nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
             # ~~~~~~~~~~~~~~~~~ HERE WE CAN DO THE INVERSE TRANSFORM ~~~~~~~~~~~~~~~~~~~~
@@ -147,28 +133,21 @@ def _segment_vol(file_path, model, orientation, batch_size, cuda_available, devi
     volume = volume if len(volume.shape) == 4 else volume[:, np.newaxis, :, :]
     volume = torch.tensor(volume).type(torch.FloatTensor)
 
-    volume_pred = []
+    volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
     for i in range(0, len(volume), batch_size):
-        batch_x = volume[i: i + batch_size]
+        batch_x = volume[i: i + 1]
         if cuda_available:
             batch_x = batch_x.cuda(device)
         out = model(batch_x)
         # _, batch_output = torch.max(out, dim=1)
-        volume_pred.append(out)
+        volume_pred[i] = out.cpu().numpy().astype(np.half)
 
-    volume_pred = torch.cat(volume_pred)
-    _, volume_prediction = torch.max(volume_pred, dim=1)
-
-    volume_prediction = (volume_prediction.cpu().numpy()).astype('float32')
-    volume_prediction = np.squeeze(volume_prediction)
     if orientation == "COR":
-        volume_prediction = volume_prediction.transpose((1, 2, 0))
-        volume_pred = volume_pred.permute((2, 1, 3, 0))
+        volume_pred = volume_pred.transpose((2, 1, 3, 0))
     elif orientation == "AXI":
-        volume_prediction = volume_prediction.transpose((2, 0, 1))
-        volume_pred = volume_pred.permute((3, 1, 0, 2))
+        volume_pred = volume_pred.transpose((3, 1, 0, 2))
 
-    return volume_pred, volume_prediction, header, original
+    return volume_pred, header, original
 
 
 def load_and_preprocess(file_path, orientation):
@@ -204,7 +183,7 @@ def transform(image):
     magic_number = 0.15 + 0.0002874 * var + 7.9317 / var - 2.986 / np.mean(data)
     scale = (np.max(data) - np.min(data))
     data = np.log2(1 + data.astype(float) / scale) * scale * np.clip(magic_number, 0.9, 1.6)
-    data = np.rint(np.clip(data, 0, 255))   # Ensure values do not go over 255
+    data = np.rint(np.clip(data, 0, 255))  # Ensure values do not go over 255
     # Continues as before from here
     data = data.astype(np.uint8)
 
@@ -221,4 +200,3 @@ def undo_transform(mask, original):
     return new_mask
 
 # segment_default("/home/sabs-r3/Desktop/quickNAT_pytorch/brains/MCI_F_83_1_conformed.nii")
-
