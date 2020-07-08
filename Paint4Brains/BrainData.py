@@ -267,8 +267,7 @@ class BrainData:
         else:
             self.data = self.full_head
         self.scale = (np.max(self.data) - np.min(self.data))
-        new_brain_data = np.clip(np.log2(
-            1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
+        new_brain_data = np.clip(np.log2(1 + self.data.astype(float)) * self.intensity, 0, self.scale)
         self.data = new_brain_data
 
 

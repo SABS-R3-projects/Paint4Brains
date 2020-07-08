@@ -64,7 +64,7 @@ class ImageViewer(GraphicsView):
                                  opacity=0.7,
                                  compositionMode=QtGui.QPainter.CompositionMode_Plus)
         self.img = ImageItem(self.brain.current_data_slice, autoDownsample=False,
-                             compositionMode=QtGui.QPainter.CompositionMode_SourceOver)
+                             compositionMode=QtGui.QPainter.CompositionMode_SourceOver, levels=(0., 1.))
 
         # Colouring the labelled data
         lut = np.array([[0, 0, 0, 0], [250, 0, 0, 255]])
@@ -117,7 +117,7 @@ class ImageViewer(GraphicsView):
         Sets the images displayed by the Image viewer to the current data slices.
         It will only show all the labels if the self.see_all_labels parameters is True.
         """
-        self.img.setImage(self.brain.current_data_slice)
+        self.img.setImage(self.brain.current_data_slice, levels=(0., 1.))
         self.over_img.setImage(
             self.brain.current_label_data_slice, autoLevels=False)
         if self.see_all_labels:
