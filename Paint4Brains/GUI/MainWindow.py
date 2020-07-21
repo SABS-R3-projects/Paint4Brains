@@ -180,7 +180,7 @@ class MainWindow(QMainWindow):
         SliceIntensityAction = QAction('Adjust Slice Intensity', self)
         SliceIntensityAction.setShortcut('Ctrl+Q')
         SliceIntensityAction.setStatusTip('Adjust Slice Intensity')
-        SliceIntensityAction.triggered.connect(self.view_intensity)
+        SliceIntensityAction.triggered.connect(self.view_intensity )
         #SliceIntensityAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(SliceIntensityAction)
 
