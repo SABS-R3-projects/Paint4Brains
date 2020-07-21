@@ -117,6 +117,7 @@ class ImageViewer(GraphicsView):
         Sets the images displayed by the Image viewer to the current data slices.
         It will only show all the labels if the self.see_all_labels parameters is True.
         """
+        #Creating slice copy
         slice = self.brain.current_data_slice
         new_slice = np.clip(np.log2(1 + slice.astype(float)) * self.brain.intensity, 0, self.brain.scale)
         self.img.setImage(new_slice, levels=(0., 1.))
