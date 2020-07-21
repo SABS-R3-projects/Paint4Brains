@@ -177,7 +177,7 @@ class MainWindow(QMainWindow):
         # normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
         # self.tools.addAction(normalizeAction)
 
-        SliceIntensityAction = QAction('Slice Intensity', self)
+        SliceIntensityAction = QAction('Adjust Slice Intensity', self)
         SliceIntensityAction.setShortcut('Ctrl+Q')
         SliceIntensityAction.setStatusTip('Adjust Slice Intensity')
         SliceIntensityAction.triggered.connect(self.view_intensity)
@@ -187,7 +187,7 @@ class MainWindow(QMainWindow):
 
         #######################################################################
         #Itai Working Adding Histogram
-        histogramAction = QAction('Intensity Histogram', self)
+        histogramAction = QAction('Adjust Full Brain Intensity', self)
         histogramAction.setShortcut('Ctrl+H')
         histogramAction.setStatusTip('View Intensity Histogram')
         histogramAction.triggered.connect(self.view_histogram)
