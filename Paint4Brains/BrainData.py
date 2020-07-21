@@ -258,7 +258,7 @@ class BrainData:
     # Creating class methods #
 
     def log_normalization(self):
-        """Logaritmic Normalization
+        """Logarithmic Normalization
 
         A Method that performs a logarithmic normalization on the brain
         """
