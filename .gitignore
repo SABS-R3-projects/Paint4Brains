@@ -140,3 +140,6 @@ quickNAT_pythorch/utils/__pycache__/preprocessor.cpython-36.pyc
 /quickNAT_pythorch/output_file/volume_estimates.csv
 /GUI/myfirstvenv/
 /Paint4Brains/myfirstvenv/
+
+#vscode 
+.vscode 
