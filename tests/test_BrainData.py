@@ -9,7 +9,7 @@ class TestBrainData(unittest.TestCase):
     """Test class methods in BrainData
     """
     rootdir = os.path.split(os.getcwd())[0]
-    filename = os.path.join(rootdir, 'opensource_brains/H_F_22.nii')
+    filename = os.path.join(rootdir, 'Paint4Brains/opensource_brains/H_F_22.nii')
     brain = BrainData(filename)
 
 
