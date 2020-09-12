@@ -88,7 +88,7 @@ class Segmenter:
             orientation (str): String indicating the input orientation of the file
 
         Updates:
-            self.volume_prediction (np.array): Array containing the predicted labelled data probabilities
+            self.volume_prediction (np.array): Array containing the predicted labelled data probabilities.
         """
 
         volume = load_and_preprocess(file_path, orientation=orientation)
