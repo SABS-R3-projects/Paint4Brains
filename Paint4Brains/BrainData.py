@@ -11,9 +11,9 @@ Usage:
 
 """
 
-
 import numpy as np
 import nibabel as nib
+import os
 from Paint4Brains.Extractor import Extractor
 from Paint4Brains.Segmenter import Segmenter
 
@@ -204,17 +204,17 @@ class BrainData:
         Args:
             saving_filename (str): Name of the file to be saved as
         """
-        self.saving_filename = saving_filename
-        print(saving_filename)
-        if (saving_filename[0])[-4:] != ".nii":
-            saving_filename = saving_filename[0] + ".nii"
+        if (saving_filename[0])[-4:] != ".nii" and (saving_filename[0])[-7:] != ".nii.gz":
+            saving_filename = saving_filename[0] + ".nii.gz"
         else:
             saving_filename = saving_filename[0]
 
-        image = nib.Nifti1Image(np.flip(self.label_data, axis=(
-            0, 1)).transpose(), self.__nib_data.affine)
+        image = nib.Nifti1Image(
+            np.flip(self.current_label * np.clip(self.label_data, 0, 1) + self.other_labels_data, axis=(
+                0, 1)).transpose(), self.__nib_data.affine)
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
+        self.saving_filename = saving_filename
 
     def position_as_voxel(self, mouse_x, mouse_y):
         """3D Mouse Position
@@ -270,7 +270,6 @@ class BrainData:
         new_brain_data = np.clip(np.log2(1 + self.data.astype(float)) * self.intensity, 0, self.scale)
         self.data = new_brain_data
 
-
     def brainExtraction(self):
         """Brain Extraction
 
@@ -282,7 +281,6 @@ class BrainData:
         elif len(self.only_brain) == 0:
             ext = Extractor()
             self.probability_mask = ext.run(self.data)
-            print("EXTRACTION DONE")
             mask2 = np.where(self.probability_mask >
                              self.extraction_cutoff, 1, 0)
             self.only_brain = self.data * mask2
@@ -385,7 +383,7 @@ class BrainData:
             self.edit_history = self.edit_history[1:]
         if self.current_edit < len(self.edit_history):
             self.edit_history = self.edit_history[
-                :(self.current_edit - len(self.edit_history))]
+                                :(self.current_edit - len(self.edit_history))]
 
         self.edit_history.append(
             [self.label_data.copy(), self.other_labels_data.copy()])
