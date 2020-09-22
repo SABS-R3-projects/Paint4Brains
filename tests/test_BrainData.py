@@ -9,7 +9,7 @@ class TestBrainData(unittest.TestCase):
     """Test class methods in BrainData
     """
     rootdir = os.path.split(os.getcwd())[0]
-    filename = os.path.join(rootdir, '../Paint4Brains/opensource_brains/H_F_22.nii')
+    filename = os.path.join(rootdir, 'Paint4Brains/opensource_brains/H_F_22.nii')
     brain = BrainData(filename)
 
 
@@ -102,20 +102,20 @@ class TestBrainData(unittest.TestCase):
         self.brain.other_labels_data = matrix
 
         # save label values to file
-        save_file = ["test_save.nii"]
+        save_file = "test_save.nii"
         self.brain.save_label_data(save_file)
 
         # clear label values
         self.brain.other_labels_data = np.zeros(self.brain.shape)
 
         # load label values form file
-        self.brain.load_label_data(save_file[0])
+        self.brain.load_label_data(save_file)
 
         # compare original labels and loaded ones
         assert np.sum(self.brain.other_labels_data) + np.sum(self.brain.label_data) == np.sum(matrix)
 
         #clear saved files
-        os.remove(save_file[0])
+        os.remove(save_file)
 
 
 
