@@ -331,6 +331,10 @@ class MainWindow(QMainWindow):
         """
         saving_filename = QFileDialog.getSaveFileName(
             self, "Save Image", os.path.dirname(self.brain.filename), "Nii Files (*.nii *.nii.gz)")
+        if (saving_filename[0])[-4:] != ".nii" and (saving_filename[0])[-7:] != ".nii.gz":
+            saving_filename = saving_filename[0] + ".nii.gz"
+        else:
+            saving_filename = saving_filename[0]
         self.brain.save_label_data(saving_filename)
 
     def save(self):
