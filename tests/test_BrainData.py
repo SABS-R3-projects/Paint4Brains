@@ -95,8 +95,11 @@ class TestBrainData(unittest.TestCase):
         del test_brain
 
     def test_loading_and_saving(self):
-        """testing loading and saving to disk functions.
+        """testing loading and saving labelled data to disk functions.
         """
+        # Fix the label we are editing
+        self.brain.current_label = np.random.randint(0, 12)
+
         # randomly set labels
         matrix = np.random.randint(0, 12, self.brain.shape)
         self.brain.other_labels_data = matrix
@@ -105,6 +108,9 @@ class TestBrainData(unittest.TestCase):
         save_file = "test_save.nii"
         self.brain.save_label_data(save_file)
 
+        # check the file was saved
+        assert os.path.exists(save_file)
+
         # clear label values
         self.brain.other_labels_data = np.zeros(self.brain.shape)
 
@@ -112,10 +118,36 @@ class TestBrainData(unittest.TestCase):
         self.brain.load_label_data(save_file)
 
         # compare original labels and loaded ones
-        assert np.sum(self.brain.other_labels_data) + np.sum(self.brain.label_data) == np.sum(matrix)
+        assert np.sum(self.brain.other_labels_data) + self.brain.current_label*np.sum(self.brain.label_data) == np.sum(matrix)
 
-        #clear saved files
+        # clear saved files and reset other_labels to zero
         os.remove(save_file)
+        self.brain.other_labels_data = np.zeros(self.brain.shape)
+
+    def test_voxel_to_mouse(self):
+        """testing transformation from 2D mouse pointer position to 3D voxel location
+        """
+        # define where the mouse would be
+        mouse_x = np.random.randint(0, 20)
+        mouse_y = np.random.randint(0, 20)
+        self.brain.i = np.random.randint(0, 20)
+
+        # check it works for all views (sections)
+        for i in range(3):
+
+            self.brain.section = i
+
+            # transform it into a 3D position
+            position = self.brain.position_as_voxel(mouse_x, mouse_y)
+
+            # check position is within the dimensions
+            assert 0 <= position[0] < self.brain.shape[0]
+            assert 0 <= position[1] < self.brain.shape[1]
+            assert 0 <= position[2] < self.brain.shape[2]
+
+            # transform it back into the mouse position and compare
+            assert (mouse_x, mouse_y) == self.brain.voxel_as_position(position[0], position[1], position[2])
+
 
 
 
