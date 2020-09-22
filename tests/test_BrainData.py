@@ -9,7 +9,7 @@ class TestBrainData(unittest.TestCase):
     """Test class methods in BrainData
     """
     rootdir = os.path.split(os.getcwd())[0]
-    filename = os.path.join(rootdir, 'Paint4Brains/opensource_brains/H_F_22.nii')
+    filename = os.path.join(rootdir, '../Paint4Brains/opensource_brains/H_F_22.nii')
     brain = BrainData(filename)
 
 
@@ -60,9 +60,6 @@ class TestBrainData(unittest.TestCase):
         """testing log_normalisation function
         """
 
-        #not working
-        #assert  self.brain.data == self.brain.full_head
-
         #test log scaling factor is not greater than max value in brain.data
         assert  self.brain.scale <= np.max(self.brain.data)
 
@@ -96,4 +93,30 @@ class TestBrainData(unittest.TestCase):
 
         #delete test_brain
         del test_brain
+
+    def test_loading_and_saving(self):
+        """testing loading and saving to disk functions.
+        """
+        # randomly set labels
+        matrix = np.random.randint(0, 12, self.brain.shape)
+        self.brain.other_labels_data = matrix
+
+        # save label values to file
+        save_file = ["test_save.nii"]
+        self.brain.save_label_data(save_file)
+
+        # clear label values
+        self.brain.other_labels_data = np.zeros(self.brain.shape)
+
+        # load label values form file
+        self.brain.load_label_data(save_file[0])
+
+        # compare original labels and loaded ones
+        assert np.sum(self.brain.other_labels_data) + np.sum(self.brain.label_data) == np.sum(matrix)
+
+        #clear saved files
+        os.remove(save_file[0])
+
+
+
 
