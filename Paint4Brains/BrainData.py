@@ -204,11 +204,6 @@ class BrainData:
         Args:
             saving_filename (str): Name of the file to be saved as
         """
-        if (saving_filename[0])[-4:] != ".nii" and (saving_filename[0])[-7:] != ".nii.gz":
-            saving_filename = saving_filename[0] + ".nii.gz"
-        else:
-            saving_filename = saving_filename[0]
-
         image = nib.Nifti1Image(
             np.flip(self.current_label * np.clip(self.label_data, 0, 1) + self.other_labels_data, axis=(
                 0, 1)).transpose(), self.__nib_data.affine)
