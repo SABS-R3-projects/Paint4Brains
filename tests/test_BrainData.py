@@ -148,6 +148,31 @@ class TestBrainData(unittest.TestCase):
             # transform it back into the mouse position and compare
             assert (mouse_x, mouse_y) == self.brain.voxel_as_position(position[0], position[1], position[2])
 
+    def test_current_label_changing(self):
+        """testing the changing label properties
+        """
+        # Setting current label to one (arbitrary but different to second label)
+        first_label = np.random.randint(1, 5)
+        self.brain.current_label = first_label
+
+        # Setting a random label voxel to one
+        x, y, z = np.random.randint(0, 20, 3)
+        self.brain.label_data[x, y, z] = 1
+
+        # Changing current label
+        second_label = np.random.randint(5, 10)
+        self.brain.current_label = second_label
+
+        # Check if the changed value is in other labels
+        assert self.brain.other_labels_data[x, y, z] == first_label
+        assert self.brain.label_data[x, y, z] == 0
+
+        # Changing it back to the first label
+        self.brain.current_label = first_label
+
+        # Check edit is still saved
+        assert self.brain.other_labels_data[x, y, z] == first_label
+        assert self.brain.label_data[x, y, z] == 1
 
 
 
