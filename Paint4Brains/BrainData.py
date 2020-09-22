@@ -205,10 +205,10 @@ class BrainData:
             saving_filename (str): Name of the file to be saved as
         """
         # Updating other_labels_data to include current label
-        self.current_label = self.current_label
+        to_be_saved = np.where(self.label_data == 0, self.other_labels_data, self.current_label)
 
         image = nib.Nifti1Image(
-            np.flip(self.other_labels_data, axis=(0, 1)).transpose(), self.__nib_data.affine)
+            np.flip(to_be_saved, axis=(0, 1)).transpose(), self.__nib_data.affine)
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
         self.saving_filename = saving_filename
