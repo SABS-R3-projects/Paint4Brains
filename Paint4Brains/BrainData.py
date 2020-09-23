@@ -320,7 +320,7 @@ class BrainData:
         self.data = data_array / np.max(data_array)
 
     def segment(self, device):
-        """Brain Segmneter
+        """Brain Segmenter
 
         This function calls the Segmenter file to perform brain segmentation.
 

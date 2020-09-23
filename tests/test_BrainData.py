@@ -8,7 +8,7 @@ from Paint4Brains.BrainData import BrainData
 class TestBrainData(unittest.TestCase):
     """Test class methods in BrainData
     """
-    rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    rootdir = os.path.dirname(os.path.dirname(__file__))
     filename = os.path.join(rootdir, '../Paint4Brains/opensource_brains/H_F_22.nii')
     brain = BrainData(filename)
 
@@ -81,7 +81,7 @@ class TestBrainData(unittest.TestCase):
         # check data and probability mask are the same shape
         assert self.brain.data.shape == test_brain.probability_mask.shape
 
-        # test number of zero values increases afte brain exrtraction
+        # test number of zero values increases after brain extraction
         assert np.count_nonzero(self.brain.data == 0) <= np.count_nonzero(test_brain.data == 0)
 
         # test data shape does not change
@@ -128,6 +128,9 @@ class TestBrainData(unittest.TestCase):
         os.remove(save_file)
         test_brain.other_labels_data = np.zeros(test_brain.shape)
 
+        # delete test_brain
+        del test_brain
+
     def test_voxel_to_mouse(self):
         """testing transformation from 2D mouse pointer position to 3D voxel location
         """
@@ -162,7 +165,7 @@ class TestBrainData(unittest.TestCase):
         x, y, z = np.random.randint(0, 20, 3)
         self.brain.label_data[x, y, z] = 1
 
-        # Changing current label
+        # Changing current label (arbitrary but different to first label)
         second_label = np.random.randint(5, 10)
         self.brain.current_label = second_label
 
