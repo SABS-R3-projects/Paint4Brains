@@ -9,14 +9,23 @@ Attributes:
     w (class): Internal class controlling the main window of the gui.
 
 Usage:
-    Before running, make sure that you are in an environment. This can be setup and ran using the following:
+    Before running, make sure that you are in an environment with the required packages.
+    An environment fulfilling all requirements can be setup and activated using the following commands:
 
         $ ./setup.sh
         $ source env/bin/activate
 
-    Then, simply call the function:
+    Once the environment has been activated, Paint4Brains can be initialised using the following command:
 
-        $ python Paint4Brains/actualGUI.py 
+        $ python Paint4Brains/actualGUI.py
+
+    Alternatively, the path to the original MRI image can be supplied as an argument:
+
+        $ python Paint4Brains/actualGUI.py brain_mri.nii
+
+    Or both the path to the original MRI image and a path to some previously labelled data can be given as arguments:
+
+        $ python Paint4Brains/actualGUI.py brain_mri.nii labels_to_be_loaded.nii
 
 """
 

@@ -4,8 +4,8 @@ This file contains the relevant functions for producing the segmented labeled br
 The functions and methods in this file were extracted from the several files associated with the original QuickNAT implementation.
 
 Attributes:
-    label_names (list): List of all labels correponding to the different regions that QuickNAT is able to segment.
-    new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmneted files.
+    label_names (list): List of all labels corresponding to the different regions that QuickNAT is able to segment.
+    new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmented files.
 
 Usage:
     To use this module, import it and instantiate is as you wish:
@@ -47,7 +47,7 @@ class Segmenter:
         device (int/str): Device type used for training (int - GPU id, str- CPU)
 
     Returns:
-        filename (str): The file name of the outputed segmentation file.
+        filename (str): The file name of the outputted segmentation file.
 
     """
 
@@ -63,7 +63,6 @@ class Segmenter:
         # We assume required files are in a fixed directory with respect to this file
         current_directory = os.path.dirname(os.path.realpath(__file__))
         if coronal_model_path is None:
-
             self.coronal_model_path = current_directory + "/saved_models/finetuned_alldata_coronal.pth.tar"
         else:
             self.coronal_model_path = coronal_model_path
@@ -134,13 +133,13 @@ class Segmenter:
     def segment(self, file_path):
         """Main Segmentation Operation
 
-        This function combines the segmentation from both axis to obtain the final result
+        This function combines the segmentations from both axis to obtain the final result
 
         Args:
             file_path (str): Path to the desired input brain file
 
         Returns:
-            filename (str): The file name of the outputed segmentation file.
+            filename (str): The file name of the outputted segmentation file.
         """
 
         self.state = "Starting evaluation"
@@ -175,7 +174,7 @@ def load_and_preprocess(file_path, orientation):
     """Load & Preprocess
 
     This function is composed of two other function calls: one that calls a function loading the data, and another which preprocesses the data to the required format.
-    # TODO: Need to check if any more proprocessing would be required besides summing the tracts!
+    # TODO: Need to check if any more preprocessing would be required besides summing the tracts!
 
     Args:
         file_paths (list): List containing the input data and target labelled output data
