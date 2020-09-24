@@ -44,7 +44,7 @@ class BonusBrush(QWidget):
         self.kernel = dot
         self.g_item = pg.GraphicsView()
         self.vbox = pg.ViewBox()
-        self.pen = np.zeros((5, 5)).astype(np.int8)
+        self.pen = np.zeros((5, 5)).astype(np.int32)
         self.img = pg.ImageItem(self.pen, autoDownSmaple=False)
         self.img.setLevels([-1, 1])
         self.img.setDrawKernel(self.kernel, mask=self.kernel, center=(0, 0), mode='add')
@@ -92,7 +92,7 @@ class BonusBrush(QWidget):
         """
         txt = self.pen_size.text()
         val = 1 if (len(txt) == 0) or (int(txt) == 0) else int(txt)
-        self.pen.resize((val, val), refcheck=False)
+        self.pen = np.zeros((val, val))
         self.img.setImage(self.pen)
         self.img.setLevels([-1, 1])
 
@@ -112,6 +112,9 @@ class BonusBrush(QWidget):
         This is basically a helper function to switch between erasing and drawing.
         """
         self.kernel = new_kernel
+        self.pen = np.clip(self.pen, -1, 1)
+        self.img.setImage(self.pen)
+        self.img.setLevels([-1, 1])
         center = len(self.kernel) // 2
         self.img.setDrawKernel(self.kernel, mask=self.kernel, center=(center, center), mode='add')
 
