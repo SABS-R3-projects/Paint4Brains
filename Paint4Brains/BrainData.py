@@ -11,11 +11,11 @@ Usage:
 
 """
 
-
 import numpy as np
 import nibabel as nib
 from Extractor import Extractor
 from Segmenter import Segmenter
+import os
 
 
 class BrainData:
@@ -204,17 +204,14 @@ class BrainData:
         Args:
             saving_filename (str): Name of the file to be saved as
         """
-        self.saving_filename = saving_filename
-        print(saving_filename)
-        if (saving_filename[0])[-4:] != ".nii":
-            saving_filename = saving_filename[0] + ".nii"
-        else:
-            saving_filename = saving_filename[0]
+        # Updating other_labels_data to include current label
+        to_be_saved = np.where(self.label_data == 0, self.other_labels_data, self.current_label)
 
-        image = nib.Nifti1Image(np.flip(self.label_data, axis=(
-            0, 1)).transpose(), self.__nib_data.affine)
+        image = nib.Nifti1Image(
+            np.flip(to_be_saved, axis=(0, 1)).transpose(), self.__nib_data.affine)
         print("Saving labeled data to: " + saving_filename)
         nib.save(image, saving_filename)
+        self.saving_filename = saving_filename
 
     def position_as_voxel(self, mouse_x, mouse_y):
         """3D Mouse Position
@@ -258,7 +255,7 @@ class BrainData:
     # Creating class methods #
 
     def log_normalization(self):
-        """Logaritmic Normalization
+        """Logarithmic Normalization
 
         A Method that performs a logarithmic normalization on the brain
         """
@@ -267,10 +264,8 @@ class BrainData:
         else:
             self.data = self.full_head
         self.scale = (np.max(self.data) - np.min(self.data))
-        new_brain_data = np.clip(np.log2(
-            1 + self.data.astype(float) / self.scale) * self.scale * self.intensity, 0, self.scale)
+        new_brain_data = np.clip(np.log2(1 + self.data.astype(float)) * self.intensity, 0, self.scale)
         self.data = new_brain_data
-
 
     def brainExtraction(self):
         """Brain Extraction
@@ -283,7 +278,6 @@ class BrainData:
         elif len(self.only_brain) == 0:
             ext = Extractor()
             self.probability_mask = ext.run(self.data)
-            print("EXTRACTION DONE")
             mask2 = np.where(self.probability_mask >
                              self.extraction_cutoff, 1, 0)
             self.only_brain = self.data * mask2
@@ -326,7 +320,7 @@ class BrainData:
         self.data = data_array / np.max(data_array)
 
     def segment(self, device):
-        """Brain Segmneter
+        """Brain Segmenter
 
         This function calls the Segmenter file to perform brain segmentation.
 
@@ -356,7 +350,7 @@ class BrainData:
 
     @current_label.setter
     def current_label(self, new_label):
-        """Current Label Setter.
+        """Current Label Setter. 
 
         Sets the label to be edited.
         It updates both the current label data and the other labels data.
@@ -386,7 +380,7 @@ class BrainData:
             self.edit_history = self.edit_history[1:]
         if self.current_edit < len(self.edit_history):
             self.edit_history = self.edit_history[
-                :(self.current_edit - len(self.edit_history))]
+                                :(self.current_edit - len(self.edit_history))]
 
         self.edit_history.append(
             [self.label_data.copy(), self.other_labels_data.copy()])

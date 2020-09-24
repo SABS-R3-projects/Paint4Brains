@@ -79,7 +79,7 @@ class NormalizationWidget(QWidget):
             float(value) / (self.log_intensity_slider.maximum() - self.log_intensity_slider.minimum())) * (
             self.maximum - self.minimum))
         # Edit the Brain Data Using function defined in BrainData class
-        self.brain.log_normalization()
+        #self.brain.log_normalization()
         # Update what you are displaying
         self.label.setText(
             "Intensity Level: {0:.1f}".format(self.brain.intensity))

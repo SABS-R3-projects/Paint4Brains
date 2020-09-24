@@ -4,8 +4,8 @@ This file contains the relevant functions for producing the segmented labeled br
 The functions and methods in this file were extracted from the several files associated with the original QuickNAT implementation.
 
 Attributes:
-    label_names (list): List of all labels correponding to the different regions that QuickNAT is able to segment.
-    new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmneted files.
+    label_names (list): List of all labels corresponding to the different regions that QuickNAT is able to segment.
+    new_affine (np.array): Homogenous affine giving relationship between voxel coordinates and world coordinates for the segmented files.
 
 Usage:
     To use this module, import it and instantiate is as you wish:
@@ -53,7 +53,7 @@ class Segmenter:
         device (int/str): Device type used for training (int - GPU id, str- CPU)
 
     Returns:
-        filename (str): The file name of the outputed segmentation file.
+        filename (str): The file name of the outputted segmentation file.
 
     """
 
@@ -92,8 +92,8 @@ class Segmenter:
             file_path (str): Path to the desired input brain file
             orientation (str): String indicating the input orientation of the file
 
-        Returns:
-            volume_pred (np.array): Array containing the predicted labelled data volume
+        Updates:
+            self.volume_prediction (np.array): Array containing the predicted labelled data probabilities.
         """
 
         volume = load_and_preprocess(file_path, orientation=orientation)
@@ -104,64 +104,63 @@ class Segmenter:
 
         if orientation == "COR":
             self.state = "Segmenting slices along the coronal axis"
-
+            self.volume_prediction = self.volume_prediction.transpose((3, 1, 0, 2))
             model = torch.load(self.coronal_model_path,
                                map_location=torch.device(self.device))
         elif orientation == "AXI":
             self.state = "Segmenting slices along the axial axis"
+            self.volume_prediction = self.volume_prediction.transpose((2, 1, 3, 0))
             model = torch.load(self.axial_model_path,
                                map_location=torch.device(self.device))
 
         model.eval()
 
-        volume_pred = np.zeros((256, 33, 256, 256), dtype=np.half)
         for i in range(len(volume)):
             if not self.run:
                 self.state = "Not running"
                 self.completion = 0
-                raise(Exception("Segmentation has been killed"))
+                # Killed segmentation so clearing memory
+                self.volume_prediction = 0
+                raise (Exception("Segmentation has been killed"))
                 break
             self.completion = self.completion + 50 / 256
             batch_x = volume[i:i + 1]
             if self.cuda_available and self.device == "cuda":
                 batch_x = batch_x.cuda(self.device)
-            volume_pred[i] = model(batch_x).cpu().numpy().astype(np.half)
+            self.volume_prediction[i] += np.squeeze(model(batch_x).cpu().numpy().astype(np.half))
 
         if orientation == "COR":
-            volume_pred = volume_pred.transpose((2, 1, 3, 0))
+            self.volume_prediction = self.volume_prediction.transpose((2, 1, 3, 0))
             self.state = "Finished segmentation along the coronal axis"
         elif orientation == "AXI":
-            volume_pred = volume_pred.transpose((3, 1, 0, 2))
+            self.volume_prediction = self.volume_prediction.transpose((3, 1, 0, 2))
             self.state = "Finished segmentation along the axial axis"
-
-        return volume_pred
 
     def segment(self, file_path):
         """Main Segmentation Operation
 
-        This function combines the segmentation from both axis to obtain the final result
+        This function combines the segmentations from both axis to obtain the final result
 
         Args:
             file_path (str): Path to the desired input brain file
 
         Returns:
-            filename (str): The file name of the outputed segmentation file.
+            filename (str): The file name of the outputted segmentation file.
         """
 
         self.state = "Starting evaluation"
         self.original = nib.load(file_path)
 
-        with torch.no_grad():
-            volume_prediction_cor = self._segment_over_one_axis(
-                file_path, orientation="COR")
-            volume_prediction_axi = self._segment_over_one_axis(
-                file_path, orientation="AXI")
-            # Add the probabilities from both segmentations and take the maximum
-            volume_prediction = np.argmax(
-                volume_prediction_axi + volume_prediction_cor, axis=1)
-            volume_prediction = np.squeeze(volume_prediction)
+        self.volume_prediction = np.zeros((256, 33, 256, 256), dtype=np.half)
 
-            nifti_img = nib.Nifti1Image(volume_prediction, new_affine)
+        with torch.no_grad():
+            self._segment_over_one_axis(file_path, orientation="COR")
+            self._segment_over_one_axis(file_path, orientation="AXI")
+            # Take the class with maximum probability
+            self.volume_prediction = np.argmax(self.volume_prediction, axis=1)
+            self.volume_prediction = np.squeeze(self.volume_prediction)
+
+            nifti_img = nib.Nifti1Image(self.volume_prediction, new_affine)
             to_save = undo_transform(nifti_img, self.original)
 
             if ".gz" in file_path:
@@ -171,6 +170,9 @@ class Segmenter:
             nib.save(to_save, filename)
 
             self.state = "Finished evaluation"
+
+            # Segmentation is done so we clear the memory
+            self.volume_prediction = 0
             return filename
 
 
@@ -178,7 +180,7 @@ def load_and_preprocess(file_path, orientation):
     """Load & Preprocess
 
     This function is composed of two other function calls: one that calls a function loading the data, and another which preprocesses the data to the required format.
-    # TODO: Need to check if any more proprocessing would be required besides summing the tracts!
+    # TODO: Need to check if any more preprocessing would be required besides summing the tracts!
 
     Args:
         file_paths (list): List containing the input data and target labelled output data
@@ -229,10 +231,10 @@ def transform(image):
     # These values are therefore empirical (potentially need to improve them, but better than hardcoded)
     var = np.var(data)
     magic_number = 0.15 + 0.0002874 * var + \
-        7.9317 / var - 2.986 / np.mean(data)
+                   7.9317 / var - 2.986 / np.mean(data)
     scale = (np.max(data) - np.min(data))
     data = np.log2(1 + data.astype(float) / scale) * \
-        scale * np.clip(magic_number, 0.9, 1.6)
+           scale * np.clip(magic_number, 0.9, 1.6)
     data = np.rint(np.clip(data, 0, 255))  # Ensure values do not go over 255
     # Continues as before from here
     data = data.astype(np.uint8)

@@ -9,6 +9,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+build/
 develop-eggs/
 dist/
 downloads/
@@ -138,3 +139,6 @@ quickNAT_pythorch/utils/__pycache__/log_utils.cpython-36.pyc
 quickNAT_pythorch/utils/__pycache__/preprocessor.cpython-36.pyc
 /quickNAT_pythorch/output_file/volume_estimates.csv
 /GUI/installer/
+
+#vscode
+.vscode
