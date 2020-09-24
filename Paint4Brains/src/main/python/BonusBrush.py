@@ -95,7 +95,7 @@ class BonusBrush(QWidget):
         """
         txt = self.pen_size.text()
         val = 1 if (len(txt) == 0) or (int(txt) == 0) else int(txt)
-        self.pen.resize((val, val), refcheck=False)
+        self.pen = np.zeros(resize((val, val), refcheck=False)
         self.img.setImage(self.pen)
         self.img.setLevels([-1, 1])
 

@@ -19,8 +19,8 @@ class HistogramWidget(QWidget):
         self.graphWidget.setLabel('bottom', 'Voxel Intensity', size=30)
         self.layout.addWidget(self.graphWidget)
 
-        self.minimum = 0.5
-        self.maximum = 1.6
+        self.minimum = 0.1
+        self.maximum = 1.8
         self.step_size = 0.1
 
         self.hlayout = QtWidgets.QHBoxLayout()

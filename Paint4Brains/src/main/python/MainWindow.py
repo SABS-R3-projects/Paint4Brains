@@ -13,7 +13,8 @@ Usage:
 import numpy as np
 import torch
 import os
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, QPushButton, QDockWidget
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, \
+    QPushButton, QDockWidget
 from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
 from PyQt5.QtGui import QIcon
 from BrainData import BrainData
@@ -26,7 +27,12 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from HistogramWidget import HistogramWidget
 
 app = ApplicationContext()
+######################
+from pyqtgraph.dockarea import *
+import pyqtgraph as pg
 
+
+######################
 
 class MainWindow(QMainWindow):
     """MainWindow class for Paint4Brains.
@@ -98,8 +104,8 @@ class MainWindow(QMainWindow):
         oldButtonsAction.triggered.connect(
             self.main_widget.revert_to_old_buttons)
 
-        viewToolbarAction = QAction("Editting Toolbar", self)
-        viewToolbarAction.setStatusTip("View Editting Toolbar")
+        viewToolbarAction = QAction("Editing Toolbar", self)
+        viewToolbarAction.setStatusTip("View Editing Toolbar")
         viewToolbarAction.triggered.connect(self.view_edit_tools)
 
         for i in [0]:  # range(1, len(viewBoxActionsList)):
@@ -161,17 +167,24 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
-        # Creating the Ajust Intensity option under Tools and connecting it to the Intensity Adjustment widget
-        #normalizeAction = QAction('Adjust Intensity', self)
-        #normalizeAction.setShortcut('Ctrl+I')
-        #normalizeAction.setStatusTip('Normalize Image Intensity')
-        #normalizeAction.triggered.connect(self.view_intensity)
-        #normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
-        #self.tools.addAction(normalizeAction)
+        # Creating the Adjust Intensity option under Tools and connecting it to the Intensity Adjustment widget
+        # normalizeAction = QAction('Adjust Intensity', self)
+        # normalizeAction.setShortcut('Ctrl+I')
+        # normalizeAction.setStatusTip('Normalize Image Intensity')
+        # normalizeAction.triggered.connect(self.view_intensity)
+        # normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
+        # self.tools.addAction(normalizeAction)
+
+        SliceIntensityAction = QAction('Adjust Slice Intensity', self)
+        SliceIntensityAction.setShortcut('Ctrl+Q')
+        SliceIntensityAction.setStatusTip('Adjust Slice Intensity')
+        SliceIntensityAction.triggered.connect(self.view_intensity)
+        # SliceIntensityAction.triggered.connect(self.main_widget.normalize_intensity)
+        self.tools.addAction(SliceIntensityAction)
 
         #######################################################################
-        #Itai Working Adding Histogram
-        histogramAction = QAction('Intensity Histogram', self)
+        # Itai Working Adding Histogram
+        histogramAction = QAction('Adjust Full Brain Intensity', self)
         histogramAction.setShortcut('Ctrl+H')
         histogramAction.setStatusTip('View Intensity Histogram')
         histogramAction.triggered.connect(self.view_histogram)
@@ -221,7 +234,7 @@ class MainWindow(QMainWindow):
         right = QAction(QIcon(app.get_resource("images/right.png")), "Next Label: Go To The Next Label", self)
         right.triggered.connect(self.main_widget.win.next_label)
 
-        self.edit_toolbar = self.addToolBar("Editting Tools")
+        self.edit_toolbar = self.addToolBar("Editing Tools")
         self.edit_toolbar.setIconSize(QSize(40, 40))
         self.edit_toolbar.addSeparator()
         self.edit_toolbar.addAction(pen)
@@ -252,9 +265,9 @@ class MainWindow(QMainWindow):
 
         # Making the Histogram Tab invisible as long as Intensity Histogram has not yet been clicked
         self.hist_widget = HistogramWidget(self.main_widget.win)
-        #self.histogram_toolbar = QToolBar()
-        #self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
-        #self.histogram_toolbar.addWidget(self.hist_widget)
+        # self.histogram_toolbar = QToolBar()
+        # self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
+        # self.histogram_toolbar.addWidget(self.hist_widget)
         self.hist_widget.setVisible(False)
 
     def load_initial(self):
@@ -292,17 +305,18 @@ class MainWindow(QMainWindow):
         Once a file is uploaded it automatically sets the app to drawing mode
         """
         self.label_filename = QFileDialog.getOpenFileName(self, "Load labeled data",
-                                                          "Please select the desired label data",
+                                                          os.path.dirname(self.brain.filename),
                                                           "Nii Files (*.nii *.nii.gz)")
         if isinstance(self.label_filename, tuple):
-            # Qt4/5 API difference
             self.label_filename = self.label_filename[0]
         if self.label_filename == '':
             return
         self.brain.load_label_data(self.label_filename)
+        self.main_widget.win.see_all_labels = True
         self.main_widget.win.enable_drawing()
         self.main_widget.win.update_colormap()
-        self.main_widget.win.view_back_labels()
+        self.main_widget.win.refresh_image()
+
 
     def save_as(self):
         """Labelled data saver with a new name
@@ -311,13 +325,12 @@ class MainWindow(QMainWindow):
         Saves edits into a new .nii file. Opens a window in which you can type the name of the new file you are saving.
         It still does not copy the headers (something to do)
         """
-        old_name = self.brain.label_filename
-        if old_name is None:
-            old_name = "New_label_data"
-        else:
-            old_name = "Modified_" + old_name
         saving_filename = QFileDialog.getSaveFileName(
-            self, "Save Image", old_name, "Nii Files (*.nii)")
+            self, "Save Image", os.path.dirname(self.brain.filename), "Nii Files (*.nii *.nii.gz)")
+        if (saving_filename[0])[-4:] != ".nii" and (saving_filename[0])[-7:] != ".nii.gz":
+            saving_filename = saving_filename[0] + ".nii.gz"
+        else:
+            saving_filename = saving_filename[0]
         self.brain.save_label_data(saving_filename)
 
     def save(self):
@@ -330,7 +343,7 @@ class MainWindow(QMainWindow):
         if self.brain.saving_filename is None:
             self.save_as()
         else:
-            self.brain.save_label_data(self.brain.saving_filename)
+            self.brain.save_label_data([self.brain.saving_filename])
 
     def new(self):
         """Create new label
@@ -377,12 +390,13 @@ class MainWindow(QMainWindow):
     def view_histogram(self):
         switch = not self.hist_widget.isVisible()
         self.hist_widget.setVisible(switch)
+
     ##############################################################
 
     def segment(self):
         """Call the segmentation function
 
         Method that returns a segmented brain
-        This funtion calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
+        This function calls the brainSegmentation function in BrainData, which transforms (pre-processes) the brain file and then calls QuickNAT for running the file.
         """
         SegmentManager(self)
