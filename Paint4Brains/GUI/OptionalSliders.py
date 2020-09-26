@@ -10,7 +10,7 @@ Usage:
 
 """
 
-from PyQt5.QtWidgets import QWidget, QSlider, QHBoxLayout, QVBoxLayout, QSpacerItem, QLabel
+from PyQt5.QtWidgets import QWidget, QSlider, QVBoxLayout, QLabel
 from PyQt5.QtCore import Qt
 import numpy as np
 

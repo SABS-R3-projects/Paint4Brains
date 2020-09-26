@@ -18,11 +18,9 @@ Usage:
 from Paint4Brains.GUI.SelectLabel import SelectLabel
 from Paint4Brains.GUI.ModViewBox import ModViewBox
 from Paint4Brains.GUI.BonusBrush import BonusBrush
-from Paint4Brains.BrainData import BrainData
 from pyqtgraph import ImageItem, GraphicsView
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QWidget, QShortcut
 import numpy as np
 
 cross = np.array([

@@ -10,11 +10,8 @@ Usage:
 
 """
 
-import numpy as np
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtCore
-from deepbrain import Extractor
-from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
 from Paint4Brains.GUI.PlaneSelectionButtons import PlaneSelectionButtons
 from Paint4Brains.GUI.ImageViewer import ImageViewer
 from Paint4Brains.GUI.MultipleViews import MultipleViews

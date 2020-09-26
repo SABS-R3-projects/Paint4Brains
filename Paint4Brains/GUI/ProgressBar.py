@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QProgressBar, QLabel, QWidget, QVBoxLayout, QPushButton
-from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
 import time
 
 

@@ -11,11 +11,8 @@ Usage:
 """
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QWidget, QSizePolicy, QSpacerItem, QVBoxLayout, QDockWidget
-import nibabel as nib
-import numpy as np
-import pyqtgraph as pg
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
+
 
 class NormalizationWidget(QWidget):
     """NormalizationWidget class

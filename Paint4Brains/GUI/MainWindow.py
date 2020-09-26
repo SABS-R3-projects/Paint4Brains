@@ -11,25 +11,18 @@ Usage:
 """
 
 import numpy as np
-import torch
 import os
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, \
-    QPushButton, QDockWidget
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QFileDialog
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon
 from Paint4Brains.BrainData import BrainData
 from Paint4Brains.GUI.MainWidget import MainWidget
-from Paint4Brains.GUI.SegmentManager import SegmentThread, SegmentManager
+from Paint4Brains.GUI.SegmentManager import SegmentManager
 from Paint4Brains.GUI.OptionalSliders import OptionalSliders
-from Paint4Brains.GUI.MultipleViews import MultipleViews
 from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
 from Paint4Brains.GUI.HistogramWidget import HistogramWidget
-######################
 from pyqtgraph.dockarea import *
-import pyqtgraph as pg
 
-
-######################
 
 class MainWindow(QMainWindow):
     """MainWindow class for Paint4Brains.

@@ -12,7 +12,6 @@ Usage:
 
 
 from pyqtgraph import ImageItem, GraphicsView, ViewBox, InfiniteLine
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtGui, QtCore
 import numpy as np
 

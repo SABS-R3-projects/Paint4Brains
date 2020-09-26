@@ -11,8 +11,7 @@ Usage:
 """
 
 import numpy as np
-import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtCore
 from pyqtgraph.Point import Point
 from pyqtgraph import ViewBox
 from pyqtgraph import functions as fn
