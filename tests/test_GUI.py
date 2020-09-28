@@ -14,7 +14,7 @@ class TestMainWindow(unittest.TestCase):
     """
     root_dir = os.path.dirname(os.path.dirname(__file__))
     filename = os.path.join(root_dir, '../Paint4Brains/opensource_brains/H_F_22.nii')
-    app = QApplication([])
+    app = QApplication(['-platform', 'minimal'])
     main = MainWindow(filename)
 
     def test_MainWindow(self):
