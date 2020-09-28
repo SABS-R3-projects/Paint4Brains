@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.com/SABS-R3-projects/Paint4Brains.svg?branch=master)](https://travis-ci.com/SABS-R3-projects/Paint4Brains)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/context:python)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/alerts/)
+
 # Paint4Brains: MRI Brain Segmentation Optimized for Elderly Brains for Use in Neurodegenerative Disease
 
 ## Motivation

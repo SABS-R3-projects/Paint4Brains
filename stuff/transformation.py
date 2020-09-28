@@ -1,7 +1,5 @@
 import nilearn as nl
 import nibabel as nb
-from dipy.align.reslice import reslice
-from dipy.data import get_fnames
 import numpy as np
 
 def transform(image):

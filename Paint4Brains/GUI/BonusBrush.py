@@ -14,7 +14,7 @@ Usage:
 
 """
 
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, QSizePolicy
 from PyQt5.QtCore import Qt, QSize
 from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
@@ -29,7 +29,6 @@ current_directory = os.path.dirname(os.path.realpath(__file__))
 
 
 class BonusBrush(QWidget):
-
     """BonusBrush class for Paint4Brains.
 
     This class contains the implementation of a series of methods that allow the user to design a brush.
