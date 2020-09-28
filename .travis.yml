@@ -15,4 +15,4 @@ services:
   - xvfb
 
 script:
-  xvfb-run pytest
+  - xvfb-run pytest
