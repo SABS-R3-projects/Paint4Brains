@@ -18,7 +18,7 @@ install:
   - pip install coveralls
 
 script:
-  - pytest --cov=Paint4Brains
+  - pytest --cov=Paint4Brains tests/
 
 after_success:
   - coveralls
