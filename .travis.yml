@@ -12,8 +12,13 @@ env:
 
 install:
   # install dependencies.
-  pip install --upgrade pip setuptools wheel
-  pip install -e .
+  - pip install --upgrade pip setuptools wheel pytest
+  - pip install -e .
+  - pip install pytest-cov
+  - pip install coveralls
 
 script:
-  - pytest
+  - pytest --cov
+
+after_success:
+  - coveralls
