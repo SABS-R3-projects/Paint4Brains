@@ -3,8 +3,15 @@ language: python
 python:
   - "3.7"
 
-variables:
-  QT_QPA_PLATFORM: "offscreen"
+matrix:
+  fast_finish: true
+
+sudo: required
+dist: bionic
+
+env:
+  # This variable is required for Qt to work on CI.
+  - QT_QPA_PLATFORM="offscreen"
 
 install:
   # install dependencies.
