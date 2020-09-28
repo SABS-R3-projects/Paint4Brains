@@ -8,5 +8,8 @@ install:
   pip install --upgrade pip setuptools wheel
   pip install -e .
 
+services:
+  - xvfb
+
 script:
   - pytest
