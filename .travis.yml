@@ -3,6 +3,9 @@ language: python
 python:
   - "3.7"
 
+variables:
+  QT_QPA_PLATFORM: "offscreen"
+
 install:
   # install dependencies.
   pip install --upgrade pip setuptools wheel
