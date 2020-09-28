@@ -55,7 +55,7 @@ Running the above will automatically open a new window, asking you to load an MR
 
 To switch between these views, please click on them individually. The slider bar also allows the user to change the different voxel plane that you are viewing.
 
-There are several menues currently incorporated within the GUI, as follows:
+There are several menus currently incorporated within the GUI, as follows:
 * File
     * New Label
         * Allows the user to open a new labelled file
