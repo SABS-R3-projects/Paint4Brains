@@ -82,12 +82,6 @@ class ImageViewer(GraphicsView):
                         [106, 61, 154],
                         [255, 255, 153],
                         [177, 89, 40]
-                        # [0, 255, 0],  # Gree
-                        # [255, 0, 0],  # Red
-                        # [0, 0, 255],  #Blue
-                        # [230, 138, 0]  #Orange
-
-
                         ]
 
         self.update_colormap()

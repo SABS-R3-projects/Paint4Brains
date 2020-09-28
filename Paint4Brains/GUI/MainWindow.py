@@ -157,14 +157,6 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
-        # Creating the Adjust Intensity option under Tools and connecting it to the Intensity Adjustment widget
-        # normalizeAction = QAction('Adjust Intensity', self)
-        # normalizeAction.setShortcut('Ctrl+I')
-        # normalizeAction.setStatusTip('Normalize Image Intensity')
-        # normalizeAction.triggered.connect(self.view_intensity)
-        # normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
-        # self.tools.addAction(normalizeAction)
-
         SliceIntensityAction = QAction('Adjust Slice Intensity', self)
         SliceIntensityAction.setShortcut('Ctrl+Q')
         SliceIntensityAction.setStatusTip('Adjust Slice Intensity')
@@ -172,7 +164,6 @@ class MainWindow(QMainWindow):
         # SliceIntensityAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(SliceIntensityAction)
 
-        #######################################################################
         # Itai Working Adding Histogram
         histogramAction = QAction('Adjust Full Brain Intensity', self)
         histogramAction.setShortcut('Ctrl+H')
@@ -181,7 +172,6 @@ class MainWindow(QMainWindow):
         histogramAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(histogramAction)
 
-        #############################################################################
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
@@ -262,9 +252,6 @@ class MainWindow(QMainWindow):
 
         # Making the Histogram Tab invisible as long as Intensity Histogram has not yet been clicked
         self.hist_widget = HistogramWidget(self.main_widget.win)
-        # self.histogram_toolbar = QToolBar()
-        # self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
-        # self.histogram_toolbar.addWidget(self.hist_widget)
         self.hist_widget.setVisible(False)
 
     def load_initial(self):
