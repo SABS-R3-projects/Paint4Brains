@@ -11,28 +11,20 @@ Usage:
 """
 
 import numpy as np
-import torch
 import os
-from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QComboBox, QToolBar, QSizePolicy, QFileDialog, \
-    QPushButton, QDockWidget
-from PyQt5.QtCore import QRunnable, QThreadPool, QThread, Qt, QSize
+from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QFileDialog
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon
 from BrainData import BrainData
 from MainWidget import MainWidget
-from SegmentManager import SegmentManager, SegmentThread
+from SegmentManager import SegmentManager
 from OptionalSliders import OptionalSliders
-from MultipleViews import MultipleViews
-from NormalizationWidget import NormalizationWidget
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from HistogramWidget import HistogramWidget
+from pyqtgraph.dockarea import *
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 app = ApplicationContext()
-######################
-from pyqtgraph.dockarea import *
-import pyqtgraph as pg
 
-
-######################
 
 class MainWindow(QMainWindow):
     """MainWindow class for Paint4Brains.
@@ -69,11 +61,6 @@ class MainWindow(QMainWindow):
         self.help = menu_bar.addMenu("Help")
 
         # Actions in file bar (This enables shortcuts too)
-        newAction = QAction('New Label', self)
-        newAction.setStatusTip('Create new label')
-        newAction.triggered.connect(self.new)
-        self.file.addAction(newAction)
-
         loadAction = QAction('Load Label', self)
         loadAction.setShortcut('Ctrl+L')
         loadAction.setStatusTip('Load Labels')
@@ -93,11 +80,6 @@ class MainWindow(QMainWindow):
 
         # Predefined actions that usually appear when you right click. Recycling one that resets the view here.
         viewBoxActionsList = self.main_widget.win.view.menu.actions()
-
-        resetViewAction = viewBoxActionsList[0]
-        resetViewAction.setText("Recenter View")
-        resetViewAction.setShortcut('Ctrl+V')
-        self.view_menu.addAction(resetViewAction)
 
         oldButtonsAction = QAction('Single View Mode', self)
         oldButtonsAction.setStatusTip('Sets layout to single window mode')
@@ -122,14 +104,19 @@ class MainWindow(QMainWindow):
         viewVisualizationAction.triggered.connect(
             self.view_visualization_tools)
         self.view_menu.addAction(viewVisualizationAction)
-
         self.view_menu.addSeparator()
+
+        resetViewAction = viewBoxActionsList[0]
+        resetViewAction.setText("Recenter View")
+        resetViewAction.setShortcut('Ctrl+V')
+        self.view_menu.addAction(resetViewAction)
 
         seeAllAction = QAction('All Labels', self)
         seeAllAction.setShortcut('Ctrl+A')
         seeAllAction.setStatusTip('Edit Next Segmented label')
         seeAllAction.triggered.connect(self.main_widget.win.view_back_labels)
         self.view_menu.addAction(seeAllAction)
+
 
         nextLabelAction = QAction('Next Label', self)
         nextLabelAction.setShortcut('Ctrl+N')
@@ -149,11 +136,12 @@ class MainWindow(QMainWindow):
         self.edit.addAction(selectLabelAction)
         self.edit.addSeparator()
 
-        nodrawAction = QAction('Deactivate drawing', self)
+        nodrawAction = QAction('Drawing Mode', self)
         nodrawAction.setShortcut('Ctrl+D')
-        nodrawAction.setStatusTip('Deactivate drawing')
+        nodrawAction.setStatusTip('Activate/Deactivate drawing mode')
         nodrawAction.triggered.connect(self.main_widget.win.disable_drawing)
         self.edit.addAction(nodrawAction)
+        self.edit.addSeparator()
 
         undoAction = QAction('Undo', self)
         undoAction.setShortcut('Ctrl+Z')
@@ -167,31 +155,13 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
-        # Creating the Adjust Intensity option under Tools and connecting it to the Intensity Adjustment widget
-        # normalizeAction = QAction('Adjust Intensity', self)
-        # normalizeAction.setShortcut('Ctrl+I')
-        # normalizeAction.setStatusTip('Normalize Image Intensity')
-        # normalizeAction.triggered.connect(self.view_intensity)
-        # normalizeAction.triggered.connect(self.main_widget.normalize_intensity)
-        # self.tools.addAction(normalizeAction)
-
-        SliceIntensityAction = QAction('Adjust Slice Intensity', self)
-        SliceIntensityAction.setShortcut('Ctrl+Q')
-        SliceIntensityAction.setStatusTip('Adjust Slice Intensity')
-        SliceIntensityAction.triggered.connect(self.view_intensity)
-        # SliceIntensityAction.triggered.connect(self.main_widget.normalize_intensity)
-        self.tools.addAction(SliceIntensityAction)
-
-        #######################################################################
-        # Itai Working Adding Histogram
-        histogramAction = QAction('Adjust Full Brain Intensity', self)
+        histogramAction = QAction('Adjust Brain Intensity', self)
         histogramAction.setShortcut('Ctrl+H')
         histogramAction.setStatusTip('View Intensity Histogram')
         histogramAction.triggered.connect(self.view_histogram)
         histogramAction.triggered.connect(self.main_widget.normalize_intensity)
         self.tools.addAction(histogramAction)
 
-        #############################################################################
         extractAction = QAction('Extract Brain', self)
         extractAction.setShortcut('Ctrl+E')
         extractAction.setStatusTip('Extract Brain')
@@ -256,18 +226,8 @@ class MainWindow(QMainWindow):
         self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
         self.optional_sliders.setVisible(False)
 
-        # Making the Intensity Normalization Tab invisible as long as Adjust Intensity has not yet been clicked
-        self.norm_widget = NormalizationWidget(self.main_widget.win)
-        self.intensity_toolbar = QToolBar()
-        self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
-        self.intensity_toolbar.addWidget(self.norm_widget)
-        self.intensity_toolbar.setVisible(False)
-
         # Making the Histogram Tab invisible as long as Intensity Histogram has not yet been clicked
         self.hist_widget = HistogramWidget(self.main_widget.win)
-        # self.histogram_toolbar = QToolBar()
-        # self.addToolBar(Qt.RightToolBarArea, self.histogram_toolbar)
-        # self.histogram_toolbar.addWidget(self.hist_widget)
         self.hist_widget.setVisible(False)
 
     def load_initial(self):
@@ -317,7 +277,6 @@ class MainWindow(QMainWindow):
         self.main_widget.win.update_colormap()
         self.main_widget.win.refresh_image()
 
-
     def save_as(self):
         """Labelled data saver with a new name
 
@@ -345,20 +304,6 @@ class MainWindow(QMainWindow):
         else:
             self.brain.save_label_data([self.brain.saving_filename])
 
-    def new(self):
-        """Create new label
-
-        If there are no other labels this is equivalent to enable drawing.
-        If there are other labels, this adds a new one and sets it to be the label that is being currently edited.
-        """
-        if np.sum(self.brain.label_data) == 0 and np.sum(self.brain.other_labels_data) == 0:
-            self.main_widget.win.enable_drawing()
-        else:
-            self.brain.current_label = int(
-                np.max(self.brain.different_labels)) + 1
-            self.main_widget.win.refresh_image()
-            self.main_widget.win.update_colormap()
-
     def view_edit_tools(self):
         """Toggle editing toolbar
 
@@ -377,21 +322,14 @@ class MainWindow(QMainWindow):
         switch = not self.optional_sliders.isVisible()
         self.optional_sliders.setVisible(switch)
 
-    def view_intensity(self):
-        """Toggle intensity widget
-
-        Method that makes the intensity adjustment widget visible after the
-        Adjust Intensity button under Tools has been clicked
-        """
-        switch = not self.intensity_toolbar.isVisible()
-        self.intensity_toolbar.setVisible(switch)
-
-    ###############################################################
     def view_histogram(self):
+        """Toggle histogram widget
+
+        Opens an intensity histogram for all voxels in the nii file.
+        This enables the user to make intensity corrections on the loaded brain.
+        """
         switch = not self.hist_widget.isVisible()
         self.hist_widget.setVisible(switch)
-
-    ##############################################################
 
     def segment(self):
         """Call the segmentation function

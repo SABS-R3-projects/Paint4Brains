@@ -11,7 +11,6 @@ Usage:
 """
 
 import Segmenter
-from BrainData import BrainData
 from PyQt5.QtWidgets import QComboBox, QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
 
 

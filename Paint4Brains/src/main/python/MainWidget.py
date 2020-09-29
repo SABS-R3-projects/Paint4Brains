@@ -10,11 +10,8 @@ Usage:
 
 """
 
-import numpy as np
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
 from PyQt5 import QtCore
-from Extractor import Extractor
-from NormalizationWidget import NormalizationWidget
 from PlaneSelectionButtons import PlaneSelectionButtons
 from ImageViewer import ImageViewer
 from MultipleViews import MultipleViews
