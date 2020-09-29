@@ -12,13 +12,8 @@ env:
 
 install:
   # install dependencies.
-  - pip install --upgrade pip setuptools wheel pytest
+  - pip install --upgrade pip setuptools wheel
   - pip install -e .
-  - pip install pytest-cov
-  - pip install coveralls
 
 script:
-  - pytest --cov=Paint4Brains tests/
-
-after_success:
-  - coveralls
+  - pytest
