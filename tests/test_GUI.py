@@ -1,10 +1,8 @@
 import os
 import unittest
-import numpy as np
-
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import Qt, QPoint, QRect
+from PyQt5.QtCore import Qt, QRect
 from Paint4Brains.GUI.MainWindow import MainWindow
 from Paint4Brains.GUI.MainWidget import MainWidget
 
