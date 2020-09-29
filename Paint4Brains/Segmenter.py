@@ -20,7 +20,6 @@ import nibabel as nib
 from nilearn.image import resample_img
 import numpy as np
 import torch
-import csv
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 app = ApplicationContext()
@@ -122,7 +121,6 @@ class Segmenter:
                 # Killed segmentation so clearing memory
                 self.volume_prediction = 0
                 raise (Exception("Segmentation has been killed"))
-                break
             self.completion = self.completion + 50 / 256
             batch_x = volume[i:i + 1]
             if self.cuda_available and self.device == "cuda":

@@ -10,8 +10,7 @@ Usage:
 
 """
 
-from pyqtgraph import ImageItem, GraphicsView, ViewBox
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QSpacerItem, QLabel
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QSizePolicy, QSpacerItem
 from PyQt5 import QtGui, QtCore
 from SideView import SideView
 

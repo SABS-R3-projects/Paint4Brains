@@ -15,15 +15,13 @@ Usage:
 
 """
 
-import numpy as np
-from PyQt5.QtWidgets import QWidget, QShortcut
-from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, pyqtSignal
-from pyqtgraph import ImageItem, GraphicsView
-from BrainData import BrainData
-from ModViewBox import ModViewBox
 from SelectLabel import SelectLabel
+from ModViewBox import ModViewBox
 from BonusBrush import BonusBrush
+from pyqtgraph import ImageItem, GraphicsView
+from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
+import numpy as np
 
 cross = np.array([
     [0, 1, 0],
@@ -84,12 +82,6 @@ class ImageViewer(GraphicsView):
                         [106, 61, 154],
                         [255, 255, 153],
                         [177, 89, 40]
-                        # [0, 255, 0],  # Gree
-                        # [255, 0, 0],  # Red
-                        # [0, 0, 255],  #Blue
-                        # [230, 138, 0]  #Orange
-
-
                         ]
 
         self.update_colormap()
@@ -121,7 +113,6 @@ class ImageViewer(GraphicsView):
         slice = self.brain.current_data_slice
         new_slice = np.clip(np.log2(1 + slice.astype(float)) * self.brain.intensity, 0, self.brain.scale)
         self.img.setImage(new_slice, levels=(0., 1.))
-        #self.img.setImage(self.brain.current_data_slice, levels=(0., 1.))
 
         self.over_img.setImage(
             self.brain.current_label_data_slice, autoLevels=False)

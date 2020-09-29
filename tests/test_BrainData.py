@@ -69,9 +69,6 @@ class TestBrainData(unittest.TestCase):
 
         assert np.var(self.brain.data) <= np.var(test_brain.data)
 
-        # delete test_brain
-        del test_brain
-
     def test_brain_Extraction(self):
         """testing brainExtraction and full_brain functions
         """
@@ -90,9 +87,6 @@ class TestBrainData(unittest.TestCase):
         # test full_brain to undo extraction
         test_brain.full_brain()
         assert np.count_nonzero(self.brain.data == 0) == np.count_nonzero(test_brain.data == 0)
-
-        # delete test_brain
-        del test_brain
 
     def test_loading_and_saving(self):
         """testing loading and saving labelled data to disk functions.
@@ -127,9 +121,6 @@ class TestBrainData(unittest.TestCase):
         # clear saved files and reset other_labels to zero
         os.remove(save_file)
         test_brain.other_labels_data = np.zeros(test_brain.shape)
-
-        # delete test_brain
-        del test_brain
 
     def test_voxel_to_mouse(self):
         """testing transformation from 2D mouse pointer position to 3D voxel location

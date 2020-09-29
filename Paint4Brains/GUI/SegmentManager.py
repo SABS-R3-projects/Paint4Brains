@@ -10,10 +10,9 @@ Usage:
 
 """
 
-import numpy as np
 from PyQt5.QtWidgets import QMessageBox, QErrorMessage
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, QObject
-from PyQt5.QtGui import QIcon, QPushButton
+from PyQt5.QtGui import QPushButton
 from ProgressBar import ProgressBar
 
 

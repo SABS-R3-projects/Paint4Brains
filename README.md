@@ -2,6 +2,10 @@
 
 ## This branch is used to easily update the installer
 
+[![Build Status](https://travis-ci.com/SABS-R3-projects/Paint4Brains.svg?branch=master)](https://travis-ci.com/SABS-R3-projects/Paint4Brains)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/context:python)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/alerts/)
+
 # Paint4Brains: MRI Brain Segmentation Optimized for Elderly Brains for Use in Neurodegenerative Disease
 
 ## Motivation
@@ -55,7 +59,7 @@ Running the above will automatically open a new window, asking you to load an MR
 
 To switch between these views, please click on them individually. The slider bar also allows the user to change the different voxel plane that you are viewing.
 
-There are several menues currently incorporated within the GUI, as follows:
+There are several menus currently incorporated within the GUI, as follows:
 * File
     * New Label
         * Allows the user to open a new labelled file

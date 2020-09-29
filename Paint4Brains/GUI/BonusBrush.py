@@ -14,7 +14,7 @@ Usage:
 
 """
 
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, QSizePolicy
 from PyQt5.QtCore import Qt, QSize
 from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon
@@ -32,7 +32,6 @@ current_directory = os.path.dirname(os.path.realpath(__file__))
 
 
 class BonusBrush(QWidget):
-
     """BonusBrush class for Paint4Brains.
 
     This class contains the implementation of a series of methods that allow the user to design a brush.
@@ -47,7 +46,7 @@ class BonusBrush(QWidget):
         self.kernel = dot
         self.g_item = pg.GraphicsView()
         self.vbox = pg.ViewBox()
-        self.pen = np.zeros((5, 5)).astype(np.int8)
+        self.pen = np.zeros((5, 5)).astype(np.int32)
         self.img = pg.ImageItem(self.pen, autoDownSmaple=False)
         self.img.setLevels([-1, 1])
         self.img.setDrawKernel(self.kernel, mask=self.kernel, center=(0, 0), mode='add')
@@ -95,7 +94,7 @@ class BonusBrush(QWidget):
         """
         txt = self.pen_size.text()
         val = 1 if (len(txt) == 0) or (int(txt) == 0) else int(txt)
-        self.pen.resize((val, val), refcheck=False)
+        self.pen = np.zeros((val, val))
         self.img.setImage(self.pen)
         self.img.setLevels([-1, 1])
 
@@ -115,6 +114,9 @@ class BonusBrush(QWidget):
         This is basically a helper function to switch between erasing and drawing.
         """
         self.kernel = new_kernel
+        self.pen = np.clip(self.pen, -1, 1)
+        self.img.setImage(self.pen)
+        self.img.setLevels([-1, 1])
         center = len(self.kernel) // 2
         self.img.setDrawKernel(self.kernel, mask=self.kernel, center=(center, center), mode='add')
 
