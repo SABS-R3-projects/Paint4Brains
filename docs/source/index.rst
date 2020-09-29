@@ -7,7 +7,8 @@ Welcome to Paint4Brains's documentation!
 ========================================
 
 .. toctree::
-
+    :maxdepth: 2
+    :caption: Contents:
 
 
 
