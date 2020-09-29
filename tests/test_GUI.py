@@ -57,6 +57,7 @@ class TestMainWindow(unittest.TestCase):
         # Test adjust slice intensity
         old = self.main.hist_widget.isVisible()
         QTest.keyClick(self.main, "h", Qt.ControlModifier)
+        QTest.qWaitForWindowExposed(self.main.hist_widget)
         assert self.main.hist_widget.isVisible() != old
 
     def test_view_recentering(self):
