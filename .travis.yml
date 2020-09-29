@@ -7,7 +7,7 @@ jobs:
   fast_finish: true
 
 env:
-  # This variable is required for Qt to work on CI.
+  # This variable is required for QTest to work on Travis CI.
   - QT_QPA_PLATFORM="offscreen"
 
 install:
