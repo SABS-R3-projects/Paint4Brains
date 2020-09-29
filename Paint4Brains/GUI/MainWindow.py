@@ -59,11 +59,6 @@ class MainWindow(QMainWindow):
         self.help = menu_bar.addMenu("Help")
 
         # Actions in file bar (This enables shortcuts too)
-        newAction = QAction('New Label', self)
-        newAction.setStatusTip('Create new label')
-        newAction.triggered.connect(self.new)
-        self.file.addAction(newAction)
-
         loadAction = QAction('Load Label', self)
         loadAction.setShortcut('Ctrl+L')
         loadAction.setStatusTip('Load Labels')
@@ -301,7 +296,6 @@ class MainWindow(QMainWindow):
         self.main_widget.win.update_colormap()
         self.main_widget.win.refresh_image()
 
-
     def save_as(self):
         """Labelled data saver with a new name
 
@@ -328,20 +322,6 @@ class MainWindow(QMainWindow):
             self.save_as()
         else:
             self.brain.save_label_data([self.brain.saving_filename])
-
-    def new(self):
-        """Create new label
-
-        If there are no other labels this is equivalent to enable drawing. 
-        If there are other labels, this adds a new one and sets it to be the label that is being currently edited.
-        """
-        if np.sum(self.brain.label_data) == 0 and np.sum(self.brain.other_labels_data) == 0:
-            self.main_widget.win.enable_drawing()
-        else:
-            self.brain.current_label = int(
-                np.max(self.brain.different_labels)) + 1
-            self.main_widget.win.refresh_image()
-            self.main_widget.win.update_colormap()
 
     def view_edit_tools(self):
         """Toggle editing toolbar
@@ -370,12 +350,9 @@ class MainWindow(QMainWindow):
         switch = not self.intensity_toolbar.isVisible()
         self.intensity_toolbar.setVisible(switch)
 
-    ###############################################################
     def view_histogram(self):
         switch = not self.hist_widget.isVisible()
         self.hist_widget.setVisible(switch)
-
-    ##############################################################
 
     def segment(self):
         """Call the segmentation function
