@@ -113,7 +113,6 @@ class ImageViewer(GraphicsView):
         slice = self.brain.current_data_slice
         new_slice = np.clip(np.log2(1 + slice.astype(float)) * self.brain.intensity, 0, self.brain.scale)
         self.img.setImage(new_slice, levels=(0., 1.))
-        #self.img.setImage(self.brain.current_data_slice, levels=(0., 1.))
 
         self.over_img.setImage(
             self.brain.current_label_data_slice, autoLevels=False)

@@ -48,11 +48,6 @@ class TestMainWindow(unittest.TestCase):
         assert self.main.main_widget.win.see_all_labels != old
 
         # Test adjust slice intensity
-        old = self.main.intensity_toolbar.isVisible()
-        QTest.keyClick(self.main, "q", Qt.ControlModifier)
-        assert self.main.intensity_toolbar.isVisible() != old
-
-        # Test adjust slice intensity
         old = self.main.hist_widget.isVisible()
         QTest.keyClick(self.main, "h", Qt.ControlModifier)
         QTest.qWaitForWindowExposed(self.main.hist_widget)

@@ -251,8 +251,6 @@ class BrainData:
         elif self.section == 2:
             return j, self.shape[0] - i - 1
 
-    # Creating class methods #
-
     def log_normalization(self):
         """Logarithmic Normalization
 

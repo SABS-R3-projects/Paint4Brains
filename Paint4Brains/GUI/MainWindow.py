@@ -19,7 +19,6 @@ from Paint4Brains.BrainData import BrainData
 from Paint4Brains.GUI.MainWidget import MainWidget
 from Paint4Brains.GUI.SegmentManager import SegmentManager
 from Paint4Brains.GUI.OptionalSliders import OptionalSliders
-from Paint4Brains.GUI.NormalizationWidget import NormalizationWidget
 from Paint4Brains.GUI.HistogramWidget import HistogramWidget
 from pyqtgraph.dockarea import *
 
@@ -152,14 +151,6 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
-        SliceIntensityAction = QAction('Adjust Slice Intensity', self)
-        SliceIntensityAction.setShortcut('Ctrl+Q')
-        SliceIntensityAction.setStatusTip('Adjust Slice Intensity')
-        SliceIntensityAction.triggered.connect(self.view_intensity)
-        # SliceIntensityAction.triggered.connect(self.main_widget.normalize_intensity)
-        self.tools.addAction(SliceIntensityAction)
-
-        # Itai Working Adding Histogram
         histogramAction = QAction('Adjust Full Brain Intensity', self)
         histogramAction.setShortcut('Ctrl+H')
         histogramAction.setStatusTip('View Intensity Histogram')
@@ -237,13 +228,6 @@ class MainWindow(QMainWindow):
         self.addToolBar(Qt.RightToolBarArea, self.optional_sliders)
         self.optional_sliders.addWidget(OptionalSliders(self.main_widget.win))
         self.optional_sliders.setVisible(False)
-
-        # Making the Intensity Normalization Tab invisible as long as Adjust Intensity has not yet been clicked
-        self.norm_widget = NormalizationWidget(self.main_widget.win)
-        self.intensity_toolbar = QToolBar()
-        self.addToolBar(Qt.RightToolBarArea, self.intensity_toolbar)
-        self.intensity_toolbar.addWidget(self.norm_widget)
-        self.intensity_toolbar.setVisible(False)
 
         # Making the Histogram Tab invisible as long as Intensity Histogram has not yet been clicked
         self.hist_widget = HistogramWidget(self.main_widget.win)
@@ -340,15 +324,6 @@ class MainWindow(QMainWindow):
         """
         switch = not self.optional_sliders.isVisible()
         self.optional_sliders.setVisible(switch)
-
-    def view_intensity(self):
-        """Toggle intensity widget
-
-        Method that makes the intensity adjustment widget visible after the
-        Adjust Intensity button under Tools has been clicked
-        """
-        switch = not self.intensity_toolbar.isVisible()
-        self.intensity_toolbar.setVisible(switch)
 
     def view_histogram(self):
         switch = not self.hist_widget.isVisible()
