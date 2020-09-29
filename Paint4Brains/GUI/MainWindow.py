@@ -78,11 +78,6 @@ class MainWindow(QMainWindow):
         # Predefined actions that usually appear when you right click. Recycling one that resets the view here.
         viewBoxActionsList = self.main_widget.win.view.menu.actions()
 
-        resetViewAction = viewBoxActionsList[0]
-        resetViewAction.setText("Recenter View")
-        resetViewAction.setShortcut('Ctrl+V')
-        self.view_menu.addAction(resetViewAction)
-
         oldButtonsAction = QAction('Single View Mode', self)
         oldButtonsAction.setStatusTip('Sets layout to single window mode')
         oldButtonsAction.triggered.connect(
@@ -106,14 +101,19 @@ class MainWindow(QMainWindow):
         viewVisualizationAction.triggered.connect(
             self.view_visualization_tools)
         self.view_menu.addAction(viewVisualizationAction)
-
         self.view_menu.addSeparator()
+
+        resetViewAction = viewBoxActionsList[0]
+        resetViewAction.setText("Recenter View")
+        resetViewAction.setShortcut('Ctrl+V')
+        self.view_menu.addAction(resetViewAction)
 
         seeAllAction = QAction('All Labels', self)
         seeAllAction.setShortcut('Ctrl+A')
         seeAllAction.setStatusTip('Edit Next Segmented label')
         seeAllAction.triggered.connect(self.main_widget.win.view_back_labels)
         self.view_menu.addAction(seeAllAction)
+
 
         nextLabelAction = QAction('Next Label', self)
         nextLabelAction.setShortcut('Ctrl+N')
@@ -133,11 +133,12 @@ class MainWindow(QMainWindow):
         self.edit.addAction(selectLabelAction)
         self.edit.addSeparator()
 
-        nodrawAction = QAction('Deactivate drawing', self)
+        nodrawAction = QAction('Drawing Mode', self)
         nodrawAction.setShortcut('Ctrl+D')
-        nodrawAction.setStatusTip('Deactivate drawing')
+        nodrawAction.setStatusTip('Activate/Deactivate drawing mode')
         nodrawAction.triggered.connect(self.main_widget.win.disable_drawing)
         self.edit.addAction(nodrawAction)
+        self.edit.addSeparator()
 
         undoAction = QAction('Undo', self)
         undoAction.setShortcut('Ctrl+Z')
@@ -151,7 +152,7 @@ class MainWindow(QMainWindow):
         undoAction.triggered.connect(self.main_widget.win.redo_previous_edit)
         self.edit.addAction(undoAction)
 
-        histogramAction = QAction('Adjust Full Brain Intensity', self)
+        histogramAction = QAction('Adjust Brain Intensity', self)
         histogramAction.setShortcut('Ctrl+H')
         histogramAction.setStatusTip('View Intensity Histogram')
         histogramAction.triggered.connect(self.view_histogram)
@@ -326,6 +327,11 @@ class MainWindow(QMainWindow):
         self.optional_sliders.setVisible(switch)
 
     def view_histogram(self):
+        """Toggle histogram widget
+
+        Opens an intensity histogram for all voxels in the nii file.
+        This enables the user to make intensity corrections on the loaded brain.
+        """
         switch = not self.hist_widget.isVisible()
         self.hist_widget.setVisible(switch)
 
