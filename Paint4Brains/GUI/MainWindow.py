@@ -10,7 +10,6 @@ Usage:
 
 """
 
-import numpy as np
 import os
 from PyQt5.QtWidgets import QMainWindow, QAction, QMessageBox, QToolBar, QFileDialog
 from PyQt5.QtCore import Qt, QSize
