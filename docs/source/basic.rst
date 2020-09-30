@@ -5,15 +5,17 @@ When you open the Paint4Brains application, a window asking you to "Load brain M
 
 Loading an MRI image at the start is required as Paint4Brains will not start without it.
 
-.. image:: _static/Load_screen.png
+.. image:: _static/screenshots/Load_screen.png
   :width: 500
   :alt: Loading Screen Example
+  :align: center
 
 Once a NIfTI file has been selected Paint4Brains will finally open.
 
-.. image:: _static/Plain_window.png
+.. image:: _static/screenshots/Plain_window.png
   :width: 500
   :alt: Loading Screen Example
+  :align: center
 
 On the center of the screen, an image showing the axial slice of the uploaded volume is shown. With both the coronal and sagittal view shown on two side panels on the left.
 
