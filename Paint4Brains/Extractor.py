@@ -7,8 +7,7 @@ PB_FILE = os.path.join(os.path.dirname(__file__), "saved_models", "deepbrain_ext
 CHECKPOINT_DIR = os.path.join(os.path.dirname(__file__), "models")
 
 
-class Extractor:
-
+class Extractor: 
     def __init__(self):
         self.SIZE = 128
         self.load_pb()
