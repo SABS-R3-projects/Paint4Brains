@@ -2,11 +2,11 @@
 BrainData
 *********
 
-.. currentmodule:: Paint4Brains.Extractor
+.. currentmodule:: Paint4Brains.BrainData	
 
 Class containing all image manipulation tools for nifti images. 
 
 Overview: 
 
 
-.. autoclass:: Extractor
+.. autoclass:: BrainData
