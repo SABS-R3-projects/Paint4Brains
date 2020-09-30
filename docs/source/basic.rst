@@ -5,7 +5,7 @@ When you open the Paint4Brains application, a window asking you to "Load brain M
 
 Loading an MRI image at the start is required as Paint4Brains will not start without it.
 
-.. image:: ../../screenshots/Load_screen.png
+.. image:: screenshots/Load_screen.png
   :width: 500
   :alt: Loading Screen Example
 
