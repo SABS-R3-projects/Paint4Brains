@@ -34,13 +34,13 @@ In order to run the code, activate the previously installed virtual environment,
     ~/(Paint4Brains Locations)$ source env/bin/activate
     ~/(Paint4Brains Locations)$ python Paint4Brains/actualGUI.py
 
-One of the advantages of installing it as source code is that you can now add the brain mri niifti file (.nii, .nii.gz) as a parameter:
+One of the advantages of installing it as source code is that you can now add the brain MRI NIfTI file (.nii, .nii.gz) as a parameter:
 
 .. code-block:: bash
 
     ~/(Paint4Brains Locations)$ python Paint4Brains/actualGUI.py brain_mri_scan.nii
     
-Additionally, you can add both the brain mri niifti file (.nii, .nii.gz) and a niifti file containing labels as parameters. This can be done as follows:
+Additionally, you can add both the brain MRI NIfTI file (.nii, .nii.gz) and a NIfTI file containing anatomical labels as parameters. This can be done as follows:
 
 .. code-block:: bash
 
