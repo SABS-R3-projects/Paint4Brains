@@ -12,8 +12,8 @@ This open source software was created at the EPSRC CDT in Sustainable Approached
 
 
 .. toctree::
-    :maxdepth: 2
-    :caption: Contents:
+    install
+    
 
 
 
