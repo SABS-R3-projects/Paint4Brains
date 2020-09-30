@@ -12,7 +12,8 @@ This open source software was created at the EPSRC CDT in Sustainable Approached
 
 
 .. toctree::
-    install
+   install
+   basic
     
 
 
