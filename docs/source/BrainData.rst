@@ -10,3 +10,5 @@ Overview:
 
 
 .. autoclass:: BrainData
+    :members:
+

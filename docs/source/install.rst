@@ -6,12 +6,14 @@ There are a number of ways to install Paint4Brains on you computer. Which one wo
 Easy Install (Windows & Ubuntu)
 -----------------------------------
 
-Paint4Brains comes with two installer files (one for Windows 10 and one for Ubuntu 18). These will install Paint4Brains as an application on your computer automatically installing all the required dependecies. If you plan to use Paint4Brains as is, we strongly recommend you take this approach because of its simplicity. The latest installers can be found under the assets section of each release.
+Paint4Brains comes with two installer_ files (one for Windows 10 and one for Ubuntu 18). These will install Paint4Brains as an application on your computer automatically dealing with all the required dependencies. If you plan to use Paint4Brains as is, we strongly recommend you take this approach because of its simplicity. The latest installers can be found under the assets section of each release.
+
+.. _installer: https://github.com/SABS-R3-projects/Paint4Brains/releases
 
 Developer Install (OSX)
 ------------------------------
 
-If, however, you want to further develop Paint4Brains to fit you needs or your operative system is not Windows or Ubuntu, you can download the python source code from github. To do this, you first have to clone the github repositry:
+If, however, you want to further develop Paint4Brains to fit you needs or your operative system is not Windows or Ubuntu, you can download the python source code from github. To do this, you first have to clone the github repository:
 
 .. code-block:: bash
 

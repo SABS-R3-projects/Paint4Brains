@@ -264,7 +264,7 @@ class BrainData:
         new_brain_data = np.clip(np.log2(1 + self.data.astype(float)) * self.intensity, 0, self.scale)
         self.data = new_brain_data
 
-    def brainExtraction(self):
+    def extract(self):
         """Brain Extraction
 
         Function which performs brain extraction/skull stripping on nifti images in preparation for segmentation.

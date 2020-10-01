@@ -154,7 +154,7 @@ class MainWidget(QWidget):
         Functionality for this method is defined in the BrainData class.
         This wrapper has been kept here to ensure the displayed image is updated.
         """
-        self.brain.brainExtraction()
+        self.brain.extract()
         self.win.refresh_image()
 
     def full_brain(self):

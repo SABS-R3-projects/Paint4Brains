@@ -70,10 +70,10 @@ class TestBrainData(unittest.TestCase):
         assert np.var(self.brain.data) <= np.var(test_brain.data)
 
     def test_brain_Extraction(self):
-        """testing brainExtraction and full_brain functions
+        """testing brain extraction and full_brain functions
         """
         test_brain = BrainData(self.filename)
-        test_brain.brainExtraction()
+        test_brain.extract()
 
         # check data and probability mask are the same shape
         assert self.brain.data.shape == test_brain.probability_mask.shape
