@@ -7,12 +7,24 @@ PB_FILE = os.path.join(os.path.dirname(__file__), "saved_models", "deepbrain_ext
 CHECKPOINT_DIR = os.path.join(os.path.dirname(__file__), "models")
 
 
-class Extractor: 
+class Extractor:
+    """Extractor class for Paint4Brains.
+
+    This class contains the main extraction functions required.
+
+    Returns:
+        prob (np.array): Probability of each voxel being brain tissue or not.
+
+    """
     def __init__(self):
         self.SIZE = 128
         self.load_pb()
 
     def load_pb(self):
+        """ Load the neural network with the appropriate weights into the Extractor class.
+
+        This function is run when the class is initialized
+        """
         graph = tf.compat.v1.Graph()
         self.sess = tf.compat.v1.Session(graph=graph)
         with tf.compat.v1.gfile.FastGFile(PB_FILE, 'rb') as f:
@@ -27,21 +39,18 @@ class Extractor:
         self.prob = graph.get_tensor_by_name("import/prob:0")
         self.pred = graph.get_tensor_by_name("import/pred:0")
 
-    def load_ckpt(self):
-        self.sess = tf.compat.v1.Session()
-        ckpt_path = tf.train.latest_checkpoint(CHECKPOINT_DIR)
-        saver = tf.compat.v1.train.import_meta_graph('{}.meta'.format(ckpt_path))
-        saver.restore(self.sess, ckpt_path)
-
-        g = tf.compat.v1.get_default_graph()
-
-        self.img = g.get_tensor_by_name("img:0")
-        self.training = g.get_tensor_by_name("training:0")
-        self.dim = g.get_tensor_by_name("dim:0")
-        self.prob = g.get_tensor_by_name("prob:0")
-        self.pred = g.get_tensor_by_name("pred:0")
-
     def run(self, image):
+        """ Performs extraction on the given image
+
+        Runs the given image through the deepbrain network and returns a probability mask.
+        :param image:
+
+        Args:
+            image (np.array): Original 3D brain mri volume
+
+        Returns:
+            prob (np.array): Probability of each voxel being brain tissue or not.
+        """
         shape = image.shape
         img = resize(image, (self.SIZE, self.SIZE, self.SIZE), mode='constant', anti_aliasing=True)
         img = (img / np.max(img))

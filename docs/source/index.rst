@@ -10,8 +10,10 @@ Accurate anatomical segmentation of structure of interest is critical in the neu
 
 This open source software was created at the EPSRC CDT in Sustainable Approached to Biomedical Sciences: Responsible and Reproducible Research - SABS R3.
 
+Index
+=====
 
 .. toctree::
    install
    basic
-   BrainData
+   code_docs
