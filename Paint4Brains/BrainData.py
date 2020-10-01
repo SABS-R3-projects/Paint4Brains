@@ -267,7 +267,7 @@ class BrainData:
     def extract(self):
         """Brain Extraction
 
-        Function which performs brain extraction/skull stripping on nifti images in preparation for segmentation.
+        Function which performs brain extraction/skull stripping on nifti images. To run extraction, this function uses the deepbrain neural network.
         """
         # If it has already been extracted (mostly empty) don't do it again
         if self.extracted:
@@ -322,7 +322,7 @@ class BrainData:
         This function calls the Segmenter file to perform brain segmentation.
 
         Args:
-            device (str/int): Device to run the neural network on, can be "cpu" (str) or cuda-enabled GPU, either integrated (int - 0) or external (int - 1)
+            device (str/int): Device to run the neural network on, can be "cpu" or cuda-enabled GPU ("gpu").
         """
         try:
             self.segmenter.device = device
