@@ -74,14 +74,34 @@ Most of the editing tools reside within the "Editing Toolbar". This toolbar can 
 
 Here is a brief description of what each of these buttons do:
 
-- The pen button allows you to mark individual voxels with the selected label.
-- The rubber allows you to unmark individual voxels with the selected label.
-- The brush can be used to mark five voxels at once (shaped as a cross) with the selected label. This can be useful when labelling large areas.
-- The star allows you to create your own brush. This brush can reach a variable number of voxels and can be set to work as an pen or eraser. This can be useful when making similar edits on a large number of slices.
-- The left and right arrows can be used to change which label is currently being edited. The left arrow selects the previous label while the right arrow selects the next one in line.
-- The labels button are used to select a new label on the image. If this button is pressed, the next label selected on the central image will become the label currently being edited.
-- The dropbox on the right allows the user to select labels by name.
+- **Pen button**: allows you to mark individual voxels with the selected label.
+- **Rubber**: is used to unmark individual voxels with the selected label.
+- **Brush**: can be used to mark five voxels at once (shaped as a cross) with the selected label. This can be useful when labelling large areas.
+- **Star button**: allows you to create your own brush. This brush can reach a variable number of voxels and can be set to work as an pen or eraser. This can be useful when making similar edits on a large number of slices.
+- **Left and right arrows**: can be used to change which label is currently being edited. The left arrow selects the previous label while the right arrow selects the next one in line.
+- **Labels button**: are used to select a new label on the image. If this button is pressed, the next label selected on the central image will become the label currently being edited.
+- **Dropbox on the right**: allows the user to select labels by name.
 
+In addition to the buttons on the "Editing Toolbar", there are a few functions in the menus that can be handy during editing.
 
+The first of these is the "Undo" (CTRL+Z) and "Redo" (CTRL+SHIFT+Z) functions that can be found under the "Edit" tab in the menu. These work as expected, reverting and redoing previous edits. Paint4Brains will only allow you to go back as far as 10 previous edits.
 
+Another potentially useful function is the "Recenter View" (CTRL+V) in the "View" tab. This rescales and recenters the central image to its original size and position.
 
+Loading and Saving
+------------------
+
+Edits can be saved at any point in time using the "Save" and "Save As" (CTRL+S) functions. While these work the same on your first save, "Save" will continue to save edits to the latest saved file, while "Save As" will ask you for a new file name each time. Labels are saved automatically after segmenting.
+
+You can load previous edits or previously segmented images by using the "Load" (CTRL+L) button. This will overlay the loaded labels on the underlying brain image.
+
+Additional Tools
+----------------
+
+In addition to the functionality described above, Paint4Brains has a number of more advanced functions
+
+- Brain Extraction: You can strip the skull from the brain mri image by using the "Extract Brain" (CTRL+E) function. This is done using the deepbrain_ neural network and is considerably faster than segmenting. To view the full head again, you can use the "See Full Head" (CTRL+U) function. The extraction tolerance used to strip the skull can be changed from the "Visualization Toolbar", activated from the "View" menu.
+- Intensity adjustments: Intensity can be adjusted for the underlying image from the "Visualization Toolbar". Additionally, the intensity histogram for the whole volume can be seen by clicking on the "Adjust Brain Intensity" (CTRL+H) function under the "Tools" tab. This opens a new window showing the histogram from which you can vary the intensity.
+- Label Transparency: The transparency of the segmentation labels can be edited in the "Visualization Toolbar". It is also possible to make all labels but the one you are editing transparent by using the "All Labels" (CTRL+A) function under the "View" tab.
+
+.. _deepbrain: https://github.com/iitzco/deepbrain
