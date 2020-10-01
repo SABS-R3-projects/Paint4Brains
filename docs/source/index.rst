@@ -15,13 +15,3 @@ This open source software was created at the EPSRC CDT in Sustainable Approached
    install
    basic
    BrainData
-    
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
