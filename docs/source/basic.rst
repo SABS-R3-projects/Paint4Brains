@@ -2,7 +2,7 @@ Basic Usage
 ===========
 
 
-Getting started
+Getting Started
 ---------------
 
 When you open the Paint4Brains application, a window asking you to "Load brain MRI" will appear. Here you can select the NIfTI file you wish to open in a directory of your system.
@@ -56,7 +56,7 @@ An example of a segmented brain can be seen in the following image:
   :alt: Paint4Brains with Segmented Brain Overlay
   :align: center
 
-Label Editting
+Label Editing
 --------------
 
 One of the key features of Paint4Brains is that, once a brain has been segmented, you can manually edit the predicted labels. In this way, if while viewing the results, you find a small error in the segmentation, this can easily be corrected.
