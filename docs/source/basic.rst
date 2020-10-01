@@ -84,9 +84,9 @@ Here is a brief description of what each of these buttons do:
 
 In addition to the buttons on the "Editing Toolbar", there are a few functions in the menus that can be handy during editing.
 
-The first of these is the "Undo" (CTRL+Z) and "Redo" (CTRL+SHIFT+Z) functions that can be found under the "Edit" tab in the menu. These work as expected, reverting and redoing previous edits. Paint4Brains will only allow you to go back as far as 10 previous edits.
+The first of these are the "Undo" (CTRL+Z) and "Redo" (CTRL+SHIFT+Z) functions that can be found under the "Edit" tab in the menu. These work as expected, reverting and redoing previous edits. Paint4Brains will only allow you to go back as far as 10 previous edits.
 
-Another potentially useful function is the "Recenter View" (CTRL+V) in the "View" tab. This rescales and recenters the central image to its original size and position.
+Another potentially useful method is the "Recenter View" (CTRL+V) function in the "View" tab. This rescales and recenters the central image to its original size and position.
 
 Loading and Saving
 ------------------
@@ -100,8 +100,8 @@ Additional Tools
 
 In addition to the functionality described above, Paint4Brains has a number of more advanced functions
 
-- Brain Extraction: You can strip the skull from the brain mri image by using the "Extract Brain" (CTRL+E) function. This is done using the deepbrain_ neural network and is considerably faster than segmenting. To view the full head again, you can use the "See Full Head" (CTRL+U) function. The extraction tolerance used to strip the skull can be changed from the "Visualization Toolbar", activated from the "View" menu.
-- Intensity adjustments: Intensity can be adjusted for the underlying image from the "Visualization Toolbar". Additionally, the intensity histogram for the whole volume can be seen by clicking on the "Adjust Brain Intensity" (CTRL+H) function under the "Tools" tab. This opens a new window showing the histogram from which you can vary the intensity.
-- Label Transparency: The transparency of the segmentation labels can be edited in the "Visualization Toolbar". It is also possible to make all labels but the one you are editing transparent by using the "All Labels" (CTRL+A) function under the "View" tab.
+- **Brain Extraction**: You can strip the skull from the brain mri image by using the "Extract Brain" (CTRL+E) function. This is done using the deepbrain_ neural network and is considerably faster than segmenting. To view the full head again, you can use the "See Full Head" (CTRL+U) function. The extraction tolerance used to strip the skull can be changed from the "Visualization Toolbar", activated from the "View" menu.
+- **Intensity adjustments**: Intensity can be adjusted for the underlying image from the "Visualization Toolbar". Additionally, the intensity histogram for the whole volume can be seen by clicking on the "Adjust Brain Intensity" (CTRL+H) function under the "Tools" tab. This opens a new window showing the histogram from which you can vary the intensity.
+- **Label Transparency**: The transparency of the segmentation labels can be edited in the "Visualization Toolbar". It is also possible to make all labels but the one you are editing transparent by using the "All Labels" (CTRL+A) function under the "View" tab.
 
 .. _deepbrain: https://github.com/iitzco/deepbrain
