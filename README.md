@@ -12,7 +12,7 @@ Accurate anatomical segmentation of structure of interest is critical in the neu
 This open source software was created at the _EPSRC CDT in Sustainable Approached to Biomedical Sciences: Responsible and Reproducible Research - SABS R3_.
 
 ## Installation
-There are several ways to install the packages. Currently, our team are working on creating installer files for Linux and Windows. The latest versions of these are available as [releases](https://github.com/SABS-R3-projects/Paint4Brains/releases).
+There are several ways to install the packages. There are installer files for Linux and Windows, the latest versions of these are available as [releases](https://github.com/SABS-R3-projects/Paint4Brains/releases).
 
 Alternatively, to download and run this code as python files, you can clone this repository using git:
 
@@ -50,7 +50,7 @@ python Paint4Brains/actualGUI.py
 
 The above command can also be run from the GUI folder, but without the _GUI/_ part of the command.
 
-For a more detailed description [read the Docs](https://paint4brains.readthedocs.io/en/latest/index.html)
+For a more detailed description [read the docs](https://paint4brains.readthedocs.io/en/latest/index.html).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -91,6 +91,6 @@ The team would like to express their gratitude to [Dr Martin Robinson](https://g
 This project is being done in collaboration and with support from [GE Healthcare UK](https://www.gehealthcare.co.uk/), with support being provided by [Dr Elisabeth Grecchi](https://www.linkedin.com/in/elisabetta-grecchi) and [Dr Christopher Buckley](https://www.linkedin.com/in/christopher-buckley-24724a13)
  
 ## Build status
-Paint4Brains is currently still in active development. Tests are currently in development. Please check this page regularly for updates. 
+Paint4Brains is currently still in active development. Please check this page regularly for updates. 
 
 
