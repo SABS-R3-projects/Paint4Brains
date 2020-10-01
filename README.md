@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.com/SABS-R3-projects/Paint4Brains.svg?branch=master)](https://travis-ci.com/SABS-R3-projects/Paint4Brains)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/context:python)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/alerts/)
+[![Documentation Status](https://readthedocs.org/projects/paint4brains/badge/?version=latest)](https://paint4brains.readthedocs.io/en/latest/?badge=latest)
+      
 
 # Paint4Brains: MRI Brain Segmentation Optimized for Elderly Brains for Use in Neurodegenerative Disease
 
@@ -48,59 +50,7 @@ python Paint4Brains/actualGUI.py
 
 The above command can also be run from the GUI folder, but without the _GUI/_ part of the command.
 
-Running the above will automatically open a new window, asking you to load an MRI file. Please do this, as you will not be able to proceed otherwise. After doing this, the GUI will open, displaying a large image of the current location in the brain, 3 smaller images on the left hand side, indicating the 3 possible views:
-* Axial
-* Coronal
-* Saggital
-
-To switch between these views, please click on them individually. The slider bar also allows the user to change the different voxel plane that you are viewing.
-
-There are several menus currently incorporated within the GUI, as follows:
-* File
-    * New Label
-        * Allows the user to open a new labelled file
-    * Load Label
-        * Allows the user to load a labeled file
-    * Save
-        * Saves the label currently being editted as .nii file. The second time it is selected it overwrites the previous save
-    * Save As
-        * Saves the label currently being editted into a new .nii file. Each time it is selected it asks the user for a file name.
-* Edit
-    * Next Label
-        * Allows the user to cycle forward through the labels
-    * Previous Label
-        * Allows the user to cycle backwards through the labels
-    * Select Label
-        * Allows the user to manually select a label, by clicking on it, rather than cycling through all labels.
-    * Deactivate Drawing
-        * Deactivates the edditng tools functionality. This can be reactivated later.
-    * Undo (Ctrl+Z)
-        * Reverts to previous edit
-    * Redo (Ctrl+Shift+Z)
-        * Reverts previous undo
-* View
-    * Recenter View
-    * Edditing Toolbar
-        * This opens the edditing toolbar, allowing the user to manually edit previously generated segmented maps.
-        * The user can choose between a pen and a cross as edditing tools, and a rubber for undo-ing made changes.
-        * The user can also cycle between the various generated labels. 
-        * **When selecting a label** this label will highlight in red. The user can eddit that label, by using the edditing instruments. When moving on to another label, the changes are saved automatically. **Please do not forget** to also save the final new mask once you have finished edditing. 
-        * On the left there is a dropdown box indicating which label is currently selected and allowing the user to select which part of the brain to edit by name.
-    * All Labels
-        * Clicking on this once, will allow the user to either see one label at a time, and cycle then through all labels
-        * Clicking on this a second time will revert the user to seeing all labels at the same time.
-* Tools
-    * Extract Brain
-        * This tool performs brain extraction
-    * See Full Brain
-        * This tool allows the user to see the full brain again, after extraction
-    * Segment Brain
-        * This tool takes the provided brain input and runs it through our software's segmentation pipeline.
-        * The brain is first conformed using Nilearn and Nibabel.
-        * Then, segmentation is performed using QuickNAT (referenced bellow). Depending on the type of hardware used (CPU or GPU), this might take anywhere between 20-30 seconds up to 1 hour. This process, however, is threaded, meaning that the GUI can still be used in the meantime.
-        * This process completes by a segmented mask file being generated and saved.
-* Help (_currently has no functionality_) 
-
+For a more detailed description [read the Docs](https://paint4brains.readthedocs.io/en/latest/index.html)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
