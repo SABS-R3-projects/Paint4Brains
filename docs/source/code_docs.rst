@@ -7,3 +7,4 @@ Code documentation.
    BrainData
    Segmenter
    Extractor
+   GUI
