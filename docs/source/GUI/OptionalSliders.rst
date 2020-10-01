@@ -1,9 +1,4 @@
 Optional Sliders
 ================
-.. currentmodule:: Paint4Brains.GUI.OptionalSliders
-
-Overview:
-
-
-.. autoclass:: OptionalSliders
+.. automodule:: Paint4Brains.GUI.OptionalSliders
     :members:

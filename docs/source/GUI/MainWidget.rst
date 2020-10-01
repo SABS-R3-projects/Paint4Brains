@@ -1,9 +1,4 @@
 Main Widget
 ===========
-.. currentmodule:: Paint4Brains.GUI.MainWidget
-
-Overview:
-
-
-.. autoclass:: MainWidget
+.. automodule:: Paint4Brains.GUI.MainWidget
     :members:

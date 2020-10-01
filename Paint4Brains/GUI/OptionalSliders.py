@@ -6,6 +6,7 @@ Usage:
     To use this module, import it and instantiate is as you wish:
 
         from Paint4Brains.GUI.OptionalSliders import OptionalSliders
+
         optional_sliders.addWidget(OptionalSliders(parameters))
 
 """

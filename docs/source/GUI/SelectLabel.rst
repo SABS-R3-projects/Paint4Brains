@@ -1,9 +1,4 @@
 Select Label
 =============
-.. currentmodule:: Paint4Brains.GUI.SelectLabel
-
-Overview:
-
-
-.. autoclass:: SelectLabel
+.. automodule:: Paint4Brains.GUI.SelectLabel
     :members:

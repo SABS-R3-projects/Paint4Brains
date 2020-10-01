@@ -1,4 +1,4 @@
-"""Slider odule
+"""Slider module
 
 This file contains a collection of functions which implement the slider to be used within the GUI. 
 
@@ -6,6 +6,7 @@ Usage:
     To use this module, import it and instantiate is as you wish:
 
         from Paint4Brains.GUI.Slider import Slider
+
         window = widget_slider = Slider(parameters)
 
 """

@@ -1,9 +1,4 @@
 Multiple Views
 ===============
-.. currentmodule:: Paint4Brains.GUI.MultipleViews
-
-Overview:
-
-
-.. autoclass:: MultipleViews
+.. automodule:: Paint4Brains.GUI.MultipleViews
     :members:

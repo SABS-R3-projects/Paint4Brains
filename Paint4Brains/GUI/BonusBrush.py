@@ -6,6 +6,7 @@ Usage:
     To use this module, import it and instantiate is as you wish:
 
         from Paint4Brains.GUI.BonusBrush import BonusBrush
+
         brush = BonusBrush()
 
     It then has to be made visible using:

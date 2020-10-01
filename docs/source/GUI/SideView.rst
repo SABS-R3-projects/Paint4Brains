@@ -1,9 +1,4 @@
 Side View
 ===========
-.. currentmodule:: Paint4Brains.GUI.SideView
-
-Overview:
-
-
-.. autoclass:: SideView
+.. automodule:: Paint4Brains.GUI.SideView
     :members:

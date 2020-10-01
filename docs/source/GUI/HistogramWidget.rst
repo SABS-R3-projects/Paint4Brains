@@ -1,9 +1,4 @@
 Histogram Widget
 ================
-.. currentmodule:: Paint4Brains.GUI.HistogramWidget
-
-Overview:
-
-
-.. autoclass:: HistogramWidget
+.. automodule:: Paint4Brains.GUI.HistogramWidget
     :members:

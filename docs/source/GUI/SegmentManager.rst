@@ -1,9 +1,4 @@
 Segment Manager
 ================
-.. currentmodule:: Paint4Brains.GUI.SegmentManager
-
-Overview:
-
-
-.. autoclass:: SegmentManager
+.. automodule:: Paint4Brains.GUI.SegmentManager
     :members:

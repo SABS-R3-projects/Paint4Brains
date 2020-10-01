@@ -6,6 +6,7 @@ Usage:
     To use this module, import it and instantiate is as you wish:
 
         from Paint4Brains.GUI.SelectLabel import SelectLabel
+
         dropbox = SelectLabel(properties)
 
 """

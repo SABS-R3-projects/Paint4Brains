@@ -1,9 +1,4 @@
 Progress Bar
 =============
-.. currentmodule:: Paint4Brains.GUI.ProgressBar
-
-Overview:
-
-
-.. autoclass:: ProgressBar
+.. automodule:: Paint4Brains.GUI.ProgressBar
     :members:

@@ -1,9 +1,4 @@
 Slider
 ===========
-.. currentmodule:: Paint4Brains.GUI.Slider
-
-Overview:
-
-
-.. autoclass:: Slider
+.. automodule:: Paint4Brains.GUI.Slider
     :members:

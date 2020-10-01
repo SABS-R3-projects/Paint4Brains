@@ -6,7 +6,9 @@ Usage:
     To use this module, import it and instantiate is as you wish:
 
         from Paint4Brains.GUI.Styler import palette, style
+
         app.setPalette(palette())
+
         app.setStyleSheet(style())
 
 """
