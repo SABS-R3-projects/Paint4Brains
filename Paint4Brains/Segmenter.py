@@ -11,7 +11,9 @@ Usage:
     To use this module, import it and instantiate is as you wish:
 
         from Paint4Brains.Segmenter import Segmenter
+
         segmentation_operation = Segmenter(parameters)
+
         segmentation_operation.segment(file_path)
 """
 
