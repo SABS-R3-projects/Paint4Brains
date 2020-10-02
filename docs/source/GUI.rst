@@ -1,6 +1,11 @@
 Graphical user interface
 ========================
 
+Documentation describing the behaviour of all the classes used to build the GUI.
+
+Module Index:
+-------------
+
 .. toctree::
     GUI/MainWindow
     GUI/MainWidget

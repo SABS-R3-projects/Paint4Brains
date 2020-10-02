@@ -1,7 +1,11 @@
 API Documentation
 =================
 
-Code documentation.
+Documentation of all the modules used to build the software.
+
+Module Index:
+-------------
+
 
 .. toctree::
    BrainData
