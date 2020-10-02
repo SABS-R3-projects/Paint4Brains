@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Paint4Brains'
-copyright = '2020, Brennan Abanades Kenyon, Andrei Roibu, Pavan Chaggar, Itau Muzhingi'
-author = 'Brennan Abanades Kenyon, Andrei Roibu, Pavan Chaggar, Itau Muzhingi'
+copyright = '2020, Brennan Abanades Kenyon, Andrei Roibu, Pavan Chaggar, Itai Muzhingi'
+author = 'Brennan Abanades Kenyon, Andrei Roibu, Pavan Chaggar, Itai Muzhingi'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1'
