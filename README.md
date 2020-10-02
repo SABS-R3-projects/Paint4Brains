@@ -1,8 +1,9 @@
 [![Build Status](https://travis-ci.com/SABS-R3-projects/Paint4Brains.svg?branch=master)](https://travis-ci.com/SABS-R3-projects/Paint4Brains)
+[![Documentation Status](https://readthedocs.org/projects/paint4brains/badge/?version=latest)](https://paint4brains.readthedocs.io/en/latest/?badge=latest)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/context:python)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/alerts/)
-[![Documentation Status](https://readthedocs.org/projects/paint4brains/badge/?version=latest)](https://paint4brains.readthedocs.io/en/latest/?badge=latest)
 [![GitHub All Releases](https://img.shields.io/github/downloads/SABS-R3-projects/Paint4Brains/total?color=green)](https://github.com/SABS-R3-projects/Paint4Brains)
+[![GitHub](https://img.shields.io/github/license/SABS-R3-projects/Paint4Brains)](https://github.com/SABS-R3-projects/Paint4Brains/blob/master/LICENSE)
 
 # Paint4Brains: MRI Brain Segmentation Optimized for Elderly Brains for Use in Neurodegenerative Disease
 
