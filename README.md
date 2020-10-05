@@ -2,7 +2,7 @@
 [![Documentation Status](https://readthedocs.org/projects/paint4brains/badge/?version=latest)](https://paint4brains.readthedocs.io/en/latest/?badge=latest)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/context:python)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/SABS-R3-projects/Paint4Brains.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/SABS-R3-projects/Paint4Brains/alerts/)
-[![GitHub All Releases](https://img.shields.io/github/downloads/SABS-R3-projects/Paint4Brains/total?color=green)](https://github.com/SABS-R3-projects/Paint4Brains)
+[![GitHub All Releases](https://img.shields.io/github/downloads/SABS-R3-projects/Paint4Brains/total?color=green)](https://github.com/SABS-R3-projects/Paint4Brains/releases)
 [![GitHub](https://img.shields.io/github/license/SABS-R3-projects/Paint4Brains)](https://github.com/SABS-R3-projects/Paint4Brains/blob/master/LICENSE)
 
 # Paint4Brains: MRI Brain Segmentation Optimized for Elderly Brains for Use in Neurodegenerative Disease
