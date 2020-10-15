@@ -20,7 +20,6 @@ from Paint4Brains.GUI.MainWidget import MainWidget
 from Paint4Brains.GUI.SegmentManager import SegmentManager
 from Paint4Brains.GUI.OptionalSliders import OptionalSliders
 from Paint4Brains.GUI.HistogramWidget import HistogramWidget
-from pyqtgraph.dockarea import *
 
 
 class MainWindow(QMainWindow):
