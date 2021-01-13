@@ -43,6 +43,5 @@ setup(
         'scikit-learn==0.20.3',
         'scikit-image',
         'nn_common_modules @ https://github.com/shayansiddiqui/nn-common-modules/releases/download/v1.0/nn_common_modules-1.0-py2.py3-none-any.whl',
-        'squeeze_and_excitation @ https://github.com/abhi4ssj/squeeze_and_excitation/releases/download/v1.0/squeeze_and_excitation-1.0-py2.py3-none-any.whl',
         ],
 )
